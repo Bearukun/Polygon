@@ -1,9 +1,3 @@
-<%-- 
-    Document   : admin
-    Created on : 24-10-2016, 10:20:45
-    Author     : Ceo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

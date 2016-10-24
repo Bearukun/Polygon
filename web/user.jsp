@@ -1,9 +1,3 @@
-<%-- 
-    Document   : user
-    Created on : Oct 24, 2016, 12:37:29 AM
-    Author     : Bear
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

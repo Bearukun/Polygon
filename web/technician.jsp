@@ -1,9 +1,3 @@
-<%-- 
-    Document   : technician
-    Created on : 24-10-2016, 10:35:15
-    Author     : Ceo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
