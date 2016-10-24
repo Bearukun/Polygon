@@ -9,6 +9,6 @@ public interface DBFacadeInterface {
     
     User getUser(String email) throws CustomException;
     
-    void createUser(String email, String password, type type) throws CustomException;
+    void createUser(String email, String password) throws CustomException;
     
 }

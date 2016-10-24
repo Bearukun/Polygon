@@ -111,6 +111,14 @@ public class Front extends HttpServlet {
                 
             case "newCustomer":
                 
+                //If no user is logged in. (user == null)
+                if(request.getSession().getAttribute("user") == null){
+                    
+                    
+                    
+                    
+                }
+                
                 if(request.getParameter("email") != null || !request.getParameter("email").isEmpty() && request.getParameter("password") != null || !request.getParameter("password").isEmpty()){
                     String email = request.getParameter("email");
                     String password = request.getParameter("password");

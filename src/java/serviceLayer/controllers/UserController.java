@@ -45,4 +45,22 @@ public class UserController implements UserControllerInterface {
         return dbfacade.getUser(email);
     }
 
+    @Override
+    public void createUser(String email, String password) throws CustomException {
+
+        //If input fields aren't empty
+        if (!email.isEmpty() && !password.isEmpty() && email != null && password != null) {
+            
+            //Then create user with 'email' and 'password'.
+            dbfacade.createUser(email, password);
+
+        } else {
+
+            //Input fields must be empty, trow error. 
+            throw new CustomException("Be sure to fill out both fields!");
+
+        }
+
+    }
+
 }
