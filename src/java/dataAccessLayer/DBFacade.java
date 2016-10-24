@@ -52,4 +52,30 @@ public class DBFacade implements DBFacadeInterface {
         }
     }
 
+    //Creates new user 
+    public void createUser(String email, String password, User.type type) throws CustomException {
+        
+        try {
+
+            Connection con = DBConnection.getConnection();
+            
+            String sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `type`) VALUES ('?', '?', '?');";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, type.name());
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            
+    }catch(Exception e){
+        throw new CustomException("Something went wrong with the database connection, beep boop!?");
+    }
+        
+    }
+
+
+    
+    
 }

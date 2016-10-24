@@ -103,17 +103,13 @@ public class Front extends HttpServlet {
                 //Logout of the website
             case "logout":
                 
-              
-              
-                
-                
+
                 request.getSession().invalidate();
                 response.sendRedirect("index.jsp#");
 
                 break;
                 
-                
-
+            case "newCustomer":
                 
 
             }
