@@ -9,4 +9,6 @@ public interface UserControllerInterface {
 
     User getUser(String email) throws CustomException;
 
+    //void createUser (String username, String password, User.type type);
+    
 }
