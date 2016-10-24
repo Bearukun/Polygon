@@ -1,0 +1,48 @@
+package serviceLayer.controllers;
+
+import dataAccessLayer.DBFacade;
+import dataAccessLayer.interfaces.DBFacadeInterface;
+import serviceLayer.controllers.interfaces.UserControllerInterface;
+import serviceLayer.enties.User;
+import serviceLayer.exceptions.CustomException;
+
+public class UserController implements UserControllerInterface {
+
+    private final DBFacadeInterface dbfacade = new DBFacade();
+
+    @Override
+    public User login(String email, String password) throws CustomException {
+
+        if (email != null && password != null && !email.isEmpty() && !password.isEmpty()) {
+
+            //Get user by that email from database.
+            User user = getUser(email);
+
+            //Check if user is null. (If null, no such user) 
+            if (user != null) {
+
+                //If password is correct
+                if (user.getPassword().equals(password)) {
+
+                    return user;
+                    //If password is incorrect.     
+                } else {
+
+                    throw new CustomException("Password or username incorrect..!");
+
+                }
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    @Override
+    public User getUser(String email) throws CustomException {
+        return dbfacade.getUser(email);
+    }
+
+}
