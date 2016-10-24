@@ -25,7 +25,7 @@ if yes - then redirect - else nothing. --%>
                 <input class="form-control" type="password" name="password" value="" placeholder="Kodeord" />
                 <input type="hidden" name="origin" value="login" />
                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Log ind" name="" />
-                <a href="newCustomer.jsp">Sign Up... fixed? </a>
+                <a href="newCustomer.jsp">Sign Up. </a>
                 
             </form>
         </div>
