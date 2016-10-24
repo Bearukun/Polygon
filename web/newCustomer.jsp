@@ -11,9 +11,9 @@
             <h1>Email</h1>
             <input class="form-control" type="text" name="email" value="" placeholder="Email" />
             <h1>Adgangskode</h1>
-            <input class="form-control" type="password" name="password" value="" placeholder="Kodeord" />
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Tilbage" name="" />
-        <input type="hidden" name="origin" value="logout" />
+            <input class="form-control" type="password" name="password" value="" placeholder="Adgangskode" />
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Registrer" name="" />
+        <input type="hidden" name="origin" value="newCustomer" />
         </form>
     </body>
 </html>

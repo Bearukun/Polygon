@@ -2,6 +2,7 @@ package presentationLayer.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,6 +33,8 @@ public class Front extends HttpServlet {
 
         UserController usrCtrl = new UserController();
 
+        String errMsg = null;
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String origin = request.getParameter("origin");
@@ -40,7 +43,7 @@ public class Front extends HttpServlet {
 
             switch (origin) {
 
-                case "login": 
+                case "login":
 
                     if (request.getSession().getAttribute("user") == null) {
 
@@ -70,14 +73,12 @@ public class Front extends HttpServlet {
                                 } else {
 
                                     response.sendRedirect("user.jsp");
-                                    
+
                                     break;
 
                                 }
 
                             }
-                            
-                          
 
                             //If something goes wrong, we need a way to show it.
                         } catch (CustomException e) {
@@ -86,46 +87,58 @@ public class Front extends HttpServlet {
 
                         }
 
-                    }else{
-                        
-                        response.sendRedirect("index.jsp#wrongLogin");
-                        
+                    } else {
+
+                        response.sendRedirect("index.jsp?wrongLogin");
+
                     }
-                    
-                    
-                    
+
                     break;
-                    
-                    
-                    
-                    
-                
+
                 //Logout of the website
-            case "logout":
-                
+                case "logout":
 
-                request.getSession().invalidate();
-                response.sendRedirect("index.jsp#");
+                    request.getSession().invalidate();
+                    response.sendRedirect("index.jsp#");
 
-                break;
-                
-            case "newCustomer":
-                
-                //If no user is logged in. (user == null)
-                if(request.getSession().getAttribute("user") == null){
-                    
-                    
-                    
-                    
-                }
-                
-                if(request.getParameter("email") != null || !request.getParameter("email").isEmpty() && request.getParameter("password") != null || !request.getParameter("password").isEmpty()){
-                    String email = request.getParameter("email");
-                    String password = request.getParameter("password");
-                }
+                    break;
+
+                case "newCustomer":
+
+                    //If no user is logged in. (user == null)
+                    if (request.getSession().getAttribute("user") == null) {
+
+                        String email = request.getParameter("email");
+                        String password = request.getParameter("password");
+
+                        try {
+
+                            //Create user
+                            usrCtrl.createUser(email, password);
+                            //If successful, redirect
+                            response.sendRedirect("index.jsp?sucess");
+
+                        } catch (CustomException e) {
+
+                            errMsg = e.getMessage();
+                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
+
+                        }
+
+                    } else {
+
+                        //if user is logged in, as in not null.
+                        response.sendRedirect("user.jsp");
+
+                    }
+
+                    break;
 
             }
 
+            
+            
+            
         } catch (Exception e) {
         }
 

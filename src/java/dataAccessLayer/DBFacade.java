@@ -57,7 +57,7 @@ public class DBFacade implements DBFacadeInterface {
     public void createUser(String email, String password) throws CustomException {
 
         try {
-
+            System.out.println("test!");
             //We need to check wether user already exists. 
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM user WHERE email = ?";
@@ -67,16 +67,16 @@ public class DBFacade implements DBFacadeInterface {
 
             //If there isn't anything in the ResultSet.
             if (!rs.next()) {
-
+                
                 //Prepare statement, notice that we don't need to specify 'type' here, hence
                 //default type is CUSTOMER. 
-                sql = "INSERT INTO `polygon`.`user` (`email`, `password`) VALUES ('?', '?');";
+                sql = "INSERT INTO `polygon`.`user` (`email`, `password`) VALUES (?, ?);";
 
                 stmt = con.prepareStatement(sql);
                 stmt.setString(1, email);
                 stmt.setString(2, password);
 
-                stmt.executeQuery();
+                stmt.executeUpdate();
 
             } else {
 
