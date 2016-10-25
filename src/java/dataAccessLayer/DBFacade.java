@@ -5,6 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import serviceLayer.enties.Building;
 import serviceLayer.enties.User;
 import serviceLayer.exceptions.CustomException;
 
@@ -14,6 +18,25 @@ import serviceLayer.exceptions.CustomException;
  */
 public class DBFacade implements DBFacadeInterface {
 
+    
+    @Override
+    public ArrayList<Building> getBuildings() throws CustomException {
+        
+        try {
+
+            Connection con = DBConnection.getConnection();
+            String sql = "SELECT * FROM building WHERE user_id = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, user_id);
+            ResultSet rs = stmt.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    //int building_id = , int postcode, int user_id, String address, String city
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     @Override
     public User getUser(String email) throws CustomException {
 
@@ -92,5 +115,7 @@ public class DBFacade implements DBFacadeInterface {
         }
 
     }
+
+    
 
 }
