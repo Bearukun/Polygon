@@ -20,7 +20,7 @@ public class DBFacade implements DBFacadeInterface {
 
     
     @Override
-    public ArrayList<Building> getBuildings() throws CustomException {
+    public ArrayList<Building> getBuildings(int user_id) throws CustomException {
         
         try {
 
