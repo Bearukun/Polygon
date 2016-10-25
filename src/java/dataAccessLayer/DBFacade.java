@@ -18,21 +18,36 @@ import serviceLayer.exceptions.CustomException;
  */
 public class DBFacade implements DBFacadeInterface {
 
+    private ArrayList<Building> tempAL = new ArrayList();
+    
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
 
         try {
-
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM building WHERE user_id = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(DBFacade.class.getName()).log(Level.SEVERE, null, ex);
+            
+            int building_id, postcode;   
+            String address, city;
+            
+            while(rs.next()){
+                building_id = rs.getInt(1);
+                address = rs.getString(2);
+                postcode = rs.getInt(3);
+                city = rs.getString(4);
+                tempAL.add(new Building(building_id, postcode, user_id, address, city));
+            }
+            
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Database connection failed.");
         }
-        //int building_id = , int postcode, int user_id, String address, String city
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(tempAL.isEmpty()){
+            throw new CustomException("No buildings available");
+        }
+        return tempAL;
     }
 
     @Override
