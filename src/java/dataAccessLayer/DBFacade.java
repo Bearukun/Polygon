@@ -32,7 +32,7 @@ public class DBFacade implements DBFacadeInterface {
             
             int building_id, postcode;   
             String address, city;
-            
+            //rs.next();
             while(rs.next()){
                 building_id = rs.getInt(1);
                 address = rs.getString(2);
@@ -40,7 +40,6 @@ public class DBFacade implements DBFacadeInterface {
                 city = rs.getString(4);
                 tempAL.add(new Building(building_id, postcode, user_id, address, city));
             }
-            
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");
         }
