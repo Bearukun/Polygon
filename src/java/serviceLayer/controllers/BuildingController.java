@@ -13,9 +13,7 @@ public class BuildingController implements BuildingControllerInterface{
     
     @Override
     public void createBuilding(int postcode, int user_id, String address, String city) throws CustomException {
-    
         dbfacade.createBuilding(postcode, user_id, address, city);
-        
     }
 
     @Override

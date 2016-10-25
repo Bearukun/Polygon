@@ -3,13 +3,16 @@ package presentationLayer.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.JOptionPane;
+import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.enties.Building;
 import serviceLayer.enties.User;
 import serviceLayer.exceptions.CustomException;
 
@@ -32,7 +35,8 @@ public class Front extends HttpServlet {
             throws ServletException, IOException {
 
         UserController usrCtrl = new UserController();
-
+        BuildingController bldgCtrl = new BuildingController();
+        
         String errMsg = null;
 
         response.setContentType("text/html;charset=UTF-8");
@@ -71,7 +75,11 @@ public class Front extends HttpServlet {
                                     break;
 
                                 } else {
-
+                                    ArrayList<Building> tempAL = new ArrayList();
+                                    tempAL = bldgCtrl.getBuildings(8);
+                                    request.getSession().setAttribute("tempAL", tempAL);
+                                    
+                                    
                                     response.sendRedirect("user.jsp");
 
                                     break;
@@ -116,7 +124,7 @@ public class Front extends HttpServlet {
                             //Create user
                             usrCtrl.createUser(email, password);
                             //If successful, redirect
-                            response.sendRedirect("index.jsp?sucess");
+                            response.sendRedirect("index.jsp?success");
 
                         } catch (CustomException e) {
 
