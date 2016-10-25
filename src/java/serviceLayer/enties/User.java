@@ -9,8 +9,7 @@ public class User {
     }
 
     private int user_id;
-    private String email;
-    private String password;
+    private String email, password;
     private type type;
 
     public User(int user_id, String email, String password, type type) {
