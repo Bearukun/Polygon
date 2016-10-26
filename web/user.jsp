@@ -23,7 +23,6 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
             </ul>
-            
             <ul class="nav navbar-nav navbar-right">
                 <li><a><span class="glyphicon glyphicon-user"></span> <%= (User)session.getAttribute("user") %></a></li>
                 <li><a href="${pageContext.request.contextPath}/Logout"><span class="glyphicon glyphicon-log-out"></span>Log ud</a></li>
@@ -48,7 +47,7 @@
                 <%
                     for (int i = 0; i < tempAL.size(); i++) {
                         %><tr>
-                            <td><a href="editBuilding.jsp"><%out.println(tempAL.get(i).getAddress());%></a></td>  
+                            <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getAddress());%></a></td>  
                             <td><%out.println(tempAL.get(i).getPostcode());%></td>  
                             <td><%out.println(tempAL.get(i).getCity());%></td>  
                         </tr>
