@@ -1,9 +1,3 @@
-<%-- 
-    Document   : logout
-    Created on : 26-10-2016, 09:25:12
-    Author     : Ceo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
