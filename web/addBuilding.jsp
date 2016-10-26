@@ -19,33 +19,21 @@
         <nav class="navbar navbar-default container-fluid">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Forside</a></li>
-                <li class="active"><a href="#"></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a><span class="glyphicon glyphicon-user"></span> <%= (User) session.getAttribute("user")%></a></li>
                 <li><a href="${pageContext.request.contextPath}/Logout"><span class="glyphicon glyphicon-log-out"></span>Log ud</a></li>
             </ul>
         </nav>
-
         <h1>Add building~!</h1>
-
         <div class="container">
             <form class="form-add-building" action="Front" method="POST">
-               
                 <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
                 <input class="form-control" type="text" name="postcode" value="" placeholder="Postnummer" />
                 <input class="form-control" type="text" name="city" value="" placeholder="By" />
-                
                 <input type="hidden" name="origin" value="createBuilding" />
                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Opret bygning" name="" />
-               
             </form>
         </div>
-        
-        
-
-
-
-
     </body>
 </html>
