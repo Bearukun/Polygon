@@ -84,7 +84,7 @@ public class Front extends HttpServlet {
 
                                 } else {
                                     
-                                
+                                //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
                                     request.getSession().setAttribute("tempAL", tempAL);
                                     response.sendRedirect("user.jsp");
@@ -202,7 +202,7 @@ public class Front extends HttpServlet {
         
     }
         
- 
+ //Refreshes the list of buildings
 public void refreshBuilding(int user_id) throws CustomException{
     
         tempAL.clear();
