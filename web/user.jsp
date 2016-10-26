@@ -35,11 +35,11 @@
             <h1>User page~!</h1>
 
             <% ArrayList<Building> tempAL = new ArrayList();
-            tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL"); 
-            out.println(tempAL.toString());
+            tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
             %>
 
-            <table border="1" text-align="left">
+            <table border="1" text-align="left" class="table table-striped">
+                <tbody>
                 <tr>
                     <td><b>Adresse</b></td>
                     <td><b>Postnr.</b></td>
@@ -48,13 +48,19 @@
                 <%
                     for (int i = 0; i < tempAL.size(); i++) {
                         %><tr>
-                            <td><%out.println(tempAL.get(i).getAddress());%></td>  
+                            <td><a href="editBuilding.jsp"><%out.println(tempAL.get(i).getAddress());%></a></td>  
                             <td><%out.println(tempAL.get(i).getPostcode());%></td>  
                             <td><%out.println(tempAL.get(i).getCity());%></td>  
                         </tr>
                     <%}
                 %>
+                </tbody>
+    
+                
             </table>
+            
+            
+
         </div>
     </body>
 </html>
