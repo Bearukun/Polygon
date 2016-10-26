@@ -23,10 +23,15 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
             </ul>
+            
             <ul class="nav navbar-nav navbar-right">
                 <li><a><span class="glyphicon glyphicon-user"></span> <%= (User)session.getAttribute("user") %></a></li>
-                <li><a href="logout.jsp"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+                <li><a href="${pageContext.request.contextPath}/Logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+               
+              
+               
             </ul>
+               
         </nav>
         
         <div id="container" class="container-fluid">
