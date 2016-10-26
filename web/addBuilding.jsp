@@ -35,5 +35,6 @@
                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Opret bygning" name="" />
             </form>
         </div>
+        <script src="scripts/script.js" type="text/javascript"></script>
     </body>
 </html>

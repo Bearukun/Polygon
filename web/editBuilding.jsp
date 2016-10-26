@@ -19,8 +19,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <!--Adding our own css-->
-        <!--<link href="css/index.css" rel="stylesheet" type="text/css"/>-->
+        <!-- Latest compiled JavaScript -->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
         
@@ -53,7 +53,7 @@
             %>
         </div>
         <div class="container">
-            <form class="form-edit-building" action="Front" method="POST">
+            <form class="form-edit-building" id="editBuild" action="javascript:amendDetails();">
                 <p>Adresse</p>
                 <input type="text" name="address" value="<%=build.getAddress()%>" />
                 <br><br>
@@ -67,8 +67,6 @@
                 <input class="btn btn-primary" type="submit" value="Gem ændringer" name="" />
             </form>
         </div>
-        
-        
-    
+        <script src="scripts/script.js" type="text/javascript"></script>
     </body>
 </html>
