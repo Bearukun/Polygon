@@ -25,7 +25,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a><span class="glyphicon glyphicon-user"></span> <%= (User)session.getAttribute("user") %></a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log ud</a></li>
+                <li><a href="logout.jsp"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
             </ul>
         </nav>
         
