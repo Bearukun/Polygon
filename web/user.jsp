@@ -27,48 +27,34 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a><span class="glyphicon glyphicon-user"></span> <%= (User)session.getAttribute("user") %></a></li>
                 <li><a href="${pageContext.request.contextPath}/Logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-               
-              
-               
             </ul>
-               
         </nav>
         
         <div id="container" class="container-fluid">
         
-        <h1>User page~!</h1>
-        
-        <% ArrayList<Building> tempAL = new ArrayList();
-        tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL"); 
-        out.println(tempAL.toString());
-        %>
-        
-        <table border="1" text-align="left">
-            <tr>
-                <td><b>Adresse</b></td>
-                <td><b>Postnr.</b></td>
-                <td><b>By</b></td>
-            </tr>
-            <%
-                for (int i = 0; i < tempAL.size(); i++) {
-                    %><tr>
-                        <td><%out.println(tempAL.get(i).getAddress());%></td>  
-                        <td><%out.println(tempAL.get(i).getPostcode());%></td>  
-                        <td><%out.println(tempAL.get(i).getCity());%></td>  
-</tr>
-                <%}
+            <h1>User page~!</h1>
+
+            <% ArrayList<Building> tempAL = new ArrayList();
+            tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL"); 
+            out.println(tempAL.toString());
             %>
-                    
-            
-        </table>
-        
-            
-            
-        <form class="form-signin" action="Front" method="POST">
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Log ud" name="" />
-        <input type="hidden" name="origin" value="logout" />
-        </form>
-            
-            </div>
+
+            <table border="1" text-align="left">
+                <tr>
+                    <td><b>Adresse</b></td>
+                    <td><b>Postnr.</b></td>
+                    <td><b>By</b></td>
+                </tr>
+                <%
+                    for (int i = 0; i < tempAL.size(); i++) {
+                        %><tr>
+                            <td><%out.println(tempAL.get(i).getAddress());%></td>  
+                            <td><%out.println(tempAL.get(i).getPostcode());%></td>  
+                            <td><%out.println(tempAL.get(i).getCity());%></td>  
+                        </tr>
+                    <%}
+                %>
+            </table>
+        </div>
     </body>
 </html>
