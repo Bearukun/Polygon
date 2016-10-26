@@ -1,5 +1,4 @@
 <%@page import="serviceLayer.enties.User"%>
-<%@page import="javax.swing.JOptionPane"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="serviceLayer.enties.Building"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -18,7 +17,6 @@
         <link href="css/index.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-    
   
         <!--Top navigation bar:-->
         <nav class="navbar navbar-default container-fluid">
@@ -33,22 +31,11 @@
         
         <div id="container" class="container-fluid">
         
-        
         <h1>User page~!</h1>
-        
-        
-        
         
         <% ArrayList<Building> tempAL = new ArrayList();
         tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL"); 
         out.println(tempAL.toString());
-        
-
-
-        //JOptionPane.showMessageDialog(null, tempAL.get(0).getPostcode());
-        //JOptionPane.showMessageDialog(null, "hej");
-        //System.out.println(tempAL.get(0).getPostcode());
-        //System.out.println("hej");
         %>
         
         <table border="1" text-align="left">
