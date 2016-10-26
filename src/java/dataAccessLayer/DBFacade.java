@@ -43,9 +43,9 @@ public class DBFacade implements DBFacadeInterface {
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");
         }
-        if (tempAL.isEmpty()) {
-            throw new CustomException("No buildings available");
-        }
+//        if (tempAL.isEmpty()) {
+//            throw new CustomException("No buildings available");
+//        }
         return tempAL;
     }
 
