@@ -54,19 +54,18 @@
             <% } else { %>
             <table border="1" text-align="left" class="table table-striped">
                 <tbody>
-
-                <tr>
-                    <td><b>Adresse</b></td>
-                    <td><b>Postnr.</b></td>
-                    <td><b>By</b></td>
-                </tr>
-                <%
-                    for (int i = 0; i < tempAL.size(); i++) {
-                        %><tr>
-                            <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getAddress());%></a></td>  
-                            <td><%out.println(tempAL.get(i).getPostcode());%></td>  
-                            <td><%out.println(tempAL.get(i).getCity());%></td>  
-                        </tr>
+                    <tr>
+                        <td><b>Adresse</b></td>
+                        <td><b>Postnr.</b></td>
+                        <td><b>By</b></td>
+                    </tr>
+                    <%
+                        for (int i = 0; i < tempAL.size(); i++) {
+                    %><tr>
+                        <td><a href="editBuilding.jsp"><%out.println(tempAL.get(i).getAddress());%></a></td>  
+                        <td><%out.println(tempAL.get(i).getPostcode());%></td>  
+                        <td><%out.println(tempAL.get(i).getCity());%></td>  
+                    </tr>
                     <%}
                     %>
                 </tbody>
