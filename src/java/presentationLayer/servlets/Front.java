@@ -141,6 +141,44 @@ public class Front extends HttpServlet {
                     }
 
                     break;
+                    
+                    
+                    case "createBuilding":
+
+                    //If no user is logged in. (user == null)
+                    if (request.getSession().getAttribute("user") != null) {
+
+                        User user = (User) request.getSession().getAttribute("user");
+                        int user_id = user.getUser_id();
+                        
+                        
+                        String address = request.getParameter("address");
+                        String postcode = request.getParameter("postcode");
+                        String city = request.getParameter("city");
+
+                        try {
+
+                            //createBuilding
+                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city);
+                            //If successful, redirect
+                            response.sendRedirect("user.jsp?sucess=buildingAdded");
+
+                        } catch (CustomException e) {
+
+                            errMsg = e.getMessage();
+                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
+
+                        }
+
+                    } else {
+
+                        //Redirect to index if no user is logged in.
+                        response.sendRedirect("index.jsp?=notLoggedIn");
+
+                    }
+
+                    break;
+                    
 
             }
 

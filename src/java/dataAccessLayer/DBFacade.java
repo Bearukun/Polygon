@@ -129,7 +129,7 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void createBuilding(int postcode, int user_id, String address, String city) throws CustomException {
+    public void createBuilding(int user_id, String address, int postcode, String city) throws CustomException {
 
         try {
 
