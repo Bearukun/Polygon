@@ -1,8 +1,12 @@
 package presentationLayer.servlets;
 
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import dataAccessLayer.DBConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +26,9 @@ import serviceLayer.exceptions.CustomException;
 @WebServlet(name = "Front", urlPatterns = {"/Front"})
 public class Front extends HttpServlet {
 
+    ArrayList<Building> tempAL = new ArrayList();
+     UserController usrCtrl = new UserController();
+     BuildingController bldgCtrl = new BuildingController();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,8 +41,7 @@ public class Front extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        UserController usrCtrl = new UserController();
-        BuildingController bldgCtrl = new BuildingController();
+       
         
         String errMsg = null;
 
@@ -51,6 +57,8 @@ public class Front extends HttpServlet {
 
                     if (request.getSession().getAttribute("user") == null) {
 
+                        
+                        
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
 
@@ -75,11 +83,10 @@ public class Front extends HttpServlet {
                                     break;
 
                                 } else {
-                                    ArrayList<Building> tempAL = new ArrayList();
-                                    tempAL = bldgCtrl.getBuildings(8);
+                                    
+                                
+                                    refreshBuilding(user.getUser_id());
                                     request.getSession().setAttribute("tempAL", tempAL);
-                                    
-                                    
                                     response.sendRedirect("user.jsp");
 
                                     break;
@@ -110,6 +117,10 @@ public class Front extends HttpServlet {
                     response.sendRedirect("index.jsp#");
 
                     break;
+                    
+                case "update":
+                    
+                    
 
                 case "newCustomer":
 
@@ -141,6 +152,45 @@ public class Front extends HttpServlet {
                     }
 
                     break;
+                    
+                    
+                    case "createBuilding":
+
+                    //If no user is logged in. (user == null)
+                    if (request.getSession().getAttribute("user") != null) {
+
+                        User user = (User) request.getSession().getAttribute("user");
+                        int user_id = user.getUser_id();
+                        
+                        
+                        String address = request.getParameter("address");
+                        String postcode = request.getParameter("postcode");
+                        String city = request.getParameter("city");
+
+                        try {
+
+                            //createBuilding
+                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city);
+                            refreshBuilding(user_id);
+                            //If successful, redirect
+                            response.sendRedirect("user.jsp?sucess=buildingAdded");
+
+                        } catch (CustomException e) {
+
+                            errMsg = e.getMessage();
+                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
+
+                        }
+
+                    } else {
+
+                        //Redirect to index if no user is logged in.
+                        response.sendRedirect("index.jsp?=notLoggedIn");
+
+                    }
+
+                    break;
+                    
 
             }
 
@@ -149,8 +199,17 @@ public class Front extends HttpServlet {
             
         } catch (Exception e) {
         }
-
+        
     }
+        
+ 
+public void refreshBuilding(int user_id) throws CustomException{
+    
+        tempAL.clear();
+        tempAL = bldgCtrl.getBuildings(user_id);
+        
+}
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -19,7 +19,7 @@ import serviceLayer.exceptions.CustomException;
 public class DBFacade implements DBFacadeInterface {
 
     private ArrayList<Building> tempAL = new ArrayList();
-    
+
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
 
@@ -29,11 +29,11 @@ public class DBFacade implements DBFacadeInterface {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
-            
-            int building_id, postcode;   
+
+            int building_id, postcode;
             String address, city;
             //rs.next();
-            while(rs.next()){
+            while (rs.next()) {
                 building_id = rs.getInt(1);
                 address = rs.getString(2);
                 postcode = rs.getInt(3);
@@ -43,7 +43,7 @@ public class DBFacade implements DBFacadeInterface {
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");
         }
-        if(tempAL.isEmpty()){
+        if (tempAL.isEmpty()) {
             throw new CustomException("No buildings available");
         }
         return tempAL;
@@ -129,7 +129,7 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void createBuilding(int postcode, int user_id, String address, String city) throws CustomException {
+    public void createBuilding(int user_id, String address, int postcode, String city) throws CustomException {
 
         try {
 
@@ -150,5 +150,8 @@ public class DBFacade implements DBFacadeInterface {
         }
 
     }
+
+    
+    
 
 }
