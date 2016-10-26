@@ -61,7 +61,7 @@ public class Building {
 
     @Override
     public String toString() {
-        return "Building{" + "building_id=" + building_id + ", postcode=" + postcode + ", user_id=" + user_id + ", address=" + address + ", city=" + city + '}';
+        return "Building: " + "building_id: " + building_id + ", postcode: " + postcode + ", user_id: " + user_id + ", address: " + address + ", city: " + city;
     }
     
     

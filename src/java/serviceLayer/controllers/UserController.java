@@ -2,6 +2,8 @@ package serviceLayer.controllers;
 
 import dataAccessLayer.DBFacade;
 import dataAccessLayer.interfaces.DBFacadeInterface;
+import javax.swing.JOptionPane;
+
 import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.enties.User;
 import serviceLayer.exceptions.CustomException;
@@ -56,6 +58,7 @@ public class UserController implements UserControllerInterface {
 
         } else {
 
+            
             //Input fields must be empty, trow error. 
             throw new CustomException("Be sure to fill out both fields!");
 
