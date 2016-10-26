@@ -14,7 +14,7 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!--Adding our own css-->
-        <link href="css/index.css" rel="stylesheet" type="text/css"/>
+        
     </head>
     <body>
   
@@ -35,9 +35,20 @@
             <h1>User page~!</h1>
 
             <% ArrayList<Building> tempAL = new ArrayList();
+            
             tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
             %>
-
+            
+            <% if (tempAL.isEmpty()){%>
+            <div id="container" class="container-fluid">
+ 
+  <p class="text-danger">Du har ingen bygninger! Tryk på 'Tilføj bygning'</p>
+</div>
+            
+            <a href="addBuilding.jsp" class="btn btn-info" role="button">Tilføj Bygning</a>
+            
+            
+            <% }else { %>
             <table border="1" text-align="left" class="table table-striped">
                 <tbody>
                 <tr>
@@ -58,6 +69,8 @@
     
                 
             </table>
+                
+               <% } %>
             
             
 
