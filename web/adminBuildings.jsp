@@ -65,37 +65,43 @@
                         <!-- END MENU -->
                     </div>
                 </div>
-                        
                 <!-- SITE CONTENT -->
-                
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
-
                         <h1>Bygninger:</h1>
+
+                        <% ArrayList<User> tempUL = new ArrayList();
+                            ArrayList<Building> allBuildings = new ArrayList();
+
+                            tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
+                            allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
+
+                        %>
+
                         <table border="1" text-align="left" class="table table-striped">
                             <tbody>
                                 <tr>
+                                    <td><b>Building(ID)</b></td>
                                     <td><b>Adresse</b></td>
-                                    <td><b>Postnr.</b></td>
+                                    <td><b>Postnummer</b></td>
                                     <td><b>By</b></td>
+                                    <td><b>Bruger(ID)</b></td>
                                 </tr>
                                 <%
-                                    for (int i = 0; i < tempAL.size(); i++) {
+                                    for (int i = 0; i < tempUL.size(); i++) {
+                                        for(int x = 0; x < allBuildings.size(); x++){
+                                            if(tempUL.get(i).getUser_id() ==  allBuildings.get(x).getUser_id()){
                                 %><tr>
-                                    <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getAddress());%></a></td>  
-                                    <td><%out.println(tempAL.get(i).getPostcode());%></td>  
-                                    <td><%out.println(tempAL.get(i).getCity());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getAddress());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getPostcode());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getCity());%></td>  
+                                    <td><%out.println(tempUL.get(i).getEmail());%></td> 
                                 </tr>
-                                <%}
+                                <%}}}
                                 %>
                             </tbody>
                         </table>
-                        
-
-                        
-
-                        
-                          
                     </div>
                 </div>
             </div>

@@ -21,6 +21,13 @@ public class BuildingController implements BuildingControllerInterface{
         return dbfacade.getBuildings(user_id);
     }
 
+    @Override
+    public ArrayList<Building> getAllBuildings() throws CustomException {
+
+        return dbfacade.getAllBuildings();
+
+    }
+
 
 
     

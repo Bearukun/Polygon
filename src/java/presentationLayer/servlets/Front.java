@@ -28,6 +28,7 @@ public class Front extends HttpServlet {
 
     private ArrayList<Building> tempAL = new ArrayList();
     private ArrayList<User> tempUL = new ArrayList();
+    private ArrayList<Building> allBuildings = new ArrayList();
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
@@ -83,7 +84,9 @@ public class Front extends HttpServlet {
 
                                 if (user.getType().equals(User.type.ADMIN)) {
                                     refreshUsers(); 
+                                    refreshAllBuildings();
                                     request.getSession().setAttribute("tempUL", tempUL);
+                                    request.getSession().setAttribute("allBuildings", allBuildings);
                                     response.sendRedirect("admin.jsp");
                                     break;
 
@@ -211,6 +214,13 @@ public class Front extends HttpServlet {
 
         tempAL.clear();
         tempAL = bldgCtrl.getBuildings(user_id);
+
+    }
+    //Refreshes the list of buildings
+    public void refreshAllBuildings() throws CustomException {
+
+        allBuildings.clear();
+        allBuildings = bldgCtrl.getAllBuildings();
 
     }
 
