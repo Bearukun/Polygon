@@ -1,5 +1,6 @@
 package serviceLayer.controllers.interfaces;
 
+import java.util.ArrayList;
 import serviceLayer.enties.User;
 import serviceLayer.exceptions.CustomException;
 
@@ -11,6 +12,6 @@ public interface UserControllerInterface {
 
     void createUser (String email, String password) throws CustomException;
     
-    
+    ArrayList<User> getUsers() throws CustomException;
     
 }

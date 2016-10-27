@@ -2,6 +2,7 @@ package serviceLayer.controllers;
 
 import dataAccessLayer.DBFacade;
 import dataAccessLayer.interfaces.DBFacadeInterface;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import serviceLayer.controllers.interfaces.UserControllerInterface;
@@ -64,6 +65,11 @@ public class UserController implements UserControllerInterface {
 
         }
 
+    }
+
+    @Override
+    public ArrayList<User> getUsers() throws CustomException {
+        return dbfacade.getUsers();
     }
 
 }

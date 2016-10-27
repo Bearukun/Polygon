@@ -46,24 +46,19 @@
                         <div class="profile-usermenu">
                             <ul class="nav">
                                 <li class="active">
-                                    <a href="user.jsp?refresh">
+                                    <a href="admin.jsp?refresh">
                                         <i class="glyphicon glyphicon-home"></i>
                                         Overblik </a>
                                 </li>
                                 <li>
-                                    <a href="addBuilding.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        Tilføj bygning </a>
+                                    <a href="adminBuildings.jsp" target="_self">
+                                        <i class="glyphicon glyphicon-object-align-bottom"></i>
+                                        Vis bygninger </a>
                                 </li>
                                 <li>
-                                    <a href="editBuilding?noID" target="_self">
-                                        <i class="glyphicon glyphicon-wrench"></i>
-                                        Rediger bygning </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="glyphicon glyphicon-user"></i>
-                                        Profil </a>
+                                    <a href="adminUsers.jsp" target="_self">
+                                        <i class="glyphicon glyphicon-th-list"></i>
+                                        Vis brugere </a>
                                 </li>
                             </ul>
                         </div>
