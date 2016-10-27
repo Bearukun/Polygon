@@ -6,6 +6,7 @@ if yes - then redirect - else nothing. --%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
         <title>Sunde Bygninger - Login</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -14,19 +15,35 @@ if yes - then redirect - else nothing. --%>
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!--Adding our own css-->
-        <link href="css/index.css" rel="stylesheet" type="text/css"/>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <!-- Login-button og styring -->
-        <div class="container">
+        <!-- Register user div, as modal window -->
+        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="loginmodal-container">
+                    <h1>Opret ny bruger</h1><br>
+                    <form class="form-signin" action="Front" method="POST">
+                        <input type="text" name="email" placeholder="Email">
+                        <input type="password" name="password" placeholder="Adgangskode">
+                        <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
+                        <input type="hidden" name="origin" value="newCustomer" />
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Login div -->
+        <div class="login_container">
             <form class="form-signin" action="Front" method="POST">
                 <img src="./img/logo.png" class="img-responsive center-block" alt="Responsive image">
                 <input class="form-control" type="text" name="email" value="" placeholder="Email" />
-                <input class="form-control" type="password" name="password" value="" placeholder="Kodeord" />
+                <input class="form-control" type="password" name="password" value="" placeholder="Adgangskode" />
                 <input type="hidden" name="origin" value="login" />
                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Log ind" name="" />
-                <a href="newCustomer.jsp">Opret bruger.</a>
-                
+                <br>
+                <div class="span12" style="text-align:center">
+                    <a href="#" data-toggle="modal" data-target="#login-modal">Opret ny bruger</a>
+                </div>
             </form>
         </div>
     </body>

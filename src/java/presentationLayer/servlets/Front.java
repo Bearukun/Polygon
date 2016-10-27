@@ -1,8 +1,12 @@
 package presentationLayer.servlets;
 
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import dataAccessLayer.DBConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +26,11 @@ import serviceLayer.exceptions.CustomException;
 @WebServlet(name = "Front", urlPatterns = {"/Front"})
 public class Front extends HttpServlet {
 
+    private ArrayList<Building> tempAL = new ArrayList();
+    private UserController usrCtrl = new UserController();
+    private BuildingController bldgCtrl = new BuildingController();
+    private User user = null;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,13 +43,8 @@ public class Front extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        UserController usrCtrl = new UserController();
-        BuildingController bldgCtrl = new BuildingController();
-        
-        String errMsg = null;
-
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        String errMsg = null;
         String origin = request.getParameter("origin");
 
         try {
@@ -54,15 +58,27 @@ public class Front extends HttpServlet {
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
 
-                        User user;
-
                         try {
 
                             user = usrCtrl.login(email, password);
 
                             if (user != null) {
 
-                                request.getSession().setAttribute("user", user);
+                                request.getSession().setAttribute("email", user.getEmail().toString());
+
+                                //Translate user type:
+                                if (user.getType().toString().equals("CUSTOMER")) {
+
+                                    request.getSession().setAttribute("type", "Kunde");
+
+                                } else if (user.getType().toString().equals("TECHNICHIAN")) {
+
+                                    request.getSession().setAttribute("type", "Teknikker");
+
+                                } else {
+
+                                    request.getSession().setAttribute("type", "Administration");
+                                }
 
                                 if (user.getType().equals(User.type.ADMIN)) {
 
@@ -75,11 +91,10 @@ public class Front extends HttpServlet {
                                     break;
 
                                 } else {
-                                    ArrayList<Building> tempAL = new ArrayList();
-                                    tempAL = bldgCtrl.getBuildings(8);
+
+                                    //Refreshes and populates the arrayList with buildings for the user.
+                                    refreshBuilding(user.getUser_id());
                                     request.getSession().setAttribute("tempAL", tempAL);
-                                    
-                                    
                                     response.sendRedirect("user.jsp");
 
                                     break;
@@ -110,6 +125,8 @@ public class Front extends HttpServlet {
                     response.sendRedirect("index.jsp#");
 
                     break;
+
+                case "update":
 
                 case "newCustomer":
 
@@ -142,13 +159,53 @@ public class Front extends HttpServlet {
 
                     break;
 
+                case "createBuilding":
+
+                    //If no user is logged in. (user == null)
+                    if (request.getSession().getAttribute("user") != null) {
+
+                        int user_id = user.getUser_id();
+
+                        String address = request.getParameter("address");
+                        String postcode = request.getParameter("postcode");
+                        String city = request.getParameter("city");
+
+                        try {
+
+                            //createBuilding
+                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city);
+                            refreshBuilding(user_id);
+                            //If successful, redirect
+                            response.sendRedirect("user.jsp?sucess=buildingAdded");
+
+                        } catch (CustomException e) {
+
+                            errMsg = e.getMessage();
+                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
+
+                        }
+
+                    } else {
+
+                        //Redirect to index if no user is logged in.
+                        response.sendRedirect("index.jsp?=notLoggedIn");
+
+                    }
+
+                    break;
+
             }
 
-            
-            
-            
         } catch (Exception e) {
         }
+
+    }
+
+    //Refreshes the list of buildings
+    public void refreshBuilding(int user_id) throws CustomException {
+
+        tempAL.clear();
+        tempAL = bldgCtrl.getBuildings(user_id);
 
     }
 

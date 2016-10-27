@@ -12,8 +12,8 @@ public class BuildingController implements BuildingControllerInterface{
     private final DBFacadeInterface dbfacade = new DBFacade();
     
     @Override
-    public void createBuilding(int postcode, int user_id, String address, String city) throws CustomException {
-        dbfacade.createBuilding(postcode, user_id, address, city);
+    public void createBuilding(int user_id, String address, int postcode, String city) throws CustomException {
+        dbfacade.createBuilding(user_id, address, postcode, city);
     }
 
     @Override
