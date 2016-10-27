@@ -27,6 +27,7 @@ import serviceLayer.exceptions.CustomException;
 public class Front extends HttpServlet {
 
     private ArrayList<Building> tempAL = new ArrayList();
+    private ArrayList<User> tempUL = new ArrayList();
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
@@ -81,7 +82,8 @@ public class Front extends HttpServlet {
                                 }
 
                                 if (user.getType().equals(User.type.ADMIN)) {
-
+                                    refreshUsers(); 
+                                    request.getSession().setAttribute("tempUL", tempUL);
                                     response.sendRedirect("admin.jsp");
                                     break;
 
@@ -193,7 +195,10 @@ public class Front extends HttpServlet {
                     }
 
                     break;
-
+                case "adminUsers":
+                    
+                    
+                    
             }
 
         } catch (Exception e) {
@@ -209,6 +214,11 @@ public class Front extends HttpServlet {
 
     }
 
+    public void refreshUsers() throws CustomException{
+        
+        tempUL.clear();
+        tempUL = usrCtrl.getUsers();
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
