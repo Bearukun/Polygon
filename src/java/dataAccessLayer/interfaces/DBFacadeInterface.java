@@ -17,5 +17,8 @@ public interface DBFacadeInterface {
     
     void createBuilding(int user_id, String address, int postcode, String city) throws CustomException;
     
+    ArrayList<User> getUsers() throws CustomException;
+    
+    
     
 }

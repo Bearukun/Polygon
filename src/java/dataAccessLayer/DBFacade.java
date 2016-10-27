@@ -19,6 +19,7 @@ import serviceLayer.exceptions.CustomException;
 public class DBFacade implements DBFacadeInterface {
 
     private ArrayList<Building> tempAL = new ArrayList();
+    private ArrayList<User> tempUL = new ArrayList();
 
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
@@ -149,6 +150,42 @@ public class DBFacade implements DBFacadeInterface {
 
         }
 
+    }
+
+    @Override
+    public ArrayList<User> getUsers() throws CustomException {
+        
+        try {
+            Connection con = DBConnection.getConnection();
+            String sql = "SELECT * FROM polygon.user";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            
+            ResultSet rs = stmt.executeQuery();
+
+            int user_id;
+            String email, password, type;
+           
+            
+            
+            //rs.next();
+            while (rs.next()) {
+                user_id = rs.getInt(1);
+                email = rs.getString(2);
+                password = rs.getString(3);
+                type = rs.getString(4);
+                
+                tempUL.add(new User(user_id, email, password, User.type.valueOf(type)));
+                
+                
+                
+            }
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Database connection failed.");
+        }
+//        if (tempAL.isEmpty()) {
+//            throw new CustomException("No buildings available");
+//        }
+        return tempUL;
     }
 
     
