@@ -167,7 +167,7 @@ public class Front extends HttpServlet {
                 case "createBuilding":
 
                     //If no user is logged in. (user == null)
-                    if (request.getSession().getAttribute("user") != null) {
+                    if (user != null) {
 
                         int user_id = user.getUser_id();
 
