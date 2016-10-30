@@ -145,6 +145,11 @@ public class DBFacade implements DBFacadeInterface {
             stmt.setInt(2, postcode);
             stmt.setString(3, city);
             stmt.setInt(4, user_id);
+            
+            //Currently disabled due to Custopmexception being thrown, even when the SQL statment has been adjusted to:
+            //"INSERT INTO `polygon`.`building` (`address`, `postcode`, `city`, `user_id`, 'floor', 'description') VALUES (?, ?, ?, ?, ?, ?);";
+            //stmt.setInt(5, floor);
+            //stmt.setString(6, description);
 
             stmt.executeUpdate();
 

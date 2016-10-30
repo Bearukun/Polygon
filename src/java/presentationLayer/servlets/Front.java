@@ -205,6 +205,8 @@ public class Front extends HttpServlet {
                     
                 case "editBuilding":
                     
+                    //needs to recieve the unique id for the user assigned to the building also.
+                    
                     JOptionPane.showMessageDialog(null, "Test!");
                     response.sendRedirect("user.jsp?sucess=TestSucessfull");
 //                    if (user != null) {
