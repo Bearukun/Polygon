@@ -77,6 +77,8 @@
                                 <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
                                 <input class="form-control" type="text" name="postcode" value="" placeholder="Postnummer" />
                                 <input class="form-control" type="text" name="city" value="" placeholder="By" />
+                                <input class="form-control" type="text" name="floor" value="" placeholder="Etager" />
+                                <input class="form-control" type="text" name="description" value="" placeholder="Beskrivelse" />
                                 <input type="hidden" name="origin" value="createBuilding" />
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Opret bygning" name="" />
                             </form>

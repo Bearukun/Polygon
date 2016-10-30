@@ -165,6 +165,8 @@ public class Front extends HttpServlet {
                     break;
 
                 case "createBuilding":
+                    
+                    
 
                     //If no user is logged in. (user == null)
                     if (user != null) {
@@ -174,11 +176,13 @@ public class Front extends HttpServlet {
                         String address = request.getParameter("address");
                         String postcode = request.getParameter("postcode");
                         String city = request.getParameter("city");
+                        String floor = request.getParameter("floor");
+                        String description = request.getParameter("description");
 
                         try {
 
                             //createBuilding
-                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city);
+                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city, Integer.parseInt(floor), description);
                             refreshBuilding(user_id);
                             //If successful, redirect
                             response.sendRedirect("user.jsp?sucess=buildingAdded");
@@ -198,6 +202,44 @@ public class Front extends HttpServlet {
                     }
 
                     break;
+                    
+                case "editBuilding":
+                    
+                    JOptionPane.showMessageDialog(null, "Test!");
+                    response.sendRedirect("user.jsp?sucess=TestSucessfull");
+//                    if (user != null) {
+//
+//                        int user_id = user.getUser_id();
+//
+//                        String address = request.getParameter("address");
+//                        String postcode = request.getParameter("postcode");
+//                        String city = request.getParameter("city");
+//
+//                        try {
+//
+//                            //createBuilding
+//                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city);
+//                            refreshBuilding(user_id);
+//                            //If successful, redirect
+//                            response.sendRedirect("user.jsp?sucess=buildingEdited");
+//
+//                        } catch (CustomException e) {
+//
+//                            errMsg = e.getMessage();
+//                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
+//
+//                        }
+//
+//                    } else {
+//
+//                        //Redirect to index if no user is logged in.
+//                        response.sendRedirect("index.jsp?=notLoggedIn");
+//
+//                    }
+//
+//                    break;
+                    
+                    
                 case "adminUsers":
                     
                     

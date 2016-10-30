@@ -65,7 +65,7 @@
                                         Rediger bygning </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="editProfile.jsp">
                                         <i class="glyphicon glyphicon-user"></i>
                                         Bruger indstillinger </a>
                                 </li>
@@ -87,7 +87,7 @@
                             }
                         }
                     %>
-                    <form class="form-edit-building" id="editBuild" action="javascript:amendDetails();">
+                    <form class="form-edit-building" id="editBuilding" action="editBuilding">
                         <p>Adresse</p>
                         <input type="text" name="address" value="<%=build.getAddress()%>" />
                         <br><br>
@@ -100,6 +100,15 @@
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="Gem ændringer" name="" />
                     </form>
+                        
+                        <form class="form-signin" action="Front" method="POST">
+                            <input type="hidden" name="origin" value="javascript:amendDetails();" />
+                        <br><br>
+                        <input class="btn btn-primary" type="submit" value="Gem !!! TEST" name="" />
+                            
+                        </form>
+                        
+                        
                 </div>
             </div>
         </div>

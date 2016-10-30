@@ -8,15 +8,12 @@ public class User {
 
     }
 
-    private int user_id;
-    private String email, password;
+    private int user_id, phone;
+    private String email, password, name;
     private type type;
+    
 
-    public User(int user_id, String email, type type) {
-        this.user_id = user_id;
-        this.email = email;
-        this.type = type;
-    }
+
 
     public User(int user_id, String email) {
         this.user_id = user_id;
@@ -27,12 +24,34 @@ public class User {
 
     
     
-    public User(int user_id, String email, String password, type type) {
+    public User(int user_id, String email, String password, type type,  String name, int phone) {
         this.user_id = user_id;
         this.email = email;
         this.password = password;
         this.type = type;
+        this.name = name;
+        this.phone = phone;
+        
+        
     }
+
+    public int getPhone() {
+        return phone;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
 
     public int getUser_id() {
         return user_id;

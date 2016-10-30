@@ -32,15 +32,18 @@ public class DBFacade implements DBFacadeInterface {
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
 
-            int building_id, postcode;
-            String address, city;
+            int building_id, postcode, floor;
+            String address, city, description;
             //rs.next();
             while (rs.next()) {
                 building_id = rs.getInt(1);
                 address = rs.getString(2);
                 postcode = rs.getInt(3);
                 city = rs.getString(4);
-                tempAL.add(new Building(building_id, postcode, user_id, address, city));
+                floor = rs.getInt(6);
+                description = rs.getString(7);
+                
+                tempAL.add(new Building(building_id, postcode, user_id, address, city, floor, description));
             }
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");
@@ -80,7 +83,7 @@ public class DBFacade implements DBFacadeInterface {
 
                 }
                 //User(int user_id, String email, String password, type type)
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), type);
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6));
 
             } else {
                 throw new CustomException("No such user");
@@ -131,7 +134,7 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void createBuilding(int user_id, String address, int postcode, String city) throws CustomException {
+    public void createBuilding(int user_id, String address, int postcode, String city, int floor, String description) throws CustomException {
 
         try {
 
@@ -163,8 +166,8 @@ public class DBFacade implements DBFacadeInterface {
             
             ResultSet rs = stmt.executeQuery();
 
-            int user_id;
-            String email, password, type;
+            int user_id, phone;
+            String email, password, type, name;
            
             
             
@@ -174,8 +177,10 @@ public class DBFacade implements DBFacadeInterface {
                 email = rs.getString(2);
                 password = rs.getString(3);
                 type = rs.getString(4);
+                name = rs.getString(5);
+                phone = rs.getInt(6);
                 
-                tempUL.add(new User(user_id, email, password, User.type.valueOf(type)));
+                tempUL.add(new User(user_id, email, password, User.type.valueOf(type), name, phone));
                 
                 
                 
@@ -199,8 +204,8 @@ public class DBFacade implements DBFacadeInterface {
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            int building_id, postcode, user_id;
-            String address, city;
+            int building_id, postcode, user_id, floor;
+            String address, city, description;
             //rs.next();
             while (rs.next()) {
                 building_id = rs.getInt(1);
@@ -208,7 +213,9 @@ public class DBFacade implements DBFacadeInterface {
                 postcode = rs.getInt(3);
                 city = rs.getString(4);
                 user_id = rs.getInt(5);
-                allBuildings.add(new Building(building_id, postcode, user_id, address, city));
+                floor = rs.getInt(6);
+                description = rs.getString(7);
+                allBuildings.add(new Building(building_id, postcode, user_id, address, city, floor, description));
             }
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");

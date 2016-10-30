@@ -100,6 +100,8 @@
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnr.</b></td>
                                     <td><b>By</b></td>
+                                    <td><b>Etager</b></td>
+                                    <td><b>Beskrivelse</b></td>
                                 </tr>
                                 <%
                                     for (int i = 0; i < tempAL.size(); i++) {
@@ -107,6 +109,8 @@
                                     <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getAddress());%></a></td>  
                                     <td><%out.println(tempAL.get(i).getPostcode());%></td>  
                                     <td><%out.println(tempAL.get(i).getCity());%></td>  
+                                    <td><%out.println(tempAL.get(i).getFloor());%></td>  
+                                    <td><%out.println(tempAL.get(i).getDescription());%></td>  
                                 </tr>
                                 <%}
                                 %>

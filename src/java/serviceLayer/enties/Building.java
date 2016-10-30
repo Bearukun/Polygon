@@ -3,18 +3,37 @@ package serviceLayer.enties;
 
 public class Building {
     
-    private int building_id, postcode, user_id;   
-    private String address, city;
+    private int building_id, postcode, user_id, floor;   
+    private String address, city, description;
 
     public Building() {
     }
 
-    public Building(int building_id, int postcode, int user_id, String address, String city) {
+    public Building(int building_id, int postcode, int user_id, String address, String city, int floor, String description) {
         this.building_id = building_id;
         this.postcode = postcode;
         this.user_id = user_id;
         this.address = address;
         this.city = city;
+        this.floor = floor;
+        this.description = description;
+        
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     
