@@ -61,9 +61,9 @@
                                         Rediger bygning </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="editProfile.jsp">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        Profil </a>
+                                        Bruger indstillinger </a>
                                 </li>
                             </ul>
                         </div>

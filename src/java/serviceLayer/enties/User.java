@@ -12,6 +12,21 @@ public class User {
     private String email, password;
     private type type;
 
+    public User(int user_id, String email, type type) {
+        this.user_id = user_id;
+        this.email = email;
+        this.type = type;
+    }
+
+    public User(int user_id, String email) {
+        this.user_id = user_id;
+        this.email = email;
+    }
+    
+    
+
+    
+    
     public User(int user_id, String email, String password, type type) {
         this.user_id = user_id;
         this.email = email;
