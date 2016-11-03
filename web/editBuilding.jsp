@@ -87,7 +87,7 @@
                             }
                         }
                     %>
-                    <form class="form-edit-building" id="editBuilding" action="editBuilding">
+                    <form class="form-edit-building" id="editBuilding" action="Front" method="POST">
                         <p>Adresse</p>
                         <input type="text" name="address" value="<%=build.getAddress()%>" />
                         <br><br>
@@ -96,17 +96,18 @@
                         <br><br>
                         <p>By</p>
                         <input type="text" name="city" value="<%=build.getCity()%>" />
+                        <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
                         <input type="hidden" name="origin" value="editBuilding" />
                         <br><br>
-                        <input class="btn btn-primary" type="submit" value="Gem ændringer" name="" />
+                        <input class="btn btn-primary" type="submit" value="Gem ændringer" name="editBuilding"/>
                     </form>
-                        
-                        <form class="form-signin" action="Front" method="POST">
+                    <% //request.getSession().setAttribute("LoggingError", message);%>    
+<!--                        <form class="form-signin" action="Front" method="POST">
                             <input type="hidden" name="origin" value="javascript:amendDetails();" />
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="Gem !!! TEST" name="" />
-                            
-                        </form>
+
+                        </form>-->
                         
                         
                 </div>

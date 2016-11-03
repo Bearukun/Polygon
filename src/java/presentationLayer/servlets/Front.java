@@ -130,7 +130,27 @@ public class Front extends HttpServlet {
                     response.sendRedirect("index.jsp#");
 
                     break;
+                    
+                case "editBuilding":
+                    //Retrieve form input values from editBuilding.jsp
+                    String addres = request.getParameter("address");
+                    int postcod = Integer.parseInt(request.getParameter("postcode"));
+                    String cit = request.getParameter("city");
+                    int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
+                    
+                    //Save values to database
+                    bldgCtrl.editBuilding(selectedBuilding, addres, postcod, cit);
 
+                    //Refresh the logged in user's buildings overview
+                    //refreshAllBuildings();
+                    refreshBuilding(user.getUser_id());
+                    request.getSession().setAttribute("tempAL", tempAL);
+                    
+                    //redirect to user.jsp
+                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
+    //fix æøå bug here!
+                    break;
+                    
                 case "update":
 
                 case "newCustomer":
@@ -203,12 +223,12 @@ public class Front extends HttpServlet {
 
                     break;
                     
-                case "editBuilding":
+                //case "editBuilding":
                     
                     //needs to recieve the unique id for the user assigned to the building also.
                     
-                    JOptionPane.showMessageDialog(null, "Test!");
-                    response.sendRedirect("user.jsp?sucess=TestSucessful");
+                    //JOptionPane.showMessageDialog(null, "Test!");
+                    
 //                    if (user != null) {
 //
 //                        int user_id = user.getUser_id();
