@@ -164,9 +164,18 @@ public class Front extends HttpServlet {
                         String phone = request.getParameter("phone"); //HUSK INTEGER.PARSE!
                         String company = request.getParameter("company");
                         String address = request.getParameter("address");
-                        String postcode = request.getParameter("postcode");
+                        String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!
                         String city = request.getParameter("city");
                         
+//                        Check that the parameters are being read
+//                        System.out.println(email + " em");
+//                        System.out.println(password + " pass");
+//                        System.out.println(name + " nam");
+//                        System.out.println(phone+ " ph");
+//                        System.out.println(company+ " com");
+//                        System.out.println(address+ " add");
+//                        System.out.println(postcode+ " post");
+//                        System.out.println(city + " city");
                         
                          //test password match
 //                        if(!request.getSession().getAttribute("password").equals(request.getSession().getAttribute("passwordConfirm")) ){

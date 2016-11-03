@@ -117,6 +117,8 @@ public class User {
     public void setType(type type) {
         this.type = type;
     }
+    
+    
 
     @Override
     public String toString() {
