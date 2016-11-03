@@ -140,6 +140,11 @@ public class Front extends HttpServlet {
 
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
+                         
+                        if(request.getSession().getAttribute("password") != request.getSession().getAttribute("password")){
+                            System.out.println("PASSWORD NOT MATCHING!");
+                            JOptionPane.showMessageDialog(null, "PASSWORD NOT MATCHING!");
+                        }
 
                         try {
 
