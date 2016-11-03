@@ -26,6 +26,19 @@ if yes - then redirect - else nothing. --%>
                     <form class="form-signin" action="Front" method="POST">
                         <input type="text" name="email" placeholder="Email">
                         <input type="password" name="password" placeholder="Adgangskode">
+                        <input type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
+                        
+                        
+                <h5>Ydeligere information</h5><br><!-- Skal centreres -->
+                <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
+                <input class="form-control" type="text" name="phone" value="" placeholder="Telefon" />
+                <input class="form-control" type="text" name="company" value="" placeholder="Firma" />
+                <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
+                <input class="form-control" type="text" name="postcode" value="" placeholder="Postnr." />
+                <input class="form-control" type="text" name="city" value="" placeholder="By" />
+                
+                
+                
                         <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
                         <input type="hidden" name="origin" value="newCustomer" />
                     </form>
@@ -38,6 +51,7 @@ if yes - then redirect - else nothing. --%>
                 <img src="./img/logo.png" class="img-responsive center-block" alt="Responsive image">
                 <input class="form-control" type="text" name="email" value="" placeholder="Email" />
                 <input class="form-control" type="password" name="password" value="" placeholder="Adgangskode" />
+                
                 <input type="hidden" name="origin" value="login" />
                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Log ind" name="" />
                 <br>
