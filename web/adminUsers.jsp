@@ -87,7 +87,12 @@
                                     <td><b>ID</b></td>
                                     <td><b>Email</b></td>
                                     <td><b>Adgandskode</b></td>
+                                    <td><b>Navn</b></td>
                                     <td><b>Type</b></td>
+                                    <td><b>Firma</b></td>
+                                    <td><b>Adresse</b></td>
+                                    <td><b>Postnr.</b></td>
+                                    <td><b>By</b></td>
                                 </tr>
                                 <%
                                     for (int i = 0; i < tempUL.size(); i++) {
@@ -95,7 +100,12 @@
                                     <td><%out.println(tempUL.get(i).getUser_id());%></td>  
                                     <td><%out.println(tempUL.get(i).getEmail());%></td>
                                     <td><%out.println(tempUL.get(i).getPassword());%></td> 
-                                    <td><%out.println(tempUL.get(i).getType());%></td> 
+                                    <td><%out.println(tempUL.get(i).getName());%></td> 
+                                    <td><%out.println(tempUL.get(i).getCompany());%></td> 
+                                    <td><%out.println(tempUL.get(i).getAddress());%></td> 
+                                    <td><%out.println(tempUL.get(i).getPostcode());%></td> 
+                                    <td><%out.println(tempUL.get(i).getCity());%></td> 
+                                    
                                 </tr>
                                 <%}
                                 %>
