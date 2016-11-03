@@ -1,43 +1,38 @@
 
 package serviceLayer.enties;
 
+import java.sql.Timestamp;
+
 public class Building {
     
-    private int building_id, postcode, user_id, floor;   
-    private String address, city, description;
+    public enum condition {
+
+        GOOD, MEDIUM, POOR
+
+    }
+    
+    private int building_id, postcode, construction_year, sqm, user_id;   
+    private String name, address, city, purpose;
+    private Timestamp date_created;
+    private condition condition;
 
     public Building() {
     }
 
-    public Building(int building_id, int postcode, int user_id, String address, String city, int floor, String description) {
+    public Building(int building_id, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, int user_id) {
         this.building_id = building_id;
-        this.postcode = postcode;
-        this.user_id = user_id;
+        this.name = name;
+        this.date_created = date_created;
         this.address = address;
+        this.postcode = postcode;
         this.city = city;
-        this.floor = floor;
-        this.description = description;
-        
+        this.condition = condition;
+        this.construction_year = construction_year;
+        this.purpose = purpose;
+        this.sqm  = sqm;   
+        this.user_id = user_id;
     }
 
-    public int getFloor() {
-        return floor;
-    }
-
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    
-    
     public int getBuilding_id() {
         return building_id;
     }
@@ -54,12 +49,36 @@ public class Building {
         this.postcode = postcode;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getConstruction_year() {
+        return construction_year;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setConstruction_year(int construction_year) {
+        this.construction_year = construction_year;
+    }
+
+    public int getSqm() {
+        return sqm;
+    }
+
+    public void setSqm(int sqm) {
+        this.sqm = sqm;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Timestamp getDate_created() {
+        return date_created;
+    }
+
+    public void setDate_created(Timestamp date_created) {
+        this.date_created = date_created;
     }
 
     public String getAddress() {
@@ -78,15 +97,30 @@ public class Building {
         this.city = city;
     }
 
-    @Override
-    public String toString() {
-        return "Building: " + "building_id: " + building_id + ", postcode: " + postcode + ", user_id: " + user_id + ", address: " + address + ", city: " + city;
+    public String getPurpose() {
+        return purpose;
     }
-    
-    
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public condition getCondition() {
+        return condition;
+    }
+
+    public void setCondition(condition condition) {
+        this.condition = condition;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
 
     
-    
-         
     
 }

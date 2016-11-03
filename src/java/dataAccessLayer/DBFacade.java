@@ -31,19 +31,40 @@ public class DBFacade implements DBFacadeInterface {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
-
-            int building_id, postcode, floor;
-            String address, city, description;
-            //rs.next();
+            Building.condition condition;
+            
+            
+            
             while (rs.next()) {
-                building_id = rs.getInt(1);
-                address = rs.getString(2);
-                postcode = rs.getInt(3);
-                city = rs.getString(4);
-                floor = rs.getInt(6);
-                description = rs.getString(7);
+                if (rs.getString(7).equals(Building.condition.GOOD.toString())) {
+
+                    condition = Building.condition.GOOD;
+
+                } else if (rs.getString(7).equals(Building.condition.MEDIUM.toString())) {
+                    condition = Building.condition.MEDIUM;
+
+                } else if (rs.getString(7).equals(Building.condition.POOR.toString())){
+                    condition = Building.condition.POOR;
+                }
+                else{
+                    condition = Building.condition.POOR;
+                }
                 
-                tempAL.add(new Building(building_id, postcode, user_id, address, city, floor, description));
+                System.out.println(rs.getInt(1));   
+                System.out.println(rs.getString(2));   
+                System.out.println(rs.getTimestamp(3));   
+                System.out.println(rs.getString(4));   
+                System.out.println(rs.getInt(5));   
+                System.out.println(rs.getString(6));   
+                System.out.println(condition);   
+                System.out.println(rs.getInt(8));   
+                System.out.println(rs.getString(9));   
+                System.out.println(rs.getInt(10));   
+                System.out.println(rs.getInt(12));   
+                
+                //                      int building_id, String name, String date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm) {
+
+                tempAL.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(12)));
             }
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");
@@ -58,7 +79,7 @@ public class DBFacade implements DBFacadeInterface {
     public User getUser(String email) throws CustomException {
 
         try {
-
+            System.out.println("try entered");
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM user WHERE email = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -66,7 +87,7 @@ public class DBFacade implements DBFacadeInterface {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-
+                System.out.println("if entered");
                 User.type type;
 
                 if (rs.getString(4).equals(User.type.ADMIN.toString())) {
@@ -74,16 +95,16 @@ public class DBFacade implements DBFacadeInterface {
                     type = User.type.ADMIN;
 
                 } else if (rs.getString(4).equals(User.type.TECHNICIAN.toString())) {
-
+                    System.out.println("else if entered");
                     type = User.type.TECHNICIAN;
 
                 } else {
-
+                    System.out.println("else entered");
                     type = User.type.CUSTOMER;
 
                 }
-                //User(int user_id, String email, String password, type type)
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6));
+                //User(int user_id, String email, String password, type type, String name, int phone, String company, String address, int postcode, String city)
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10));
 
             } else {
                 throw new CustomException("No such user");
@@ -171,24 +192,8 @@ public class DBFacade implements DBFacadeInterface {
             
             ResultSet rs = stmt.executeQuery();
 
-            int user_id, phone;
-            String email, password, type, name;
-           
-            
-            
-            //rs.next();
             while (rs.next()) {
-                user_id = rs.getInt(1);
-                email = rs.getString(2);
-                password = rs.getString(3);
-                type = rs.getString(4);
-                name = rs.getString(5);
-                phone = rs.getInt(6);
-                
-                tempUL.add(new User(user_id, email, password, User.type.valueOf(type), name, phone));
-                
-                
-                
+                tempUL.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), User.type.valueOf(rs.getString(4)), rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
             }
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");
@@ -208,19 +213,8 @@ public class DBFacade implements DBFacadeInterface {
             String sql = "SELECT * FROM polygon.building;";
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
-
-            int building_id, postcode, user_id, floor;
-            String address, city, description;
-            //rs.next();
             while (rs.next()) {
-                building_id = rs.getInt(1);
-                address = rs.getString(2);
-                postcode = rs.getInt(3);
-                city = rs.getString(4);
-                user_id = rs.getInt(5);
-                floor = rs.getInt(6);
-                description = rs.getString(7);
-                allBuildings.add(new Building(building_id, postcode, user_id, address, city, floor, description));
+                allBuildings.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), Building.condition.valueOf(rs.getString(7)), rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(12)));
             }
         } catch (Exception e) {
             throw new CustomException("SQL Error: Database connection failed.");

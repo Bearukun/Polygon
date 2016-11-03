@@ -75,7 +75,7 @@ public class Front extends HttpServlet {
 
                                 } else if (user.getType().toString().equals("TECHNICHIAN")) {
 
-                                    request.getSession().setAttribute("type", "Teknikker");
+                                    request.getSession().setAttribute("type", "Tekniker");
 
                                 } else {
 
@@ -208,7 +208,7 @@ public class Front extends HttpServlet {
                     //needs to recieve the unique id for the user assigned to the building also.
                     
                     JOptionPane.showMessageDialog(null, "Test!");
-                    response.sendRedirect("user.jsp?sucess=TestSucessfull");
+                    response.sendRedirect("user.jsp?sucess=TestSucessful");
 //                    if (user != null) {
 //
 //                        int user_id = user.getUser_id();
