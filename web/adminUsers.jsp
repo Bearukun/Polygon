@@ -101,6 +101,7 @@
                                     <td><%out.println(tempUL.get(i).getEmail());%></td>
                                     <td><%out.println(tempUL.get(i).getPassword());%></td> 
                                     <td><%out.println(tempUL.get(i).getName());%></td> 
+                                    <td><%out.println(tempUL.get(i).getType());%></td>                                    
                                     <td><%out.println(tempUL.get(i).getCompany());%></td> 
                                     <td><%out.println(tempUL.get(i).getAddress());%></td> 
                                     <td><%out.println(tempUL.get(i).getPostcode());%></td> 
