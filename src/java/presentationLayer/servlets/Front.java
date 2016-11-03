@@ -185,7 +185,7 @@ public class Front extends HttpServlet {
 //                        }
 
                         try {
-
+                            System.out.println("creating user");
                             //Create user
                             usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
                             //If successful, redirect

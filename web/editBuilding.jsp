@@ -87,6 +87,7 @@
                             }
                         }
                     %>
+                    <h1>Rediger bygning:</h1>
                     <form class="form-edit-building" id="editBuilding" action="Front" method="POST">
                         <p>Adresse</p>
                         <input type="text" name="address" value="<%=build.getAddress()%>" />
