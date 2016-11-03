@@ -1,9 +1,3 @@
-<%-- 
-    Document   : adminUserList
-    Created on : 26-10-2016, 21:47:46
-    Author     : RadeonXRay
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
