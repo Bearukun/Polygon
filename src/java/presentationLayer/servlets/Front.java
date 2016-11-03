@@ -185,12 +185,14 @@ public class Front extends HttpServlet {
 //                        }
 
                         try {
-
+                            System.out.println("Front 1");
                             //Create user
                             usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
                             //If successful, redirect
+                            System.out.println("Index redirect");
                             response.sendRedirect("index.jsp?success");
-
+                            
+                            
                         } catch (CustomException e) {
 
                             errMsg = e.getMessage();

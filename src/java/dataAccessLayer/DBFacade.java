@@ -123,7 +123,7 @@ public class DBFacade implements DBFacadeInterface {
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM user WHERE email = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(2, email);
+            stmt.setString(1, email);
            
             ResultSet rs = stmt.executeQuery();
 
