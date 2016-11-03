@@ -118,30 +118,34 @@ public class DBFacade implements DBFacadeInterface {
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
 
         try {
-            System.out.println("test!");
+            System.out.println("test! TRY CREATING USER");
             //We need to check wether user already exists. 
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM user WHERE email = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, email);
+            stmt.setString(2, email);
+           
             ResultSet rs = stmt.executeQuery();
 
             //If there isn't anything in the ResultSet.
             if (!rs.next()) {
-
+                System.out.println("if! creating");
+                
                 //Prepare statement, notice that we don't need to specify 'type' here, hence
                 //default type is CUSTOMER. 
-                sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `name`, `phone`, `company`, `address`, `postcode`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?,);";
-
+                sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `name`, `phone`, `company`, `address`, `postcode`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                
                 stmt = con.prepareStatement(sql);
+               
                 stmt.setString(1, email);
-                stmt.setString(2, password);
-                stmt.setString(3, name);
-                stmt.setInt(4, phone);
-                stmt.setString(5, company);
-                stmt.setString(6, address);
-                stmt.setInt(7, postcode);
+                stmt.setString(2, password); 
+                stmt.setString(3, name); 
+                stmt.setInt(4, phone);                
+                stmt.setString(5, company);                
+                stmt.setString(6, address);                
+                stmt.setInt(7, postcode );                
                 stmt.setString(8, city);
+                
 
                 stmt.executeUpdate();
 
