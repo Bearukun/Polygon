@@ -97,16 +97,29 @@
                         <table border="1" text-align="left" class="table table-striped">
                             <tbody>
                                 <tr>
+                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnr.</b></td>
                                     <td><b>By</b></td>
+                                    <td><b>Tilstand</b></td>
+                                    <td><b>Opførelses År</b></td>
+                                    <td><b>Formål</b></td>
+                                    <td><b>KvadratMeter</b></td>
+                                    
                                 </tr>
                                 <%
                                     for (int i = 0; i < tempAL.size(); i++) {
                                 %><tr>
-                                    <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getAddress());%></a></td>  
+                                    <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getName());%></a></td>  
+                                    <td><%out.println(tempAL.get(i).getDate_created());%></td>  
+                                    <td><%out.println(tempAL.get(i).getAddress());%></td>  
                                     <td><%out.println(tempAL.get(i).getPostcode());%></td>  
                                     <td><%out.println(tempAL.get(i).getCity());%></td>  
+                                    <td><%out.println(tempAL.get(i).getCondition());%></td>  
+                                    <td><%out.println(tempAL.get(i).getConstruction_year());%></td>  
+                                    <td><%out.println(tempAL.get(i).getPurpose());%></td>  
+                                    <td><%out.println(tempAL.get(i).getSqm());%></td>  
                                 </tr>
                                 <%}
                                 %>
