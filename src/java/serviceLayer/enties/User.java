@@ -33,6 +33,11 @@ public class User {
         this.city = city;
     }
 
+    public User() {
+    }
+    
+    
+
     public int getUser_id() {
         return user_id;
     }

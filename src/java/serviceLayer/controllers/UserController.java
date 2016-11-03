@@ -49,13 +49,13 @@ public class UserController implements UserControllerInterface {
     }
 
     @Override
-    public void createUser(String email, String password) throws CustomException {
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
 
         //If input fields aren't empty
         if (!email.isEmpty() && !password.isEmpty() && email != null && password != null) {
             
-            //Then create user with 'email' and 'password'.
-            dbfacade.createUser(email, password);
+            //Then create user with 'email', 'password' and the other fields.
+            dbfacade.createUser(email, password, name, phone, company, address, postcode, city);
 
         } else {
 

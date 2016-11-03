@@ -115,7 +115,7 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     //Creates new user 
-    public void createUser(String email, String password) throws CustomException {
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
 
         try {
             System.out.println("test!");
@@ -131,11 +131,17 @@ public class DBFacade implements DBFacadeInterface {
 
                 //Prepare statement, notice that we don't need to specify 'type' here, hence
                 //default type is CUSTOMER. 
-                sql = "INSERT INTO `polygon`.`user` (`email`, `password`) VALUES (?, ?);";
+                sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `name`, `phone`, `company`, `address`, `postcode`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?,);";
 
                 stmt = con.prepareStatement(sql);
                 stmt.setString(1, email);
                 stmt.setString(2, password);
+                stmt.setString(3, name);
+                stmt.setInt(4, phone);
+                stmt.setString(5, company);
+                stmt.setString(6, address);
+                stmt.setInt(7, postcode);
+                stmt.setString(8, city);
 
                 stmt.executeUpdate();
 

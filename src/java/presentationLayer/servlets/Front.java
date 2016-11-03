@@ -140,16 +140,25 @@ public class Front extends HttpServlet {
 
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
-                         
-                        if(request.getSession().getAttribute("password") != request.getSession().getAttribute("password")){
-                            System.out.println("PASSWORD NOT MATCHING!");
-                            JOptionPane.showMessageDialog(null, "PASSWORD NOT MATCHING!");
-                        }
+                        String name = request.getParameter("name");
+                        String phone = request.getParameter("phone"); //HUSK INTEGER.PARSE!
+                        String company = request.getParameter("company");
+                        String address = request.getParameter("address");
+                        String postcode = request.getParameter("postcode");
+                        String city = request.getParameter("city");
+                        
+                        
+                         //test password match
+//                        if(!request.getSession().getAttribute("password").equals(request.getSession().getAttribute("passwordConfirm")) ){
+//                            System.out.println("PASSWORD NOT MATCHING!");
+//                            JOptionPane.showMessageDialog(null, "PASSWORD NOT MATCHING!");
+//                             response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8") + " PASSWORD NOT MATCHING");
+//                        }
 
                         try {
 
                             //Create user
-                            usrCtrl.createUser(email, password);
+                            usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
                             //If successful, redirect
                             response.sendRedirect("index.jsp?success");
 

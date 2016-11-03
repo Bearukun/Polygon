@@ -74,17 +74,45 @@
                 <div class="col-sm-10">
                     <h1>Rediger Profil</h1>
                    
+                    
+                    <% User usr = new User(); %>
+                    <%
+                        ArrayList<User> tempUL = new ArrayList();
+                        tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
+
+                        for (int i = 0; i < tempUL.size(); i++) {
+                            if (tempUL.get(i).getUser_id()== Integer.parseInt(request.getParameter("value"))) {
+                                usr = tempUL.get(i);
+                            }
+                        }
+                    %>
                     <form class="form-edit-profile" id="editPRofile" action="javascript:amendDetails();">
                        
-                        <p>Navn</p>                      
-                        <input type="text" name="name" value="<%//=build.getAddress()%>" />
-                        <p>Telefon Nummer</p>                      
-                        <input type="text" name="phonenumber" value="<%//=build.getAddress()%>" />
+                       
+                        
                         
                         <p>Email</p>                      
-                        <input type="text" name="email" value="<%//=build.getAddress()%>" />
+                        <input type="text" name="email" value="<%=usr.getEmail()%>" />
+                         <br><br>
+                        <p>Navn</p>                      
+                        <input type="text" name="name" value="<%=usr.getName()%>" />
                         <br><br>
-                        
+                        <p>Telefon Nummer</p>                      
+                        <input type="text" name="phonenumber" value="<%=usr.getPhone()%>" />
+                        <br><br>                       
+                         <p>Firma</p> 
+                         <input type="text" name="phonenumber" value="<%=usr.getCompany()%>" />
+                         <br><br>
+                          <p>Adresse</p> 
+                          <input type="text" name="phonenumber" value="<%=usr.getAddress()%>" />
+                         <br><br>
+                          <p>Postnr.</p> 
+                          <input type="text" name="phonenumber" value="<%=usr.getPostcode()%>" />
+                         <br><br>
+                          <p>By</p> 
+                          <input type="text" name="phonenumber" value="<%=usr.getCity()%>" />
+                         <br><br>
+   
                         <input type="hidden" name="origin" value="editProfile" />
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="Gem ændringer" name="" />
