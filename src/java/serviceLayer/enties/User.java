@@ -8,8 +8,8 @@ public class User {
 
     }
 
-    private int user_id, phone;
-    private String email, password, name;
+    private int user_id, phone, postcode;
+    private String email, password, name, company, address, city;
     private type type;
     
 
@@ -19,21 +19,25 @@ public class User {
         this.user_id = user_id;
         this.email = email;
     }
+
+    public User(int user_id, String password, int phone, int postcode, String email, , String name, String company, String address, String city, type type) {
+        this.user_id = user_id;
+        this.phone = phone;
+        this.postcode = postcode;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.company = company;
+        this.address = address;
+        this.city = city;
+        this.type = type;
+    }
     
     
 
     
     
-    public User(int user_id, String email, String password, type type,  String name, int phone) {
-        this.user_id = user_id;
-        this.email = email;
-        this.password = password;
-        this.type = type;
-        this.name = name;
-        this.phone = phone;
-        
-        
-    }
+    
 
     public int getPhone() {
         return phone;
