@@ -32,9 +32,7 @@ public class DBFacade implements DBFacadeInterface {
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
             Building.condition condition;
-            
-            
-            
+
             while (rs.next()) {
                 if (rs.getString(7).equals(Building.condition.GOOD.toString())) {
 
@@ -43,27 +41,25 @@ public class DBFacade implements DBFacadeInterface {
                 } else if (rs.getString(7).equals(Building.condition.MEDIUM.toString())) {
                     condition = Building.condition.MEDIUM;
 
-                } else if (rs.getString(7).equals(Building.condition.POOR.toString())){
+                } else if (rs.getString(7).equals(Building.condition.POOR.toString())) {
+                    condition = Building.condition.POOR;
+                } else {
                     condition = Building.condition.POOR;
                 }
-                else{
-                    condition = Building.condition.POOR;
-                }
-                
-                System.out.println(rs.getInt(1));   
-                System.out.println(rs.getString(2));   
-                System.out.println(rs.getTimestamp(3));   
-                System.out.println(rs.getString(4));   
-                System.out.println(rs.getInt(5));   
-                System.out.println(rs.getString(6));   
-                System.out.println(condition);   
-                System.out.println(rs.getInt(8));   
-                System.out.println(rs.getString(9));   
-                System.out.println(rs.getInt(10));   
-                System.out.println(rs.getInt(12));   
-                
-                //                      int building_id, String name, String date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm) {
 
+//                System.out.println(rs.getInt(1));   
+//                System.out.println(rs.getString(2));   
+//                System.out.println(rs.getTimestamp(3));   
+//                System.out.println(rs.getString(4));   
+//                System.out.println(rs.getInt(5));   
+//                System.out.println(rs.getString(6));   
+//                System.out.println(condition);   
+//                System.out.println(rs.getInt(8));   
+//                System.out.println(rs.getString(9));   
+//                System.out.println(rs.getInt(10));   
+//                System.out.println(rs.getInt(12));   
+//                
+                //                      int building_id, String name, String date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm) {
                 tempAL.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(12)));
             }
         } catch (Exception e) {
@@ -79,7 +75,6 @@ public class DBFacade implements DBFacadeInterface {
     public User getUser(String email) throws CustomException {
 
         try {
-            System.out.println("try entered");
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM user WHERE email = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -87,21 +82,15 @@ public class DBFacade implements DBFacadeInterface {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                System.out.println("if entered");
                 User.type type;
 
                 if (rs.getString(4).equals(User.type.ADMIN.toString())) {
-
                     type = User.type.ADMIN;
-
                 } else if (rs.getString(4).equals(User.type.TECHNICIAN.toString())) {
-                    System.out.println("else if entered");
                     type = User.type.TECHNICIAN;
 
                 } else {
-                    System.out.println("else entered");
                     type = User.type.CUSTOMER;
-
                 }
                 //User(int user_id, String email, String password, type type, String name, int phone, String company, String address, int postcode, String city)
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10));
@@ -124,28 +113,26 @@ public class DBFacade implements DBFacadeInterface {
             String sql = "SELECT * FROM user WHERE email = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, email);
-           
+
             ResultSet rs = stmt.executeQuery();
 
             //If there isn't anything in the ResultSet.
             if (!rs.next()) {
-                System.out.println("if! creating");
-                
+
                 //Prepare statement, notice that we don't need to specify 'type' here, hence
                 //default type is CUSTOMER. 
                 sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `name`, `phone`, `company`, `address`, `postcode`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-                
+
                 stmt = con.prepareStatement(sql);
-               
+
                 stmt.setString(1, email);
-                stmt.setString(2, password); 
-                stmt.setString(3, name); 
-                stmt.setInt(4, phone);                
-                stmt.setString(5, company);                
-                stmt.setString(6, address);                
-                stmt.setInt(7, postcode );                
+                stmt.setString(2, password);
+                stmt.setString(3, name);
+                stmt.setInt(4, phone);
+                stmt.setString(5, company);
+                stmt.setString(6, address);
+                stmt.setInt(7, postcode);
                 stmt.setString(8, city);
-                
 
                 stmt.executeUpdate();
 
@@ -176,12 +163,11 @@ public class DBFacade implements DBFacadeInterface {
             stmt.setInt(2, postcode);
             stmt.setString(3, city);
             stmt.setInt(4, user_id);
-            
+
             //Currently disabled due to Custopmexception being thrown, even when the SQL statment has been adjusted to:
             //"INSERT INTO `polygon`.`building` (`address`, `postcode`, `city`, `user_id`, 'floor', 'description') VALUES (?, ?, ?, ?, ?, ?);";
             //stmt.setInt(5, floor);
             //stmt.setString(6, description);
-
             stmt.executeUpdate();
 
         } catch (Exception e) {
@@ -194,19 +180,31 @@ public class DBFacade implements DBFacadeInterface {
 
     @Override
     public ArrayList<User> getUsers() throws CustomException {
-        
+
         try {
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM polygon.user";
             PreparedStatement stmt = con.prepareStatement(sql);
-            
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                tempUL.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), User.type.valueOf(rs.getString(4)), rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+
+                User.type type;
+
+                if (rs.getString(4).equals(User.type.ADMIN.toString())) {
+                    type = User.type.ADMIN;
+                } else if (rs.getString(4).equals(User.type.TECHNICIAN.toString())) {
+                    type = User.type.TECHNICIAN;
+
+                } else {
+                    type = User.type.CUSTOMER;
+                }
+
+                tempUL.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
             }
         } catch (Exception e) {
-            throw new CustomException("SQL Error: Database connection failed.");
+            throw new CustomException("SQL Error: getUsers failed in facade.");
         }
 //        if (tempAL.isEmpty()) {
 //            throw new CustomException("No buildings available");
@@ -216,31 +214,47 @@ public class DBFacade implements DBFacadeInterface {
 
     @Override
     public ArrayList<Building> getAllBuildings() throws CustomException {
-        
-        
+
         try {
             Connection con = DBConnection.getConnection();
             String sql = "SELECT * FROM polygon.building;";
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
+            Building.condition condition;
+            
             while (rs.next()) {
-                allBuildings.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), Building.condition.valueOf(rs.getString(7)), rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(12)));
+                if (rs.getString(7).equals(Building.condition.GOOD.toString())) {
+
+                    condition = Building.condition.GOOD;
+
+                } else if (rs.getString(7).equals(Building.condition.MEDIUM.toString())) {
+                    condition = Building.condition.MEDIUM;
+
+                } else if (rs.getString(7).equals(Building.condition.POOR.toString())) {
+                    condition = Building.condition.POOR;
+                } else {
+                    condition = Building.condition.NONE;
+                }
+                System.out.println("Adding building");
+                allBuildings.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(12)));
+                System.out.println("Added!");
             }
         } catch (Exception e) {
-            throw new CustomException("SQL Error: Database connection failed.");
+            throw new CustomException("SQL Error: getAllBuildingsFailed at DBFacade.");
         }
 //        if (tempAL.isEmpty()) {
 //            throw new CustomException("No buildings available");
 //        }
         return allBuildings;
-        
+
     }
 
     /**
      * Method to update the details of a building
+     *
      * @param selectedBuilding
      * @param postcode
-     * @throws CustomException 
+     * @throws CustomException
      */
     @Override
     public void editBuilding(int selectedBuilding, String addres, int postcode, String cit) throws CustomException {

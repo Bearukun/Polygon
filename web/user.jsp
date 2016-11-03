@@ -56,11 +56,6 @@
                                         Tilføj bygning </a>
                                 </li>
                                 <li>
-                                    <a href="editBuilding?noID" target="_self">
-                                        <i class="glyphicon glyphicon-wrench"></i>
-                                        Rediger bygning </a>
-                                </li>
-                                <li>
                                     <a href="editProfile.jsp">
                                         <i class="glyphicon glyphicon-user"></i>
                                         Bruger indstillinger </a>
