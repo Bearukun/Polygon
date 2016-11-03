@@ -4,10 +4,7 @@ import dataAccessLayer.interfaces.DBFacadeInterface;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import serviceLayer.enties.Building;
 import serviceLayer.enties.User;
 import serviceLayer.exceptions.CustomException;
@@ -47,19 +44,8 @@ public class DBFacade implements DBFacadeInterface {
                     condition = Building.condition.POOR;
                 }
 
-//                System.out.println(rs.getInt(1));   
-//                System.out.println(rs.getString(2));   
-//                System.out.println(rs.getTimestamp(3));   
-//                System.out.println(rs.getString(4));   
-//                System.out.println(rs.getInt(5));   
-//                System.out.println(rs.getString(6));   
-//                System.out.println(condition);   
-//                System.out.println(rs.getInt(8));   
-//                System.out.println(rs.getString(9));   
-//                System.out.println(rs.getInt(10));   
-//                System.out.println(rs.getInt(12));   
-//                
-                //                      int building_id, String name, String date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm) {
+          
+                //int building_id, String name, String date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm) {
                 tempAL.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(12)));
             }
         } catch (Exception e) {
@@ -235,7 +221,7 @@ public class DBFacade implements DBFacadeInterface {
                 } else {
                     condition = Building.condition.NONE;
                 }
-                System.out.println("Adding building");
+                
                 allBuildings.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(12)));
                 System.out.println("Added!");
             }
