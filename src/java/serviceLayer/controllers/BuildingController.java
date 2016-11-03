@@ -23,12 +23,11 @@ public class BuildingController implements BuildingControllerInterface{
 
     @Override
     public ArrayList<Building> getAllBuildings() throws CustomException {
-
         return dbfacade.getAllBuildings();
-
     }
 
-
-
-    
+    @Override
+    public void editBuilding(int selectedBuilding, String addres, int postcode, String cit) throws CustomException {
+        dbfacade.editBuilding(selectedBuilding, addres, postcode, cit);
+    }
 }

@@ -232,4 +232,26 @@ public class DBFacade implements DBFacadeInterface {
         
     }
 
+    /**
+     * Method to update the details of a building
+     * @param selectedBuilding
+     * @param postcode
+     * @throws CustomException 
+     */
+    @Override
+    public void editBuilding(int selectedBuilding, String addres, int postcode, String cit) throws CustomException {
+        try {
+            Connection con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "UPDATE polygon.building SET address=?, postcode=?, city=? WHERE building_id=?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, addres);
+            stmt.setInt(2, postcode);
+            stmt.setString(3, cit);
+            stmt.setInt(4, selectedBuilding);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Connection problem.");
+        }
+    }
 }
