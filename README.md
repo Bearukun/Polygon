@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Polygon
 2nd semester Computer Science exam project.
 
@@ -6,6 +5,7 @@
 
 
 [![Throughput Graph](https://graphs.waffle.io/Bearukun/Polygon/throughput.svg)](https://waffle.io/Bearukun/Polygon/metrics/throughput)
+
 =======
 # Week 9-14 Project part 1
 This period will be mostly project, with sprints and development of the solution for Polygon.
