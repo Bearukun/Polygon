@@ -4,6 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
         <title>Sunde Bygninger - Tilføj bygning</title>
         <!-- Latest compiled and minified CSS -->
@@ -52,11 +53,6 @@
                                     <a href="addBuilding.jsp?refresh" target="_self">
                                         <i class="glyphicon glyphicon-plus"></i>
                                         Tilføj bygning </a>
-                                </li>
-                                <li>
-                                    <a href="editBuilding?noID" target="_self">
-                                        <i class="glyphicon glyphicon-wrench"></i>
-                                        Rediger bygning </a>
                                 </li>
                                 <li>
                                     <a href="#">

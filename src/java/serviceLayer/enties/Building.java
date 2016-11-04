@@ -7,7 +7,7 @@ public class Building {
     
     public enum condition {
 
-        GOOD, MEDIUM, POOR
+        GOOD, MEDIUM, POOR, NONE
 
     }
     

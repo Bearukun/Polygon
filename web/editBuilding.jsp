@@ -6,6 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
         <title>Sunde Bygninger - Rediger bygning</title>
         <!-- Latest compiled and minified CSS -->
@@ -87,6 +88,7 @@
                             }
                         }
                     %>
+                    <h1>Rediger bygning:</h1>
                     <form class="form-edit-building" id="editBuilding" action="Front" method="POST">
                         <p>Adresse</p>
                         <input type="text" name="address" value="<%=build.getAddress()%>" />

@@ -6,6 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
         <title>Sunde Bygninger - Profil</title>
         <!-- Latest compiled and minified CSS -->
@@ -101,16 +102,16 @@
                         <input type="text" name="phonenumber" value="<%=usr.getPhone()%>" />
                         <br><br>                       
                          <p>Firma</p> 
-                         <input type="text" name="phonenumber" value="<%=usr.getCompany()%>" />
+                         <input type="text" name="company" value="<%=usr.getCompany()%>" />
                          <br><br>
                           <p>Adresse</p> 
-                          <input type="text" name="phonenumber" value="<%=usr.getAddress()%>" />
+                          <input type="text" name="address" value="<%=usr.getAddress()%>" />
                          <br><br>
                           <p>Postnr.</p> 
-                          <input type="text" name="phonenumber" value="<%=usr.getPostcode()%>" />
+                          <input type="text" name="postcode" value="<%=usr.getPostcode()%>" />
                          <br><br>
                           <p>By</p> 
-                          <input type="text" name="phonenumber" value="<%=usr.getCity()%>" />
+                          <input type="text" name="city" value="<%=usr.getCity()%>" />
                          <br><br>
    
                         <input type="hidden" name="origin" value="editProfile" />

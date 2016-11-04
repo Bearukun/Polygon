@@ -35,8 +35,10 @@
 }
 
 .form-signin {
+    
+    padding-top: 0px;
+    padding-bottom: 0px;
     max-width: 330px;
-    padding: 15px;
     margin: auto;
 }
 
@@ -87,10 +89,19 @@
 }
 
 .loginmodal-container h1 {
+    
+    margin-bottom: 0px;
+    margin-top: 0px;
+
     text-align: center;
     font-size: 1.8em;
 
 }
+
+.loginmodal-container h5 {
+    
+    text-align: center;
+  }
 
 .loginmodal-container input[type=submit] {
     width: 100%;
