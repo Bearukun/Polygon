@@ -99,7 +99,7 @@
                         <input type="text" name="name" value="<%=usr.getName()%>" />
                         <br><br>
                         <p>Telefon Nummer</p>                      
-                        <input type="text" name="phonenumber" value="<%=usr.getPhone()%>" />
+                        <input type="number" name="phonenumber" value="<%=usr.getPhone()%>" />
                         <br><br>                       
                          <p>Firma</p> 
                          <input type="text" name="company" value="<%=usr.getCompany()%>" />
@@ -108,7 +108,7 @@
                           <input type="text" name="address" value="<%=usr.getAddress()%>" />
                          <br><br>
                           <p>Postnr.</p> 
-                          <input type="text" name="postcode" value="<%=usr.getPostcode()%>" />
+                          <input type="number" name="postcode" value="<%=usr.getPostcode()%>" />
                          <br><br>
                           <p>By</p> 
                           <input type="text" name="city" value="<%=usr.getCity()%>" />
