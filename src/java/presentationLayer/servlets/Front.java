@@ -175,7 +175,8 @@ public class Front extends HttpServlet {
                         
 //                        Check that the parameters are being read
 //                        System.out.println(email + " em");
-//                        System.out.println(password + " pass");
+//              
+System.out.println(password + " pass");
 //                        System.out.println(name + " nam");
 //                        System.out.println(phone+ " ph");
 //                        System.out.println(company+ " com");
@@ -227,7 +228,6 @@ public class Front extends HttpServlet {
                         String address = request.getParameter("address");
                         String postcode = request.getParameter("postcode");
                         String city = request.getParameter("city");
-                        
                         String construction_year = request.getParameter("construction_year");
                         String purpose = request.getParameter("purpose");
                         String sqm = request.getParameter("sqm");

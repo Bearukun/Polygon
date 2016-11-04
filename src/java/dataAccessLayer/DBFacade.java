@@ -41,7 +41,7 @@ public class DBFacade implements DBFacadeInterface {
                 } else if (rs.getString(7).equals(Building.condition.POOR.toString())) {
                     condition = Building.condition.POOR;
                 } else {
-                    condition = Building.condition.POOR;
+                    condition = Building.condition.NONE;
                 }
 
           
