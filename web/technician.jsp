@@ -61,6 +61,22 @@
                                         <i class="glyphicon glyphicon-th-list"></i>
                                         Vis brugere </a>
                                 </li>
+                                  <li>
+                                    <a href="" target="_self">
+                                        <i class="glyphicon glyphicon-inbox "></i>
+                                        Tickets </a>
+                                </li>
+                                 <li>
+                                    <a href="" target="_self">
+                                        <i class=" glyphicon glyphicon-comment"></i>
+                                        Beskeder </a>
+                                </li>
+                               
+                                  <li>
+                                    <a href="" target="_self">
+                                        <i class="glyphicon glyphicon-briefcase"></i>
+                                        Sunhedseftersyn </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- END MENU -->
