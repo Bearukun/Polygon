@@ -82,9 +82,15 @@
                             <tbody>
                                 <tr>
                                     <td><b>Building(ID)</b></td>
+                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnummer</b></td>
                                     <td><b>By</b></td>
+                                    <td><b>Tilstand</b></td>
+                                    <td><b>Opførelses år</b></td>
+                                    <td><b>Formål</b></td>
+                                    <td><b>KvadratMeter</b></td>
                                     <td><b>Bruger(ID)</b></td>
                                 </tr>
                                 <%
@@ -93,9 +99,15 @@
                                             if(tempUL.get(i).getUser_id() ==  allBuildings.get(x).getUser_id()){
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getName());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getDate_created());%></td>  
                                     <td><%out.println(allBuildings.get(x).getAddress());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPostcode());%></td>  
                                     <td><%out.println(allBuildings.get(x).getCity());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getCondition());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getSqm());%></td>  
                                     <td><%out.println(tempUL.get(i).getEmail());%></td> 
                                 </tr>
                                 <%}}}
