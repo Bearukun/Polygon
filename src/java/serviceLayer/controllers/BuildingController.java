@@ -2,6 +2,7 @@ package serviceLayer.controllers;
 
 import dataAccessLayer.DBFacade;
 import dataAccessLayer.interfaces.DBFacadeInterface;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import serviceLayer.controllers.interfaces.BuildingControllerInterface;
 import serviceLayer.enties.Building;
@@ -12,8 +13,8 @@ public class BuildingController implements BuildingControllerInterface{
     private final DBFacadeInterface dbfacade = new DBFacade();
     
     @Override
-    public void createBuilding(int user_id, String address, int postcode, String city, int floor, String description) throws CustomException {
-        dbfacade.createBuilding(user_id, address, postcode, city, floor, description);
+    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException {
+        dbfacade.createBuilding( name, address, postcode, city, construction_year, purpose, sqm, user_id);
     }
 
     @Override

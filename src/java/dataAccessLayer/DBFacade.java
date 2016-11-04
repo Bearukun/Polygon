@@ -161,17 +161,21 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void createBuilding(int user_id, String address, int postcode, String city, int floor, String description) throws CustomException {
+    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id ) throws CustomException {
 
         try {
-
+         
             Connection con = DBConnection.getConnection();
-            String sql = "INSERT INTO `polygon`.`building` (`address`, `postcode`, `city`, `user_id`) VALUES (?, ?, ?, ?);";
+            String sql = "INSERT INTO `polygon`.`building` (`name`, `address`, `postcode`, `city`, `construction_year`, `purpose`, `sqm`, `user_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, address);
-            stmt.setInt(2, postcode);
-            stmt.setString(3, city);
-            stmt.setInt(4, user_id);
+            stmt.setString(1, name);
+            stmt.setString(2, address);
+            stmt.setInt(3, postcode);
+            stmt.setString(4, city);
+            stmt.setInt(5, construction_year);
+            stmt.setString(6, purpose);
+            stmt.setInt(7, sqm);
+            stmt.setInt(8, user_id);
             
             //Currently disabled due to Custopmexception being thrown, even when the SQL statment has been adjusted to:
             //"INSERT INTO `polygon`.`building` (`address`, `postcode`, `city`, `user_id`, 'floor', 'description') VALUES (?, ?, ?, ?, ?, ?);";

@@ -206,17 +206,18 @@ public class Front extends HttpServlet {
                     if (user != null) {
 
                         int user_id = user.getUser_id();
-
+                        String name = request.getParameter("name");
                         String address = request.getParameter("address");
                         String postcode = request.getParameter("postcode");
                         String city = request.getParameter("city");
-                        String floor = request.getParameter("floor");
-                        String description = request.getParameter("description");
-
+                        
+                        String construction_year = request.getParameter("construction_year");
+                        String purpose = request.getParameter("purpose");
+                        String sqm = request.getParameter("sqm");
                         try {
 
                             //createBuilding
-                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city, Integer.parseInt(floor), description);
+                            bldgCtrl.createBuilding( name, address, Integer.parseInt(postcode), city, Integer.parseInt(construction_year), purpose, Integer.parseInt(sqm), user_id);
                             refreshBuilding(user_id);
                             //If successful, redirect
                             response.sendRedirect("user.jsp?sucess=buildingAdded");

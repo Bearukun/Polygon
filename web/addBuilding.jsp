@@ -74,11 +74,14 @@
                         <h1>Tilføj bygning</h1>
                         <div class="container">
                             <form class="form-add-building" action="Front" method="POST">
+                                <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
                                 <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
                                 <input class="form-control" type="text" name="postcode" value="" placeholder="Postnummer" />
                                 <input class="form-control" type="text" name="city" value="" placeholder="By" />
-                                <input class="form-control" type="text" name="floor" value="" placeholder="Etager" />
-                                <input class="form-control" type="text" name="description" value="" placeholder="Beskrivelse" />
+                                <input class="form-control" type="text" name="construction_year" value="" placeholder="Bygget i år:" />
+                                <input class="form-control" type="text" name="purpose" value="" placeholder="Formål" />
+                                <input class="form-control" type="text" name="sqm" value="" placeholder="areal" />
+                                
                                 <input type="hidden" name="origin" value="createBuilding" />
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Opret bygning" name="" />
                             </form>

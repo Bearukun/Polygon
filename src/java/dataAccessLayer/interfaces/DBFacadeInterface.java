@@ -1,5 +1,6 @@
 package dataAccessLayer.interfaces;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import serviceLayer.enties.Building;
 import serviceLayer.enties.User;
@@ -17,7 +18,7 @@ public interface DBFacadeInterface {
     
     ArrayList<Building> getAllBuildings() throws CustomException;
     
-    void createBuilding(int user_id, String address, int postcode, String city, int floor, String description) throws CustomException;
+    void createBuilding( String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException;
     
     ArrayList<User> getUsers() throws CustomException;
 
