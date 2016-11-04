@@ -77,6 +77,11 @@
                                         <i class="glyphicon glyphicon-briefcase"></i>
                                         Sunhedseftersyn </a>
                                 </li>
+                                <li>
+                                    <a href="technicianPDF.jsp" target="_self">
+                                        <i class="glyphicon glyphicon-file"></i>
+                                        PDF Generator </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- END MENU -->
