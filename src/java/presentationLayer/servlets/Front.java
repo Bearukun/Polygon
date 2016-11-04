@@ -73,7 +73,7 @@ public class Front extends HttpServlet {
 
                                     request.getSession().setAttribute("type", "Kunde");
 
-                                } else if (user.getType().toString().equals("TECHNICHIAN")) {
+                                } else if (user.getType().toString().equals("TECHNICIAN")) {
 
                                     request.getSession().setAttribute("type", "Tekniker");
 
