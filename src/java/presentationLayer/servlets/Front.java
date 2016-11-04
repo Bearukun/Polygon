@@ -137,18 +137,15 @@ public class Front extends HttpServlet {
                     String addres = request.getParameter("address");
                     int postcod = Integer.parseInt(request.getParameter("postcode"));
                     String cit = request.getParameter("city");
-                    
                     int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
                     String purpos = request.getParameter("purpose");
                     int sq = Integer.parseInt(request.getParameter("sqm"));
-                    
                     int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
                     
                     //Save values to database
                     bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
 
                     //Refresh the logged in user's buildings overview
-                    //refreshAllBuildings();
                     refreshBuilding(user.getUser_id());
                     request.getSession().setAttribute("tempAL", tempAL);
                     
