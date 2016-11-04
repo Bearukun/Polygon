@@ -81,7 +81,7 @@
                     <%
                         ArrayList<Building> tempAL = new ArrayList();
                         tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
-
+                        
                         for (int i = 0; i < tempAL.size(); i++) {
                             if (tempAL.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
                                 build = tempAL.get(i);
@@ -97,7 +97,7 @@
                         <input type="text" name="address" value="<%=build.getAddress()%>" />
                         <br><br>
                         <p>Postnr.</p>
-                        <input type="text" name="postcode" value="<%=build.getPostcode()%>" />
+                        <input type="number" name="postcode" min="1000" max="9999" value="<%=build.getPostcode()%>" />
                         <br><br>
                         <p>By</p>
                         <input type="text" name="city" value="<%=build.getCity()%>" />
@@ -106,10 +106,34 @@
                         <input type="text" name="constructionYear" value="<%=build.getConstruction_year()%>" />
                         <br><br>
                         <p>Formål</p>
-                        <input type="text" name="purpose" value="<%=build.getPurpose()%>" />
+                        <select name="purpose">
+                        <!-- Scriptlet section to ensure the correct option is selected as default  -->
+                        <% 
+                            ArrayList<String> bldgPurpose = new ArrayList();
+                            bldgPurpose.add("Landbrug");
+                            bldgPurpose.add("Erhverv");
+                            bldgPurpose.add("Bolig");
+                            bldgPurpose.add("Uddannelse");
+                            bldgPurpose.add("Offentlig");
+                            bldgPurpose.add("Industriel");
+                            bldgPurpose.add("Militær");
+                            bldgPurpose.add("Religiøs");
+                            bldgPurpose.add("Transport");
+                            bldgPurpose.add("Andet");
+                                 
+                            for (int i = 0; i < bldgPurpose.size(); i++) {
+                                if(build.getPurpose().equals(bldgPurpose.get(i))){
+                                    %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
+                                }
+                                else{
+                                    %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
+                                }
+                            }
+                        %>
+                        </select>
                         <br><br>
                         <p>Kvadratmeter</p>
-                        <input type="text" name="sqm" value="<%=build.getSqm()%>" />
+                        <input type="number" name="sqm" max="51660" value="<%=build.getSqm()%>" />
                         <br><br>
                         <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
                         <input type="hidden" name="origin" value="editBuilding" />
