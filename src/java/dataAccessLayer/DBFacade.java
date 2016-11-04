@@ -5,8 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import serviceLayer.enties.Building;
-import serviceLayer.enties.User;
+import serviceLayer.entities.Building;
+import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
 /**
@@ -247,16 +247,20 @@ public class DBFacade implements DBFacadeInterface {
      * @throws CustomException
      */
     @Override
-    public void editBuilding(int selectedBuilding, String addres, int postcode, String cit) throws CustomException {
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
         try {
             Connection con = DBConnection.getConnection();
             //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
-            String sql = "UPDATE polygon.building SET address=?, postcode=?, city=? WHERE building_id=?";
+            String sql = "UPDATE polygon.building SET name=?, address=?, postcode=?, city=?, construction_year=?, purpose=?, sqm=? WHERE building_id=?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, addres);
-            stmt.setInt(2, postcode);
-            stmt.setString(3, cit);
-            stmt.setInt(4, selectedBuilding);
+            stmt.setString(1, buildingName);
+            stmt.setString(2, addres);
+            stmt.setInt(3, postcod);
+            stmt.setString(4, cit);
+            stmt.setInt(5, constructionYear);
+            stmt.setString(6, purpose);
+            stmt.setInt(7, sqm);
+            stmt.setInt(8, selectedBuilding);
             stmt.executeUpdate();
         } catch (Exception e) {
             throw new CustomException("SQL Error: Connection problem.");

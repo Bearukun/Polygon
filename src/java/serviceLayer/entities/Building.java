@@ -1,5 +1,5 @@
 
-package serviceLayer.enties;
+package serviceLayer.entities;
 
 import java.sql.Timestamp;
 

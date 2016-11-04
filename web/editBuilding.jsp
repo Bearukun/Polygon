@@ -1,6 +1,6 @@
-<%@page import="serviceLayer.enties.User"%>
+<%@page import="serviceLayer.entities.User"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="serviceLayer.enties.Building"%>
+<%@page import="serviceLayer.entities.Building"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -90,6 +90,9 @@
                     %>
                     <h1>Rediger bygning:</h1>
                     <form class="form-edit-building" id="editBuilding" action="Front" method="POST">
+                        <p>Bygningsnavn</p>
+                        <input type="text" name="buildingName" value="<%=build.getName()%>" />
+                        <br><br>
                         <p>Adresse</p>
                         <input type="text" name="address" value="<%=build.getAddress()%>" />
                         <br><br>
@@ -98,9 +101,18 @@
                         <br><br>
                         <p>By</p>
                         <input type="text" name="city" value="<%=build.getCity()%>" />
+                        <br><br>
+                        <p>Opførelsesår</p>
+                        <input type="text" name="constructionYear" value="<%=build.getConstruction_year()%>" />
+                        <br><br>
+                        <p>Formål</p>
+                        <input type="text" name="purpose" value="<%=build.getPurpose()%>" />
+                        <br><br>
+                        <p>Kvadratmeter</p>
+                        <input type="text" name="sqm" value="<%=build.getSqm()%>" />
+                        <br><br>
                         <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
                         <input type="hidden" name="origin" value="editBuilding" />
-                        <br><br>
                         <input class="btn btn-primary" type="submit" value="Gem ændringer" name="editBuilding"/>
                     </form>
                     <% //request.getSession().setAttribute("LoggingError", message);%>    

@@ -2,9 +2,9 @@ package dataAccessLayer.interfaces;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import serviceLayer.enties.Building;
-import serviceLayer.enties.User;
-import serviceLayer.enties.User.type;
+import serviceLayer.entities.Building;
+import serviceLayer.entities.User;
+import serviceLayer.entities.User.type;
 import serviceLayer.exceptions.CustomException;
 
 
@@ -22,7 +22,7 @@ public interface DBFacadeInterface {
     
     ArrayList<User> getUsers() throws CustomException;
 
-    public void editBuilding(int selectedBuilding, String addres, int postcode, String cit) throws CustomException;
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException;
     
     
     

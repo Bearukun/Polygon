@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import serviceLayer.controllers.interfaces.UserControllerInterface;
-import serviceLayer.enties.User;
+import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
 public class UserController implements UserControllerInterface {

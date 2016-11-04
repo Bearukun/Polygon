@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.swing.JOptionPane;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
-import serviceLayer.enties.Building;
-import serviceLayer.enties.User;
+import serviceLayer.entities.Building;
+import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
 /**
@@ -133,13 +133,19 @@ public class Front extends HttpServlet {
                     
                 case "editBuilding":
                     //Retrieve form input values from editBuilding.jsp
+                    String buildingName = request.getParameter("buildingName");
                     String addres = request.getParameter("address");
                     int postcod = Integer.parseInt(request.getParameter("postcode"));
                     String cit = request.getParameter("city");
+                    
+                    int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
+                    String purpos = request.getParameter("purpose");
+                    int sq = Integer.parseInt(request.getParameter("sqm"));
+                    
                     int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
                     
                     //Save values to database
-                    bldgCtrl.editBuilding(selectedBuilding, addres, postcod, cit);
+                    bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
 
                     //Refresh the logged in user's buildings overview
                     //refreshAllBuildings();

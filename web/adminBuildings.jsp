@@ -1,6 +1,6 @@
-<%@page import="serviceLayer.enties.User"%>
+<%@page import="serviceLayer.entities.User"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="serviceLayer.enties.Building"%>
+<%@page import="serviceLayer.entities.Building"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

@@ -1,7 +1,7 @@
 package serviceLayer.controllers.interfaces;
 
 import java.util.ArrayList;
-import serviceLayer.enties.User;
+import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
 public interface UserControllerInterface {

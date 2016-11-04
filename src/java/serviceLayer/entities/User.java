@@ -1,4 +1,4 @@
-package serviceLayer.enties;
+package serviceLayer.entities;
 
 public class User {
 

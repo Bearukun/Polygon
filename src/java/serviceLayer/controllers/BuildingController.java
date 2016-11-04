@@ -5,7 +5,7 @@ import dataAccessLayer.interfaces.DBFacadeInterface;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import serviceLayer.controllers.interfaces.BuildingControllerInterface;
-import serviceLayer.enties.Building;
+import serviceLayer.entities.Building;
 import serviceLayer.exceptions.CustomException;
 
 public class BuildingController implements BuildingControllerInterface{
@@ -28,7 +28,7 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
-    public void editBuilding(int selectedBuilding, String addres, int postcode, String cit) throws CustomException {
-        dbfacade.editBuilding(selectedBuilding, addres, postcode, cit);
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
+        dbfacade.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpose, sqm);
     }
 }
