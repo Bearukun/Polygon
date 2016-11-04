@@ -45,6 +45,7 @@ public class Front extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         String errMsg = null;
         String origin = request.getParameter("origin");
@@ -135,6 +136,7 @@ public class Front extends HttpServlet {
                     //Retrieve form input values from editBuilding.jsp
                     String buildingName = request.getParameter("buildingName");
                     String addres = request.getParameter("address");
+                    System.out.println(addres);
                     int postcod = Integer.parseInt(request.getParameter("postcode"));
                     String cit = request.getParameter("city");
                     int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
