@@ -1,6 +1,6 @@
-<%@page import="serviceLayer.enties.User"%>
+
 <%@page import="java.util.ArrayList"%>
-<%@page import="serviceLayer.enties.Building"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -61,8 +61,8 @@
                                         <i class="glyphicon glyphicon-wrench"></i>
                                         Rediger bygning </a>
                                 </li>
-                                <li>
-                                    <a href="#">
+                                <li class="active">
+                                    <a href="editBuilding.jsp" target="self">
                                         <i class="glyphicon glyphicon-user"></i>
                                         Bruger indstillinger </a>
                                 </li>
@@ -76,43 +76,44 @@
                     <h1>Rediger Profil</h1>
                    
                     
-                    <% User usr = new User(); %>
+                    <!--<% //User usr = new User(); %>
                     <%
-                        ArrayList<User> tempUL = new ArrayList();
-                        tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
+//                        ArrayList<User> tempUL = new ArrayList();
+//                        tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
 
-                        for (int i = 0; i < tempUL.size(); i++) {
-                            if (tempUL.get(i).getUser_id()== Integer.parseInt(request.getParameter("value"))) {
-                                usr = tempUL.get(i);
-                            }
-                        }
-                    %>
-                    <form class="form-edit-profile" id="editPRofile" action="javascript:amendDetails();">
+//                        for (int i = 0; i < tempUL.size(); i++) {
+//                            if (tempUL.get(i).getUser_id()== Integer.parseInt(request.getParameter("value"))) {
+//                                usr = tempUL.get(i);
+//                            }
+//                        }
+                    %>-->
+                    <form class="form-edit-profile" id="editProfile" action="POST">
                        
                        
                         
-                        
+                       
                         <p>Email</p>                      
-                        <input type="text" name="email" value="<%=usr.getEmail()%>" />
+                        <input type="text" name="email" value="<%//=usr.getEmail()%>" />
                          <br><br>
                         <p>Navn</p>                      
-                        <input type="text" name="name" value="<%=usr.getName()%>" />
+                        <input type="text" name="name" value="<%//=usr.getName()%>" />
                         <br><br>
                         <p>Telefon Nummer</p>                      
-                        <input type="number" name="phonenumber" value="<%=usr.getPhone()%>" />
+                        <input type="number" name="phonenumber" value="<%//=usr.getPhone()%>" />
                         <br><br>                       
                          <p>Firma</p> 
-                         <input type="text" name="company" value="<%=usr.getCompany()%>" />
+                         <input type="text" name="company" value="<%//=usr.getCompany()%>" />
                          <br><br>
                           <p>Adresse</p> 
-                          <input type="text" name="address" value="<%=usr.getAddress()%>" />
+                          <input type="text" name="address" value="<%//=usr.getAddress()%>" />
                          <br><br>
                           <p>Postnr.</p> 
-                          <input type="number" name="postcode" value="<%=usr.getPostcode()%>" />
+                          <input type="number" name="postcode" value="<%//=usr.getPostcode()%>" />
                          <br><br>
                           <p>By</p> 
-                          <input type="text" name="city" value="<%=usr.getCity()%>" />
+                          <input type="text" name="city" value="<%//=usr.getCity()%>" />
                          <br><br>
+                        
    
                         <input type="hidden" name="origin" value="editProfile" />
                         <br><br>
