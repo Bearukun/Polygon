@@ -158,6 +158,30 @@ public class Front extends HttpServlet {
     //fix æøå bug here!
                     break;
                     
+                    case "editProfile":
+                    //Retrieve form input values from editProfile.jsp
+                    String uEmail = request.getParameter("email");
+                    String uPassword = request.getParameter("password");
+                    String uName = request.getParameter("name");
+                    int uPhone = Integer.parseInt(request.getParameter("phone"));
+                    String uCompany = request.getParameter("company");
+                    String uAddress = request.getParameter("address");
+                    int uPostcode = Integer.parseInt(request.getParameter("postcode"));
+                    String uCity = request.getParameter("city");
+                    int uSelectedUser = Integer.parseInt(request.getParameter("selectedUser"));
+                    
+                    //Save values to database
+                    usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
+
+                    //Refresh the logged in user's buildings overview
+//                    refreshBuilding(user.getUser_id());
+//                    request.getSession().setAttribute("tempAL", tempAL);
+                    
+                    //redirect to user.jsp
+                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
+    //fix æøå bug here!
+                    break;
+                    
                 case "update":
 
                 case "newCustomer":
@@ -257,29 +281,7 @@ System.out.println(password + " pass");
                     break;
                     
                     
-//                case "editProfile":
-//                    //Retrieve form input values from editBuilding.jsp
-//                    String buildingName = request.getParameter("buildingName");
-//                    String addres = request.getParameter("address");
-//                    System.out.println(addres);
-//                    int postcod = Integer.parseInt(request.getParameter("postcode"));
-//                    String cit = request.getParameter("city");
-//                    int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
-//                    String purpos = request.getParameter("purpose");
-//                    int sq = Integer.parseInt(request.getParameter("sqm"));
-//                    int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
-//                    
-//                    //Save values to database
-//                    bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
-//
-//                    //Refresh the logged in user's buildings overview
-//                    refreshBuilding(user.getUser_id());
-//                    request.getSession().setAttribute("tempAL", tempAL);
-//                    
-//                    //redirect to user.jsp
-//                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
-//    //fix æøå bug here!
-//                    break;
+
                 //case "editBuilding":
                     
                     //needs to recieve the unique id for the user assigned to the building also.
