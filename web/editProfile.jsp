@@ -56,15 +56,12 @@
                                         <i class="glyphicon glyphicon-plus"></i>
                                         Tilføj bygning </a>
                                 </li>
-                                <li>
-                                    <a href="editBuilding?noID" target="_self">
-                                        <i class="glyphicon glyphicon-wrench"></i>
-                                        Rediger bygning </a>
-                                </li>
+                                
                                 <li class="active">
                                     <a href="editBuilding.jsp" target="self">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        Bruger indstilling </a>
+                                        Bruger indstillinger
+                                    </a>
                                 </li>
                             </ul>
                         </div>
