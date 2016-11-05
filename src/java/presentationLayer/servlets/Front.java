@@ -14,11 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.JOptionPane;
+import javax.websocket.Session;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
+import sun.security.pkcs11.wrapper.Functions;
 
 /**
  * Servlet used to check what type of user is logging in.
@@ -101,7 +103,37 @@ public class Front extends HttpServlet {
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
                                    // Ved login skal user have sin info, skal ske via et refresh refreshUsers();
-                                   tempUL = usrCtrl.getUsers();
+                                   
+                                  String uEmail = usrCtrl.getUser(email).getEmail();
+                                  String uPassword = usrCtrl.getUser(email).getPassword();
+                                  String uName = usrCtrl.getUser(email).getName();
+                                  int uPhone = usrCtrl.getUser(email).getPhone();
+                                  String uCompany = usrCtrl.getUser(email).getCompany();                                
+                                  String uAddress = usrCtrl.getUser(email).getAddress();
+                                  int uPostcode = usrCtrl.getUser(email).getPostcode();
+                                  String uCity = usrCtrl.getUser(email).getCity();
+                                  
+                                  
+                                    System.out.println("Front " + uEmail);
+                                    System.out.println("Front " + uPassword);
+                                    System.out.println("Front " + uName);
+                                    System.out.println("Front " + uPhone);
+                                    System.out.println("Front " + uCompany);
+                                    System.out.println("Front " + uAddress);
+                                    System.out.println("Front " + uPostcode);
+                                    System.out.println("Front " + uCity);
+                                    
+                                    request.getSession().setAttribute("uEmail", uEmail);
+                                    request.getSession().setAttribute("uPassword", uPassword);
+                                    request.getSession().setAttribute("uName", uName);
+                                    request.getSession().setAttribute("uPhone", uPhone);
+                                    request.getSession().setAttribute("uCompany", uCompany);
+                                    request.getSession().setAttribute("uAddress", uAddress);
+                                    request.getSession().setAttribute("uPostcode", uPostcode);
+                                    request.getSession().setAttribute("uCity", uCity);
+                                    
+                                  
+                                   
                                     request.getSession().setAttribute("tempUL", tempUL);
                                     request.getSession().setAttribute("tempAL", tempAL);
                                     response.sendRedirect("user.jsp");

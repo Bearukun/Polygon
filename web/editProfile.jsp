@@ -75,14 +75,19 @@
                    
                     
                     <% User usr = new User(); %>
-                    <%
+                    <% System.out.println(request.getSession().getAttribute("uAdress"));
                        ArrayList<User> tempUL = new ArrayList();
                        tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
                        System.out.println("tempUL size: " + tempUL.size());
+                       
+                       
+                       //System.out.println(tempUL.get(1).getCompany());
+                       System.out.println(request.getAttribute("testEmail"));
 
                         for (int i = 0; i < tempUL.size(); i++) {
                           if (tempUL.get(i).getUser_id()== Integer.parseInt(request.getParameter("value"))) {
                               usr = tempUL.get(i);
+                              
                           }
                        }
                         
@@ -94,25 +99,28 @@
                         
                        
                         <p>Email</p>                      
-                        <input type="text" name="email" value="<%=usr.getEmail()%>" />
-                         <br><br>
+                        <input type="text" name="email" value="<%=request.getSession().getAttribute("uEmail")%>" />
+                        <br><br>
+                         <p>Password</p>                      
+                        <input type="text" name="email" value="<%=request.getSession().getAttribute("uPassword")%>" />
+                        <br><br>
                         <p>Navn</p>                      
-                        <input type="text" name="name" value="<%=usr.getName()%>" />
+                        <input type="text" name="name" value="<%=request.getSession().getAttribute("uName")%>" />
                         <br><br>
                         <p>Telefon Nummer</p>                      
-                        <input type="number" name="phonenumber" value="<%=usr.getPhone()%>" />
+                        <input type="number" name="phonenumber" value="<%=request.getSession().getAttribute("uPhone")%>" />
                         <br><br>                       
                          <p>Firma</p> 
-                         <input type="text" name="company" value="<%=usr.getCompany()%>" />
+                         <input type="text" name="company" value="<%=request.getSession().getAttribute("uCompany")%>" />
                          <br><br>
                           <p>Adresse</p> 
-                          <input type="text" name="address" value="<%=usr.getAddress()%>" />
+                          <input type="text" name="address" value="<%=request.getSession().getAttribute("uAddress")%>" />
                          <br><br>
                           <p>Postnr.</p> 
-                          <input type="number" name="postcode" value="<%=usr.getPostcode()%>" />
+                          <input type="number" name="postcode" value="<%=request.getSession().getAttribute("uPostcode")%>" />
                          <br><br>
-                          <p>By</p> 
-                          <input type="text" name="city" value="<%=usr.getCity()%>" />
+                          <p>By</p>  
+                          <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>" />
                          <br><br>
                         
                         <input type="hidden" name="selectedUser" value="<%=request.getParameter("value")%>"
