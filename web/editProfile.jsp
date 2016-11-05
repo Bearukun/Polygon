@@ -64,7 +64,7 @@
                                 <li class="active">
                                     <a href="editBuilding.jsp" target="self">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        Bruger indstillinger </a>
+                                        Bruger indstilling </a>
                                 </li>
                             </ul>
                         </div>
