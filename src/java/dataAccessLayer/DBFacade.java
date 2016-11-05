@@ -266,4 +266,25 @@ public class DBFacade implements DBFacadeInterface {
             throw new CustomException("SQL Error: Connection problem.");
         }
     }
+
+    @Override
+    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+        try {
+            Connection con = DBConnection.getConnection();
+            String sql = "UPDATE polygon.user SET email=?, password=?, name=?, phone=?, company=?, address=?, postcode=?, city=? WHERE user_id=?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, name);
+            stmt.setInt(4, phone);
+            stmt.setString(5, company);
+            stmt.setString(6, address);
+            stmt.setInt(7, postcode);
+            stmt.setString(8, city);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Connection problem.");
+        }
+    }
+
 }

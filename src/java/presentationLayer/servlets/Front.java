@@ -100,6 +100,7 @@ public class Front extends HttpServlet {
 
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
+                                    //refreshUsers();
                                     request.getSession().setAttribute("tempUL", tempUL);
                                     request.getSession().setAttribute("tempAL", tempAL);
                                     response.sendRedirect("user.jsp");

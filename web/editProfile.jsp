@@ -78,7 +78,7 @@
                     <%
                        ArrayList<User> tempUL = new ArrayList();
                        tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
-                       System.out.println(tempUL.toString());
+                       System.out.println("tempUL size: " + tempUL.size());
 
                         for (int i = 0; i < tempUL.size(); i++) {
                           if (tempUL.get(i).getUser_id()== Integer.parseInt(request.getParameter("value"))) {
