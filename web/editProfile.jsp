@@ -85,6 +85,8 @@
                               usr = tempUL.get(i);
                           }
                        }
+                        
+
                     %>
                     <form class="form-edit-profile" id="editProfile" action="POST">
                        
@@ -113,7 +115,7 @@
                           <input type="text" name="city" value="<%=usr.getCity()%>" />
                          <br><br>
                         
-   
+                        <input type="hidden" name="selectedUser" value="<%=request.getParameter("value")%>"
                         <input type="hidden" name="origin" value="editProfile" />
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="Gem ændringer" name="" />

@@ -100,7 +100,8 @@ public class Front extends HttpServlet {
 
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
-                                    //refreshUsers();
+                                   // Ved login skal user have sin info, skal ske via et refresh refreshUsers();
+                                   tempUL = usrCtrl.getUsers();
                                     request.getSession().setAttribute("tempUL", tempUL);
                                     request.getSession().setAttribute("tempAL", tempAL);
                                     response.sendRedirect("user.jsp");
@@ -150,8 +151,8 @@ public class Front extends HttpServlet {
                     bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
 
                     //Refresh the logged in user's buildings overview
-                    refreshBuilding(user.getUser_id());
-                    request.getSession().setAttribute("tempAL", tempAL);
+//                    refreshBuilding(user.getUser_id());
+//                    request.getSession().setAttribute("tempAL", tempAL);
                     
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
@@ -338,8 +339,8 @@ System.out.println(password + " pass");
         tempAL.clear();
         tempAL = bldgCtrl.getBuildings(user_id);
 
-    }
-    //Refreshes the list of buildings
+    }    
+      //Refreshes the list of buildings
     public void refreshAllBuildings() throws CustomException {
 
         allBuildings.clear();

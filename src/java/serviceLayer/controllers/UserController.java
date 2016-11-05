@@ -47,6 +47,8 @@ public class UserController implements UserControllerInterface {
     public User getUser(String email) throws CustomException {
         return dbfacade.getUser(email);
     }
+    
+    
 
     @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
