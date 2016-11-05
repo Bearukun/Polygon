@@ -81,6 +81,7 @@
                     <%
                         ArrayList<Building> tempAL = new ArrayList();
                         tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
+                        System.out.println(tempAL);
                         
                         for (int i = 0; i < tempAL.size(); i++) {
                             if (tempAL.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
