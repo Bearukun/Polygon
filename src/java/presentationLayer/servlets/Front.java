@@ -112,6 +112,7 @@ public class Front extends HttpServlet {
                                   String uAddress = usrCtrl.getUser(email).getAddress();
                                   int uPostcode = usrCtrl.getUser(email).getPostcode();
                                   String uCity = usrCtrl.getUser(email).getCity();
+                                  int uUser_id = usrCtrl.getUser(email).getUser_id();
                                   
                                   
                                     System.out.println("Front " + uEmail);
@@ -122,6 +123,8 @@ public class Front extends HttpServlet {
                                     System.out.println("Front " + uAddress);
                                     System.out.println("Front " + uPostcode);
                                     System.out.println("Front " + uCity);
+                                    System.out.println("Front UID " + uUser_id);
+                                    
                                     
                                     request.getSession().setAttribute("uEmail", uEmail);
                                     request.getSession().setAttribute("uPassword", uPassword);
@@ -131,10 +134,12 @@ public class Front extends HttpServlet {
                                     request.getSession().setAttribute("uAddress", uAddress);
                                     request.getSession().setAttribute("uPostcode", uPostcode);
                                     request.getSession().setAttribute("uCity", uCity);
+                                    request.getSession().setAttribute("uUser_id", uUser_id);
+                                    
                                     
                                   
                                    
-                                    request.getSession().setAttribute("tempUL", tempUL);
+                                    
                                     request.getSession().setAttribute("tempAL", tempAL);
                                     response.sendRedirect("user.jsp");
 
@@ -191,9 +196,42 @@ public class Front extends HttpServlet {
     //fix æøå bug here!
                     break;
                     
+                case "testC":
+                    
+                    System.out.println("in the testC");
+                    String u2Email = request.getParameter("email"); 
+                    String u2Password = request.getParameter("password");
+//                    String u2Name = request.getParameter("name");
+//                    int u2Phone = Integer.parseInt(request.getParameter("phone"));
+//                    String u2Company = request.getParameter("company");
+//                    String u2Address = request.getParameter("address");
+//                    int u2Postcode = Integer.parseInt(request.getParameter("postcode"));
+//                    String u2City = request.getParameter("city");
+//                    int u2SelectedUser = Integer.parseInt(request.getParameter("selectedUser"));
+                   
+                    
+                    
+                    System.out.println("STATS!");
+                    System.out.println(u2Email);
+                    System.out.println(u2Password);
+//                    System.out.println(u2Name);
+//                    System.out.println(u2Phone);
+//                    System.out.println(u2Company);
+//                    System.out.println(u2Address);
+//                    System.out.println(u2Postcode);
+//                    System.out.println(u2City);
+//                    System.out.println(u2SelectedUser);
+//                    System.out.println("REDIRECT!");
+                    response.sendRedirect("editProfile.jsp?success=UpdateSuccessful");
+                    
+                    break;
+                    
+                    
+                    
                     case "editProfile":
+                        System.out.println("Entered edit profile");
                     //Retrieve form input values from editProfile.jsp
-                    String uEmail = request.getParameter("email");
+                    String uEmail = request.getParameter("email");                        
                     String uPassword = request.getParameter("password");
                     String uName = request.getParameter("name");
                     int uPhone = Integer.parseInt(request.getParameter("phone"));
@@ -202,17 +240,28 @@ public class Front extends HttpServlet {
                     int uPostcode = Integer.parseInt(request.getParameter("postcode"));
                     String uCity = request.getParameter("city");
                     int uSelectedUser = Integer.parseInt(request.getParameter("selectedUser"));
+                   
+                        System.out.println("DATA confirmed funneled down into editProfile case");
+                        System.out.println(uEmail);
+                        System.out.println(uPassword);
+                        System.out.println(uName);
+                        System.out.println(uPhone);
+                        System.out.println(uCompany);
+                        System.out.println(uAddress);
+                        System.out.println(uPostcode);
+                        System.out.println(uCity);
+                        System.out.println(uSelectedUser);
                     
                     //Save values to database
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
 
                     //Refresh the logged in user's buildings overview
-//                    refreshBuilding(user.getUser_id());
-//                    request.getSession().setAttribute("tempAL", tempAL);
+                    refreshBuilding(user.getUser_id());
+                    request.getSession().setAttribute("tempAL", tempAL);
                     
                     //redirect to user.jsp
-                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
-    //fix æøå bug here!
+                    response.sendRedirect("editProfile.jsp?success=UpdateSuccessful");
+//    //fix æøå bug here!
                     break;
                     
                 case "update":
