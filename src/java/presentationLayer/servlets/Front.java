@@ -188,8 +188,8 @@ public class Front extends HttpServlet {
                     bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
 
                     //Refresh the logged in user's buildings overview
-//                    refreshBuilding(user.getUser_id());
-//                    request.getSession().setAttribute("tempAL", tempAL);
+                    refreshBuilding(user.getUser_id());
+                    request.getSession().setAttribute("tempAL", tempAL);
                     
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
@@ -201,12 +201,12 @@ public class Front extends HttpServlet {
                     System.out.println("in the testC");
                     String u2Email = request.getParameter("email"); 
                     String u2Password = request.getParameter("password");
-//                    String u2Name = request.getParameter("name");
-//                    int u2Phone = Integer.parseInt(request.getParameter("phone"));
-//                    String u2Company = request.getParameter("company");
-//                    String u2Address = request.getParameter("address");
-//                    int u2Postcode = Integer.parseInt(request.getParameter("postcode"));
-//                    String u2City = request.getParameter("city");
+                    String u2Name = request.getParameter("name");
+                   int u2Phone = Integer.parseInt(request.getParameter("phonenumber"));
+                    String u2Company = request.getParameter("company");
+                    String u2Address = request.getParameter("address");
+                    int u2Postcode = Integer.parseInt(request.getParameter("postcode"));
+                    String u2City = request.getParameter("city");
 //                    int u2SelectedUser = Integer.parseInt(request.getParameter("selectedUser"));
                    
                     
@@ -214,19 +214,23 @@ public class Front extends HttpServlet {
                     System.out.println("STATS!");
                     System.out.println(u2Email);
                     System.out.println(u2Password);
-//                    System.out.println(u2Name);
-//                    System.out.println(u2Phone);
-//                    System.out.println(u2Company);
-//                    System.out.println(u2Address);
-//                    System.out.println(u2Postcode);
-//                    System.out.println(u2City);
+                    System.out.println(u2Name);
+                    System.out.println(u2Phone);
+                    System.out.println(u2Company);
+                    System.out.println(u2Address);
+                   System.out.println(u2Postcode);
+                    System.out.println(u2City);
+                    
+                   // usrCtrl.editUser(5, u2Email, u2Password, u2Name, u2Phone, u2Company, u2Address, u2Postcode, u2City);
 //                    System.out.println(u2SelectedUser);
-//                    System.out.println("REDIRECT!");
+                    System.out.println("REDIRECT!");
                     response.sendRedirect("editProfile.jsp?success=UpdateSuccessful");
                     
                     break;
                     
+                
                     
+                 
                     
                     case "editProfile":
                         System.out.println("Entered edit profile");
@@ -234,7 +238,7 @@ public class Front extends HttpServlet {
                     String uEmail = request.getParameter("email");                        
                     String uPassword = request.getParameter("password");
                     String uName = request.getParameter("name");
-                    int uPhone = Integer.parseInt(request.getParameter("phone"));
+                    int uPhone = Integer.parseInt(request.getParameter("phonenumber"));
                     String uCompany = request.getParameter("company");
                     String uAddress = request.getParameter("address");
                     int uPostcode = Integer.parseInt(request.getParameter("postcode"));
@@ -256,8 +260,8 @@ public class Front extends HttpServlet {
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
 
                     //Refresh the logged in user's buildings overview
-                    refreshBuilding(user.getUser_id());
-                    request.getSession().setAttribute("tempAL", tempAL);
+                    //refreshBuilding(user.getUser_id());
+                   // request.getSession().setAttribute("tempAL", tempAL);
                     
                     //redirect to user.jsp
                     response.sendRedirect("editProfile.jsp?success=UpdateSuccessful");

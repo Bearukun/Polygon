@@ -100,7 +100,7 @@
                         <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>" />
                         <br><br>
 
-<!--<input type="hidden" name="selectedUser" value="<%=request.getSession().getAttribute("uUser_id")%>"-->
+<input type="hidden" name="selectedUser" value="<%=request.getSession().getAttribute("uUser_id")%>"
                         <input type="hidden" name="origin" value="editUser" />
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="KNAP NAVN HER [Gem Ændringer]" name="editUser" />
@@ -119,13 +119,13 @@
                         <p>Navn</p>                      
                         <input type="text" name="name" value="<%=request.getSession().getAttribute("uName")%>" />
                         <br><br>
-                        <p>Telefon Nummer</p>                      
+                       <p>Telefon Nummer</p>                      
                         <input type="number" name="phonenumber" value="<%=request.getSession().getAttribute("uPhone")%>" />
                         <br><br>                       
-                        <p>Firma</p> 
+                         <p>Firma</p> 
                         <input type="text" name="company" value="<%=request.getSession().getAttribute("uCompany")%>" />
                         <br><br>
-                        <p>Adresse</p> 
+                       <p>Adresse</p> 
                         <input type="text" name="address" value="<%=request.getSession().getAttribute("uAddress")%>" />
                         <br><br>
                         <p>Postnr.</p> 
@@ -134,8 +134,11 @@
                         <p>By</p>  
                         <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>" />
                         <br><br>
-
-                        <input type="hidden" name="selectedUser" value="<%=request.getSession().getAttribute("uUser_id")%>"
+ 
+                        <!-- Next line breaks the code and throws the user to the front! 
+                       
+                        <input type="hidden" name="selectedUser" value="<%=request.getSession().getAttribute("uUser_id")%>-->"
+                               
                         <input type="hidden" name="origin" value="testC" />
                         <input class="btn btn-primary" type="submit" value="testC" name=""/>
                     </form>
