@@ -86,7 +86,7 @@ public class Front extends HttpServlet {
                                 }
 
                                 if (user.getType().equals(User.type.ADMIN)) {
-                                    refreshUsers(); 
+                                    refreshUsers();
                                     refreshAllBuildings();
                                     request.getSession().setAttribute("tempUL", tempUL);
                                     request.getSession().setAttribute("allBuildings", allBuildings);
@@ -102,19 +102,18 @@ public class Front extends HttpServlet {
 
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
-                                   // Ved login skal user have sin info, skal ske via et refresh refreshUsers();
-                                   
-                                  String uEmail = usrCtrl.getUser(email).getEmail();
-                                  String uPassword = usrCtrl.getUser(email).getPassword();
-                                  String uName = usrCtrl.getUser(email).getName();
-                                  int uPhone = usrCtrl.getUser(email).getPhone();
-                                  String uCompany = usrCtrl.getUser(email).getCompany();                                
-                                  String uAddress = usrCtrl.getUser(email).getAddress();
-                                  int uPostcode = usrCtrl.getUser(email).getPostcode();
-                                  String uCity = usrCtrl.getUser(email).getCity();
-                                  int uUser_id = usrCtrl.getUser(email).getUser_id();
-                                  
-                                  
+                                    // Ved login skal user have sin info, skal ske via et refresh refreshUsers();
+
+                                    String uEmail = usrCtrl.getUser(email).getEmail();
+                                    String uPassword = usrCtrl.getUser(email).getPassword();
+                                    String uName = usrCtrl.getUser(email).getName();
+                                    int uPhone = usrCtrl.getUser(email).getPhone();
+                                    String uCompany = usrCtrl.getUser(email).getCompany();
+                                    String uAddress = usrCtrl.getUser(email).getAddress();
+                                    int uPostcode = usrCtrl.getUser(email).getPostcode();
+                                    String uCity = usrCtrl.getUser(email).getCity();
+                                    int uUser_id = usrCtrl.getUser(email).getUser_id();
+
                                     System.out.println("Front " + uEmail);
                                     System.out.println("Front " + uPassword);
                                     System.out.println("Front " + uName);
@@ -124,8 +123,7 @@ public class Front extends HttpServlet {
                                     System.out.println("Front " + uPostcode);
                                     System.out.println("Front " + uCity);
                                     System.out.println("Front UID " + uUser_id);
-                                    
-                                    
+
                                     request.getSession().setAttribute("uEmail", uEmail);
                                     request.getSession().setAttribute("uPassword", uPassword);
                                     request.getSession().setAttribute("uName", uName);
@@ -135,11 +133,7 @@ public class Front extends HttpServlet {
                                     request.getSession().setAttribute("uPostcode", uPostcode);
                                     request.getSession().setAttribute("uCity", uCity);
                                     request.getSession().setAttribute("uUser_id", uUser_id);
-                                    
-                                    
-                                  
-                                   
-                                    
+
                                     request.getSession().setAttribute("tempAL", tempAL);
                                     response.sendRedirect("user.jsp");
 
@@ -171,7 +165,7 @@ public class Front extends HttpServlet {
                     response.sendRedirect("index.jsp#");
 
                     break;
-                    
+
                 case "editBuilding":
                     //Retrieve form input values from editBuilding.jsp
                     String buildingName = request.getParameter("buildingName");
@@ -183,34 +177,32 @@ public class Front extends HttpServlet {
                     String purpos = request.getParameter("purpose");
                     int sq = Integer.parseInt(request.getParameter("sqm"));
                     int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
-                    
+
                     //Save values to database
                     bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
 
                     //Refresh the logged in user's buildings overview
                     refreshBuilding(user.getUser_id());
                     request.getSession().setAttribute("tempAL", tempAL);
-                    
+
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
-    //fix æøå bug here!
+                    //fix æøå bug here!
                     break;
-                    
+
                 case "testC":
-                    
+
                     System.out.println("in the testC");
-                    String u2Email = request.getParameter("email"); 
+                    String u2Email = request.getParameter("email");
                     String u2Password = request.getParameter("password");
                     String u2Name = request.getParameter("name");
-                   int u2Phone = Integer.parseInt(request.getParameter("phonenumber"));
+                    int u2Phone = Integer.parseInt(request.getParameter("phonenumber"));
                     String u2Company = request.getParameter("company");
                     String u2Address = request.getParameter("address");
                     int u2Postcode = Integer.parseInt(request.getParameter("postcode"));
                     String u2City = request.getParameter("city");
 //                    int u2SelectedUser = Integer.parseInt(request.getParameter("selectedUser"));
-                   
-                    
-                    
+
                     System.out.println("STATS!");
                     System.out.println(u2Email);
                     System.out.println(u2Password);
@@ -218,24 +210,25 @@ public class Front extends HttpServlet {
                     System.out.println(u2Phone);
                     System.out.println(u2Company);
                     System.out.println(u2Address);
-                   System.out.println(u2Postcode);
+                    System.out.println(u2Postcode);
                     System.out.println(u2City);
+
                     
-                    usrCtrl.editUser(5, u2Email, u2Password, u2Name, u2Phone, u2Company, u2Address, u2Postcode, u2City);
 //                    System.out.println(u2SelectedUser);
                     System.out.println("REDIRECT!");
-                    response.sendRedirect("editProfile.jsp?success=UpdateSuccessful");
-                    
+
+             
+
+
+                    response.sendRedirect("editProfileSuccess.jsp?success=UpdateSuccessful");
+
                     break;
+
+                case "editProfile":
                     
-                
-                    
-                 
-                    
-                    case "editProfile":
-                        System.out.println("Entered edit profile");
+                    System.out.println("Entered edit profile");
                     //Retrieve form input values from editProfile.jsp
-                    String uEmail = request.getParameter("email");                        
+                    String uEmail = request.getParameter("email");
                     String uPassword = request.getParameter("password");
                     String uName = request.getParameter("name");
                     int uPhone = Integer.parseInt(request.getParameter("phonenumber"));
@@ -243,31 +236,33 @@ public class Front extends HttpServlet {
                     String uAddress = request.getParameter("address");
                     int uPostcode = Integer.parseInt(request.getParameter("postcode"));
                     String uCity = request.getParameter("city");
-                    int uSelectedUser = Integer.parseInt(request.getParameter("selectedUser"));
-                   
-                        System.out.println("DATA confirmed funneled down into editProfile case");
-                        System.out.println(uEmail);
-                        System.out.println(uPassword);
-                        System.out.println(uName);
-                        System.out.println(uPhone);
-                        System.out.println(uCompany);
-                        System.out.println(uAddress);
-                        System.out.println(uPostcode);
-                        System.out.println(uCity);
-                        System.out.println(uSelectedUser);
-                    
+                    int uSelectedUser = user.getUser_id();
+
+                    System.out.println("DATA confirmed funneled down into editProfile case");
+                    System.out.println(uEmail);
+                    System.out.println(uPassword);
+                    System.out.println(uName);
+                    System.out.println(uPhone);
+                    System.out.println(uCompany);
+                    System.out.println(uAddress);
+                    System.out.println(uPostcode);
+                    System.out.println(uCity);
+                    System.out.println(uSelectedUser);
+
                     //Save values to database
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
+                    
 
                     //Refresh the logged in user's buildings overview
                     //refreshBuilding(user.getUser_id());
-                   // request.getSession().setAttribute("tempAL", tempAL);
-                    
+                    // request.getSession().setAttribute("tempAL", tempAL);
                     //redirect to user.jsp
-                    response.sendRedirect("editProfile.jsp?success=UpdateSuccessful");
+                    response.sendRedirect("editProfileSuccess.jsp?success=UpdateSuccessful");
+                    
+                    
 //    //fix æøå bug here!
                     break;
-                    
+
                 case "update":
 
                 case "newCustomer":
@@ -283,25 +278,24 @@ public class Front extends HttpServlet {
                         String address = request.getParameter("address");
                         String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!
                         String city = request.getParameter("city");
-                        
+
 //                        Check that the parameters are being read
 //                        System.out.println(email + " em");
 //              
-System.out.println(password + " pass");
+                        System.out.println(password + " pass");
 //                        System.out.println(name + " nam");
 //                        System.out.println(phone+ " ph");
 //                        System.out.println(company+ " com");
 //                        System.out.println(address+ " add");
 //                        System.out.println(postcode+ " post");
 //                        System.out.println(city + " city");
-                        
-                         //test password match
+
+                        //test password match
 //                        if(!request.getSession().getAttribute("password").equals(request.getSession().getAttribute("passwordConfirm")) ){
 //                            System.out.println("PASSWORD NOT MATCHING!");
 //                            JOptionPane.showMessageDialog(null, "PASSWORD NOT MATCHING!");
 //                             response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8") + " PASSWORD NOT MATCHING");
 //                        }
-
                         try {
                             System.out.println("creating user");
                             //Create user
@@ -309,8 +303,7 @@ System.out.println(password + " pass");
                             //If successful, redirect
                             System.out.println("Index redirect");
                             response.sendRedirect("index.jsp?success");
-                            
-                            
+
                         } catch (CustomException e) {
 
                             errMsg = e.getMessage();
@@ -328,8 +321,6 @@ System.out.println(password + " pass");
                     break;
 
                 case "createBuilding":
-                    
-                    
 
                     //If no user is logged in. (user == null)
                     if (user != null) {
@@ -345,7 +336,7 @@ System.out.println(password + " pass");
                         try {
 
                             //createBuilding
-                            bldgCtrl.createBuilding( name, address, Integer.parseInt(postcode), city, Integer.parseInt(construction_year), purpose, Integer.parseInt(sqm), user_id);
+                            bldgCtrl.createBuilding(name, address, Integer.parseInt(postcode), city, Integer.parseInt(construction_year), purpose, Integer.parseInt(sqm), user_id);
                             refreshBuilding(user_id);
                             //If successful, redirect
                             response.sendRedirect("user.jsp?sucess=buildingAdded");
@@ -365,15 +356,10 @@ System.out.println(password + " pass");
                     }
 
                     break;
-                    
-                    
 
                 //case "editBuilding":
-                    
-                    //needs to recieve the unique id for the user assigned to the building also.
-                    
-                    //JOptionPane.showMessageDialog(null, "Test!");
-                    
+                //needs to recieve the unique id for the user assigned to the building also.
+                //JOptionPane.showMessageDialog(null, "Test!");
 //                    if (user != null) {
 //
 //                        int user_id = user.getUser_id();
@@ -405,12 +391,8 @@ System.out.println(password + " pass");
 //                    }
 //
 //                    break;
-                    
-                    
                 case "adminUsers":
-                    
-                    
-                    
+
             }
 
         } catch (Exception e) {
@@ -424,8 +406,9 @@ System.out.println(password + " pass");
         tempAL.clear();
         tempAL = bldgCtrl.getBuildings(user_id);
 
-    }    
-      //Refreshes the list of buildings
+    }
+    //Refreshes the list of buildings
+
     public void refreshAllBuildings() throws CustomException {
 
         allBuildings.clear();
@@ -433,11 +416,12 @@ System.out.println(password + " pass");
 
     }
 
-    public void refreshUsers() throws CustomException{
-        
+    public void refreshUsers() throws CustomException {
+
         tempUL.clear();
         tempUL = usrCtrl.getUsers();
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
