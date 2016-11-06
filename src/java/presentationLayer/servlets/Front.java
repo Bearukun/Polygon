@@ -103,7 +103,8 @@ public class Front extends HttpServlet {
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
                                     // Ved login skal user have sin info, skal ske via et refresh refreshUsers();
-
+                                    
+                                    
                                     String uEmail = usrCtrl.getUser(email).getEmail();
                                     String uPassword = usrCtrl.getUser(email).getPassword();
                                     String uName = usrCtrl.getUser(email).getName();
@@ -190,40 +191,6 @@ public class Front extends HttpServlet {
                     //fix æøå bug here!
                     break;
 
-                case "testC":
-
-                    System.out.println("in the testC");
-                    String u2Email = request.getParameter("email");
-                    String u2Password = request.getParameter("password");
-                    String u2Name = request.getParameter("name");
-                    int u2Phone = Integer.parseInt(request.getParameter("phonenumber"));
-                    String u2Company = request.getParameter("company");
-                    String u2Address = request.getParameter("address");
-                    int u2Postcode = Integer.parseInt(request.getParameter("postcode"));
-                    String u2City = request.getParameter("city");
-//                    int u2SelectedUser = Integer.parseInt(request.getParameter("selectedUser"));
-
-                    System.out.println("STATS!");
-                    System.out.println(u2Email);
-                    System.out.println(u2Password);
-                    System.out.println(u2Name);
-                    System.out.println(u2Phone);
-                    System.out.println(u2Company);
-                    System.out.println(u2Address);
-                    System.out.println(u2Postcode);
-                    System.out.println(u2City);
-
-                    
-//                    System.out.println(u2SelectedUser);
-                    System.out.println("REDIRECT!");
-
-             
-
-
-                    response.sendRedirect("editProfileSuccess.jsp?success=UpdateSuccessful");
-
-                    break;
-
                 case "editProfile":
                     
                     System.out.println("Entered edit profile");
@@ -252,12 +219,14 @@ public class Front extends HttpServlet {
                     //Save values to database
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
                     
+                    //getSession().setAttribute("email", user.getEmail().toString());
+                    
 
-                    //Refresh the logged in user's buildings overview
-                    //refreshBuilding(user.getUser_id());
-                    // request.getSession().setAttribute("tempAL", tempAL);
+                    
+                    
+                    
                     //redirect to user.jsp
-                    response.sendRedirect("editProfileSuccess.jsp?success=UpdateSuccessful");
+                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
                     
                     
 //    //fix æøå bug here!
@@ -421,8 +390,8 @@ public class Front extends HttpServlet {
         tempUL.clear();
         tempUL = usrCtrl.getUsers();
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    
+       // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
