@@ -281,6 +281,7 @@ public class DBFacade implements DBFacadeInterface {
             stmt.setString(6, address);
             stmt.setInt(7, postcode);
             stmt.setString(8, city);
+            stmt.setInt(9, selectedUser);
             stmt.executeUpdate();
         } catch (Exception e) {
             throw new CustomException("SQL Error: Connection problem.");

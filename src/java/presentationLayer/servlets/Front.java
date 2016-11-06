@@ -221,7 +221,7 @@ public class Front extends HttpServlet {
                    System.out.println(u2Postcode);
                     System.out.println(u2City);
                     
-                   // usrCtrl.editUser(5, u2Email, u2Password, u2Name, u2Phone, u2Company, u2Address, u2Postcode, u2City);
+                    usrCtrl.editUser(5, u2Email, u2Password, u2Name, u2Phone, u2Company, u2Address, u2Postcode, u2City);
 //                    System.out.println(u2SelectedUser);
                     System.out.println("REDIRECT!");
                     response.sendRedirect("editProfile.jsp?success=UpdateSuccessful");
