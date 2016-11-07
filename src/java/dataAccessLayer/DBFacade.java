@@ -4,6 +4,7 @@ import dataAccessLayer.interfaces.DBFacadeInterface;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.User;
@@ -15,6 +16,7 @@ import serviceLayer.exceptions.CustomException;
  */
 public class DBFacade implements DBFacadeInterface {
 
+    //Declare and instantiate ArrayLists.
     private ArrayList<Building> userBuilding = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
     private ArrayList<User> tempUL = new ArrayList();
@@ -26,8 +28,9 @@ public class DBFacade implements DBFacadeInterface {
         Building.condition condition;
         
         //Declare new objects of the Connection and PrepareStatement.
-        Connection con;
-        PreparedStatement stmt;
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         
         try {
             
@@ -39,14 +42,14 @@ public class DBFacade implements DBFacadeInterface {
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.
             stmt.setInt(1, user_id);
-            //Execute query, and save the resultset.
-            ResultSet rs = stmt.executeQuery();
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
 
             //Loop through the resultSet.
             while (rs.next()) {
                 
                 //If-condition, checking the condition of the building.
-                //The local v
+                //The local varible gets assigned the ENUM from the rs.
                 if (rs.getString(7).equals(Building.condition.GOOD.toString())) {
 
                     condition = Building.condition.GOOD;
@@ -68,10 +71,28 @@ public class DBFacade implements DBFacadeInterface {
                 //int building_id, String name, String date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm) {
                 userBuilding.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getBoolean(12), rs.getInt(13), rs.getInt(14)));
             }
+            
         } catch (Exception e) {
-            throw new CustomException("SQL Error: Database connection failed.");
+            
+            throw new CustomException("SQL Error:@DBFacade.getBuildings."+e.getMessage());
+        
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+                rs.close();
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
 
+        //Return ArrayList of Building(s).
         return userBuilding;
     }
 
