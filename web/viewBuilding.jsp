@@ -79,14 +79,14 @@
                 <div class="col-sm-10">
                     <% Building build = new Building(); %>
                     <%
-                        ArrayList<Building> tempAL = new ArrayList();
-                        tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
+                        ArrayList<Building> userBuildings = new ArrayList();
+                        userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
                         //Loop through entire buildings list
-                        for (int i = 0; i < tempAL.size(); i++) {
+                        for (int i = 0; i < userBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
-                            if (tempAL.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
+                            if (userBuildings.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
                                 //Save the building in the reference object build so its details can be shown on page
-                                build = tempAL.get(i);
+                                build = userBuildings.get(i);
                                 request.getSession().setAttribute("buildingBeingEdited", build);
                             }
                         }
