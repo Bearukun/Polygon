@@ -104,6 +104,7 @@
                         <input type="hidden" name="origin" value="editProfile" />
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="[Gem Ændringer]" name="editProfile" />
+                        <br><br>
                     </form>
                   
 
