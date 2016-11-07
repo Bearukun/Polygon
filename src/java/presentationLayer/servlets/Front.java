@@ -58,9 +58,32 @@ public class Front extends HttpServlet {
                         String password = request.getParameter("password");
 
                         try {
-
+                            
                             user = usrCtrl.login(email, password);
 
+                            //Retrieve of the users data, to be used in the editProfile.jsp
+                            String uEmail = user.getEmail();
+                            String uPassword = user.getPassword();
+                            String uName = user.getName();
+                            int uPhone = user.getPhone();
+                            String uCompany = user.getCompany();
+                            String uAddress = user.getAddress();
+                            int uPostcode = user.getPostcode();
+                            String uCity = user.getCity();
+                            int uUser_id = user.getUser_id();
+
+                            //Takes the retrieved user data/information and sends it 
+                            //to the editProfile.jsp page.
+                            request.getSession().setAttribute("uEmail", uEmail);
+                            request.getSession().setAttribute("uPassword", uPassword);
+                            request.getSession().setAttribute("uName", uName);
+                            request.getSession().setAttribute("uPhone", uPhone);
+                            request.getSession().setAttribute("uCompany", uCompany);
+                            request.getSession().setAttribute("uAddress", uAddress);
+                            request.getSession().setAttribute("uPostcode", uPostcode);
+                            request.getSession().setAttribute("uCity", uCity);
+                            request.getSession().setAttribute("uUser_id", uUser_id);
+                            
                             if (user != null) {
 
                                 request.getSession().setAttribute("email", user.getEmail().toString());
@@ -100,42 +123,6 @@ public class Front extends HttpServlet {
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
                                     
-                                    //Retrieve of the users data, to be used in the editProfile.jsp
-                                    String uEmail = usrCtrl.getUser(email).getEmail();
-                                    String uPassword = usrCtrl.getUser(email).getPassword();
-                                    String uName = usrCtrl.getUser(email).getName();
-                                    int uPhone = usrCtrl.getUser(email).getPhone();
-                                    String uCompany = usrCtrl.getUser(email).getCompany();
-                                    String uAddress = usrCtrl.getUser(email).getAddress();
-                                    int uPostcode = usrCtrl.getUser(email).getPostcode();
-                                    String uCity = usrCtrl.getUser(email).getCity();
-                                    int uUser_id = usrCtrl.getUser(email).getUser_id();
-
-                                    //Display of the data being pulled up from the user, 
-                                    //which is going to setup and displayed in the editUser.jsp 
-                                    //in a few moments
-//                                    System.out.println("Front " + uEmail);
-//                                    System.out.println("Front " + uPassword);
-//                                    System.out.println("Front " + uName);
-//                                    System.out.println("Front " + uPhone);
-//                                    System.out.println("Front " + uCompany);
-//                                    System.out.println("Front " + uAddress);
-//                                    System.out.println("Front " + uPostcode);
-//                                    System.out.println("Front " + uCity);
-//                                    System.out.println("Front UID " + uUser_id);
-
-                                    //Takes the retrieved user data/information and sends it 
-                                    //to the editProfile.jsp page.
-                                    request.getSession().setAttribute("uEmail", uEmail);
-                                    request.getSession().setAttribute("uPassword", uPassword);
-                                    request.getSession().setAttribute("uName", uName);
-                                    request.getSession().setAttribute("uPhone", uPhone);
-                                    request.getSession().setAttribute("uCompany", uCompany);
-                                    request.getSession().setAttribute("uAddress", uAddress);
-                                    request.getSession().setAttribute("uPostcode", uPostcode);
-                                    request.getSession().setAttribute("uCity", uCity);
-                                    request.getSession().setAttribute("uUser_id", uUser_id);
-
                                     //Setup users buildings
                                     request.getSession().setAttribute("userBuildings", userBuildings);
                                     
