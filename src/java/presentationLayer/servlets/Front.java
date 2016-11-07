@@ -28,6 +28,7 @@ public class Front extends HttpServlet {
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
     private Building building = null;
+    private boolean beingEdited = false;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,6 +44,7 @@ public class Front extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        request.getSession().setAttribute("beingEdited", beingEdited);
         String errMsg = null;
         String origin = request.getParameter("origin");
 
@@ -159,28 +161,44 @@ public class Front extends HttpServlet {
                     break;
 
                 case "viewBuilding":
-                    //Retrieve form input values from viewBuilding.jsp
-                    String buildingName = request.getParameter("buildingName");
-                    String addres = request.getParameter("address");
-                    System.out.println(addres);
-                    int postcod = Integer.parseInt(request.getParameter("postcode"));
-                    String cit = request.getParameter("city");
-                    int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
-                    String purpos = request.getParameter("purpose");
-                    int sq = Integer.parseInt(request.getParameter("sqm"));
-                    int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
-
-                    //Save values to database
-                    bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
-
-                    //Refresh the logged in user's buildings overview
-                    refreshBuilding(user.getUser_id());
-                    request.getSession().setAttribute("userBuilding", userBuildings);
-
+                    
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                     Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                    //redirect to viewBuilding.jsp into the specific building being edited
-                    response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    
+                    if(beingEdited){
+                        
+                        //Retrieve form input values from viewBuilding.jsp
+                        String buildingName = request.getParameter("buildingName");
+                        String addres = request.getParameter("address");
+                        System.out.println(addres);
+                        int postcod = Integer.parseInt(request.getParameter("postcode"));
+                        String cit = request.getParameter("city");
+                        int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
+                        String purpos = request.getParameter("purpose");
+                        int sq = Integer.parseInt(request.getParameter("sqm"));
+                        int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
+
+                        //Save values to database
+                        bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
+
+                        //Refresh the logged in user's buildings overview
+                        refreshBuilding(user.getUser_id());
+                        request.getSession().setAttribute("userBuilding", userBuildings);
+
+                        beingEdited = false;
+                        request.getSession().setAttribute("beingEdited", beingEdited);
+
+                        //redirect to viewBuilding.jsp into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    }
+                    else{
+                    //if(request.getParameter("origin").equals("viewBuilding")){
+                        beingEdited = true;
+                        request.getSession().setAttribute("beingEdited", beingEdited);
+                        
+                        //redirect to viewBuilding.jsp into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    }
                     
                     break;
 

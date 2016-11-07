@@ -22,7 +22,8 @@
     </head>
     <body>
 
-        <% boolean editBuilding = false; %>
+        
+        <% boolean editBuilding = (boolean) request.getSession().getAttribute("beingEdited"); %>
 
         <div class="container-fluid">
             <div class="siteContent">
@@ -79,14 +80,15 @@
                 <!-- SITE CONTENT -->
             <!-- If else statements show different page contents depending on whether a building is 'just' being viewed or whether it is being edited -->    
             <% 
-                //if the building's details are being edited
+                ArrayList<Building> userBuildings = new ArrayList();
+                userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
+                Building build = new Building();
+                //If the building's details are being edited
+                
                 if(editBuilding){%>
                 
                 <div class="col-sm-10">
-                    <% Building build = new Building(); %>
                     <%
-                        ArrayList<Building> userBuildings = new ArrayList();
-                        userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
                         //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
@@ -97,8 +99,8 @@
                             }
                         }
                     %>
-                    <h1>Rediger bygning:</h1>
-                    <form class="form-edit-building" id="editBuilding" action="Front" method="POST">
+                    <h1>Rediger bygning</h1>
+                    <form class="form-view-building" id="editBuilding" action="Front" method="POST">
                         <p>Bygningsnavn</p>
                         <input type="text" name="buildingName" value="<%=build.getName()%>" />
                         <br><br>
@@ -146,24 +148,14 @@
                         <br><br>
                         <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
                         <input type="hidden" name="origin" value="viewBuilding" />
-                        <input class="btn btn-primary" type="submit" value="Gem ændringer" name="viewBuilding"/>
+                        <input class="btn btn-primary" type="submit" value="Gem ændringer" />
                     </form>
-                    <% //request.getSession().setAttribute("LoggingError", message);%>    
-<!--                        <form class="form-signin" action="Front" method="POST">
-                            <input type="hidden" name="origin" value="javascript:amendDetails();" />
-                        <br><br>
-                        <input class="btn btn-primary" type="submit" value="Gem !!! TEST" name="" />
-
-                        </form>-->
-                        
-                        
                 </div>
-            <%} else{%>
-                
+            <%} else{
+                //if the building's details are not being edited
+            %>
                 <div class="col-sm-10">
-                    <% Building build = new Building(); %>
                     <%
-                        userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
                         //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
@@ -174,70 +166,79 @@
                             }
                         }
                     %>
-                    <h1>Vis bygning:</h1>
-                    <form class="form-view-building" id="viewBuilding" action="Front" method="POST">
-                        <p>Bygningsnavn</p>
-                        <p><%=build.getName()%></p>
-                        
-                        <br><br>
-                        <p>Adresse</p>
-                        <input type="text" name="address" value="<%=build.getAddress()%>" />
-                        <br><br>
-                        <p>Postnr.</p>
-                        <input type="number" name="postcode" min="1000" max="9999" value="<%=build.getPostcode()%>" />
-                        <br><br>
-                        <p>By</p>
-                        <input type="text" name="city" value="<%=build.getCity()%>" />
-                        <br><br>
-                        <p>Opførelsesår</p>
-                        <input type="text" name="constructionYear" value="<%=build.getConstruction_year()%>" />
-                        <br><br>
-                        <p>Formål</p>
-                        <select name="purpose">
-                        <!-- Scriptlet section to ensure the correct option is selected as default  -->
-                        <% 
-                            ArrayList<String> bldgPurpose = new ArrayList();
-                            bldgPurpose.add("Landbrug");
-                            bldgPurpose.add("Erhverv");
-                            bldgPurpose.add("Bolig");
-                            bldgPurpose.add("Uddannelse");
-                            bldgPurpose.add("Offentlig");
-                            bldgPurpose.add("Industriel");
-                            bldgPurpose.add("Militær");
-                            bldgPurpose.add("Religiøs");
-                            bldgPurpose.add("Transport");
-                            bldgPurpose.add("Andet");
-                                 
-                            for (int i = 0; i < bldgPurpose.size(); i++) {
-                                if(build.getPurpose().equals(bldgPurpose.get(i))){
-                                    %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                }
-                                else{
-                                    %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                }
-                            }
-                        %>
-                        </select>
-                        <br><br>
-                        <p>Kvadratmeter</p>
-                        <input type="number" name="sqm" max="51660" value="<%=build.getSqm()%>" />
-                        <br><br>
-                        <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
-                        <input type="hidden" name="origin" value="viewBuilding" />
-                        <input class="btn btn-primary" type="submit" value="Gem ændringer" name="viewBuilding"/>
-                    </form>
-                    <% //request.getSession().setAttribute("LoggingError", message);%>    
-<!--                        <form class="form-signin" action="Front" method="POST">
-                            <input type="hidden" name="origin" value="javascript:amendDetails();" />
-                        <br><br>
-                        <input class="btn btn-primary" type="submit" value="Gem !!! TEST" name="" />
+                    <h1>Vis bygning</h1>
 
-                        </form>-->
+                    <table text-align="left" class="table">
+                        <tbody>
+                            <tr bgcolor='cyan'>
+                                <th colspan="3"><b>Staminformationer</b></th>
+                            </tr>
+                            <tr>
+                                <td><%=build.getName()%><br><%=build.getAddress()%><br><%=build.getPostcode()%> <%=build.getCity()%></td>
+                                <td>Opførelsesår: <%=build.getConstruction_year()%><br>Formål: <%=build.getPurpose()%><br>Kvadratmeter: <%=build.getSqm()%></td>
+                                <td>
+                                    <form class="form-view-building" id="viewBuilding" action="Front" method="POST">
+                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                        <input class="btn btn-primary" type="submit" value="Rediger" />
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                    <br><br>
+                    
+                    <table text-align="left" class="table">
+                        <tbody>
+                            <tr bgcolor='cyan'>
+                                <th colspan="1"><b>Dokumentnavn</b></th>
+                                <th colspan="1"><b>Filtype</b></th>
+                                <th colspan="1"><b>Oprettet den</b></th>
+                                <th colspan="3"><b>Filstørrelse</b></th>
+                            </tr>
+                            <tr>
+                                <td>Dokument 1</td>
+                                <td>PDF</td>
+                                <td>31-10-2016</td>
+                                <td>2MB</td>
+                                <td>
+                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
+                                        <input class="btn btn-primary" type="submit" value="Vis" />
+                                    </form>
+                                </td>
+                                <td>
+                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
+                                        <input class="btn btn-primary" type="submit" value="Download" />
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokument 2</td>
+                                <td>DOC</td>
+                                <td>03-11-2016</td>
+                                <td>0.5MB</td>
+                                <td>
+                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
+                                        <input class="btn btn-primary" type="submit" value="Vis" />
+                                    </form>
+                                </td>
+                                <td>
+                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
+                                        <input class="btn btn-primary" type="submit" value="Download" />
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                    
+ 
+                        
+                      
+                    
                         
                         
                 </div>
 
-            }%>
+            <%}%>
             </div>
         </div>
     </body>
