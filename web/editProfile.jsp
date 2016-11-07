@@ -103,7 +103,7 @@
                         <!--<input type="hidden" name="selectedUser" value="<%=request.getSession().getAttribute("uUser_id")%>"-->
                         <input type="hidden" name="origin" value="editProfile" />
                         <br><br>
-                        <input class="btn btn-primary" type="submit" value="KNAP NAVN HER [Gem Ændringer]" name="editProfile" />
+                        <input class="btn btn-primary" type="submit" value="[Gem Ændringer]" name="editProfile" />
                     </form>
                   
 
