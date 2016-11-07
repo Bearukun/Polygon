@@ -71,10 +71,10 @@
                     <div id="container" class="container-fluid">
                         <h1>Bygninger:</h1>
 
-                        <% ArrayList<User> tempUL = new ArrayList();
+                        <% ArrayList<User> userList = new ArrayList();
                             ArrayList<Building> allBuildings = new ArrayList();
 
-                            tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
+                            userList = (ArrayList<User>) request.getSession().getAttribute("userList");
                             allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
 
                         %>
@@ -95,9 +95,9 @@
                                     <td><b>Bruger(ID)</b></td>
                                 </tr>
                                 <%
-                                    for (int i = 0; i < tempUL.size(); i++) {
+                                    for (int i = 0; i < userList.size(); i++) {
                                         for(int x = 0; x < allBuildings.size(); x++){
-                                            if(tempUL.get(i).getUser_id() ==  allBuildings.get(x).getUser_id()){
+                                            if(userList.get(i).getUser_id() ==  allBuildings.get(x).getUser_id()){
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  
@@ -109,7 +109,7 @@
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>  
-                                    <td><%out.println(tempUL.get(i).getEmail());%></td> 
+                                    <td><%out.println(userList.get(i).getEmail());%></td> 
                                 </tr>
                                 <%}}}
                                 %>

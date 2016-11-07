@@ -76,7 +76,7 @@
                         
                         <% ArrayList<User> tempUL = new ArrayList();
                         
-                        tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
+                        tempUL = (ArrayList<User>) request.getSession().getAttribute("userList");
                         
                         
                         

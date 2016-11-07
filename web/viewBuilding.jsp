@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
-        <title>Sunde Bygninger - Rediger bygning</title>
+        <title>Sunde Bygninger - Vis bygning</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Optional theme -->
@@ -61,9 +61,9 @@
                                         Tilføj bygning </a>
                                 </li>
                                 <li class="active">
-                                    <a href="editBuilding?noID" target="_self">
+                                    <a href="viewBuilding?noID" target="_self">
                                         <i class="glyphicon glyphicon-wrench"></i>
-                                        Rediger bygning </a>
+                                        Vis bygning </a>
                                 </li>
                                 <li>
                                     <a href="editProfile.jsp">
@@ -79,18 +79,20 @@
                 <div class="col-sm-10">
                     <% Building build = new Building(); %>
                     <%
-                        ArrayList<Building> tempAL = new ArrayList();
-                        tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
-                        System.out.println("tempAL Size:" + tempAL.size());
-                        
-                        for (int i = 0; i < tempAL.size(); i++) {
-                            if (tempAL.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
-                                build = tempAL.get(i);
+                        ArrayList<Building> userBuildings = new ArrayList();
+                        userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
+                        //Loop through entire buildings list
+                        for (int i = 0; i < userBuildings.size(); i++) {
+                            //If the currently selected building has the same building id as the one saved in the Session
+                            if (userBuildings.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
+                                //Save the building in the reference object build so its details can be shown on page
+                                build = userBuildings.get(i);
+                                request.getSession().setAttribute("buildingBeingEdited", build);
                             }
                         }
                     %>
                     <h1>Rediger bygning:</h1>
-                    <form class="form-edit-building" id="editBuilding" action="Front" method="POST">
+                    <form class="form-edit-building" id="viewBuilding" action="Front" method="POST">
                         <p>Bygningsnavn</p>
                         <input type="text" name="buildingName" value="<%=build.getName()%>" />
                         <br><br>
@@ -137,8 +139,8 @@
                         <input type="number" name="sqm" max="51660" value="<%=build.getSqm()%>" />
                         <br><br>
                         <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
-                        <input type="hidden" name="origin" value="editBuilding" />
-                        <input class="btn btn-primary" type="submit" value="Gem ændringer" name="editBuilding"/>
+                        <input type="hidden" name="origin" value="viewBuilding" />
+                        <input class="btn btn-primary" type="submit" value="Gem ændringer" name="viewBuilding"/>
                     </form>
                     <% //request.getSession().setAttribute("LoggingError", message);%>    
 <!--                        <form class="form-signin" action="Front" method="POST">

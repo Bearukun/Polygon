@@ -1,26 +1,18 @@
 package presentationLayer.servlets;
 
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
-import dataAccessLayer.DBConnection;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JOptionPane;
-import javax.websocket.Session;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
-import sun.security.pkcs11.wrapper.Functions;
 
 /**
  * Servlet used to check what type of user is logging in.
@@ -28,9 +20,10 @@ import sun.security.pkcs11.wrapper.Functions;
 @WebServlet(name = "Front", urlPatterns = {"/Front"})
 public class Front extends HttpServlet {
 
-    private ArrayList<Building> tempAL = new ArrayList();
-    private ArrayList<User> tempUL = new ArrayList();
+    private ArrayList<Building> userBuildings = new ArrayList();
+    private ArrayList<User> userList = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
+    
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
@@ -88,7 +81,7 @@ public class Front extends HttpServlet {
                                 if (user.getType().equals(User.type.ADMIN)) {
                                     refreshUsers();
                                     refreshAllBuildings();
-                                    request.getSession().setAttribute("tempUL", tempUL);
+                                    request.getSession().setAttribute("userList", userList);
                                     request.getSession().setAttribute("allBuildings", allBuildings);
                                     response.sendRedirect("admin.jsp");
                                     break;
@@ -140,7 +133,7 @@ public class Front extends HttpServlet {
                                     request.getSession().setAttribute("uUser_id", uUser_id);
 
                                     //Setup users buildings
-                                    request.getSession().setAttribute("tempAL", tempAL);
+                                    request.getSession().setAttribute("userBuildings", userBuildings);
                                     
                                     //Redirect to user.jsp page
                                     response.sendRedirect("user.jsp");
@@ -174,8 +167,8 @@ public class Front extends HttpServlet {
 
                     break;
 
-                case "editBuilding":
-                    //Retrieve form input values from editBuilding.jsp
+                case "viewBuilding":
+                    //Retrieve form input values from viewBuilding.jsp
                     String buildingName = request.getParameter("buildingName");
                     String addres = request.getParameter("address");
                     System.out.println(addres);
@@ -187,15 +180,17 @@ public class Front extends HttpServlet {
                     int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
 
                     //Save values to database
-                    bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
+                    bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
 
                     //Refresh the logged in user's buildings overview
                     refreshBuilding(user.getUser_id());
-                    request.getSession().setAttribute("tempAL", tempAL);
+                    request.getSession().setAttribute("userBuilding", userBuildings);
 
-                    //redirect to user.jsp
-                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
-                    //fix æøå bug here!
+                    //Retrieve the building being edited (saved in the Session) and save it in the reference object build
+                    Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+                    //redirect to viewBuilding.jsp into the specific building being edited
+                    response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    
                     break;
 
                 case "editProfile":
@@ -349,7 +344,7 @@ public class Front extends HttpServlet {
 
                     break;
 
-                //case "editBuilding":
+                //case "viewBuilding":
                 //needs to recieve the unique id for the user assigned to the building also.
                 //JOptionPane.showMessageDialog(null, "Test!");
 //                    if (user != null) {
@@ -395,8 +390,8 @@ public class Front extends HttpServlet {
     //Refreshes the list of buildings
     public void refreshBuilding(int user_id) throws CustomException {
 
-        tempAL.clear();
-        tempAL = bldgCtrl.getBuildings(user_id);
+        userBuildings.clear();
+        userBuildings = bldgCtrl.getBuildings(user_id);
 
     }
     //Refreshes the list of buildings
@@ -410,8 +405,8 @@ public class Front extends HttpServlet {
 
     public void refreshUsers() throws CustomException {
 
-        tempUL.clear();
-        tempUL = usrCtrl.getUsers();
+        userList.clear();
+        userList = usrCtrl.getUsers();
     }
     
        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
