@@ -32,6 +32,7 @@ public class Front extends HttpServlet {
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
+    private Building building = null;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -223,6 +224,7 @@ System.out.println(password + " pass");
                     if (user != null) {
 
                         int user_id = user.getUser_id();
+                        int assigned_tech_id = building.getAssigned_tech_id();
                         String name = request.getParameter("name");
                         String address = request.getParameter("address");
                         String postcode = request.getParameter("postcode");
@@ -233,7 +235,7 @@ System.out.println(password + " pass");
                         try {
 
                             //createBuilding
-                            bldgCtrl.createBuilding( name, address, Integer.parseInt(postcode), city, Integer.parseInt(construction_year), purpose, Integer.parseInt(sqm), user_id);
+                            bldgCtrl.createBuilding( name, address, Integer.parseInt(postcode), city, Integer.parseInt(construction_year), purpose, Integer.parseInt(sqm), assigned_tech_id, user_id);
                             refreshBuilding(user_id);
                             //If successful, redirect
                             response.sendRedirect("user.jsp?sucess=buildingAdded");

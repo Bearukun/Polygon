@@ -1,4 +1,5 @@
 
+
 package serviceLayer.entities;
 
 import java.sql.Timestamp;
@@ -11,7 +12,7 @@ public class Building {
 
     }
     
-    private int building_id, postcode, construction_year, sqm, user_id;   
+    private int building_id, postcode, construction_year, sqm, user_id, assigned_tech_id;   
     private String name, address, city, purpose;
     private Timestamp date_created;
     private condition condition;
@@ -19,7 +20,7 @@ public class Building {
     public Building() {
     }
 
-    public Building(int building_id, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, int user_id) {
+    public Building(int building_id, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, int assigned_tech_id, int user_id) {
         this.building_id = building_id;
         this.name = name;
         this.date_created = date_created;
@@ -30,6 +31,7 @@ public class Building {
         this.construction_year = construction_year;
         this.purpose = purpose;
         this.sqm  = sqm;   
+        this.assigned_tech_id = assigned_tech_id;
         this.user_id = user_id;
     }
 
@@ -113,6 +115,16 @@ public class Building {
         this.condition = condition;
     }
 
+    public int getAssigned_tech_id() {
+        return assigned_tech_id;
+    }
+
+    public void setAssigned_tech_id(int assigned_tech_id) {
+        this.assigned_tech_id = assigned_tech_id;
+    }
+
+    
+    
     public int getUser_id() {
         return user_id;
     }

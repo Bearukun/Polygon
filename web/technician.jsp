@@ -88,14 +88,61 @@
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
 
-                        <h1>????????</h1>
-                        
-                        
+                        <h1>Tildelte bygninger:</h1>
 
+                        <% ArrayList<Building> tempAL = new ArrayList();
                         
+                            tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
+                            
 
-                        
-                          
+                        %>
+
+                        <!-- Checks if the user has any buildings. -->
+                        <!-- If not, no table will be created/shown.-->
+                        <%for (int i = 0; i < tempAL.size(); i++) {%>
+
+                        <% int assigned_tech_id = 2;%>
+
+
+                        <% if (tempAL.isEmpty()) {%>
+                        <div id="container" class="container-fluid">
+
+                            <p class="text-danger">Du har ingen opgaver på nuværende tidspunkt.</p>
+                        </div>
+
+                        <!-- If the technctian has any assignments, the table is shown with the building(s) -->
+                        <% } else if (assigned_tech_id == 2) { %>
+                        <table border="1" text-align="left" class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Oprettet den</b></td>
+                                    <td><b>Adresse</b></td>
+                                    <td><b>Postnr.</b></td>
+                                    <td><b>By</b></td>
+                                    <td><b>Tilstand</b></td>
+                                    <td><b>Opførelses År</b></td>
+                                    <td><b>Formål</b></td>
+                                    <td><b>KvadratMeter</b></td>
+                                    
+                                </tr>
+                                <%
+                                %><tr>
+                                    <td><%out.println(tempAL.get(i).getName());%></td>  
+                                    <td><%out.println(tempAL.get(i).getDate_created());%></td>  
+                                    <td><%out.println(tempAL.get(i).getAddress());%></td>  
+                                    <td><%out.println(tempAL.get(i).getPostcode());%></td>  
+                                    <td><%out.println(tempAL.get(i).getCity());%></td>  
+                                    <td><%out.println(tempAL.get(i).getCondition());%></td>  
+                                    <td><%out.println(tempAL.get(i).getConstruction_year());%></td>  
+                                    <td><%out.println(tempAL.get(i).getPurpose());%></td>  
+                                    <td><%out.println(tempAL.get(i).getSqm());%></td>  
+                                </tr>
+                                <%}
+                                %>
+                            </tbody>
+                        </table>
+                        <% }%>
                     </div>
                 </div>
             </div>
