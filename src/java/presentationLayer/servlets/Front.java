@@ -121,7 +121,9 @@ public class Front extends HttpServlet {
                                     break;
 
                                 } else {
-
+                                   
+                                    refreshUsers();
+                                    System.out.println("after ref: " + userList.size());
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
                                     
@@ -228,7 +230,28 @@ public class Front extends HttpServlet {
 //                    System.out.println(uPostcode);
 //                    System.out.println(uCity);
 //                    System.out.println(uSelectedUser);
-
+                    
+                    
+                    //Basic idea for checking user email ! Not working atm!
+//                    System.out.println(userList.size());                                       
+//                    System.out.println("user email: " + user.getEmail());
+//                    System.out.println("new user email:" + uEmail);
+//                    
+//                    
+//                    
+//                    for (int j = 0; j < userList.size(); j++) {
+//                        System.out.println("users: " + userList.get(j).getEmail());
+//                    }
+//                    for (int i = 0; i < userList.size(); i++) {
+//                        System.out.println("Second for-loop");
+//                        if (uEmail == userList.get(i).getEmail()) {
+//                            
+//                            System.out.println("EMAIL ALREADY EXIST!");
+//                            response.sendRedirect("user.jsp?success=EmailAlreadyExist");
+//                            
+//                        }
+//                    }
+                    
                     //Save the users edited values to the user database
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
                     
@@ -251,7 +274,7 @@ public class Front extends HttpServlet {
                     
                     
                     
-                    
+                    System.out.println("Response inc.");
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
                     
