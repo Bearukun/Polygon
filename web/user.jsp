@@ -106,8 +106,9 @@
                                 </tr>
                                 <%
                                     for (int i = 0; i < tempAL.size(); i++) {
+                                //Dynamically load in a row for each of the user's buildings
                                 %><tr>
-                                    <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getName());%></a></td>  
+                                    <td><a href="viewBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getName());%></a></td>  
                                     <td><%out.println(tempAL.get(i).getDate_created());%></td>  
                                     <td><%out.println(tempAL.get(i).getAddress());%></td>  
                                     <td><%out.println(tempAL.get(i).getPostcode());%></td>  

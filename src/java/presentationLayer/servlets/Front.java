@@ -167,8 +167,8 @@ public class Front extends HttpServlet {
 
                     break;
 
-                case "editBuilding":
-                    //Retrieve form input values from editBuilding.jsp
+                case "viewBuilding":
+                    //Retrieve form input values from viewBuilding.jsp
                     String buildingName = request.getParameter("buildingName");
                     String addres = request.getParameter("address");
                     System.out.println(addres);
@@ -180,15 +180,17 @@ public class Front extends HttpServlet {
                     int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
 
                     //Save values to database
-                    bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
+                    bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
 
                     //Refresh the logged in user's buildings overview
                     refreshBuilding(user.getUser_id());
                     request.getSession().setAttribute("tempAL", tempAL);
 
-                    //redirect to user.jsp
-                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
-                    //fix æøå bug here!
+                    //Retrieve the building being edited (saved in the Session) and save it in the reference object build
+                    Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+                    //redirect to viewBuilding.jsp into the specific building being edited
+                    response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    
                     break;
 
                 case "editProfile":
@@ -326,7 +328,7 @@ public class Front extends HttpServlet {
 
                     break;
 
-                //case "editBuilding":
+                //case "viewBuilding":
                 //needs to recieve the unique id for the user assigned to the building also.
                 //JOptionPane.showMessageDialog(null, "Test!");
 //                    if (user != null) {

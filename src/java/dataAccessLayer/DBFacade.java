@@ -247,7 +247,7 @@ public class DBFacade implements DBFacadeInterface {
      * @throws CustomException
      */
     @Override
-    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
+    public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
         try {
             Connection con = DBConnection.getConnection();
             //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
