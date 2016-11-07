@@ -47,6 +47,8 @@ public class UserController implements UserControllerInterface {
     public User getUser(String email) throws CustomException {
         return dbfacade.getUser(email);
     }
+    
+    
 
     @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
@@ -72,6 +74,12 @@ public class UserController implements UserControllerInterface {
     @Override
     public ArrayList<User> getUsers() throws CustomException {
         return dbfacade.getUsers();
+    }
+
+    @Override
+    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+    dbfacade.editUser(selectedUser, email, password, name, phone, company, address, postcode, city);    
+    
     }
 
 }

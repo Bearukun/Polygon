@@ -1,6 +1,7 @@
-<%@page import="serviceLayer.enties.User"%>
+
+<%@page import="serviceLayer.entities.User"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="serviceLayer.enties.Building"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -56,15 +57,12 @@
                                         <i class="glyphicon glyphicon-plus"></i>
                                         Tilføj bygning </a>
                                 </li>
-                                <li>
-                                    <a href="editBuilding?noID" target="_self">
-                                        <i class="glyphicon glyphicon-wrench"></i>
-                                        Rediger bygning </a>
-                                </li>
-                                <li>
-                                    <a href="#">
+
+                                <li class="active">
+                                    <a href="viewBuilding.jsp" target="self">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        Bruger indstillinger </a>
+                                        Bruger indstillinger
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -74,50 +72,42 @@
                 <!-- SITE CONTENT -->
                 <div class="col-sm-10">
                     <h1>Rediger Profil</h1>
-                   
-                    
-                    <% User usr = new User(); %>
-                    <%
-                        ArrayList<User> tempUL = new ArrayList();
-                        tempUL = (ArrayList<User>) request.getSession().getAttribute("tempUL");
 
-                        for (int i = 0; i < tempUL.size(); i++) {
-                            if (tempUL.get(i).getUser_id()== Integer.parseInt(request.getParameter("value"))) {
-                                usr = tempUL.get(i);
-                            }
-                        }
-                    %>
-                    <form class="form-edit-profile" id="editPRofile" action="javascript:amendDetails();">
-                       
-                       
-                        
-                        
+
+                    <form class="form-edit-profile" action="Front" method="POST"> 
                         <p>Email</p>                      
-                        <input type="text" name="email" value="<%=usr.getEmail()%>" />
-                         <br><br>
+                        <input type="text" name="email" value="<%=request.getSession().getAttribute("uEmail")%>" />
+                        <br><br>
+                        <p>Password</p>                      
+                        <input type="text" name="password" value="<%=request.getSession().getAttribute("uPassword")%>" />
+                        <br><br>
                         <p>Navn</p>                      
-                        <input type="text" name="name" value="<%=usr.getName()%>" />
+                        <input type="text" name="name" value="<%=request.getSession().getAttribute("uName")%>" />
                         <br><br>
                         <p>Telefon Nummer</p>                      
-                        <input type="number" name="phonenumber" value="<%=usr.getPhone()%>" />
+                        <input type="number" name="phonenumber" value="<%=request.getSession().getAttribute("uPhone")%>" />
                         <br><br>                       
-                         <p>Firma</p> 
-                         <input type="text" name="company" value="<%=usr.getCompany()%>" />
-                         <br><br>
-                          <p>Adresse</p> 
-                          <input type="text" name="address" value="<%=usr.getAddress()%>" />
-                         <br><br>
-                          <p>Postnr.</p> 
-                          <input type="number" name="postcode" value="<%=usr.getPostcode()%>" />
-                         <br><br>
-                          <p>By</p> 
-                          <input type="text" name="city" value="<%=usr.getCity()%>" />
-                         <br><br>
-   
+                        <p>Firma</p> 
+                        <input type="text" name="company" value="<%=request.getSession().getAttribute("uCompany")%>" />
+                        <br><br>
+                        <p>Adresse</p> 
+                        <input type="text" name="address" value="<%=request.getSession().getAttribute("uAddress")%>" />
+                        <br><br>
+                        <p>Postnr.</p> 
+                        <input type="number" name="postcode" value="<%=request.getSession().getAttribute("uPostcode")%>" />
+                        <br><br>
+                        <p>By</p>  
+                        <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>" />
+                        <br><br>
+
+                        <!--<input type="hidden" name="selectedUser" value="<%=request.getSession().getAttribute("uUser_id")%>"-->
                         <input type="hidden" name="origin" value="editProfile" />
                         <br><br>
-                        <input class="btn btn-primary" type="submit" value="Gem ændringer" name="" />
+                        <input class="btn btn-primary" type="submit" value="KNAP NAVN HER [Gem Ændringer]" name="editProfile" />
                     </form>
+                  
+
+
                 </div>
             </div>
         </div>

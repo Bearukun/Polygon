@@ -16,11 +16,11 @@ public class Building {
     private String name, address, city, purpose;
     private Timestamp date_created;
     private condition condition;
-
+    private boolean healthchech_pending;
     public Building() {
     }
 
-    public Building(int building_id, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, int assigned_tech_id, int user_id) {
+    public Building(int building_id, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, boolean healthcheck_pending, int assigned_tech_id, int user_id) {
         this.building_id = building_id;
         this.name = name;
         this.date_created = date_created;
@@ -31,6 +31,7 @@ public class Building {
         this.construction_year = construction_year;
         this.purpose = purpose;
         this.sqm  = sqm;   
+        this.healthchech_pending = healthcheck_pending;
         this.assigned_tech_id = assigned_tech_id;
         this.user_id = user_id;
     }
@@ -115,6 +116,16 @@ public class Building {
         this.condition = condition;
     }
 
+    public boolean isHealthchech_pending() {
+        return healthchech_pending;
+    }
+
+    public void setHealthchech_pending(boolean healthchech_pending) {
+        this.healthchech_pending = healthchech_pending;
+    }
+
+    
+    
     public int getAssigned_tech_id() {
         return assigned_tech_id;
     }
@@ -123,8 +134,6 @@ public class Building {
         this.assigned_tech_id = assigned_tech_id;
     }
 
-    
-    
     public int getUser_id() {
         return user_id;
     }

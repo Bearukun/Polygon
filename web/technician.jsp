@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
-        <title>Sunde Bygninger - Technician Portal</title>
+        <title>Sunde Bygninger - Teknikerportal</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Optional theme -->
@@ -46,103 +46,75 @@
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
                         <div class="profile-usermenu">
                             <ul class="nav">
-                                <li class="active">
-                                    <a href="">
+                                <li>
+                                    <a href="admin.jsp?refresh">
                                         <i class="glyphicon glyphicon-home"></i>
                                         Overblik </a>
                                 </li>
-                                <li>
-                                    <a href="" target="_self">
+                                <li class="active">
+                                    <a href="adminBuildings.jsp" target="_self">
                                         <i class="glyphicon glyphicon-object-align-bottom"></i>
                                         Vis bygninger </a>
                                 </li>
                                 <li>
-                                    <a href="" target="_self">
+                                    <a href="adminUsers.jsp" target="_self">
                                         <i class="glyphicon glyphicon-th-list"></i>
                                         Vis brugere </a>
-                                </li>
-                                  <li>
-                                    <a href="" target="_self">
-                                        <i class="glyphicon glyphicon-inbox "></i>
-                                        Tickets </a>
-                                </li>
-                                 <li>
-                                    <a href="" target="_self">
-                                        <i class=" glyphicon glyphicon-comment"></i>
-                                        Beskeder </a>
-                                </li>
-                               
-                                  <li>
-                                    <a href="" target="_self">
-                                        <i class="glyphicon glyphicon-briefcase"></i>
-                                        Sunhedseftersyn </a>
                                 </li>
                             </ul>
                         </div>
                         <!-- END MENU -->
                     </div>
                 </div>
-                        
                 <!-- SITE CONTENT -->
-                
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
+                        <h1>Bygninger:</h1>
 
-                        <h1>Tildelte bygninger:</h1>
+                        <% ArrayList<User> userList = new ArrayList();
+                            ArrayList<Building> allBuildings = new ArrayList();
 
-                        <% ArrayList<Building> tempAL = new ArrayList();
-                        
-                            tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
-                            
+                            userList = (ArrayList<User>) request.getSession().getAttribute("userList");
+                            allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
 
                         %>
 
-                        <!-- Checks if the user has any buildings. -->
-                        <!-- If not, no table will be created/shown.-->
-                        <%for (int i = 0; i < tempAL.size(); i++) {%>
-
-                        <% int assigned_tech_id = 2;%>
-
-
-                        <% if (tempAL.isEmpty()) {%>
-                        <div id="container" class="container-fluid">
-
-                            <p class="text-danger">Du har ingen opgaver på nuværende tidspunkt.</p>
-                        </div>
-
-                        <!-- If the technctian has any assignments, the table is shown with the building(s) -->
-                        <% } else if (assigned_tech_id == 2) { %>
                         <table border="1" text-align="left" class="table table-striped">
                             <tbody>
                                 <tr>
+                                    <td><b>Building(ID)</b></td>
                                     <td><b>Bygnings Navn</b></td>
                                     <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
-                                    <td><b>Postnr.</b></td>
+                                    <td><b>Postnummer</b></td>
                                     <td><b>By</b></td>
                                     <td><b>Tilstand</b></td>
-                                    <td><b>Opførelses År</b></td>
+                                    <td><b>Opførelses år</b></td>
                                     <td><b>Formål</b></td>
                                     <td><b>KvadratMeter</b></td>
-                                    
+                                    <td><b>Bruger(ID)</b></td>
                                 </tr>
                                 <%
+                                    for (int i = 0; i < userList.size(); i++) {
+                                        for(int x = 0; x < allBuildings.size(); x++){
+                                            if(userList.get(i).getUser_id() ==  allBuildings.get(x).getUser_id()){
                                 %><tr>
-                                    <td><%out.println(tempAL.get(i).getName());%></td>  
-                                    <td><%out.println(tempAL.get(i).getDate_created());%></td>  
-                                    <td><%out.println(tempAL.get(i).getAddress());%></td>  
-                                    <td><%out.println(tempAL.get(i).getPostcode());%></td>  
-                                    <td><%out.println(tempAL.get(i).getCity());%></td>  
-                                    <td><%out.println(tempAL.get(i).getCondition());%></td>  
-                                    <td><%out.println(tempAL.get(i).getConstruction_year());%></td>  
-                                    <td><%out.println(tempAL.get(i).getPurpose());%></td>  
-                                    <td><%out.println(tempAL.get(i).getSqm());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getName());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getDate_created());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getAddress());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getPostcode());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getCity());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getCondition());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getSqm());%></td>  
+                                    <td><%out.println(userList.get(i).getEmail());%></td> 
                                 </tr>
-                                <%}
+                                <%}}}
                                 %>
                             </tbody>
                         </table>
-                        <% }%>
                     </div>
                 </div>
             </div>

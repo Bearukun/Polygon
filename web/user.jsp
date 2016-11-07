@@ -72,15 +72,15 @@
 
                         <h1>Bygninger:</h1>
 
-                        <% ArrayList<Building> tempAL = new ArrayList();
+                        <% ArrayList<Building> userBuildings = new ArrayList();
 
-                            tempAL = (ArrayList<Building>) request.getSession().getAttribute("tempAL");
+                            userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
                         %>
 
                         <!-- Checks if the user has any buildings. -->
                         <!-- If not, no table will be created/shown.-->
 
-                        <% if (tempAL.isEmpty()) {%>
+                        <% if (userBuildings.isEmpty()) {%>
                         <div id="container" class="container-fluid">
 
                             <p class="text-danger">Du har ingen bygninger! Tryk på 'Tilføj bygning'</p>
@@ -105,17 +105,18 @@
                                     
                                 </tr>
                                 <%
-                                    for (int i = 0; i < tempAL.size(); i++) {
+                                    for (int i = 0; i < userBuildings.size(); i++) {
+                                //Dynamically load in a row for each of the user's buildings
                                 %><tr>
-                                    <td><a href="editBuilding.jsp?value=<%=tempAL.get(i).getBuilding_id()%>"><%out.println(tempAL.get(i).getName());%></a></td>  
-                                    <td><%out.println(tempAL.get(i).getDate_created());%></td>  
-                                    <td><%out.println(tempAL.get(i).getAddress());%></td>  
-                                    <td><%out.println(tempAL.get(i).getPostcode());%></td>  
-                                    <td><%out.println(tempAL.get(i).getCity());%></td>  
-                                    <td><%out.println(tempAL.get(i).getCondition());%></td>  
-                                    <td><%out.println(tempAL.get(i).getConstruction_year());%></td>  
-                                    <td><%out.println(tempAL.get(i).getPurpose());%></td>  
-                                    <td><%out.println(tempAL.get(i).getSqm());%></td>  
+                                    <td><a href="viewBuilding.jsp?value=<%=userBuildings.get(i).getBuilding_id()%>"><%out.println(userBuildings.get(i).getName());%></a></td>  
+                                    <td><%out.println(userBuildings.get(i).getDate_created());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getAddress());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getPostcode());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getCity());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getCondition());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getConstruction_year());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getPurpose());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getSqm());%></td>  
                                 </tr>
                                 <%}
                                 %>

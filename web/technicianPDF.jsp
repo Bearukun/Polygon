@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
-        <title>Sunde Bygninger - Admin Brugeroversigt</title>
+        <title>Sunde Bygninger - Technician PDF Portal</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Optional theme -->
@@ -46,20 +46,36 @@
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
                         <div class="profile-usermenu">
                             <ul class="nav">
-                                <li>
-                                    <a href="admin.jsp?refresh">
+                                <li class="active">
+                                    <a href="">
                                         <i class="glyphicon glyphicon-home"></i>
                                         Overblik </a>
                                 </li>
                                 <li>
-                                    <a href="adminBuildings.jsp" target="_self">
+                                    <a href="" target="_self">
                                         <i class="glyphicon glyphicon-object-align-bottom"></i>
                                         Vis bygninger </a>
                                 </li>
-                                <li class="active">
-                                    <a href="adminUsers.jsp" target="_self">
+                                <li>
+                                    <a href="" target="_self">
                                         <i class="glyphicon glyphicon-th-list"></i>
                                         Vis brugere </a>
+                                </li>
+                                  <li>
+                                    <a href="" target="_self">
+                                        <i class="glyphicon glyphicon-inbox "></i>
+                                        Tickets </a>
+                                </li>
+                                 <li>
+                                    <a href="" target="_self">
+                                        <i class=" glyphicon glyphicon-comment"></i>
+                                        Beskeder </a>
+                                </li>
+                               
+                                  <li>
+                                    <a href="" target="_self">
+                                        <i class="glyphicon glyphicon-briefcase"></i>
+                                        Sunhedseftersyn </a>
                                 </li>
                             </ul>
                         </div>
@@ -72,47 +88,8 @@
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
 
-                        <h1>Bygninger:</h1>
+                        <h1>Data til PDF Dokument</h1>
                         
-                        <% ArrayList<User> tempUL = new ArrayList();
-                        
-                        tempUL = (ArrayList<User>) request.getSession().getAttribute("userList");
-                        
-                        
-                        
-                        %>
-                        
-                        <table border="1" text-align="left" class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <td><b>ID</b></td>
-                                    <td><b>Email</b></td>
-                                    <td><b>Adgandskode</b></td>
-                                    <td><b>Navn</b></td>
-                                    <td><b>Type</b></td>
-                                    <td><b>Firma</b></td>
-                                    <td><b>Adresse</b></td>
-                                    <td><b>Postnr.</b></td>
-                                    <td><b>By</b></td>
-                                </tr>
-                                <%
-                                    for (int i = 0; i < tempUL.size(); i++) {
-                                %><tr>
-                                    <td><%out.println(tempUL.get(i).getUser_id());%></td>  
-                                    <td><%out.println(tempUL.get(i).getEmail());%></td>
-                                    <td><%out.println(tempUL.get(i).getPassword());%></td> 
-                                    <td><%out.println(tempUL.get(i).getName());%></td> 
-                                    <td><%out.println(tempUL.get(i).getType());%></td>                                    
-                                    <td><%out.println(tempUL.get(i).getCompany());%></td> 
-                                    <td><%out.println(tempUL.get(i).getAddress());%></td> 
-                                    <td><%out.println(tempUL.get(i).getPostcode());%></td> 
-                                    <td><%out.println(tempUL.get(i).getCity());%></td> 
-                                    
-                                </tr>
-                                <%}
-                                %>
-                            </tbody>
-                        </table>
                         
 
                         
