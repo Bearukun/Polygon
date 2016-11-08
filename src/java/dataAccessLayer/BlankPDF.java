@@ -14,15 +14,28 @@ import org.apache.pdfbox.pdmodel.PDPage;
  * @author Ceo
  */
 public class BlankPDF {
-    public static void main(String[] args) {
+    
+    public void testBlank(String pdfName){
+    
         PDDocument doc = null;
         doc = new PDDocument();
         doc.addPage(new PDPage());
+        
+        
         try{
-            doc.save("Empty PDF123.pdf");
+            doc.save(pdfName + ".pdf");
             doc.close();
         } catch (Exception io){
             System.out.println(io);
         }
     }
+
+   
+    
+
+   
+
+   
+    
+    
 }

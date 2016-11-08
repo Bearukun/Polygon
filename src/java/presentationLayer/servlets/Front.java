@@ -1,5 +1,6 @@
 package presentationLayer.servlets;
 
+import dataAccessLayer.BlankPDF;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class Front extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -416,12 +418,24 @@ public class Front extends HttpServlet {
 //
 //                    break;
                 case "adminUsers":
+                    break;
+
+        case "blankTestPDF":
+            
+            BlankPDF bpdf = new BlankPDF();
+            String testPDF =  request.getParameter("email");
+            bpdf.testBlank(testPDF);
+            
+            break;
 
             }
 
         } catch (Exception e) {
         }
-
+        
+        
+        
+        
     }
 
     //Refreshes the list of buildings

@@ -231,9 +231,40 @@
                     </table>  
                     
  
-                        
-                      
-                    
+                    <table text-align="left" class="table">
+                        <tbody>
+                            <tr bgcolor='cyan' height="100">
+                                <th colspan="1"><b>1. etage</b></th>
+                                <th colspan="1"><b>Denne etage er meget flot!</b></th>
+                                <th colspan="1"><b>1000</b></th>
+                            </tr>
+                            <tr>
+                                <td><b>Lokale</b></td>
+                                <td><b>Beskrivelse</b></td>
+                                <td><b>Kvadratmeter</b></td>
+                            </tr>
+                            <tr>
+                                <td>1.01</td>
+                                <td>Undervisningslokale</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>1.03</td>
+                                <td>Undervisningslokale</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>1.35</td>
+                                <td>Toilet - herrer</td>
+                                <td>12</td>
+                            </tr>
+                            <tr>
+                                <td>1.37</td>
+                                <td>Toilet - damer</td>
+                                <td>12</td>
+                            </tr>
+                        </tbody>
+                    </table>      
                         
                         
                 </div>
