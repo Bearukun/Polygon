@@ -1,4 +1,4 @@
-# Created by https://www.gitignore.io/api/netbeans,macos,windows,java
+# Created by https://www.gitignore.io/api/netbeans,java,macos,windows
 
 ### NetBeans ###
 nbproject/private/
@@ -7,7 +7,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-src/java/dataAccessLayer/ConnectionConstants.java
 
 
 ### macOS ###
@@ -27,7 +26,6 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
-
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
@@ -64,47 +62,11 @@ $RECYCLE.BIN/
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-=======
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
 
-
-### macOS ###
-*.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-
-# Thumbnails
-._*
-
-
-### Java ###
-*.class
-
-# Mobile Tools for Java (J2ME)
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# word #
-*.docx
-
-### jacocoverage tool
+# Jacocoverage Tool #
 .jacocoverage/
-
