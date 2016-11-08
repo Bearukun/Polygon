@@ -1,10 +1,8 @@
 package dataAccessLayer.interfaces;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.User;
-import serviceLayer.entities.User.type;
 import serviceLayer.exceptions.CustomException;
 
 
