@@ -28,6 +28,7 @@ public class Front extends HttpServlet {
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
     private Building building = null;
+    private boolean beingEdited = false;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,6 +44,7 @@ public class Front extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        request.getSession().setAttribute("beingEdited", beingEdited);
         String errMsg = null;
         String origin = request.getParameter("origin");
 
@@ -58,9 +60,32 @@ public class Front extends HttpServlet {
                         String password = request.getParameter("password");
 
                         try {
-
+                            
                             user = usrCtrl.login(email, password);
 
+                            //Retrieve of the users data, to be used in the editProfile.jsp
+                            String uEmail = user.getEmail();
+                            String uPassword = user.getPassword();
+                            String uName = user.getName();
+                            int uPhone = user.getPhone();
+                            String uCompany = user.getCompany();
+                            String uAddress = user.getAddress();
+                            int uPostcode = user.getPostcode();
+                            String uCity = user.getCity();
+                            int uUser_id = user.getUser_id();
+
+                            //Takes the retrieved user data/information and sends it 
+                            //to the editProfile.jsp page.
+                            request.getSession().setAttribute("uEmail", uEmail);
+                            request.getSession().setAttribute("uPassword", uPassword);
+                            request.getSession().setAttribute("uName", uName);
+                            request.getSession().setAttribute("uPhone", uPhone);
+                            request.getSession().setAttribute("uCompany", uCompany);
+                            request.getSession().setAttribute("uAddress", uAddress);
+                            request.getSession().setAttribute("uPostcode", uPostcode);
+                            request.getSession().setAttribute("uCity", uCity);
+                            request.getSession().setAttribute("uUser_id", uUser_id);
+                            
                             if (user != null) {
 
                                 request.getSession().setAttribute("email", user.getEmail().toString());
@@ -100,46 +125,12 @@ public class Front extends HttpServlet {
                                     break;
 
                                 } else {
-
+                                   
+                                    refreshUsers();
+                                    System.out.println("after ref: " + userList.size());
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
                                     
-                                    //Retrieve of the users data, to be used in the editProfile.jsp
-                                    String uEmail = usrCtrl.getUser(email).getEmail();
-                                    String uPassword = usrCtrl.getUser(email).getPassword();
-                                    String uName = usrCtrl.getUser(email).getName();
-                                    int uPhone = usrCtrl.getUser(email).getPhone();
-                                    String uCompany = usrCtrl.getUser(email).getCompany();
-                                    String uAddress = usrCtrl.getUser(email).getAddress();
-                                    int uPostcode = usrCtrl.getUser(email).getPostcode();
-                                    String uCity = usrCtrl.getUser(email).getCity();
-                                    int uUser_id = usrCtrl.getUser(email).getUser_id();
-
-                                    //Display of the data being pulled up from the user, 
-                                    //which is going to setup and displayed in the editUser.jsp 
-                                    //in a few moments
-//                                    System.out.println("Front " + uEmail);
-//                                    System.out.println("Front " + uPassword);
-//                                    System.out.println("Front " + uName);
-//                                    System.out.println("Front " + uPhone);
-//                                    System.out.println("Front " + uCompany);
-//                                    System.out.println("Front " + uAddress);
-//                                    System.out.println("Front " + uPostcode);
-//                                    System.out.println("Front " + uCity);
-//                                    System.out.println("Front UID " + uUser_id);
-
-                                    //Takes the retrieved user data/information and sends it 
-                                    //to the editProfile.jsp page.
-                                    request.getSession().setAttribute("uEmail", uEmail);
-                                    request.getSession().setAttribute("uPassword", uPassword);
-                                    request.getSession().setAttribute("uName", uName);
-                                    request.getSession().setAttribute("uPhone", uPhone);
-                                    request.getSession().setAttribute("uCompany", uCompany);
-                                    request.getSession().setAttribute("uAddress", uAddress);
-                                    request.getSession().setAttribute("uPostcode", uPostcode);
-                                    request.getSession().setAttribute("uCity", uCity);
-                                    request.getSession().setAttribute("uUser_id", uUser_id);
-
                                     //Setup users buildings
                                     request.getSession().setAttribute("userBuildings", userBuildings);
                                     
@@ -176,28 +167,44 @@ public class Front extends HttpServlet {
                     break;
 
                 case "viewBuilding":
-                    //Retrieve form input values from viewBuilding.jsp
-                    String buildingName = request.getParameter("buildingName");
-                    String addres = request.getParameter("address");
-                    System.out.println(addres);
-                    int postcod = Integer.parseInt(request.getParameter("postcode"));
-                    String cit = request.getParameter("city");
-                    int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
-                    String purpos = request.getParameter("purpose");
-                    int sq = Integer.parseInt(request.getParameter("sqm"));
-                    int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
-
-                    //Save values to database
-                    bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
-
-                    //Refresh the logged in user's buildings overview
-                    refreshBuilding(user.getUser_id());
-                    request.getSession().setAttribute("userBuilding", userBuildings);
-
+                    
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                     Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                    //redirect to viewBuilding.jsp into the specific building being edited
-                    response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    
+                    if(beingEdited){
+                        
+                        //Retrieve form input values from viewBuilding.jsp
+                        String buildingName = request.getParameter("buildingName");
+                        String addres = request.getParameter("address");
+                        System.out.println(addres);
+                        int postcod = Integer.parseInt(request.getParameter("postcode"));
+                        String cit = request.getParameter("city");
+                        int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
+                        String purpos = request.getParameter("purpose");
+                        int sq = Integer.parseInt(request.getParameter("sqm"));
+                        int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
+
+                        //Save values to database
+                        bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
+
+                        //Refresh the logged in user's buildings overview
+                        refreshBuilding(user.getUser_id());
+                        request.getSession().setAttribute("userBuilding", userBuildings);
+
+                        beingEdited = false;
+                        request.getSession().setAttribute("beingEdited", beingEdited);
+
+                        //redirect to viewBuilding.jsp into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    }
+                    else{
+                    //if(request.getParameter("origin").equals("viewBuilding")){
+                        beingEdited = true;
+                        request.getSession().setAttribute("beingEdited", beingEdited);
+                        
+                        //redirect to viewBuilding.jsp into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
+                    }
                     
                     break;
 
@@ -227,7 +234,28 @@ public class Front extends HttpServlet {
 //                    System.out.println(uPostcode);
 //                    System.out.println(uCity);
 //                    System.out.println(uSelectedUser);
-
+                    
+                    
+                    //Basic idea for checking user email ! Not working atm!
+//                    System.out.println(userList.size());                                       
+//                    System.out.println("user email: " + user.getEmail());
+//                    System.out.println("new user email:" + uEmail);
+//                    
+//                    
+//                    
+//                    for (int j = 0; j < userList.size(); j++) {
+//                        System.out.println("users: " + userList.get(j).getEmail());
+//                    }
+//                    for (int i = 0; i < userList.size(); i++) {
+//                        System.out.println("Second for-loop");
+//                        if (uEmail == userList.get(i).getEmail()) {
+//                            
+//                            System.out.println("EMAIL ALREADY EXIST!");
+//                            response.sendRedirect("user.jsp?success=EmailAlreadyExist");
+//                            
+//                        }
+//                    }
+                    
                     //Save the users edited values to the user database
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
                     
@@ -250,7 +278,7 @@ public class Front extends HttpServlet {
                     
                     
                     
-                    
+                    System.out.println("Response inc.");
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
                     

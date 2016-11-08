@@ -19,7 +19,7 @@ public class DBFacade implements DBFacadeInterface {
     //Declare and instantiate ArrayLists.
     private ArrayList<Building> userBuilding = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
-    private ArrayList<User> tempUL = new ArrayList();
+    private ArrayList<User> allUsers = new ArrayList();
 
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
@@ -80,9 +80,11 @@ public class DBFacade implements DBFacadeInterface {
         
             //Try releasing objects. 
             try {
+                
                 con.close();
                 stmt.close();
                 rs.close();
+                
             } catch (SQLException ex) {
                 
                 //Trow error if not sucessful. 
@@ -99,47 +101,113 @@ public class DBFacade implements DBFacadeInterface {
     @Override
     public User getUser(String email) throws CustomException {
 
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
         try {
-            Connection con = DBConnection.getConnection();
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
             String sql = "SELECT * FROM user WHERE email = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
             stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
 
+            //If-statement checking what kind of user is loggin in. 
             if (rs.next()) {
+                
+                //Declare and instantiate type.
                 User.type type;
 
                 if (rs.getString(4).equals(User.type.ADMIN.toString())) {
+                    
+                    //If admin.
                     type = User.type.ADMIN;
+                    
                 } else if (rs.getString(4).equals(User.type.TECHNICIAN.toString())) {
+                    
+                    //If tech.
                     type = User.type.TECHNICIAN;
 
                 } else {
+                    
+                    //If cust.
                     type = User.type.CUSTOMER;
+                    
                 }
+                
                 //User(int user_id, String email, String password, type type, String name, int phone, String company, String address, int postcode, String city)
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10));
 
             } else {
-                throw new CustomException("No such user");
+                
+                throw new CustomException("BDFacade:@getUser-No match for passwd and email.");
+                
             }
+            
         } catch (Exception e) {
+            
             throw new CustomException("SQL Error: Database connection failed.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
+        
     }
 
-    //Creates new user 
+   
+    /**
+     * Method used to create a new user.
+     * @param email
+     * @param password
+     * @param name
+     * @param phone
+     * @param company
+     * @param address
+     * @param postcode
+     * @param city
+     * @throws CustomException
+     */
+    @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
 
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
         try {
-            System.out.println("test! TRY CREATING USER");
-            //We need to check wether user already exists. 
-            Connection con = DBConnection.getConnection();
-            String sql = "SELECT * FROM user WHERE email = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, email);
 
-            ResultSet rs = stmt.executeQuery();
+            //We need to check wether user already exists. 
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM user WHERE email = ?";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setString(1, email);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
 
             //If there isn't anything in the ResultSet.
             if (!rs.next()) {
@@ -147,9 +215,9 @@ public class DBFacade implements DBFacadeInterface {
                 //Prepare statement, notice that we don't need to specify 'type' here, hence
                 //default type is CUSTOMER. 
                 sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `name`, `phone`, `company`, `address`, `postcode`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-
+                //Creating prepare statement.
                 stmt = con.prepareStatement(sql);
-
+                //Insert variables if into prepareStatement.
                 stmt.setString(1, email);
                 stmt.setString(2, password);
                 stmt.setString(3, name);
@@ -158,7 +226,7 @@ public class DBFacade implements DBFacadeInterface {
                 stmt.setString(6, address);
                 stmt.setInt(7, postcode);
                 stmt.setString(8, city);
-
+                //Execute update
                 stmt.executeUpdate();
 
             } else {
@@ -172,6 +240,22 @@ public class DBFacade implements DBFacadeInterface {
 
             throw new CustomException("SQL Error: Email in use.");
 
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
 
     }
@@ -179,11 +263,19 @@ public class DBFacade implements DBFacadeInterface {
     @Override
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id ) throws CustomException {
 
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+                
         try {
          
-            Connection con = DBConnection.getConnection();
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
             String sql = "INSERT INTO `polygon`.`building` (`name`, `address`, `postcode`, `city`, `construction_year`, `purpose`, `sqm`, `user_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-            PreparedStatement stmt = con.prepareStatement(sql);
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert variables if into prepareStatement.
             stmt.setString(1, name);
             stmt.setString(2, address);
             stmt.setInt(3, postcode);
@@ -203,6 +295,21 @@ public class DBFacade implements DBFacadeInterface {
 
             throw new CustomException("SQL Error: Connection problem.");
 
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
 
     }
@@ -210,88 +317,167 @@ public class DBFacade implements DBFacadeInterface {
     @Override
     public ArrayList<User> getUsers() throws CustomException {
 
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
         try {
-            Connection con = DBConnection.getConnection();
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
             String sql = "SELECT * FROM polygon.user";
-            PreparedStatement stmt = con.prepareStatement(sql);
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
 
-            ResultSet rs = stmt.executeQuery();
-
+            //Loop through the resultSet.
             while (rs.next()) {
 
+                //Declare and instantiate type.
                 User.type type;
-
+                
+                //If-condition, checking the condition of the building.
+                //The local varible gets assigned the ENUM from the rs.
                 if (rs.getString(4).equals(User.type.ADMIN.toString())) {
+                    
                     type = User.type.ADMIN;
+                    
                 } else if (rs.getString(4).equals(User.type.TECHNICIAN.toString())) {
+                    
                     type = User.type.TECHNICIAN;
 
                 } else {
+                    
                     type = User.type.CUSTOMER;
+                    
                 }
 
-                tempUL.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+                allUsers.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+            
             }
         } catch (Exception e) {
+            
             throw new CustomException("SQL Error: getUsers failed in facade.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
-//        if (tempAL.isEmpty()) {
-//            throw new CustomException("No buildings available");
-//        }
-        return tempUL;
+
+        return allUsers;
     }
 
     @Override
     public ArrayList<Building> getAllBuildings() throws CustomException {
 
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
         try {
-            Connection con = DBConnection.getConnection();
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
             String sql = "SELECT * FROM polygon.building;";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Declare and instantiate condition.
             Building.condition condition;
             
+            //Loop through the resultSet.
             while (rs.next()) {
+                
+                //Series of if-statements reading the condition and setting 
+                //the local variable. 
                 if (rs.getString(7).equals(Building.condition.GOOD.toString())) {
 
                     condition = Building.condition.GOOD;
 
                 } else if (rs.getString(7).equals(Building.condition.MEDIUM.toString())) {
+                    
                     condition = Building.condition.MEDIUM;
 
                 } else if (rs.getString(7).equals(Building.condition.POOR.toString())) {
+                    
                     condition = Building.condition.POOR;
+                    
                 } else {
+                    
                     condition = Building.condition.NONE;
+                    
                 }
                 
+                //Add current building from RS into the allBuilding-ArrayList.
                 allBuildings.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getBoolean(12), rs.getInt(13), rs.getInt(14)));
-                System.out.println("Added!");
+                
             }
+            
         } catch (Exception e) {
+            
             throw new CustomException("SQL Error: getAllBuildingsFailed at DBFacade.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
-//        if (tempAL.isEmpty()) {
-//            throw new CustomException("No buildings available");
-//        }
+
         return allBuildings;
 
     }
 
     /**
      * Method to update the details of a building
-     *
-     * @param selectedBuilding
-     * @param postcode
      * @throws CustomException
      */
     @Override
     public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
+        
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
         try {
-            Connection con = DBConnection.getConnection();
+           
+            //Get connection object.
+            con = DBConnection.getConnection();
             //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
             String sql = "UPDATE polygon.building SET name=?, address=?, postcode=?, city=?, construction_year=?, purpose=?, sqm=? WHERE building_id=?";
-            PreparedStatement stmt = con.prepareStatement(sql);
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
             stmt.setString(1, buildingName);
             stmt.setString(2, addres);
             stmt.setInt(3, postcod);
@@ -300,18 +486,48 @@ public class DBFacade implements DBFacadeInterface {
             stmt.setString(6, purpose);
             stmt.setInt(7, sqm);
             stmt.setInt(8, selectedBuilding);
+            //Execute update.
             stmt.executeUpdate();
+            
         } catch (Exception e) {
+            
             throw new CustomException("SQL Error: Connection problem.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
+        
     }
 
     @Override
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+        
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        
         try {
-            Connection con = DBConnection.getConnection();
+        
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
             String sql = "UPDATE polygon.user SET email=?, password=?, name=?, phone=?, company=?, address=?, postcode=?, city=? WHERE user_id=?";
-            PreparedStatement stmt = con.prepareStatement(sql);
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert variables if into prepareStatement.
             stmt.setString(1, email);
             stmt.setString(2, password);
             stmt.setString(3, name);
@@ -321,10 +537,30 @@ public class DBFacade implements DBFacadeInterface {
             stmt.setInt(7, postcode);
             stmt.setString(8, city);
             stmt.setInt(9, selectedUser);
+            //Execute update
             stmt.executeUpdate();
+            
         } catch (Exception e) {
+            
             throw new CustomException("SQL Error: Connection problem.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                
+            } catch (SQLException ex) {
+                
+                //Trow error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+            
+            }
+            
         }
+        
     }
 
 }
