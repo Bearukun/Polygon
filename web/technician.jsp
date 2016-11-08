@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <!-- SITE CONTENT -->
-                <div class="col-sm-10">
+                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
                         <h1>Bygninger:</h1>
 
