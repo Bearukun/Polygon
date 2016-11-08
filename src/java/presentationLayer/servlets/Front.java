@@ -434,10 +434,18 @@ public class Front extends HttpServlet {
          case "pdfwithtext":
         
              PDFWithText pdfwt = new PDFWithText();
-             String pdfName = request.getParameter("pdfname2");
-             String pdfText = request.getParameter("name");
-             String pdfText2 = request.getParameter("lastname");
-             pdfwt.pdfWithText(pdfName, pdfText,pdfText2);
+String pdfName = request.getParameter("pdfname");
+             String bName = request.getParameter("buildingname");
+             String bAddress = request.getParameter("buildingaddress");
+             String bPostCode = request.getParameter("buildingpostcode"); //String that needs to parse into int!
+             String bCity = request.getParameter("buildingcity");
+String bConstructionYear = request.getParameter("constructionyear");  //String that needs to parse into int!
+String bSQM = request.getParameter("buildingsqm");  //String that needs to parse into int!
+String bOwner = request.getParameter("buildingsowner");
+
+
+
+             pdfwt.pdfWithText(pdfName, bName , bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM), bOwner);
              
         break;
 
