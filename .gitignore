@@ -7,7 +7,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-
+src/java/dataAccessLayer/ConnectionConstants.java
 
 ### macOS ###
 *.DS_Store
