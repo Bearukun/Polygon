@@ -5,6 +5,7 @@ We need to check if a user is logged in,
 if yes - then redirect - else nothing. --%>
 <html>
     <head>
+       
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
@@ -24,7 +25,7 @@ if yes - then redirect - else nothing. --%>
             <div class="modal-dialog">
                 <div class="loginmodal-container">
                     <h1>Opret ny bruger</h1><br>
-                    <form class="form-signin" action="Front" method="POST">
+                    <form class="form-signin" name="ValidationForm" action="Front" method="POST">
                         <input class="form-control" type="text" name="email" placeholder="Email">
                         <input class="form-control" type="password" name="password" placeholder="Adgangskode">
                         <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
@@ -37,7 +38,10 @@ if yes - then redirect - else nothing. --%>
                         <input class="form-control" type="text" name="city" value="" placeholder="By" />
                         <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
                         <input type="hidden" name="origin" value="newCustomer" />
+                        
                     </form>
+                    
+
                 </div>
             </div>
         </div>
