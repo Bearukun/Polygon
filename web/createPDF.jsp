@@ -24,14 +24,29 @@
                         <p>PDFName</p>                      
                         <input type="text" name="pdfname2" value="" />
                         <br><br>
-                        <p>Navn</p>                      
-                        <input type="text" name="name" value="" />
+                        <p>Bygningens Navn</p>                      
+                        <input type="text" name="buildingname" value="" />
                         <br><br>
-                         <p>Efternavn</p>                      
-                        <input type="text" name="lastname" value="" />
+                         <p>Adresse</p>                      
+                        <input type="text" name="buildingadddress" value="" />
                         <br><br>
-                       
-                        <input type="hidden" name="origin" value="pdfwithtext" />
+<p>Postnummer</p>                      
+                        <input type="number" name="buildingpostcode" value="" />
+                        <br><br>
+<p>By</p>                      
+                        <input type="text" name="buildingcity" value="" />
+                        <br><br>                     
+<p>Opførelses år</p>                      
+                        <input type="number" name="constructionyear" value="" />
+                        <br><br>
+ <p>Bygningens Samlede areal [kvadrat meter]</p>                      
+                        <input type="text" name="buildingsqm" value="" />
+                        <br><br>                  
+<p>Bygnings ansvarlig</p>                      
+                        <input type="text" name="buildingsowner" value="" />
+                        <br><br>
+
+ <input type="hidden" name="origin" value="pdfwithtext" />
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="Generate PDF with Text" name="pdfwithtext" />
         </form>
