@@ -26,6 +26,7 @@ public class PDFBoxTest {
         try{
           /* Step 1: Prepare the document.
            */
+          //test
          doc = new PDDocument();
          PDPage page = new PDPage();
          doc.addPage(page);
