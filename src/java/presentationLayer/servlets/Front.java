@@ -27,7 +27,6 @@ public class Front extends HttpServlet {
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
-    private Building building = null;
     private boolean beingEdited = false;
 
     /**

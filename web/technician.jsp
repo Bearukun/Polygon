@@ -47,20 +47,9 @@
                         <div class="profile-usermenu">
                             <ul class="nav">
                                 <li>
-                                    <a href="admin.jsp?refresh">
+                                    <a href="technician.jsp?refresh">
                                         <i class="glyphicon glyphicon-home"></i>
                                         Overblik </a>
-                                </li>
-                                <li class="active">
-                                    <a href="adminBuildings.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-object-align-bottom"></i>
-                                        Vis bygninger </a>
-                                </li>
-                                <li>
-                                    <a href="adminUsers.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-th-list"></i>
-                                        Vis brugere </a>
-                                </li>
                             </ul>
                         </div>
                         <!-- END MENU -->
@@ -73,7 +62,7 @@
 
                         <% ArrayList<User> userList = new ArrayList();
                             ArrayList<Building> allBuildings = new ArrayList();
-
+                            
                             userList = (ArrayList<User>) request.getSession().getAttribute("userList");
                             allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
 
@@ -97,7 +86,7 @@
                                 <%
                                     for (int i = 0; i < userList.size(); i++) {
                                         for(int x = 0; x < allBuildings.size(); x++){
-                                            if(userList.get(i).getUser_id() ==  allBuildings.get(x).getUser_id()){
+                                            if(userList.get(i).getUser_id() ==  allBuildings.get(x).getAssigned_tech_id()){
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  

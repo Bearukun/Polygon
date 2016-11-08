@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
-        <title>Sunde Bygninger - Admin Brugeroversigt</title>
+        <title>Sunde Bygninger - Admin Bygningsoversigt</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Optional theme -->
@@ -56,74 +56,67 @@
                                         <i class="glyphicon glyphicon-object-align-bottom"></i>
                                         Vis bygninger </a>
                                 </li>
-                                <li class="active">
+                                <li>
                                     <a href="adminUsers.jsp" target="_self">
                                         <i class="glyphicon glyphicon-th-list"></i>
                                         Vis brugere </a>
                                 </li>
-                                <li>
+                                <li class="active">
                                     <a href="adminPendingBuildings.jsp" target="_self">
                                         <i class="glyphicon glyphicon-list"></i>
-                                        Healthchecks </a>
+                                        healthchecks </a>
                                 </li>
                             </ul>
                         </div>
                         <!-- END MENU -->
                     </div>
                 </div>
-                        
                 <!-- SITE CONTENT -->
-                
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
+                        <h1>Anmodninger:</h1>
 
-                        <h1>Bygninger:</h1>
-                        
-                        <% ArrayList<User> tempUL = new ArrayList();
-                        
-                        tempUL = (ArrayList<User>) request.getSession().getAttribute("userList");
-                        
-                        
-                        
+                        <% 
+                            ArrayList<Building> allBuildings = new ArrayList();
+
+                            allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
+
                         %>
-                        
+
                         <table border="1" text-align="left" class="table table-striped">
                             <tbody>
                                 <tr>
-                                    <td><b>ID</b></td>
-                                    <td><b>Email</b></td>
-                                    <td><b>Adgandskode</b></td>
-                                    <td><b>Navn</b></td>
-                                    <td><b>Type</b></td>
-                                    <td><b>Firma</b></td>
+                                    <td><b>Building(ID)</b></td>
+                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
-                                    <td><b>Postnr.</b></td>
+                                    <td><b>Postnummer</b></td>
                                     <td><b>By</b></td>
+                                    <td><b>Tilstand</b></td>
+                                    <td><b>Opførelses år</b></td>
+                                    <td><b>Formål</b></td>
+                                    <td><b>KvadratMeter</b></td>
                                 </tr>
                                 <%
-                                    for (int i = 0; i < tempUL.size(); i++) {
+                                   
+                                        for(int x = 0; x < allBuildings.size(); x++){
+                                            if(allBuildings.get(x).isHealthchech_pending()){
                                 %><tr>
-                                    <td><%out.println(tempUL.get(i).getUser_id());%></td>  
-                                    <td><%out.println(tempUL.get(i).getEmail());%></td>
-                                    <td><%out.println(tempUL.get(i).getPassword());%></td> 
-                                    <td><%out.println(tempUL.get(i).getName());%></td> 
-                                    <td><%out.println(tempUL.get(i).getType());%></td>                                    
-                                    <td><%out.println(tempUL.get(i).getCompany());%></td> 
-                                    <td><%out.println(tempUL.get(i).getAddress());%></td> 
-                                    <td><%out.println(tempUL.get(i).getPostcode());%></td> 
-                                    <td><%out.println(tempUL.get(i).getCity());%></td> 
-                                    
+                                    <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getName());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getDate_created());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getAddress());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getPostcode());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getCity());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getCondition());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getSqm());%></td>  
                                 </tr>
-                                <%}
+                                <%}}
                                 %>
                             </tbody>
                         </table>
-                        
-
-                        
-
-                        
-                          
                     </div>
                 </div>
             </div>

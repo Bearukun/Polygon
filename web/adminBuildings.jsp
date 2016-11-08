@@ -61,6 +61,11 @@
                                         <i class="glyphicon glyphicon-th-list"></i>
                                         Vis brugere </a>
                                 </li>
+                                <li>
+                                    <a href="adminPendingBuildings.jsp" target="_self">
+                                        <i class="glyphicon glyphicon-list"></i>
+                                        Healthchecks </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- END MENU -->
