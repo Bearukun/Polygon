@@ -18,15 +18,21 @@ import serviceLayer.exceptions.CustomException;
  */
 public class BlankPDF {
     
+//Creates an empty .pdf-document with a custom filename
     public void testBlank(String pdfName) throws CustomException{
     
+//initiates a new PDDocument
         PDDocument doc = null;
         doc = new PDDocument();
+
+//Creates a new page
         doc.addPage(new PDPage());
         
         
         try{
+//Saves The .pdf at The designated path, with the custom file name.
             doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\"+ pdfName + ".pdf");
+//Closes the PDF creation
             doc.close();
         } catch (Exception io){
             System.out.println(io);
