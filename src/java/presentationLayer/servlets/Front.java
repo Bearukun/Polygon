@@ -1,6 +1,8 @@
 package presentationLayer.servlets;
 
 import dataAccessLayer.BlankPDF;
+import dataAccessLayer.PDFWithText;
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -422,19 +424,30 @@ public class Front extends HttpServlet {
 
         case "blankTestPDF":
             
+            
             BlankPDF bpdf = new BlankPDF();
-            String testPDF =  request.getParameter("email");
+            String testPDF =  request.getParameter("pdfname");
             bpdf.testBlank(testPDF);
             
             break;
+            
+         case "pdfwithtext":
+        
+             PDFWithText pdfwt = new PDFWithText();
+             String pdfName = request.getParameter("pdfname2");
+             String pdfText = request.getParameter("name");
+             String pdfText2 = request.getParameter("lastname");
+             pdfwt.pdfWithText(pdfName, pdfText,pdfText2);
+             
+        break;
 
             }
-
+ 
         } catch (Exception e) {
+           
         }
-        
-        
-        
+       
+       
         
     }
 

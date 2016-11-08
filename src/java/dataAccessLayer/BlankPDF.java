@@ -5,9 +5,12 @@
  */
 package dataAccessLayer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import serviceLayer.exceptions.CustomException;
 
 /**
  *
@@ -15,7 +18,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
  */
 public class BlankPDF {
     
-    public void testBlank(String pdfName){
+    public void testBlank(String pdfName) throws CustomException{
     
         PDDocument doc = null;
         doc = new PDDocument();
@@ -23,7 +26,7 @@ public class BlankPDF {
         
         
         try{
-            doc.save(pdfName + ".pdf");
+            doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\"+ pdfName + ".pdf");
             doc.close();
         } catch (Exception io){
             System.out.println(io);
