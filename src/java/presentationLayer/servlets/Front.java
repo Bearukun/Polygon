@@ -28,7 +28,6 @@ public class Front extends HttpServlet {
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
-    private Building building = null;
     private boolean beingEdited = false;
 
     /**
@@ -115,10 +114,14 @@ public class Front extends HttpServlet {
                                     break;
 
                                 } else if (user.getType().equals(User.type.TECHNICIAN)) {
+                                    
                                     refreshUsers();
                                     refreshAllBuildings();
                                     request.getSession().setAttribute("userList", userList);
                                     request.getSession().setAttribute("allBuildings", allBuildings);
+                                    
+                                   // refreshBuilding(building.getAssigned_tech_id());
+                                    //request.getSession().setAttribute("userBuildings", userBuildings);
                                     response.sendRedirect("technician.jsp");
                                     break;
 
