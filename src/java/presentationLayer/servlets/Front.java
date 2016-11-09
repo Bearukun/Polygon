@@ -1,6 +1,6 @@
 package presentationLayer.servlets;
 
-import dataAccessLayer.PDFWithText;
+import dataAccessLayer.PDFCreator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -34,6 +34,8 @@ public class Front extends HttpServlet {
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
     private boolean beingEdited = false;
+    
+     PDFCreator pdfwt = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -432,13 +434,21 @@ public class Front extends HttpServlet {
 //                    break;
                 case "adminUsers":
                     break;
+                    
+                    case "blankTestPDF":
+                    
+                    
+                     String testPDF = request.getParameter("pdfname");
+                     pdfwt.testBlank(testPDF);
+ 
+                     break;
 
                     case "pdfwithtext":
 
-                    PDFWithText pdfwt = new PDFWithText();
+                   
                     String pdfName = request.getParameter("pdfname");
                     String bName = request.getParameter("buildingname");
-                    String bAddress = request.getParameter("buildingaddress");
+                    String bAddress = request.getParameter("buildingadddress");
                     String bPostCode = request.getParameter("buildingpostcode"); //String that needs to parse into int!
                     String bCity = request.getParameter("buildingcity");
                     String bConstructionYear = request.getParameter("constructionyear");  //String that needs to parse into int!
