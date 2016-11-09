@@ -13,7 +13,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 public class PDFWithText {
 
     public void pdfWithText(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear, Integer buildingSQM, String buildingOwner  ) {
-(pdfName, bName , bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM), bOwner);
+
         PDDocument doc = null;
         PDPage page = null;
 
