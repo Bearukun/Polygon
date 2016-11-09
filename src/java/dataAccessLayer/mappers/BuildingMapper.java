@@ -331,7 +331,8 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Get connection object.
             con = DBConnection.getConnection();
             //Creating string used for the prepare statement.
-            String sql = "SELECT * FROM room WHERE building_id = ?";
+            //String sql = "SELECT * FROM room WHERE building_id = ?";
+            String sql = "SELECT room.room_id, room.name, room.description, room.sqm, room.moisture_scan, room.area_id FROM polygon.room join polygon.area on room.area_id = area.area_id and building_id = ?";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.

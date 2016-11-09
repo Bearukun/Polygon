@@ -180,11 +180,13 @@ public class Front extends HttpServlet {
                     //Retrieve the building being edited
                     String buildingID = request.getParameter("buildingID");
                     
-                    //Fetch areas for selected building
+                    //Fetch areas and rooms for selected building
                     refreshAreas(Integer.parseInt(buildingID));
+                    refreshRooms(Integer.parseInt(buildingID));
                     
-                    //Save areas in Session
+                    //Save areas and rooms in Session
                     request.getSession().setAttribute("buildingAreas", buildingAreas);
+                    request.getSession().setAttribute("buildingRooms", buildingRooms);
                     
                     //redirect to viewBuilding into the specific building being edited
                     response.sendRedirect("viewBuilding.jsp?value="+buildingID+"");

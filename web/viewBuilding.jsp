@@ -1,3 +1,4 @@
+<%@page import="serviceLayer.entities.Room"%>
 <%@page import="serviceLayer.entities.Area"%>
 <%@page import="serviceLayer.entities.User"%>
 <%@page import="java.util.ArrayList"%>
@@ -27,6 +28,10 @@
         <% boolean editBuilding = (boolean) request.getSession().getAttribute("beingEdited"); %>
         <% ArrayList<Area> buildingAreas = new ArrayList();
            buildingAreas = (ArrayList<Area>) request.getSession().getAttribute("buildingAreas");
+        %>
+        <% ArrayList<Room> buildingRooms = new ArrayList();
+           //buildingRooms.add(new Room(8, "name", "description", 100, 1, 1));
+            buildingRooms = (ArrayList<Room>) request.getSession().getAttribute("buildingRooms");
         %>
         
         <div class="container-fluid">
@@ -195,73 +200,30 @@
                     <% 
                         for (int i = 0; i < buildingAreas.size(); i++) {
                     %>
-                    <table text-align="left" class="table">
-                        <tbody>
-                            <tr bgcolor='cyan' height="100">
-                                <th colspan="1"><b><%=buildingAreas.get(i).getName()%></b></th>
-                                <th colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></th>
-                                <th colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></th>
-                            </tr>
-                        </tbody>
-                    </table>        
+                            <table text-align="left" class="table">
+                                <tbody>
+                                    <tr bgcolor='cyan' height="100">
+                                        <th colspan="1"><b><%=buildingAreas.get(i).getName()%></b></th>
+                                        <th colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></th>
+                                        <th colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></th>
+                                    </tr>
+                                    <% 
+                                    for (int j = 0; j < buildingRooms.size(); j++) {
+                                       if(buildingAreas.get(i).getArea_id()==buildingRooms.get(j).getArea_id()){
+                                        %> 
+                                            <tr>
+                                                <td><%=buildingRooms.get(j).getName()%></td>
+                                                <td><%=buildingRooms.get(j).getDescription()%></td>
+                                                <td><%=buildingRooms.get(j).getSqm()%></td>
+                                            </tr>
+                                        <%}
+                                    }
+                                    %>
+                                </tbody>
+                            </table>        
                     <br><br>    
                        <%}
                     %>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
- 
-                    <table text-align="left" class="table">
-                        <tbody>
-                            <tr bgcolor='cyan' height="100">
-                                <th colspan="1"><b>1. etage</b></th>
-                                <th colspan="1"><b>Denne etage er meget flot!</b></th>
-                                <th colspan="1"><b>1000</b></th>
-                            </tr>
-                            <tr>
-                                <td><b>Lokale</b></td>
-                                <td><b>Beskrivelse</b></td>
-                                <td><b>Kvadratmeter</b></td>
-                            </tr>
-                            <tr>
-                                <td>1.01</td>
-                                <td>Undervisningslokale</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <td>1.03</td>
-                                <td>Undervisningslokale</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <td>1.35</td>
-                                <td>Toilet - herrer</td>
-                                <td>12</td>
-                            </tr>
-                            <tr>
-                                <td>1.37</td>
-                                <td>Toilet - damer</td>
-                                <td>12</td>
-                            </tr>
-                        </tbody>
-                    </table>      
-                        
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     
                     
                     <br><br><br><br><br><br><br><br><br>  
