@@ -2,7 +2,9 @@ package serviceLayer.controllers.interfaces;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Room;
 import serviceLayer.exceptions.CustomException;
 
 
@@ -16,6 +18,9 @@ public interface BuildingControllerInterface {
     
     ArrayList<Building> getBuildings (int user_id)throws CustomException;
     
-    ArrayList<Building> getAllBuildings ()throws CustomException;
+    ArrayList<Building> getAllBuildings() throws CustomException;
     
+    public ArrayList<Area> getAreas(int building_id) throws CustomException;
+    
+    public ArrayList<Room> getRooms(int building_id) throws CustomException;
 }

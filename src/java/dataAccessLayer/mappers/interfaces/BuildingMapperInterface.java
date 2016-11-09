@@ -1,7 +1,9 @@
 package dataAccessLayer.mappers.interfaces;
 
 import java.util.ArrayList;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Room;
 import serviceLayer.exceptions.CustomException;
 
 public interface BuildingMapperInterface {
@@ -14,4 +16,7 @@ public interface BuildingMapperInterface {
 
     public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException;
 
+    public ArrayList<Area> getAreas(int building_id) throws CustomException;
+    
+    public ArrayList<Room> getRooms(int building_id) throws CustomException;
 }

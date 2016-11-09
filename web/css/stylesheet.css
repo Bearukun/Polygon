@@ -228,6 +228,19 @@
   min-height: 460px;
 }
 
+/* Form submit - styling as hyperlink */
+.submitLink {
+  background-color: transparent;
+  text-decoration: underline;
+  border: none;
+  color: blue;
+  cursor: pointer;
+}
+
+submitLink:focus {
+  outline: none;
+}
+
 /**
 * 
 **/

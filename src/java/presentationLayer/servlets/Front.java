@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
@@ -26,6 +28,8 @@ public class Front extends HttpServlet {
     private ArrayList<Building> userBuildings = new ArrayList();
     private ArrayList<User> userList = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
+    private ArrayList<Area> buildingAreas = new ArrayList();
+    private ArrayList<Room> buildingRooms = new ArrayList();
     
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
@@ -169,6 +173,24 @@ public class Front extends HttpServlet {
 
                     break;
 
+                case "userOverview":
+                    
+                        //request.getSession().setAttribute("beingEdited", false);
+                            
+                    //Retrieve the building being edited
+                    String buildingID = request.getParameter("buildingID");
+                    
+                    //Fetch areas for selected building
+                    refreshAreas(Integer.parseInt(buildingID));
+                    
+                    //Save areas in Session
+                    request.getSession().setAttribute("buildingAreas", buildingAreas);
+                    
+                    //redirect to viewBuilding into the specific building being edited
+                    response.sendRedirect("viewBuilding.jsp?value="+buildingID+"");
+                    
+                    break;
+
                 case "viewBuilding":
                     
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
@@ -176,7 +198,7 @@ public class Front extends HttpServlet {
                     
                     if(beingEdited){
                         
-                        //Retrieve form input values from viewBuilding.jsp
+                        //Retrieve form input values from viewBuilding
                         String buildingName = request.getParameter("buildingName");
                         String addres = request.getParameter("address");
                         System.out.println(addres);
@@ -197,7 +219,7 @@ public class Front extends HttpServlet {
                         beingEdited = false;
                         request.getSession().setAttribute("beingEdited", beingEdited);
 
-                        //redirect to viewBuilding.jsp into the specific building being edited
+                        //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
                     }
                     else{
@@ -205,7 +227,7 @@ public class Front extends HttpServlet {
                         beingEdited = true;
                         request.getSession().setAttribute("beingEdited", beingEdited);
                         
-                        //redirect to viewBuilding.jsp into the specific building being edited
+                        //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
                     }
                     
@@ -475,6 +497,18 @@ String bOwner = request.getParameter("buildingsowner");
 
     }
 
+    //Refreshes the list of building areas
+    public void refreshAreas(int building_id) throws CustomException {
+        buildingAreas.clear();
+        buildingAreas = bldgCtrl.getAreas(building_id);
+    }
+    
+    //Refreshes the list of building rooms
+    public void refreshRooms(int building_id) throws CustomException {
+        buildingRooms.clear();
+        buildingRooms = bldgCtrl.getRooms(building_id);
+    }
+            
     public void refreshUsers() throws CustomException {
 
         userList.clear();

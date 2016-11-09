@@ -7,7 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Room;
 import serviceLayer.exceptions.CustomException;
 
 public class BuildingMapper implements BuildingMapperInterface {
@@ -15,7 +17,10 @@ public class BuildingMapper implements BuildingMapperInterface {
     //Declare and instantiate ArrayLists.
     private ArrayList<Building> userBuilding = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
+    private ArrayList<Area> buildingAreas = new ArrayList();
+    private ArrayList<Room> buildingRooms = new ArrayList();
 
+    
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
         
@@ -82,7 +87,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -119,7 +124,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             stmt.setInt(7, sqm);
             stmt.setInt(8, user_id);
             
-            //Currently disabled due to Custopmexception being thrown, even when the SQL statment has been adjusted to:
+            //Currently disabled due to Customexception being thrown, even when the SQL statment has been adjusted to:
             //"INSERT INTO `polygon`.`building` (`address`, `postcode`, `city`, `user_id`, 'floor', 'description') VALUES (?, ?, ?, ?, ?, ?);";
             //stmt.setInt(5, floor);
             //stmt.setString(6, description);
@@ -139,7 +144,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -213,7 +218,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -224,6 +229,48 @@ public class BuildingMapper implements BuildingMapperInterface {
         
     }
 
+    
+    @Override
+    public ArrayList<Area> getAreas(int building_id) throws CustomException {
+        
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM area WHERE building_id = ?";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, building_id);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Loop through the resultSet.
+            while (rs.next()) {
+                buildingAreas.add(new Area(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            throw new CustomException("SQL Error:@DBFacade.getAreas."+e.getMessage());
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+                rs.close();
+            } catch (SQLException ex) {
+                //Throw error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getAreas."+ex.getMessage());
+            }
+        }
+        //Return ArrayList of Area(s).
+        return buildingAreas;
+    }
+    
     @Override
     public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
         
@@ -264,7 +311,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -273,4 +320,43 @@ public class BuildingMapper implements BuildingMapperInterface {
         
     }
 
+    @Override
+    public ArrayList<Room> getRooms(int building_id) throws CustomException {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM room WHERE building_id = ?";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, building_id);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Loop through the resultSet.
+            while (rs.next()) {
+                buildingRooms.add(new Room(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6)));
+            }
+        } catch (Exception e) {
+            throw new CustomException("SQL Error:@DBFacade.getRooms."+e.getMessage());
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+                rs.close();
+            } catch (SQLException ex) {
+                //Throw error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.getRooms."+ex.getMessage());
+            }
+        }
+        //Return ArrayList of Room(s).
+        return buildingRooms;
+    }
 }

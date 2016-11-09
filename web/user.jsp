@@ -108,7 +108,14 @@
                                     for (int i = 0; i < userBuildings.size(); i++) {
                                 //Dynamically load in a row for each of the user's buildings
                                 %><tr>
-                                    <td><a href="viewBuilding.jsp?value=<%=userBuildings.get(i).getBuilding_id()%>"><%out.println(userBuildings.get(i).getName());%></a></td>  
+                                    <td>
+                                        <form class="submitLink" action="Front" method="POST">
+                                            <input type="submit" class="submitLink" value="<%=userBuildings.get(i).getName()%>" />
+                                            <input type="hidden" name="buildingID" value="<%=userBuildings.get(i).getBuilding_id()%>" />
+                                            <input type="hidden" name="origin" value="userOverview" />
+                                       <!-- <a href="viewBuilding.jsp?value=<%//=userBuildings.get(i).getBuilding_id()%>"><%//out.println(userBuildings.get(i).getName());%></a></td> --> 
+                                        </form>
+                                    </td>
                                     <td><%out.println(userBuildings.get(i).getDate_created());%></td>  
                                     <td><%out.println(userBuildings.get(i).getAddress());%></td>  
                                     <td><%out.println(userBuildings.get(i).getPostcode());%></td>  
