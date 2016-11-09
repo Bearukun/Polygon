@@ -453,9 +453,10 @@ public class Front extends HttpServlet {
                     String bCity = request.getParameter("buildingcity");
                     String bConstructionYear = request.getParameter("constructionyear");  //String that needs to parse into int!
                     String bSQM = request.getParameter("buildingsqm");  //String that needs to parse into int!
+                    String bPurpose = request.getParameter("buildingpurpose");
                     String bOwner = request.getParameter("buildingsowner");
 
-                    pdfwt.pdfWithText(pdfName, bName, bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM), bOwner);
+                    pdfwt.pdfWithText(pdfName, bName, bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM),bPurpose, bOwner);
 
                     response.sendRedirect("index.jsp?sucess=PDFCreated");
                     break;

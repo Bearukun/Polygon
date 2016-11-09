@@ -42,6 +42,11 @@
             <p>Bygningens Samlede areal [kvadrat meter]</p>                      
             <input type="number" name="buildingsqm" value="" />
             <br><br>                  
+            
+            <p>Bygnings Formål</p>                      
+            <input type="text" name="buildingpurpose" value="" />
+            <br><br>
+            
             <p>Bygnings ansvarlig</p>                      
             <input type="text" name="buildingsowner" value="" />
             <br><br>

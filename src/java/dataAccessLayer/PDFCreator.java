@@ -1,6 +1,9 @@
 package dataAccessLayer;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -26,135 +29,193 @@ import serviceLayer.exceptions.CustomException;
 public class PDFCreator {
 
     public void pdfWithText(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingOwner) {
+            Integer buildingSQM, String buildingPurpose, String buildingOwner) {
 
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+Calendar cal = Calendar.getInstance();
+System.out.println(dateFormat.format(cal.getTime()));
+        
+        int pageNumber = 0;
         PDDocument doc = null;
-        PDPage page = null;
+        PDPage page1 = null;
+        PDPage page2 = null;
 
         //String test = "Would you please work? I'm asking nicely....";
         try {
             doc = new PDDocument();
-            page = new PDPage();
+            page1 = new PDPage();
+            page2 = new PDPage();
 
-            doc.addPage(page);
-            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-            PDFont fontHel = PDType1Font.TIMES_ROMAN; 
+            doc.addPage(page1);
+            doc.addPage(page2);
             
+            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
+            PDFont fontHel = PDType1Font.TIMES_ROMAN;
 
             //content.moveTextPositionByAmount(tx, ty);
             //tx = Width; (Max 450-500!)
             //ty = Height (max 800!)
-            PDPageContentStream content = new PDPageContentStream(doc, page);
-            
+            PDPageContentStream content = new PDPageContentStream(doc, page1);
+
             content.beginText();
             content.setFont(fontHel, 10);
-            content.moveTextPositionByAmount(50, 700);
+            content.moveTextPositionByAmount(50, 680);
             content.drawString("Rapport nr.: ");
             content.endText();
-            
+
+            content.beginText();
+            content.moveTextPositionByAmount(50, 667);
+            content.setFont(fontHelB, 8);            
+            content.drawString("PDF Navn: " + pdfName);
+            content.endText();
             
             content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(50, 675);
-            content.drawString("PDF Navn: " + pdfName);
-            content.newLineAtOffset(200,-27 );
+            content.setFont(fontHelB, 12);  
+            content.moveTextPositionByAmount(245, 647);
             content.drawString("Bygnings Gennemgang");
             content.endText();
 
-            
             content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(50, 615);
-            content.drawString(""+ buildingName);
-            content.newLineAtOffset(0,-10);
+            content.setFont(fontHelB, 10);
+            content.moveTextPositionByAmount(50, 610);
+            content.drawString("" + buildingName);                     
+            content.newLineAtOffset(0, -12);
             content.drawString("Bygnings navn");
-            content.newLineAtOffset(300,0);
+            content.newLineAtOffset(300, 0);
             content.drawString("Dato");
+            content.newLineAtOffset(0, 12);
+            content.drawString("" + cal.getTime());
             content.endText();
+            PDImageXObject bsBName = null;
+            bsBName = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring.jpg", doc);
+            content.drawXObject(bsBName, 50, 606, 200,2 );
+            PDImageXObject bsDate = null;
+            bsDate = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring.jpg", doc);
+            content.drawXObject(bsDate, 350,606 , 200,2 );
             
-                      
-
             content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(50, 550);
+            content.setFont(fontHelB, 10);
+            content.moveTextPositionByAmount(50, 545);
             content.drawString("Bygnings Adresse");
-            content.newLineAtOffset(0, 10);
+            content.newLineAtOffset(0, 12);
             content.drawString("" + buildingAddress);
             content.endText();
-
             
+            PDImageXObject bsBAdr = null;
+            bsBAdr = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring2.jpg", doc);
+            content.drawXObject(bsBAdr, 50, 553, 200,2 );
+
             content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(50, 480);
+            content.setFont(fontHelB, 10);
+            content.moveTextPositionByAmount(50, 475);
             content.drawString("Postnr. / By ");
-            content.newLineAtOffset(0, 10);
-            content.drawString(""+buildingPostcode);
-            content.newLineAtOffset(35, 0);
-            content.drawString(""+buildingCity);
+            content.newLineAtOffset(0, 12);
+            content.drawString("" + buildingPostcode);
+            content.newLineAtOffset(45, 0);
+            content.drawString("" + buildingCity);
             content.endText();
             
+            PDImageXObject bsBCity = null;
+            bsBCity = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring4.jpg", doc);
+            content.drawXObject(bsBCity, 50,483 , 200,2 );
+          
             content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(50, 500);
-           
-            content.endText();
-
-            content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(75, 50);
-            
-            content.endText();
-
-            content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(500, 500);
-            content.drawString("500, 500 Bygnings opførelses år: " + buildingContructionYear);
-            content.endText();
-
-            content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(300, 300);
-            content.drawString("250, 250 Bygningens Areal: " + buildingSQM);
-            content.endText();
-
-            content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(100, 100);
-            content.drawString("100, 100 Bygning Ejer: " + buildingOwner);
-            content.endText();
-            
-            content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(500, 580);
+            content.setFont(fontHelB, 12);
+            content.moveTextPositionByAmount(500, 560);
             content.drawString("Polygon");
-            content.newLineAtOffset(-13, -13);
+            content.newLineAtOffset(-19, -13);
             content.drawString("Rypevang 5");
-            content.newLineAtOffset(-3, -13);
+            content.newLineAtOffset(-6, -13);
             content.drawString("3450 Allerød");
-            content.newLineAtOffset(-2, -18);
+            content.newLineAtOffset(-5, -18);
             content.drawString("Tlf. 4814 0055");
-            content.newLineAtOffset(-62, -13);
+            content.newLineAtOffset(-90, -13);
             content.drawString("sundebygninger@polygon.dk");
             content.endText();
-            
-           content.beginText();
-            content.setFont(fontHelB, 8);
-            content.moveTextPositionByAmount(500, 500);
-            content.drawString("Billede indsættes her");
-            content.endText();
 
-            PDImageXObject image = null;
-         image = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\logoJ.jpg", doc);
-         content.drawXObject(image,400,690, 150, 65);
-             
-       
-       
-      
+            
+            PDImageXObject sundB = null;
+            sundB = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\logoJ.jpg", doc);
+            content.drawXObject(sundB, 400, 690, 150, 65);
+
+            PDImageXObject polygonLogo = null;
+            polygonLogo = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\polygon.jpg", doc);
+            content.drawXObject(polygonLogo, 50, 690, 150, 30);
+
+           
+            PDImageXObject userBygning = null;
+            userBygning = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\whouse.jpg", doc);
+            content.drawXObject(userBygning, 125, 225, 375,215 );
+            
+            content.beginText();
+            content.setFont(fontHelB, 12);
+            content.moveTextPositionByAmount(50, 200);
+            content.drawString("Generel information om bygningen:");
+            content.endText();
+            
+              
+            content.beginText();
+            content.setFont(fontHelB, 10);
+            content.moveTextPositionByAmount(50, 175);
+            content.drawString("Bygge år: " + buildingContructionYear);
+            content.endText();
+            PDImageXObject bsBYear = null;
+            bsBYear = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring5.jpg", doc);
+            content.drawXObject(bsBYear, 98,172 , 25,2 );
+
+            content.beginText();
+            content.setFont(fontHelB, 10);
+            content.moveTextPositionByAmount(50, 145);
+            content.drawString("Bygningens Areal: " + buildingSQM + " Kvadrat Meter");
+            content.endText();
+            PDImageXObject bsBArea = null;
+            bsBArea = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring6.jpg", doc);
+            content.drawXObject(bsBArea, 140,142 , 120,2 );
+
+            content.beginText();
+            content.setFont(fontHelB, 10);
+            content.moveTextPositionByAmount(50, 120);
+            content.drawString("Hvad bruges bygningen til / Hvad har bygningen været brugt til?" + buildingPurpose);
+            content.endText();
+            PDImageXObject bsBPurpose = null;
+            bsBPurpose = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring6.jpg", doc);
+            content.drawXObject(bsBPurpose, 355,117 , 120,2 );
+            
+            
+            
+//            content.beginText();
+//            content.setFont(fontHelB, 10);
+//            content.moveTextPositionByAmount(50, 120);
+//            content.drawString("Bygning Ejer: " + buildingOwner);
+//            content.endText();
+
+            
+            content.beginText();
+            content.setFont(fontHelB, 8);
+            content.moveTextPositionByAmount(550, 25);
+            content.drawString("1");
+            content.endText();
             
             content.close();
             
+            PDPageContentStream content2 = new PDPageContentStream(doc, page2);
             
+            content2.beginText();
+            content2.setFont(fontHelB, 12);
+            content2.moveTextPositionByAmount(50, 200);
+            content2.drawString("Generel information om bygningen:");
+            content2.endText();
 
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 8);
+            content2.moveTextPositionByAmount(550, 25);
+            content2.drawString("2");
+            content2.endText();
+            
+             content2.close();
+             
+             
             //Save directory + file name
             doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
             doc.close();
@@ -216,26 +277,22 @@ public class PDFCreator {
 //        }
     public void testBlank(String pdfName) throws CustomException {
 
-        try{
-        //initiates a new PDDocument
-        PDDocument doc = new PDDocument();
-        PDPage page = new PDPage();        
-              
-        doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
+        try {
+            //initiates a new PDDocument
+            PDDocument doc = new PDDocument();
+            PDPage page = new PDPage();
+
+            doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
 //            //Closes the PDF creation
             doc.close();
-        
-        
-        
-//Creates a new page
- 
-        doc.addPage(page);
 
-        }catch (Exception e) {
+//Creates a new page
+            doc.addPage(page);
+
+        } catch (Exception e) {
             System.out.println(e);
         }
-       
-        
+
 //        try {
 //            
 //                // Adobe Acrobat uses Helvetica as a default font and 
@@ -303,6 +360,5 @@ public class PDFCreator {
 //            System.out.println(io);
 //        }
 //    }
-
-}
+    }
 }
