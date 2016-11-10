@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -359,5 +360,93 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
         //Return ArrayList of Room(s).
         return buildingRooms;
+    }
+
+    @Override
+    public void createArea(String name, String description, int sqm, int building_id) throws CustomException {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "INSERT INTO polygon.area (name, description, sqm, building_id) VALUES (?, ?, ?, ?)";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setString(2, description);
+            stmt.setInt(3, sqm);
+            stmt.setInt(4, building_id);
+            //Execute update.
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.createArea."+ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void deleteArea(int area_id) throws CustomException {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "DELETE FROM area WHERE area_id = ?;ALTER TABLE area AUTO_INCREMENT=1;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, area_id);
+            
+            //Execute update.
+            stmt.executeUpdate();
+            
+//            //Get connection object.
+//            con = DBConnection.getConnection();
+//            //Creating statement
+//            stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+//            
+//            String sql = "DELETE FROM area WHERE area_id = ?)";
+//            stmt.setInt(1, area_id);
+//            String sql2 = "ALTER TABLE area AUTO_INCREMENT=1";
+//            con.setAutoCommit(false);
+//            stmt.addBatch(sql);
+//            stmt.addBatch(sql2);
+//
+//            ResultSet rs = stmt.executeQuery("SELECT * FROM area");
+//            stmt.executeBatch();
+//            con.commit();
+//
+//            
+//            
+//            stmt = con.prepareStatement(sql);
+//            stmt.setInt(1, area_id);
+//            //Execute update.
+//            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.deleteeArea."+ex.getMessage());
+            }
+        }
     }
 }

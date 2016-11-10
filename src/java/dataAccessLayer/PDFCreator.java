@@ -28,9 +28,13 @@ import serviceLayer.exceptions.CustomException;
  */
 public class PDFCreator {
 
+    //sourceFolder sf = new sourceFolder();
+    
     public void pdfWithText(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath) {
+            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath) {
 
+        
+        //System.out.println(sf.getPath() + "what path is this!?");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
         System.out.println(dateFormat.format(cal.getTime()));
@@ -71,7 +75,7 @@ public class PDFCreator {
 
             content.beginText();
             content.setFont(fontHelB, 12);
-            content.moveTextPositionByAmount(245, 647);
+            content.moveTextPositionByAmount(235, 647);
             content.drawString("Bygnings Gennemgang");
             content.endText();
 
@@ -86,13 +90,16 @@ public class PDFCreator {
             content.newLineAtOffset(0, 12);
             content.drawString("" + cal.getTime());
             content.endText();
+            
             PDImageXObject bsBName = null;
-            bsBName = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring.jpg", doc);
+            bsBName = PDImageXObject.createFromFile(imgFolderPath + "bstring.jpg", doc);
             content.drawXObject(bsBName, 50, 606, 200, 2);
+            
+            
             PDImageXObject bsDate = null;
-            bsDate = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring.jpg", doc);
+            bsDate = PDImageXObject.createFromFile(imgFolderPath + "/bstring.jpg", doc);
             content.drawXObject(bsDate, 350, 606, 200, 2);
-
+            
             content.beginText();
             content.setFont(fontHelB, 10);
             content.moveTextPositionByAmount(50, 545);
@@ -102,7 +109,7 @@ public class PDFCreator {
             content.endText();
 
             PDImageXObject bsBAdr = null;
-            bsBAdr = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring2.jpg", doc);
+            bsBAdr = PDImageXObject.createFromFile(imgFolderPath + "bstring2.jpg", doc);
             content.drawXObject(bsBAdr, 50, 553, 200, 2);
 
             content.beginText();
@@ -116,8 +123,9 @@ public class PDFCreator {
             content.endText();
 
             PDImageXObject bsBCity = null;
-            bsBCity = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring4.jpg", doc);
+            bsBCity = PDImageXObject.createFromFile(imgFolderPath + "bstring4.jpg", doc);
             content.drawXObject(bsBCity, 50, 483, 200, 2);
+            
 
             content.beginText();
             content.setFont(fontHelB, 12);
@@ -134,17 +142,19 @@ public class PDFCreator {
             content.endText();
 
             PDImageXObject sundB = null;
-            sundB = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\logoJ.jpg", doc);
+            sundB = PDImageXObject.createFromFile(imgFolderPath + "logoJ.jpg", doc);
             content.drawXObject(sundB, 400, 690, 150, 65);
 
             PDImageXObject polygonLogo = null;
-            polygonLogo = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\polygon.jpg", doc);
+           polygonLogo = PDImageXObject.createFromFile(imgFolderPath+ "polygon.jpg", doc);
             content.drawXObject(polygonLogo, 50, 690, 150, 30);
 
             PDImageXObject userBygning = null;
-            if (picturePath.contains("")) {
-                userBygning = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\whouse.jpg", doc);
+            if (picturePath.equals("")) {
+                //System.out.println(picturePath + " NULL STATEMENT!");
+            userBygning = PDImageXObject.createFromFile(imgFolderPath + "whouse.jpg", doc);
             } else {
+                        //System.out.println("PICTURE PATCH!: " + picturePath );
                         userBygning = PDImageXObject.createFromFile("" + picturePath, doc);
             }
             content.drawXObject(userBygning, 125, 225, 375, 215); 
@@ -160,8 +170,9 @@ public class PDFCreator {
             content.moveTextPositionByAmount(50, 175);
             content.drawString("Bygge år: " + buildingContructionYear);
             content.endText();
+            
             PDImageXObject bsBYear = null;
-            bsBYear = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring5.jpg", doc);
+            bsBYear = PDImageXObject.createFromFile(imgFolderPath + "bstring5.jpg", doc);
             content.drawXObject(bsBYear, 98, 172, 25, 2);
 
             content.beginText();
@@ -169,18 +180,20 @@ public class PDFCreator {
             content.moveTextPositionByAmount(50, 145);
             content.drawString("Bygningens Areal: " + buildingSQM + " Kvadrat Meter");
             content.endText();
+            
             PDImageXObject bsBArea = null;
-            bsBArea = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring6.jpg", doc);
+            bsBArea = PDImageXObject.createFromFile(imgFolderPath+"bstring6.jpg", doc);
             content.drawXObject(bsBArea, 140, 142, 120, 2);
 
             content.beginText();
             content.setFont(fontHelB, 10);
             content.moveTextPositionByAmount(50, 120);
-            content.drawString("Hvad bruges bygningen til / Hvad har bygningen været brugt til?" + buildingPurpose);
+            content.drawString("Hvad bruges bygningen til / Hvad har bygningen været brugt til?  " + buildingPurpose);
             content.endText();
+            
             PDImageXObject bsBPurpose = null;
-            bsBPurpose = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\bstring6.jpg", doc);
-            content.drawXObject(bsBPurpose, 355, 117, 120, 2);
+            bsBPurpose = PDImageXObject.createFromFile(imgFolderPath+"bstring6.jpg", doc);
+            content.drawXObject(bsBPurpose, 358, 117, 120, 2);
 
 //            content.beginText();
 //            content.setFont(fontHelB, 10);
@@ -275,9 +288,10 @@ public class PDFCreator {
             PDPageContentStream content3 = new PDPageContentStream(doc, page3);
             
             
-            PDImageXObject tj = null;
-            tj = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\tj.jpg", doc);
-            content.drawXObject(tj, 355, 117, 25, 25);
+//            PDImageXObject tj = null;
+//            //Windows
+//            tj = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\tj.jpg", doc);
+//            content.drawXObject(tj, 355, 117, 25, 25);
             
             // Adobe Acrobat uses Helvetica as a default font and 
         // stores that under the name '/Helv' in the resources dictionary
@@ -334,7 +348,7 @@ public class PDFCreator {
         page3.getAnnotations().add(widgetP3);
         
         // set the field value
-        textBoxP3.setValue("" + tj);
+        //textBoxP3.setValue("" + tj);
         //textBox.drawLine(10, 10, 10, 10);
             
         
@@ -347,8 +361,13 @@ public class PDFCreator {
             
             content3.close();
 
-            //Save directory + file name
-            doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
+            
+            //WINDOWS CEO: 
+            //doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
+            //MAC CEO 
+            //doc.save("/Users/Ceo/NetBeansProjects/Polygon/" + pdfName + ".pdf");
+            
+            doc.save(savePath + pdfName + ".pdf");
             doc.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -407,18 +426,39 @@ public class PDFCreator {
 //             System.out.println("Exception");
 //        }
     public void testBlank(String pdfName) throws CustomException {
-
-        try {
-            //initiates a new PDDocument
+        
+        String pdfname2 = "test2312";
+        
+         //initiates a new PDDocument
             PDDocument doc = new PDDocument();
-            PDPage page = new PDPage();
+            
+        
+        try {
+           PDPage page = new PDPage();
+            doc.addPage(page);
+            
+            PDPageContentStream conten = new PDPageContentStream(doc, page);
+            
+            PDFont font = PDType1Font.HELVETICA_BOLD;
+            
+            conten.beginText();
+            conten.setFont( font, 12 );
+           conten.moveTextPositionByAmount( 100, 700 );
+            conten.drawString("test!");
+            conten.endText();
+            
+            conten.close();
 
-            doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
+            
+            //WINDOWS CEO: 
+            //doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
+            //MAC CEO 
+            //"/Users/Ceo/NetBeansProjects/Polygon/" +
+           doc.save("/Users/Ceo/NetBeansProjects/Polygon/pdf/" + pdfName + ".pdf");
 //            //Closes the PDF creation
             doc.close();
 
-//Creates a new page
-            doc.addPage(page);
+
 
         } catch (Exception e) {
             System.out.println(e);
@@ -492,4 +532,6 @@ public class PDFCreator {
 //        }
 //    }
     }
-}
+
+    }
+
