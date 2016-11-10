@@ -456,22 +456,49 @@ public class Front extends HttpServlet {
                     String bSQM = request.getParameter("buildingsqm");  //String that needs to parse into int!
                     String bPurpose = request.getParameter("buildingpurpose");
                     String bOwner = request.getParameter("buildingsowner");
+                    String imgFolderPath = request.getParameter("folderPath");
+                    String savePath = request.getParameter("savePath");
 
+                    String systemDir = System.getProperty("user.dir");
+                    System.out.println(systemDir);
+
+//                    //Folderchooser
+//                    JFileChooser chooser = new JFileChooser();
+//                    chooser.setCurrentDirectory(new java.io.File("."));
+//                    chooser.setDialogTitle("choosertitle");
+//                    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//                    chooser.setAcceptAllFileFilterUsed(false);
+//
+//                    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+//                        System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+//                        System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
+//                    } else {
+//                        System.out.println("No Selection ");
+//
+//                    }
                     //Filechooser for selecting an image for the generated PDF
                     JFileChooser choose = new JFileChooser();
                     FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
                     choose.setFileFilter(filter);
                     String picturePath = "";
+                    String folderPath = "";
                     int returnVal = choose.showOpenDialog(choose);
 
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
 
                         picturePath = choose.getSelectedFile().getAbsolutePath();
-                        //  System.out.println(picturePath);
+                        folderPath = "" + choose.getCurrentDirectory();
+                        System.out.println(picturePath);
+                        System.out.println(folderPath + " Folder sti");
+                       
 
                     }
 
-                    pdfwt.pdfWithText(pdfName, bName, bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM), bPurpose, bOwner, picturePath);
+                    System.out.println(picturePath);
+
+                    pdfwt.pdfWithText(pdfName, bName, bAddress,
+                            Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
+                            Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
 
                     response.sendRedirect("index.jsp?sucess=PDFCreated");
                     break;
