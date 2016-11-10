@@ -59,7 +59,7 @@
                                 <li>
                                     <a href="adminUsers.jsp" target="_self">
                                         <i class="glyphicon glyphicon-th-list"></i>
-                                        Vis brugere </a>
+                                        Håndter brugere </a>
                                 </li>
                                 <li class="active">
                                     <a href="adminPendingBuildings.jsp" target="_self">
@@ -96,6 +96,7 @@
                                     <td><b>Opførelses år</b></td>
                                     <td><b>Formål</b></td>
                                     <td><b>KvadratMeter</b></td>
+                                    <td><b>Vælg tekniker</b></td>
                                 </tr>
                                 <%
                                    
@@ -111,7 +112,8 @@
                                     <td><%out.println(allBuildings.get(x).getCondition());%></td>  
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getSqm());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getSqm());%></td>
+                                    
                                 </tr>
                                 <%}}
                                 %>

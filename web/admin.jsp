@@ -59,7 +59,7 @@
                                 <li>
                                     <a href="adminUsers.jsp" target="_self">
                                         <i class="glyphicon glyphicon-th-list"></i>
-                                        Vis brugere </a>
+                                        Håndter brugere </a>
                                 </li>
                                 <li>
                                     <a href="adminPendingBuildings.jsp" target="_self">
