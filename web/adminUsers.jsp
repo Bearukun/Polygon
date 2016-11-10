@@ -17,8 +17,16 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!--Adding our own css-->
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript">
+$(document).ready(function() {
+$('#slectboxid option').click(function(){
+    $('#textboxid').val($(this).val());
+        });
+});
+</script>
     </head>
     <body>
+        </div>
         <div class="container-fluid">
             <div class="siteContent">
                 <div class="col-sm-2">
@@ -59,7 +67,7 @@
                                 <li class="active">
                                     <a href="adminUsers.jsp" target="_self">
                                         <i class="glyphicon glyphicon-th-list"></i>
-                                        Vis brugere </a>
+                                        Håndter brugere </a>
                                 </li>
                                 <li>
                                     <a href="adminPendingBuildings.jsp" target="_self">
@@ -77,8 +85,13 @@
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
 
-                        <h1>Bygninger:</h1>
-                        
+                        <h1>Brugere:</h1>
+                        <br>
+                            
+                                        <a href="adminCreateUser.jsp" target="_self">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        Ny bruger </a>
+                 
                         <% ArrayList<User> tempUL = new ArrayList();
                         
                         tempUL = (ArrayList<User>) request.getSession().getAttribute("userList");
@@ -130,3 +143,23 @@
         </div>
     </body>
 </html>
+ <input class="form-control" type="text" name="email" placeholder="Email">
+                        <input class="form-control" type="password" name="password" placeholder="Adgangskode">
+                        <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
+                        <select name="type" id="slectboxid">
+                            
+                            <option value="ADMIN">Admin</option>
+                            <option value="TECHNICIAN">Teknikker</option>
+                            <option value="CUSTOMER">Kunde</option>
+                            
+                        </select>
+                        <input type="text" name="text" placeholder="Vælg brugertype" id="textboxid" />
+                        <h5>Ydeligere information</h5><br><!-- Skal centreres -->
+                        <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
+                        <input class="form-control" type="text" name="phone" value="" placeholder="Telefon" />
+                        <input class="form-control" type="text" name="company" value="" placeholder="Firma" />
+                        <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
+                        <input class="form-control" type="text" name="postcode" value="" placeholder="Postnr." />
+                        <input class="form-control" type="text" name="city" value="" placeholder="By" />
+                        <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
+                        <input type="hidden" name="origin" value="newCustomer" />

@@ -87,4 +87,9 @@ public class DBFacade implements DBFacadeInterface {
         return bmi.getRooms(building_id);
     }
 
+    @Override
+    public void createArea(String name, String description, int sqm, int building_id) throws CustomException {
+        bmi.createArea(name, description, sqm, building_id);
+    }
+
 }
