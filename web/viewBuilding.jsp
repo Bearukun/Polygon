@@ -249,7 +249,7 @@
                         <input type="hidden" name="originSection" value="createAreaButton" />
                         <input class="btn btn-primary" type="submit" value="Nyt område" />
                     </form>
-                    
+                    <br><br>
                     <% 
                         for (int i = 0; i < buildingAreas.size(); i++) {
                     %>
@@ -259,6 +259,14 @@
                                         <th colspan="1"><b><%=buildingAreas.get(i).getName()%></b></th>
                                         <th colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></th>
                                         <th colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></th>
+                                        <th colspan="1">
+                                            <form class="form-view-building" id="viewBuilding" action="Front" method="POST">
+                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                <input type="hidden" name="originSection" value="deleteAreaButton" />
+                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                <input class="btn btn-primary" type="submit" value="Slet område" />
+                                            </form>
+                                        </th>
                                     </tr>
                                     <% 
                                     for (int j = 0; j < buildingRooms.size(); j++) {

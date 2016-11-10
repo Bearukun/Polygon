@@ -92,4 +92,8 @@ public class DBFacade implements DBFacadeInterface {
         bmi.createArea(name, description, sqm, building_id);
     }
 
+    @Override
+    public void deleteArea(int area_id) throws CustomException {
+        bmi.deleteArea(area_id);
+    }
 }

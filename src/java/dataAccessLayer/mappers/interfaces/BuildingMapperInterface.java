@@ -20,5 +20,7 @@ public interface BuildingMapperInterface {
     
     public void createArea(String name, String description, int sqm, int building_id) throws CustomException;
     
+    public void deleteArea(int area_id) throws CustomException;
+    
     public ArrayList<Room> getRooms(int building_id) throws CustomException;
 }
