@@ -58,9 +58,11 @@ if yes - then redirect - else nothing. --%>
                 <div class="span12" style="text-align:center">
                     <a href="#" data-toggle="modal" data-target="#login-modal">Opret ny bruger</a>
                 </div>
-                
+                <br>
+                <br>
+                <a href="createPDF.jsp"> Opret test PDF </a>
             </form>
-            <a href="createPDF.jsp"> Opret test PDF </a>
+            
         </div>
     </body>
 </html>

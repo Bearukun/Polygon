@@ -10,6 +10,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Area;
@@ -34,8 +37,8 @@ public class Front extends HttpServlet {
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
     private boolean beingEdited = false;
-    
-     PDFCreator pdfwt = new PDFCreator();
+
+    PDFCreator pdfwt = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -178,15 +181,15 @@ public class Front extends HttpServlet {
                     //request.getSession().setAttribute("beingEdited", false);
                     //Retrieve the building being edited
                     String buildingID = request.getParameter("buildingID");
-                    
+
                     //Fetch areas and rooms for selected building
                     refreshAreas(Integer.parseInt(buildingID));
                     refreshRooms(Integer.parseInt(buildingID));
-                    
+
                     //Save areas and rooms in Session
                     request.getSession().setAttribute("buildingAreas", buildingAreas);
                     request.getSession().setAttribute("buildingRooms", buildingRooms);
-                    
+
                     //redirect to viewBuilding into the specific building being edited
                     response.sendRedirect("viewBuilding.jsp?value=" + buildingID + "");
 
@@ -434,18 +437,16 @@ public class Front extends HttpServlet {
 //                    break;
                 case "adminUsers":
                     break;
-                    
-                    case "blankTestPDF":
-                    
-                    
-                     String testPDF = request.getParameter("pdfname");
-                     pdfwt.testBlank(testPDF);
- 
-                     break;
 
-                    case "pdfwithtext":
+                case "blankTestPDF":
 
-                   
+                    String testPDF = request.getParameter("pdfname");
+                    pdfwt.testBlank(testPDF);
+
+                    break;
+
+                case "pdfwithtext":
+
                     String pdfName = request.getParameter("pdfname");
                     String bName = request.getParameter("buildingname");
                     String bAddress = request.getParameter("buildingadddress");
@@ -456,7 +457,21 @@ public class Front extends HttpServlet {
                     String bPurpose = request.getParameter("buildingpurpose");
                     String bOwner = request.getParameter("buildingsowner");
 
-                    pdfwt.pdfWithText(pdfName, bName, bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM),bPurpose, bOwner);
+                    //Filechooser for selecting an image for the generated PDF
+                    JFileChooser choose = new JFileChooser();
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
+                    choose.setFileFilter(filter);
+                    String picturePath = "";
+                    int returnVal = choose.showOpenDialog(choose);
+
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+                        picturePath = choose.getSelectedFile().getAbsolutePath();
+                        //  System.out.println(picturePath);
+
+                    }
+
+                    pdfwt.pdfWithText(pdfName, bName, bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM), bPurpose, bOwner, picturePath);
 
                     response.sendRedirect("index.jsp?sucess=PDFCreated");
                     break;

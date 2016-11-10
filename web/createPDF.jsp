@@ -7,8 +7,9 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Generate PDF</h1>
+        <h1>Generate PDF - Technician</h1>
 
+         <h3>Generate blank PDF</h3>
         <form class="form-edit-profile" action="Front" method="POST"> 
             <p>PDFName</p>                      
             <input type="text" name="pdfname" value="" />
@@ -19,7 +20,7 @@
         </form>
         <br><br>
         <br><br>
-        <br><br>
+         <h3>Generate PDF with information</h3>
         <form class="form-edit-profile" action="Front" method="POST"> 
             <p>PDFName</p>                      
             <input type="text" name="pdfname" value="" />
