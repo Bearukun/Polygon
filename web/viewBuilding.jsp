@@ -108,13 +108,13 @@
 
                         <form class="form-view-building" id="editArea" action="Front" method="POST">
                             <p>Områdenavn</p>
-                            <input type="text" name="AreaName" />
+                            <input type="text" name="areaName" />
                             <br><br>
                             <p>Beskrivelse</p>
-                            <input type="text" name="AreaDesc" />
+                            <input type="text" name="areaDesc" />
                             <br><br>
                             <p>Kvadratmeter</p>
-                            <input type="number" name="AreaSqm" />
+                            <input type="number" name="areaSqm" />
                             <br><br>
                             <p>Bygning dropdown</p>
                             <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />

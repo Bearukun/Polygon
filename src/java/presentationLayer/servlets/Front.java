@@ -209,6 +209,28 @@ public class Front extends HttpServlet {
                     //If a new area needs creating
                     else if(request.getParameter("originSection").equals("createArea")){
                         request.getSession().setAttribute("source", "createArea");
+                        //Retrieve form input values from viewBuilding
+                        String areaName = request.getParameter("areaName");
+                        String areaDesc = request.getParameter("areaDesc");
+                        int areaSqm = Integer.parseInt(request.getParameter("areaSqm"));
+                        int building_id = build.getBuilding_id();
+                        //Save values to database
+                        bldgCtrl.createArea(areaName, areaDesc, areaSqm, building_id);
+                        
+                        
+                        
+                        //Fetch areas and rooms for selected building
+                        refreshAreas(building_id);
+                        refreshRooms(building_id);
+
+                        //Save areas and rooms in Session
+                        request.getSession().setAttribute("buildingAreas", buildingAreas);
+                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+                        
+                        
+                        
+                        
+                        
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     }

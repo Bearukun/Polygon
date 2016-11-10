@@ -360,4 +360,38 @@ public class BuildingMapper implements BuildingMapperInterface {
         //Return ArrayList of Room(s).
         return buildingRooms;
     }
+
+    @Override
+    public void createArea(String name, String description, int sqm, int building_id) throws CustomException {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "INSERT INTO polygon.area (name, description, sqm, building_id) VALUES (?, ?, ?, ?)";
+            //"INSERT INTO `polygon`.`building` (`name`, `address`, `postcode`, `city`, `construction_year`, `purpose`, `sqm`, `user_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setString(2, description);
+            stmt.setInt(3, sqm);
+            stmt.setInt(4, building_id);
+            //Execute update.
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not sucessful. 
+                 throw new CustomException("SQL Error:@DBFacade.createArea."+ex.getMessage());
+            }
+        }
+    }
 }
