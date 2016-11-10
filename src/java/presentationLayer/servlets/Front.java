@@ -1,7 +1,6 @@
 package presentationLayer.servlets;
 
-import dataAccessLayer.BlankPDF;
-import dataAccessLayer.PDFWithText;
+import dataAccessLayer.PDFCreator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -11,9 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
@@ -26,11 +30,14 @@ public class Front extends HttpServlet {
     private ArrayList<Building> userBuildings = new ArrayList();
     private ArrayList<User> userList = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
-    
+    private ArrayList<Area> buildingAreas = new ArrayList();
+    private ArrayList<Room> buildingRooms = new ArrayList();
+
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
-    private boolean beingEdited = false;
+
+    PDFCreator pdfwt = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,13 +48,11 @@ public class Front extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        request.getSession().setAttribute("beingEdited", beingEdited);
         String errMsg = null;
         String origin = request.getParameter("origin");
 
@@ -63,7 +68,7 @@ public class Front extends HttpServlet {
                         String password = request.getParameter("password");
 
                         try {
-                            
+
                             user = usrCtrl.login(email, password);
 
                             //Retrieve of the users data, to be used in the editProfile.jsp
@@ -88,7 +93,7 @@ public class Front extends HttpServlet {
                             request.getSession().setAttribute("uPostcode", uPostcode);
                             request.getSession().setAttribute("uCity", uCity);
                             request.getSession().setAttribute("uUser_id", uUser_id);
-                            
+
                             if (user != null) {
 
                                 request.getSession().setAttribute("email", user.getEmail().toString());
@@ -116,27 +121,27 @@ public class Front extends HttpServlet {
                                     break;
 
                                 } else if (user.getType().equals(User.type.TECHNICIAN)) {
-                                    
+
                                     refreshUsers();
                                     refreshAllBuildings();
                                     request.getSession().setAttribute("userList", userList);
                                     request.getSession().setAttribute("allBuildings", allBuildings);
-                                    
-                                   // refreshBuilding(building.getAssigned_tech_id());
+
+                                    // refreshBuilding(building.getAssigned_tech_id());
                                     //request.getSession().setAttribute("userBuildings", userBuildings);
                                     response.sendRedirect("technician.jsp");
                                     break;
 
                                 } else {
-                                   
+
                                     refreshUsers();
                                     System.out.println("after ref: " + userList.size());
                                     //Refreshes and populates the arrayList with buildings for the user.
                                     refreshBuilding(user.getUser_id());
-                                    
+
                                     //Setup users buildings
                                     request.getSession().setAttribute("userBuildings", userBuildings);
-                                    
+
                                     //Redirect to user.jsp page
                                     response.sendRedirect("user.jsp");
 
@@ -169,52 +174,101 @@ public class Front extends HttpServlet {
 
                     break;
 
-                case "viewBuilding":
+                case "userOverview":
                     
+                    request.getSession().setAttribute("source", "#");
+                    
+                    //Retrieve the building being edited
+                    String buildingID = request.getParameter("buildingID");
+
+                    //Fetch areas and rooms for selected building
+                    refreshAreas(Integer.parseInt(buildingID));
+                    refreshRooms(Integer.parseInt(buildingID));
+
+                    //Save areas and rooms in Session
+                    request.getSession().setAttribute("buildingAreas", buildingAreas);
+                    request.getSession().setAttribute("buildingRooms", buildingRooms);
+
+                    //redirect to viewBuilding into the specific building being edited
+                    response.sendRedirect("viewBuilding.jsp?value=" + buildingID + "");
+
+                    break;
+
+                case "viewBuilding":
+
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                     Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
                     
-                    if(beingEdited){
+                    //If 'Create area' button was clicked
+                    if(request.getParameter("originSection").equals("createAreaButton")){
+                        request.getSession().setAttribute("source", "createAreaButton");
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    
+                    //If a new area needs creating
+                    else if(request.getParameter("originSection").equals("createArea")){
+                        request.getSession().setAttribute("source", "createArea");
+                        //Retrieve form input values from viewBuilding
+                        String areaName = request.getParameter("areaName");
+                        String areaDesc = request.getParameter("areaDesc");
+                        int areaSqm = Integer.parseInt(request.getParameter("areaSqm"));
+                        int building_id = build.getBuilding_id();
+                        //Save values to database
+                        bldgCtrl.createArea(areaName, areaDesc, areaSqm, building_id);
                         
-                        //Retrieve form input values from viewBuilding.jsp
+                        
+                        
+                        //Fetch areas and rooms for selected building
+                        refreshAreas(building_id);
+                        refreshRooms(building_id);
+
+                        //Save areas and rooms in Session
+                        request.getSession().setAttribute("buildingAreas", buildingAreas);
+                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+                        
+                        
+                        
+                        
+                        
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    
+                    //If 'Edit building details' button was clicked
+                    else if(request.getParameter("originSection").equals("editBuildingButton")){
+                        request.getSession().setAttribute("source", "editBuildingButton");
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    
+                    //If the building needs editing
+                    else if(request.getParameter("originSection").equals("editBuilding")){
+                        request.getSession().setAttribute("source", "editBuilding");
+                        //Retrieve form input values from viewBuilding
                         String buildingName = request.getParameter("buildingName");
                         String addres = request.getParameter("address");
-                        System.out.println(addres);
                         int postcod = Integer.parseInt(request.getParameter("postcode"));
                         String cit = request.getParameter("city");
                         int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
                         String purpos = request.getParameter("purpose");
                         int sq = Integer.parseInt(request.getParameter("sqm"));
                         int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
-
                         //Save values to database
                         bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
-
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user.getUser_id());
                         request.getSession().setAttribute("userBuilding", userBuildings);
-
-                        beingEdited = false;
-                        request.getSession().setAttribute("beingEdited", beingEdited);
-
-                        //redirect to viewBuilding.jsp into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
-                    }
-                    else{
-                    //if(request.getParameter("origin").equals("viewBuilding")){
-                        beingEdited = true;
-                        request.getSession().setAttribute("beingEdited", beingEdited);
-                        
-                        //redirect to viewBuilding.jsp into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value="+build.getBuilding_id()+"");
-                    }
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    } 
                     
                     break;
-
+                
                 case "editProfile":
-                    
+
                     System.out.println("Entered edit profile");
-                    
+
                     //Retrieve form input values from editProfile.jsp
                     String uEmail = request.getParameter("email");
                     String uPassword = request.getParameter("password");
@@ -237,8 +291,6 @@ public class Front extends HttpServlet {
 //                    System.out.println(uPostcode);
 //                    System.out.println(uCity);
 //                    System.out.println(uSelectedUser);
-                    
-                    
                     //Basic idea for checking user email ! Not working atm!
 //                    System.out.println(userList.size());                                       
 //                    System.out.println("user email: " + user.getEmail());
@@ -258,34 +310,27 @@ public class Front extends HttpServlet {
 //                            
 //                        }
 //                    }
-                    
                     //Save the users edited values to the user database
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
-                    
-                   
-                    
-                    
+
                     //Resets/updates the userName, password and updates the displayed username
                     request.getSession().setAttribute("email", uEmail);
                     request.getSession().setAttribute("password", uPassword);
-                    
+
                     //Updates the editUserTable with the new/updated user information
                     request.getSession().setAttribute("uEmail", uEmail);
-                    request.getSession().setAttribute("uPassword", uPassword);                 
+                    request.getSession().setAttribute("uPassword", uPassword);
                     request.getSession().setAttribute("uName", uName);
                     request.getSession().setAttribute("uPhonenumber", uPhone);
                     request.getSession().setAttribute("uCompany", uCompany);
                     request.getSession().setAttribute("uAddress", uAddress);
                     request.getSession().setAttribute("uPostcode", uPostcode);
                     request.getSession().setAttribute("uCity", uCity);
-                    
-                    
-                    
+
                     System.out.println("Response inc.");
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
-                    
-                    
+
 //    //fix æøå bug here!
                     break;
 
@@ -422,33 +467,50 @@ public class Front extends HttpServlet {
                 case "adminUsers":
                     break;
 
-        case "blankTestPDF":
-            
-            
-            BlankPDF bpdf = new BlankPDF();
-            String testPDF =  request.getParameter("pdfname");
-            bpdf.testBlank(testPDF);
-            
-            break;
-            
-         case "pdfwithtext":
-        
-             PDFWithText pdfwt = new PDFWithText();
-             String pdfName = request.getParameter("pdfname2");
-             String pdfText = request.getParameter("name");
-             String pdfText2 = request.getParameter("lastname");
-             pdfwt.pdfWithText(pdfName, pdfText,pdfText2);
-             
-        break;
+                case "blankTestPDF":
+
+                    String testPDF = request.getParameter("pdfname");
+                    pdfwt.testBlank(testPDF);
+
+                    break;
+
+                case "pdfwithtext":
+
+                    String pdfName = request.getParameter("pdfname");
+                    String bName = request.getParameter("buildingname");
+                    String bAddress = request.getParameter("buildingadddress");
+                    String bPostCode = request.getParameter("buildingpostcode"); //String that needs to parse into int!
+                    String bCity = request.getParameter("buildingcity");
+                    String bConstructionYear = request.getParameter("constructionyear");  //String that needs to parse into int!
+                    String bSQM = request.getParameter("buildingsqm");  //String that needs to parse into int!
+                    String bPurpose = request.getParameter("buildingpurpose");
+                    String bOwner = request.getParameter("buildingsowner");
+
+                    //Filechooser for selecting an image for the generated PDF
+                    JFileChooser choose = new JFileChooser();
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
+                    choose.setFileFilter(filter);
+                    String picturePath = "";
+                    int returnVal = choose.showOpenDialog(choose);
+
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+                        picturePath = choose.getSelectedFile().getAbsolutePath();
+                        //  System.out.println(picturePath);
+
+                    }
+
+                    pdfwt.pdfWithText(pdfName, bName, bAddress, Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear), Integer.parseInt(bSQM), bPurpose, bOwner, picturePath);
+
+                    response.sendRedirect("index.jsp?sucess=PDFCreated");
+                    break;
 
             }
- 
+
         } catch (Exception e) {
-           
+
         }
-       
-       
-        
+
     }
 
     //Refreshes the list of buildings
@@ -467,13 +529,25 @@ public class Front extends HttpServlet {
 
     }
 
+    //Refreshes the list of building areas
+    public void refreshAreas(int building_id) throws CustomException {
+        buildingAreas.clear();
+        buildingAreas = bldgCtrl.getAreas(building_id);
+    }
+
+    //Refreshes the list of building rooms
+    public void refreshRooms(int building_id) throws CustomException {
+        buildingRooms.clear();
+        buildingRooms = bldgCtrl.getRooms(building_id);
+    }
+
     public void refreshUsers() throws CustomException {
 
         userList.clear();
         userList = usrCtrl.getUsers();
     }
-    
-       // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -50,6 +50,11 @@
                                     <a href="technician.jsp?refresh">
                                         <i class="glyphicon glyphicon-home"></i>
                                         Overblik </a>
+                                     <li>
+                                    <a href="createPDF.jsp" target="_self">
+                                        <i class="glyphicon glyphicon-file"></i>
+                                        Sundhedscheck </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- END MENU -->

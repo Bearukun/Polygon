@@ -64,7 +64,7 @@ public class UserController implements UserControllerInterface {
         } else {
 
             
-            //Input fields must be empty, trow error. 
+            //Input fields must be empty, throw error. 
             throw new CustomException("Be sure to fill out both fields!");
 
         }

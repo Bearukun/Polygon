@@ -1,7 +1,9 @@
 package dataAccessLayer.interfaces;
 
 import java.util.ArrayList;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
@@ -24,5 +26,9 @@ public interface DBFacadeInterface {
     
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException;
     
+    public ArrayList<Area> getAreas(int building_id) throws CustomException;
     
+    public ArrayList<Room> getRooms(int building_id) throws CustomException;
+    
+    public void createArea(String name, String description, int sqm, int building_id) throws CustomException;
 }

@@ -1,3 +1,5 @@
+<%@page import="serviceLayer.entities.Room"%>
+<%@page import="serviceLayer.entities.Area"%>
 <%@page import="serviceLayer.entities.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="serviceLayer.entities.Building"%>
@@ -23,8 +25,15 @@
     <body>
 
         
-        <% boolean editBuilding = (boolean) request.getSession().getAttribute("beingEdited"); %>
-
+        
+        <% ArrayList<Area> buildingAreas = new ArrayList();
+           buildingAreas = (ArrayList<Area>) request.getSession().getAttribute("buildingAreas");
+        %>
+        <% ArrayList<Room> buildingRooms = new ArrayList();
+           //buildingRooms.add(new Room(8, "name", "description", 100, 1, 1));
+            buildingRooms = (ArrayList<Room>) request.getSession().getAttribute("buildingRooms");
+        %>
+        
         <div class="container-fluid">
             <div class="siteContent">
                 <div class="col-sm-2">
@@ -83,11 +92,45 @@
                 ArrayList<Building> userBuildings = new ArrayList();
                 userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
                 Building build = new Building();
+            
+            
+            String source = "";
+            if(request.getSession().getAttribute("source")!=null){
+                source = request.getSession().getAttribute("source").toString();
+            }
+            switch (source) {
+                
+                case "createAreaButton":
+                    %>
+                    <div class="col-sm-10">
+                    <div id="container" class="container-fluid">
+                        <h1>Nyt område:</h1>
+
+                        <form class="form-view-building" id="editArea" action="Front" method="POST">
+                            <p>Områdenavn</p>
+                            <input type="text" name="areaName" />
+                            <br><br>
+                            <p>Beskrivelse</p>
+                            <input type="text" name="areaDesc" />
+                            <br><br>
+                            <p>Kvadratmeter</p>
+                            <input type="number" name="areaSqm" />
+                            <br><br>
+                            <p>Bygning dropdown</p>
+                            <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                            <input type="hidden" name="origin" value="viewBuilding" />
+                            <input type="hidden" name="originSection" value="createArea" />
+                            <input class="btn btn-primary" type="submit" value="Opret område" />
+                        </form>
+                    </div>
+                </div>
+                    <%
+                    break;
+                
                 //If the building's details are being edited
-                
-                if(editBuilding){%>
-                
-                <div class="col-sm-10">
+                case "editBuildingButton":
+                %>
+                    <div class="col-sm-10">
                     <%
                         //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
@@ -99,62 +142,69 @@
                             }
                         }
                     %>
-                    <h1>Rediger bygning</h1>
-                    <form class="form-view-building" id="editBuilding" action="Front" method="POST">
-                        <p>Bygningsnavn</p>
-                        <input type="text" name="buildingName" value="<%=build.getName()%>" />
-                        <br><br>
-                        <p>Adresse</p>
-                        <input type="text" name="address" value="<%=build.getAddress()%>" />
-                        <br><br>
-                        <p>Postnr.</p>
-                        <input type="number" name="postcode" min="1000" max="9999" value="<%=build.getPostcode()%>" />
-                        <br><br>
-                        <p>By</p>
-                        <input type="text" name="city" value="<%=build.getCity()%>" />
-                        <br><br>
-                        <p>Opførelsesår</p>
-                        <input type="text" name="constructionYear" value="<%=build.getConstruction_year()%>" />
-                        <br><br>
-                        <p>Formål</p>
-                        <select name="purpose">
-                        <!-- Scriptlet section to ensure the correct option is selected as default  -->
-                        <% 
-                            ArrayList<String> bldgPurpose = new ArrayList();
-                            bldgPurpose.add("Landbrug");
-                            bldgPurpose.add("Erhverv");
-                            bldgPurpose.add("Bolig");
-                            bldgPurpose.add("Uddannelse");
-                            bldgPurpose.add("Offentlig");
-                            bldgPurpose.add("Industriel");
-                            bldgPurpose.add("Militær");
-                            bldgPurpose.add("Religiøs");
-                            bldgPurpose.add("Transport");
-                            bldgPurpose.add("Andet");
-                                 
-                            for (int i = 0; i < bldgPurpose.size(); i++) {
-                                if(build.getPurpose().equals(bldgPurpose.get(i))){
-                                    %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
+                        <h1>Rediger bygning</h1>
+                        <form class="form-view-building" id="editBuilding" action="Front" method="POST">
+                            <p>Bygningsnavn</p>
+                            <input type="text" name="buildingName" value="<%=build.getName()%>" />
+                            <br><br>
+                            <p>Adresse</p>
+                            <input type="text" name="address" value="<%=build.getAddress()%>" />
+                            <br><br>
+                            <p>Postnr.</p>
+                            <input type="number" name="postcode" min="1000" max="9999" value="<%=build.getPostcode()%>" />
+                            <br><br>
+                            <p>By</p>
+                            <input type="text" name="city" value="<%=build.getCity()%>" />
+                            <br><br>
+                            <p>Opførelsesår</p>
+                            <input type="text" name="constructionYear" value="<%=build.getConstruction_year()%>" />
+                            <br><br>
+                            <p>Formål</p>
+                            <select name="purpose">
+                            <!-- Scriptlet section to ensure the correct option is selected as default  -->
+                            <% 
+                                ArrayList<String> bldgPurpose = new ArrayList();
+                                bldgPurpose.add("Landbrug");
+                                bldgPurpose.add("Erhverv");
+                                bldgPurpose.add("Bolig");
+                                bldgPurpose.add("Uddannelse");
+                                bldgPurpose.add("Offentlig");
+                                bldgPurpose.add("Industriel");
+                                bldgPurpose.add("Militær");
+                                bldgPurpose.add("Religiøs");
+                                bldgPurpose.add("Transport");
+                                bldgPurpose.add("Andet");
+
+                                for (int i = 0; i < bldgPurpose.size(); i++) {
+                                    if(build.getPurpose().equals(bldgPurpose.get(i))){
+                                        %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
+                                    }
+                                    else{
+                                        %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
+                                    }
                                 }
-                                else{
-                                    %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                }
-                            }
-                        %>
-                        </select>
-                        <br><br>
-                        <p>Kvadratmeter</p>
-                        <input type="number" name="sqm" max="51660" value="<%=build.getSqm()%>" />
-                        <br><br>
-                        <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
-                        <input type="hidden" name="origin" value="viewBuilding" />
-                        <input class="btn btn-primary" type="submit" value="Gem ændringer" />
-                    </form>
-                </div>
-            <%} else{
-                //if the building's details are not being edited
-            %>
-                <div class="col-sm-10">
+                            %>
+                            </select>
+                            <br><br>
+                            <p>Kvadratmeter</p>
+                            <input type="number" name="sqm" max="51660" value="<%=build.getSqm()%>" />
+                            <br><br>
+                            <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                            <input type="hidden" name="origin" value="viewBuilding" />
+                            <input type="hidden" name="originSection" value="editBuilding" />
+                            <input class="btn btn-primary" type="submit" value="Gem ændringer" />
+                        </form>
+                    </div>
+                
+                
+                <%
+                    break;
+                
+                //If none of the building's details are being edited
+                default:
+                
+                %>    
+                    <div class="col-sm-10">
                     <%
                         //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
@@ -174,11 +224,18 @@
                                 <th colspan="3"><b>Staminformationer</b></th>
                             </tr>
                             <tr>
-                                <td><%=build.getName()%><br><%=build.getAddress()%><br><%=build.getPostcode()%> <%=build.getCity()%></td>
-                                <td>Opførelsesår: <%=build.getConstruction_year()%><br>Formål: <%=build.getPurpose()%><br>Kvadratmeter: <%=build.getSqm()%></td>
+                                <td><%=build.getName()%><br>
+                                    <%=build.getAddress()%><br>
+                                    <%=build.getPostcode()%> <%=build.getCity()%>
+                                </td>
+                                <td>Opførelsesår: <%=build.getConstruction_year()%><br>
+                                    Formål: <%=build.getPurpose()%><br>
+                                    Kvadratmeter: <%=build.getSqm()%>
+                                </td>
                                 <td>
                                     <form class="form-view-building" id="viewBuilding" action="Front" method="POST">
                                         <input type="hidden" name="origin" value="viewBuilding" />
+                                        <input type="hidden" name="originSection" value="editBuildingButton" />
                                         <input class="btn btn-primary" type="submit" value="Rediger" />
                                     </form>
                                 </td>
@@ -186,6 +243,43 @@
                         </tbody>
                     </table>  
                     <br><br>
+                    
+                    <form class="form-view-building" id="viewBuilding" action="Front" method="POST">
+                        <input type="hidden" name="origin" value="viewBuilding" />
+                        <input type="hidden" name="originSection" value="createAreaButton" />
+                        <input class="btn btn-primary" type="submit" value="Nyt område" />
+                    </form>
+                    
+                    <% 
+                        for (int i = 0; i < buildingAreas.size(); i++) {
+                    %>
+                            <table text-align="left" class="table">
+                                <tbody>
+                                    <tr bgcolor='cyan' height="100">
+                                        <th colspan="1"><b><%=buildingAreas.get(i).getName()%></b></th>
+                                        <th colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></th>
+                                        <th colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></th>
+                                    </tr>
+                                    <% 
+                                    for (int j = 0; j < buildingRooms.size(); j++) {
+                                       if(buildingAreas.get(i).getArea_id()==buildingRooms.get(j).getArea_id()){
+                                        %> 
+                                            <tr>
+                                                <td><%=buildingRooms.get(j).getName()%></td>
+                                                <td><%=buildingRooms.get(j).getDescription()%></td>
+                                                <td><%=buildingRooms.get(j).getSqm()%></td>
+                                            </tr>
+                                        <%}
+                                    }
+                                    %>
+                                </tbody>
+                            </table>        
+                    <br><br>    
+                       <%}
+                    %>
+                    
+                    
+                    <br><br><br><br><br><br><br><br><br>  
                     
                     <table text-align="left" class="table">
                         <tbody>
@@ -229,47 +323,13 @@
                             </tr>
                         </tbody>
                     </table>  
-                    
- 
-                    <table text-align="left" class="table">
-                        <tbody>
-                            <tr bgcolor='cyan' height="100">
-                                <th colspan="1"><b>1. etage</b></th>
-                                <th colspan="1"><b>Denne etage er meget flot!</b></th>
-                                <th colspan="1"><b>1000</b></th>
-                            </tr>
-                            <tr>
-                                <td><b>Lokale</b></td>
-                                <td><b>Beskrivelse</b></td>
-                                <td><b>Kvadratmeter</b></td>
-                            </tr>
-                            <tr>
-                                <td>1.01</td>
-                                <td>Undervisningslokale</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <td>1.03</td>
-                                <td>Undervisningslokale</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <td>1.35</td>
-                                <td>Toilet - herrer</td>
-                                <td>12</td>
-                            </tr>
-                            <tr>
-                                <td>1.37</td>
-                                <td>Toilet - damer</td>
-                                <td>12</td>
-                            </tr>
-                        </tbody>
-                    </table>      
-                        
-                        
                 </div>
-
-            <%}%>
+                <%break;    
+                
+               } 
+                %>
+                
+            
             </div>
         </div>
     </body>

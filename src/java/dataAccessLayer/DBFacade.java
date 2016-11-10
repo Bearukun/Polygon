@@ -6,7 +6,9 @@ import dataAccessLayer.mappers.UserMapper;
 import dataAccessLayer.mappers.interfaces.BuildingMapperInterface;
 import dataAccessLayer.mappers.interfaces.UserMapperInterface;
 import java.util.ArrayList;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
@@ -73,6 +75,21 @@ public class DBFacade implements DBFacadeInterface {
         
         umi.editUser(0, email, password, name, phone, company, address, postcode, city);
         
+    }
+
+    @Override
+    public ArrayList<Area> getAreas(int building_id) throws CustomException {
+        return bmi.getAreas(building_id);
+    }
+
+    @Override
+    public ArrayList<Room> getRooms(int building_id) throws CustomException {
+        return bmi.getRooms(building_id);
+    }
+
+    @Override
+    public void createArea(String name, String description, int sqm, int building_id) throws CustomException {
+        bmi.createArea(name, description, sqm, building_id);
     }
 
 }

@@ -83,7 +83,7 @@ public class UserMapper implements UserMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -155,7 +155,7 @@ public class UserMapper implements UserMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -223,7 +223,7 @@ public class UserMapper implements UserMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -276,7 +276,7 @@ public class UserMapper implements UserMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //Trow error if not sucessful. 
+                //throw error if not sucessful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
