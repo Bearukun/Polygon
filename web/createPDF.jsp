@@ -51,6 +51,18 @@
             <p>Bygnings ansvarlig</p>                      
             <input type="text" name="buildingsowner" value="" />
             <br><br>
+            
+             <p>Billeder folder</p>                      
+             <p>Mac: /Users/Ceo/NetBeansProjects/Polygon/web/img/ </p>    
+             <p>Windows: E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\ </p>
+             <input type="text" name="folderPath" value="/Users/Ceo/NetBeansProjects/Polygon/web/img/" />
+            <br><br>
+            
+            <p>Save Folder</p>                      
+             <p>Mac: /Users/Ceo/NetBeansProjects/Polygon/pdf/ </p>    
+             <p>Windows: E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\ </p>
+             <input type="text" name="savePath" value="/Users/Ceo/NetBeansProjects/Polygon/pdf/" />
+            <br><br>
 
             <input type="hidden" name="origin" value="pdfwithtext" />
             <br><br>
