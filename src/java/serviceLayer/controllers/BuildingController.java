@@ -53,4 +53,14 @@ public class BuildingController implements BuildingControllerInterface{
     public void deleteArea(int area_id) throws CustomException {
         dbfacade.deleteArea(area_id);
     }
+
+    @Override
+    public void createRoom(String name, String description, int sqm, int area_id) throws CustomException {
+        dbfacade.createRoom(name, description, sqm, area_id);
+    }
+
+    @Override
+    public void deleteRoom(int room_id) throws CustomException {
+        dbfacade.deleteRoom(room_id);    
+    }
 }

@@ -256,6 +256,70 @@ public class Front extends HttpServlet {
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     }
                     
+                    //If 'Create area' button was clicked
+                    else if(request.getParameter("originSection").equals("createRoomButton")){
+                        request.getSession().setAttribute("source", "createRoomButton");
+                        request.getSession().setAttribute("areaId",request.getParameter("areaId"));
+
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    
+                    //If a new room needs creating
+                    else if(request.getParameter("originSection").equals("createRoom")){
+                        request.getSession().setAttribute("source", "createRoom");
+                        //Retrieve form input values from viewBuilding
+                        String roomName = request.getParameter("roomName");
+                        String roomDesc = request.getParameter("roomDesc");
+                        int roomSqm = Integer.parseInt(request.getParameter("roomSqm"));
+                        int area_id = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
+                        
+                        //Retrieve the building being edited (saved in the Session) and save it in the reference object build
+                        build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+                        int building_id = build.getBuilding_id();
+
+                        //Save values to database
+                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, area_id);
+                        
+                        //Fetch areas and rooms for selected building
+                        refreshAreas(building_id);
+                        refreshRooms(building_id);
+
+                        //Save areas and rooms in Session
+                        request.getSession().setAttribute("buildingAreas", buildingAreas);
+                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+                        
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    
+                    //If an area needs deleting
+                    else if(request.getParameter("originSection").equals("deleteRoomButton")){
+                        request.getSession().setAttribute("source", "deleteRoomButton");
+                        
+                        //Retrieve form input values from viewBuilding
+                        int room_id = Integer.parseInt(request.getParameter("roomId"));
+                        //int area_id = 6;
+                        
+                        //Save values to database
+                        bldgCtrl.deleteRoom(room_id);
+                        
+                        //Retrieve the building being edited (saved in the Session) and save it in the reference object build
+                        build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+                    
+                        //Fetch areas and rooms for selected building
+                        refreshAreas(build.getBuilding_id());
+                        refreshRooms(build.getBuilding_id());
+                        //refreshRooms(building_id);
+
+                        //Save areas and rooms in Session
+                        request.getSession().setAttribute("buildingAreas", buildingAreas);
+                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    
                     //If 'Edit building details' button was clicked
                     else if(request.getParameter("originSection").equals("editBuildingButton")){
                         request.getSession().setAttribute("source", "editBuildingButton");

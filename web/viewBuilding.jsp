@@ -106,7 +106,7 @@
                     <div id="container" class="container-fluid">
                         <h1>Nyt område:</h1>
 
-                        <form class="form-view-building" id="editArea" action="Front" method="POST">
+                        <form class="form-view-building" id="newArea" action="Front" method="POST">
                             <p>Områdenavn</p>
                             <input type="text" name="areaName" />
                             <br><br>
@@ -121,6 +121,32 @@
                             <input type="hidden" name="origin" value="viewBuilding" />
                             <input type="hidden" name="originSection" value="createArea" />
                             <input class="btn btn-primary" type="submit" value="Opret område" />
+                        </form>
+                    </div>
+                </div>
+                    <%
+                    break;
+                
+                case "createRoomButton":
+                    %>
+                    <div class="col-sm-10">
+                    <div id="container" class="container-fluid">
+                        <h1>Nyt lokale:</h1>
+
+                        <form class="form-view-building" id="newRoom" action="Front" method="POST">
+                            <p>Lokalenavn</p>
+                            <input type="text" name="roomName" />
+                            <br><br>
+                            <p>Beskrivelse</p>
+                            <input type="text" name="roomDesc" />
+                            <br><br>
+                            <p>Kvadratmeter</p>
+                            <input type="number" name="roomSqm" />
+                            <br><br>
+                            <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                            <input type="hidden" name="origin" value="viewBuilding" />
+                            <input type="hidden" name="originSection" value="createRoom" />
+                            <input class="btn btn-primary" type="submit" value="Opret lokale" />
                         </form>
                     </div>
                 </div>
@@ -267,6 +293,14 @@
                                                 <input class="btn btn-primary" type="submit" value="Slet område" />
                                             </form>
                                         </th>
+                                        <th colspan="1">
+                                            <form class="form-view-building" id="viewBuilding" action="Front" method="POST">
+                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                <input type="hidden" name="originSection" value="createRoomButton" />
+                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                <input class="btn btn-primary" type="submit" value="Nyt lokale" />
+                                            </form>
+                                        </th>
                                     </tr>
                                     <% 
                                     for (int j = 0; j < buildingRooms.size(); j++) {
@@ -276,6 +310,14 @@
                                                 <td><%=buildingRooms.get(j).getName()%></td>
                                                 <td><%=buildingRooms.get(j).getDescription()%></td>
                                                 <td><%=buildingRooms.get(j).getSqm()%></td>
+                                                <td>
+                                                    <form class="form-view-building" id="viewBuilding" action="Front" method="POST">
+                                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                                        <input type="hidden" name="originSection" value="deleteRoomButton" />
+                                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />
+                                                        <input class="btn btn-primary" type="submit" value="Slet lokale" />
+                                                    </form>
+                                                </td>
                                             </tr>
                                         <%}
                                     }

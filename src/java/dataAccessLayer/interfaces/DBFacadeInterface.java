@@ -33,4 +33,8 @@ public interface DBFacadeInterface {
     public ArrayList<Room> getRooms(int building_id) throws CustomException;
     
     public void createArea(String name, String description, int sqm, int building_id) throws CustomException;
+    
+    public void createRoom(String name, String description, int sqm, int area_id) throws CustomException;
+    
+    public void deleteRoom(int room_id) throws CustomException;
 }

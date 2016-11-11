@@ -96,4 +96,14 @@ public class DBFacade implements DBFacadeInterface {
     public void deleteArea(int area_id) throws CustomException {
         bmi.deleteArea(area_id);
     }
+
+    @Override
+    public void createRoom(String name, String description, int sqm, int area_id) throws CustomException {
+        bmi.createRoom(name, description, sqm, area_id);
+    }
+
+    @Override
+    public void deleteRoom(int room_id) throws CustomException {
+        bmi.deleteRoom(room_id);
+    }
 }
