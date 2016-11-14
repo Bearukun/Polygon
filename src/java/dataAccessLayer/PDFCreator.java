@@ -27,6 +27,8 @@ import serviceLayer.exceptions.CustomException;
  * @author Ceo
  *
  * Clean up: split op i metoder! fjern overskyddende/dubblet billede!
+ * Comments!!!!!!!
+ * Need to figure out to make a method for "PDFont"!
  *
  *
  *
