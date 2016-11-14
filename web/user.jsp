@@ -109,7 +109,7 @@
                                 //Dynamically load in a row for each of the user's buildings
                                 %><tr>
                                     <td>
-                                        <form class="submitLink" action="Front" method="POST">
+                                        <form class="submitLink" action="FrontC" method="POST">
                                             <input type="submit" class="submitLink" value="<%=userBuildings.get(i).getName()%>" />
                                             <input type="hidden" name="buildingID" value="<%=userBuildings.get(i).getBuilding_id()%>" />
                                             <input type="hidden" name="origin" value="userOverview" />

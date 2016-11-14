@@ -53,52 +53,46 @@ public class FrontCustomer extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         
-        
-        
-        String errMsg = null;
-        String origin = request.getParameter("origin");
-
-        
-        
         try {
 
             //If we are coming from the Front servlet
             if(request.getSession().getAttribute("sourcePage").toString().equals("Front")){
-
+                request.getSession().setAttribute("sourcePage","Invalid");
                 //Save the logged in user's id
-                user_id = (Integer) request.getSession().getAttribute("user_id");
-
+                //user_id = (Integer) request.getSession().getAttribute("user_id");
+                user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
                 refreshBuilding(user_id);
+                //refreshBuilding(3);
                 request.getSession().setAttribute("userBuildings", userBuildings);
                 //response.sendRedirect("viewBuilding.jsp");
                 response.sendRedirect("user.jsp");
             }
         
-
+            String errMsg = null;
+            String origin = request.getParameter("origin");
             
             switch (origin) {
-            
-                //default:
+        
+                case "userOverview":
                     
-                    //break;
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+                    request.getSession().setAttribute("source", "#");
+
+                    //Retrieve the building being edited
+                    String buildingID = request.getParameter("buildingID");
+                    request.getSession().setAttribute("buildingBeingEdited", buildingID);
+                    
+                    //Fetch areas and rooms for selected building
+                    refreshAreas(Integer.parseInt(buildingID));
+                    refreshRooms(Integer.parseInt(buildingID));
+
+                    //Save areas and rooms in Session
+                    request.getSession().setAttribute("buildingAreas", buildingAreas);
+                    request.getSession().setAttribute("buildingRooms", buildingRooms);
+
+                    //redirect to viewBuilding into the specific building being edited
+                    response.sendRedirect("viewBuilding.jsp?value=" + buildingID + "");
+
+                    break;
 
                 case "viewBuilding":
 
@@ -124,10 +118,6 @@ public class FrontCustomer extends HttpServlet {
                         
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user_id);
-                        
-                        //Fetch areas and rooms for selected building
-                        //refreshAreas(build.getBuilding_id());
-                        //refreshRooms(build.getBuilding_id());
                         
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
@@ -273,8 +263,7 @@ public class FrontCustomer extends HttpServlet {
                         //Save values to database
                         bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user.getUser_id());
-                        //request.getSession().setAttribute("userBuilding", userBuildings);
+                        refreshBuilding(user_id);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } 
@@ -294,7 +283,7 @@ public class FrontCustomer extends HttpServlet {
                     String uAddress = request.getParameter("address");
                     int uPostcode = Integer.parseInt(request.getParameter("postcode"));
                     String uCity = request.getParameter("city");
-                    int uSelectedUser = user.getUser_id();
+                    int uSelectedUser = user_id;
 
                     //Displayes what data is being pulled down into the usrCtrl.editUser
 //                    System.out.println("DATA confirmed funneled down into editProfile case");
@@ -409,10 +398,9 @@ public class FrontCustomer extends HttpServlet {
 
                 case "createBuilding":
 
-                    //If no user is logged in. (user == null)
-                    if (user != null) {
+                    //If no user is logged in. (user == 0)
+                    if (user_id>0) {
 
-                        int user_id = user.getUser_id();
                         String assigned_tech_id = request.getParameter("assigned_tech_id");
                         String healthcheck_pending = request.getParameter("healthcheck_pending");
                         String name = request.getParameter("name");
@@ -551,7 +539,7 @@ public class FrontCustomer extends HttpServlet {
             }
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
