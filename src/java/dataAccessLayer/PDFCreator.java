@@ -83,7 +83,7 @@ public class PDFCreator {
 
             //Writes and places the PDF Name
             content.beginText();
-            content.moveTextPositionByAmount(50, 667);
+            content.moveTextPositionByAmount(50, 25);
             content.setFont(fontHelB, 8);
             content.drawString("PDF Navn: " + pdfName);
             content.endText();
@@ -329,9 +329,29 @@ public class PDFCreator {
             //Open the content creation for Page 2
             PDPageContentStream content2 = new PDPageContentStream(doc, page2);
 
+             //Creates a image from a file and places it.
+            //Polygon logo in the top left corner of the document
+           
+           polygonLogo = PDImageXObject.createFromFile(imgFolderPath+ "polygon.jpg", doc);
+            content2.drawXObject(polygonLogo, 50, 690, 150, 30);
+            
+            //Writes and places the Rapport Nr.
+            content2.beginText();
+            content2.setFont(fontHel, 10);
+            content2.moveTextPositionByAmount(50, 680);
+            content2.drawString("Rapport nr.: ");
+            content2.endText();
+            
+            //Writes and places the PDF Name
+            content2.beginText();
+            content2.moveTextPositionByAmount(50, 25);
+            content2.setFont(fontHelB, 8);
+            content2.drawString("PDF Navn: " + pdfName);
+            content2.endText();
+            
             content2.beginText();
             content2.setFont(fontHelB, 16);
-            content2.moveTextPositionByAmount(50, 690);
+            content2.moveTextPositionByAmount(50, 660);
             content2.drawString("Gennemgang af bygningen udvendig ");
             content2.endText();
             
