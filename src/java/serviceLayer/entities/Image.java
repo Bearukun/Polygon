@@ -8,6 +8,11 @@ public class Image {
     private String img_name;
     private Blob img_file;
 
+    public Image() {
+    }
+    
+    
+
     public Image(int image_id, int issue_id, String img_name, Blob img_file) {
         this.image_id = image_id;
         this.issue_id = issue_id;
