@@ -2,12 +2,15 @@ package dataAccessLayer;
 
 import dataAccessLayer.interfaces.DBFacadeInterface;
 import dataAccessLayer.mappers.BuildingMapper;
+import dataAccessLayer.mappers.DataMapper;
 import dataAccessLayer.mappers.UserMapper;
 import dataAccessLayer.mappers.interfaces.BuildingMapperInterface;
+import dataAccessLayer.mappers.interfaces.DataMapperInterface;
 import dataAccessLayer.mappers.interfaces.UserMapperInterface;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Image;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
@@ -20,6 +23,7 @@ public class DBFacade implements DBFacadeInterface {
     
     UserMapperInterface umi = new UserMapper();
     BuildingMapperInterface bmi = new BuildingMapper();
+    DataMapperInterface dmi = new DataMapper();
 
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
@@ -110,5 +114,10 @@ public class DBFacade implements DBFacadeInterface {
     @Override
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
         bmi.toggleHealthcheck(building_id, healthcheck_pending);
+    }
+    
+    @Override
+    public Image getImage(int image_id) throws CustomException {
+        return dmi.getImage(image_id);
     }
 }

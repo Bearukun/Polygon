@@ -3,6 +3,7 @@ package dataAccessLayer.interfaces;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Image;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
@@ -39,4 +40,5 @@ public interface DBFacadeInterface {
     public void deleteRoom(int room_id) throws CustomException;
     
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException;
+    public Image getImage(int image_id) throws CustomException;
 }
