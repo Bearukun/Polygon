@@ -52,12 +52,14 @@
             <input type="text" name="buildingsowner" value="" />
             <br><br>
             
+            <!--Manually set the img folder-->
              <p>Billeder folder</p>                      
              <p>Mac: /Users/Ceo/NetBeansProjects/Polygon/web/img/ </p>    
              <p>Windows: E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\ </p>
              <input type="text" name="folderPath" value="/Users/Ceo/NetBeansProjects/Polygon/web/img/" />
             <br><br>
             
+            <!--Manually set the save folder-->
             <p>Save Folder</p>                      
              <p>Mac: /Users/Ceo/NetBeansProjects/Polygon/pdf/ </p>    
              <p>Windows: E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\ </p>
