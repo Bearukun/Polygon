@@ -44,8 +44,7 @@ public class PDFCreator {
         page1Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
-        page2Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
-                buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
+        page2Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
 
         page3Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
@@ -205,8 +204,7 @@ public class PDFCreator {
 
     }
 
-    public void page2Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+    public void page2Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
         //Creates a new page
         PDPage page2 = new PDPage();
@@ -230,6 +228,7 @@ public class PDFCreator {
 
             singleTextLine(content2, "Tag", 12, 50, 625);
             insertJPGImage(content2, imgFolderPath, "underLineJPG.jpg", 50, 620, 23, 2);
+            singleTextLine(content2,"There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of." , 6, 50, 600);
 
             singleTextLine(content2, "Bemærkning", 8, 325, 625);
 
@@ -237,32 +236,11 @@ public class PDFCreator {
 
             singleTextLine(content2, "Billede", 8, 500, 625);
 
-            //Bemærkning
-            //if(notesCheckBox == 0){
-            // noNotesCheckBoxImg(imgFolderPath, content2, 375, 624, 7, 7);
-            //} else {
-            //  notesCheckBoxImg(imgFolderPath, content2, 475, 624, 7, 7);
-            //}
-            //
-            //Ingen Bemærkning
-            //if(notesCheckBox == 0){
-            // noNotesCheckBoxImg(imgFolderPath, content2, 375, 624, 7, 7);
-            //} else {
-            //  notesCheckBoxImg(imgFolderPath, content2, 475, 624, 7, 7);
-            //}
-            //
-            // Billede
-            //if(notesCheckBox == 0){
-            // noNotesCheckBoxImg(imgFolderPath, content2, 375, 624, 7, 7);
-            //} else {
-            //  notesCheckBoxImg(imgFolderPath, content2, 475, 624, 7, 7);
-            //}
-            
-            noNotesCheckBoxImg(imgFolderPath, content2, 375, 624, 7, 7);
-
-            notesCheckBoxImg(imgFolderPath, content2, 475, 624, 7, 7);
-
-            notesCheckBoxImg(imgFolderPath, content2, 528, 624, 7, 7);
+//            noNotesCheckBoxImg(imgFolderPath, content2, 375, 624, 7, 7);
+//
+//            notesCheckBoxImg(imgFolderPath, content2, 475, 624, 7, 7);
+//
+//            notesCheckBoxImg(imgFolderPath, content2, 528, 624, 7, 7);
 
             singleTextLine(content2, "Ydervægge", 12, 50, 310);
 
@@ -274,11 +252,13 @@ public class PDFCreator {
 
             insertJPGImage(content2, imgFolderPath, "underLineJPG.jpg", 50, 305, 70, 2);
 
-            noNotesCheckBoxImg(imgFolderPath, content2, 375, 310, 7, 7);
+//            noNotesCheckBoxImg(imgFolderPath, content2, 375, 310, 7, 7);
+//
+//            notesCheckBoxImg(imgFolderPath, content2, 475, 310, 7, 7);
+//
+//            notesCheckBoxImg(imgFolderPath, content2, 528, 310, 7, 7);
 
-            notesCheckBoxImg(imgFolderPath, content2, 475, 310, 7, 7);
-
-            notesCheckBoxImg(imgFolderPath, content2, 528, 310, 7, 7);
+            checkBoxes(content2, imgFolderPath, 1, 0, 1, 0, 1, 0);
 
             //Closes the content creation for Page 2           
             content2.close();
@@ -488,6 +468,69 @@ public class PDFCreator {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+    
+    public void checkBoxes(PDPageContentStream content, String imgFolderPath, int gotTagNotes,
+            int gotNoTagNotes, int gotTagPicture, int gotWallNotes,int gotNoWallNotes, int gotWallPicture){
+        
+        // 0 = false/no
+        // 1 = true/yes
+        
+        //Got note? Yes/no
+        //Got picture? yes/No
+        
+         //Ydervægge
+        //Bemærkning
+            if(gotTagNotes == 0){
+             noNotesCheckBoxImg(imgFolderPath, content, 375, 624, 7, 7);
+             
+            } else if (gotTagNotes == 1 ){
+              notesCheckBoxImg(imgFolderPath, content, 375, 624, 7, 7);
+            }
+            
+          //  Ingen Bemærkning
+            if(gotNoTagNotes == 0 ){
+             noNotesCheckBoxImg(imgFolderPath, content, 475, 624, 7, 7);
+            } else if (gotNoTagNotes == 1 ) {
+              notesCheckBoxImg(imgFolderPath, content, 475, 624, 7, 7);
+            }
+            
+            // Billede
+            if(gotTagPicture == 0){
+             noNotesCheckBoxImg(imgFolderPath, content, 528, 624, 7, 7);
+            } else if(gotTagPicture == 1 ) {
+              notesCheckBoxImg(imgFolderPath, content, 528, 624, 7, 7);
+                //insertJPGImage(content, imgFolderPath, placement, gotTagNotes, gotTagNotes, picture, notes);
+            }
+        
+        
+        
+        
+        //Ydervægge
+        //Bemærkning
+            if(gotWallNotes == 0){
+             noNotesCheckBoxImg(imgFolderPath, content, 375, 310, 7, 7);
+             
+            } else if (gotWallNotes == 1){
+              notesCheckBoxImg(imgFolderPath, content, 375, 310, 7, 7);
+            }
+            
+          //  Ingen Bemærkning
+            if(gotNoWallNotes == 0){
+             noNotesCheckBoxImg(imgFolderPath, content, 475, 310, 7, 7);
+            } else if (gotNoWallNotes == 1) {
+              notesCheckBoxImg(imgFolderPath, content, 475, 310, 7, 7);
+            }
+            
+            // Billede
+            if(gotWallPicture == 0 ){
+             noNotesCheckBoxImg(imgFolderPath, content, 528, 310, 7, 7);
+            } else if(gotWallPicture == 1 ) {
+              notesCheckBoxImg(imgFolderPath, content, 528, 310, 7, 7);
+              //insertJPGImage(content, imgFolderPath, placement, gotTagNotes, gotTagNotes, picture, notes);
+            }
+        
+        
     }
 
     public void testBlank(String pdfName) throws CustomException {
