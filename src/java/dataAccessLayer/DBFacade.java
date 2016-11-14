@@ -106,4 +106,9 @@ public class DBFacade implements DBFacadeInterface {
     public void deleteRoom(int room_id) throws CustomException {
         bmi.deleteRoom(room_id);
     }
+
+    @Override
+    public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
+        bmi.toggleHealthcheck(building_id, healthcheck_pending);
+    }
 }

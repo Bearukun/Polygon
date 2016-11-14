@@ -63,4 +63,9 @@ public class BuildingController implements BuildingControllerInterface{
     public void deleteRoom(int room_id) throws CustomException {
         dbfacade.deleteRoom(room_id);    
     }
+
+    @Override
+    public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
+        dbfacade.toggleHealthcheck(building_id, healthcheck_pending);
+    }
 }

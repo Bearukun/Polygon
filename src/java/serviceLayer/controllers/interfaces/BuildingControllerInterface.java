@@ -31,4 +31,6 @@ public interface BuildingControllerInterface {
     public void createRoom(String name, String description, int sqm, int area_id) throws CustomException;
     
     public void deleteRoom(int room_id) throws CustomException;
+    
+    public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException;
 }
