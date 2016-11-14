@@ -24,8 +24,8 @@ import serviceLayer.exceptions.CustomException;
 /**
  * Servlet used to check what type of user is logging in.
  */
-@WebServlet(name = "Front", urlPatterns = {"/Front"})
-public class Front extends HttpServlet {
+@WebServlet(name = "FrontC", urlPatterns = {"/FrontC"})
+public class FrontCustomer extends HttpServlet {
 
     private ArrayList<Building> userBuildings = new ArrayList();
     private ArrayList<User> userList = new ArrayList();
@@ -36,7 +36,7 @@ public class Front extends HttpServlet {
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
-
+    private int user_id;
     PDFCreator pdfwt = new PDFCreator();
 
     /**
@@ -50,157 +50,56 @@ public class Front extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        
+        
+        
         String errMsg = null;
         String origin = request.getParameter("origin");
 
+        
+        
         try {
 
+            //If we are coming from the Front servlet
+            if(request.getSession().getAttribute("sourcePage").toString().equals("Front")){
+
+                //Save the logged in user's id
+                user_id = (Integer) request.getSession().getAttribute("user_id");
+
+                refreshBuilding(user_id);
+                request.getSession().setAttribute("userBuildings", userBuildings);
+                //response.sendRedirect("viewBuilding.jsp");
+                response.sendRedirect("user.jsp");
+            }
+        
+
+            
             switch (origin) {
-
-                case "login":
-
-                    if (request.getSession().getAttribute("user") == null) {
-
-                        String email = request.getParameter("email");
-                        String password = request.getParameter("password");
-
-                        try {
-
-                            user = usrCtrl.login(email, password);
-
-                            //Retrieve of the users data, to be used in the editProfile.jsp
-                            String uEmail = user.getEmail();
-                            String uPassword = user.getPassword();
-                            String uName = user.getName();
-                            int uPhone = user.getPhone();
-                            String uCompany = user.getCompany();
-                            String uAddress = user.getAddress();
-                            int uPostcode = user.getPostcode();
-                            String uCity = user.getCity();
-                            int uUser_id = user.getUser_id();
-
-                            //Takes the retrieved user data/information and sends it 
-                            //to the editProfile.jsp page.
-                            request.getSession().setAttribute("uEmail", uEmail);
-                            request.getSession().setAttribute("uPassword", uPassword);
-                            request.getSession().setAttribute("uName", uName);
-                            request.getSession().setAttribute("uPhone", uPhone);
-                            request.getSession().setAttribute("uCompany", uCompany);
-                            request.getSession().setAttribute("uAddress", uAddress);
-                            request.getSession().setAttribute("uPostcode", uPostcode);
-                            request.getSession().setAttribute("uCity", uCity);
-                            request.getSession().setAttribute("uUser_id", uUser_id);
-
-                            if (user != null) {
-
-                                request.getSession().setAttribute("email", user.getEmail().toString());
-
-                                //Translate user type:
-                                if (user.getType().toString().equals("CUSTOMER")) {
-
-                                    request.getSession().setAttribute("type", "Kunde");
-
-                                } else if (user.getType().toString().equals("TECHNICIAN")) {
-
-                                    request.getSession().setAttribute("type", "Tekniker");
-
-                                } else {
-
-                                    request.getSession().setAttribute("type", "Administration");
-                                }
-
-                                if (user.getType().equals(User.type.ADMIN)) {
-                                    refreshUsers();
-                                    refreshAllBuildings();
-                                    request.getSession().setAttribute("userList", userList);
-                                    request.getSession().setAttribute("allBuildings", allBuildings);
-                                    response.sendRedirect("admin.jsp");
-                                    break;
-
-                                } else if (user.getType().equals(User.type.TECHNICIAN)) {
-
-                                    refreshUsers();
-                                    refreshAllBuildings();
-                                    request.getSession().setAttribute("userList", userList);
-                                    request.getSession().setAttribute("allBuildings", allBuildings);
-
-                                    // refreshBuilding(building.getAssigned_tech_id());
-                                    //request.getSession().setAttribute("userBuildings", userBuildings);
-                                    response.sendRedirect("technician.jsp");
-                                    break;
-
-                                } else {
-
-                                    refreshUsers();
-                                    //System.out.println("after ref: " + userList.size());
-                                    //Refreshes and populates the arrayList with buildings for the user.
-                                    refreshBuilding(user.getUser_id());
-
-                                    //Setup user's buildings
-                                    //request.getSession().setAttribute("userBuildings", userBuildings);
-                                    
-                                    //Save the logged in user's id
-                                    request.getSession().setAttribute("user_id", user.getUser_id());
-                                    
-                                    //Save where (which page) we are coming from
-                                    request.getSession().setAttribute("sourcePage", "Front");
-                                    
-                                    //Redirect to Customer servlet
-                                    response.sendRedirect("FrontC");
-
-                                    break;
-
-                                }
-
-                            }
-
-                            //If something goes wrong, we need a way to show it.
-                        } catch (CustomException e) {
-
-                            response.sendRedirect("#" + e.getMessage());
-
-                        }
-
-                    } else {
-
-                        response.sendRedirect("index.jsp?wrongLogin");
-
-                    }
-
-                    break;
-
-                //Logout of the website
-                case "logout":
-
-                    request.getSession().invalidate();
-                    response.sendRedirect("index.jsp#");
-
-                    break;
-
-                case "userOverview":
+            
+                //default:
                     
-                    request.getSession().setAttribute("source", "#");
-                    
-                    //Retrieve the building being edited
-                    String buildingID = request.getParameter("buildingID");
-                    //request.getSession().setAttribute("buildingBeingEdited", buildingID);
-                    
-                    //Fetch areas and rooms for selected building
-                    refreshAreas(Integer.parseInt(buildingID));
-                    refreshRooms(Integer.parseInt(buildingID));
+                    //break;
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-                    //Save areas and rooms in Session
-                    request.getSession().setAttribute("buildingAreas", buildingAreas);
-                    request.getSession().setAttribute("buildingRooms", buildingRooms);
-
-                    //redirect to viewBuilding into the specific building being edited
-                    response.sendRedirect("viewBuilding.jsp?value=" + buildingID + "");
-
-                    break;
-                /*
                 case "viewBuilding":
 
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
@@ -224,7 +123,7 @@ public class Front extends HttpServlet {
                         bldgCtrl.toggleHealthcheck(build.getBuilding_id(), healthcheckValueToWrite);
                         
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user.getUser_id());
+                        refreshBuilding(user_id);
                         
                         //Fetch areas and rooms for selected building
                         //refreshAreas(build.getBuilding_id());
@@ -375,13 +274,13 @@ public class Front extends HttpServlet {
                         bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user.getUser_id());
-                        request.getSession().setAttribute("userBuilding", userBuildings);
+                        //request.getSession().setAttribute("userBuilding", userBuildings);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } 
                     
                     break;
-                */
+                
                 case "editProfile":
 
                     System.out.println("Entered edit profile");

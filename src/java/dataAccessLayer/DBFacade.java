@@ -112,9 +112,12 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
+    public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
+        bmi.toggleHealthcheck(building_id, healthcheck_pending);
+    }
+    
+    @Override
     public Image getImage(int image_id) throws CustomException {
-
         return dmi.getImage(image_id);
-        
     }
 }
