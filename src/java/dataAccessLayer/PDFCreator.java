@@ -42,7 +42,7 @@ public class PDFCreator {
         //System.out.println(dateFormat.format(cal.getTime()));
 
         //Initiates a PDDocument
-        PDDocument doc = new PDDocument();
+        PDDocument doc = null;
         
         //Initiates new PDPAge
         PDPage page1 = new PDPage();
@@ -51,6 +51,8 @@ public class PDFCreator {
 
         //String test = "Would you please work? I'm asking nicely....";
         try {
+            
+            doc = new PDDocument();
             
 
             //Adds pages to the PDF document
@@ -66,6 +68,8 @@ public class PDFCreator {
             //content.moveTextPositionByAmount(tx, ty);
             //tx = Width; (Max 450-500!)
             //ty = Height (max 800!)
+            
+            
             
             //Opens ContentStream for writting to the PDF document
             PDPageContentStream content = new PDPageContentStream(doc, page1);
@@ -232,7 +236,6 @@ public class PDFCreator {
             content.drawXObject(bsBArea, 140, 142, 120, 2);
 
             //Writes and places the Hvad bruges bygningen til / Hvad har bygningen været brugt til?  " + buildingPurpose);
-            content.endText();
             content.beginText();
             content.setFont(fontHelB, 10);
             content.moveTextPositionByAmount(50, 120);
@@ -322,14 +325,96 @@ public class PDFCreator {
             //Closes the content creation for Page 1
             content.close();
 
+         
             //Open the content creation for Page 2
             PDPageContentStream content2 = new PDPageContentStream(doc, page2);
 
             content2.beginText();
-            content2.setFont(fontHelB, 12);
-            content2.moveTextPositionByAmount(50, 200);
+            content2.setFont(fontHelB, 16);
+            content2.moveTextPositionByAmount(50, 690);
             content2.drawString("Gennemgang af bygningen udvendig ");
             content2.endText();
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 12);
+            content2.moveTextPositionByAmount(50, 650);
+            content2.drawString("Tag");
+            content2.endText();
+            bsBPurpose = PDImageXObject.createFromFile(imgFolderPath+"bstring6.jpg", doc);
+            content2.drawXObject(bsBPurpose, 50, 645, 23, 2);
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 8);
+            content2.moveTextPositionByAmount(325, 650);
+            content2.drawString("Bemærkning");
+            content2.endText();
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 8);
+            content2.moveTextPositionByAmount(400, 650);
+            content2.drawString("Ingen Bemærkning");
+            content2.endText();
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 8);
+            content2.moveTextPositionByAmount(500, 650);
+            content2.drawString("Billede");
+            content2.endText();
+            
+            
+         
+            
+            PDImageXObject noNotes = null;
+            noNotes = PDImageXObject.createFromFile(imgFolderPath + "nonotes.jpg", doc);
+            content2.drawXObject(noNotes, 375, 649, 7, 7);
+            
+            PDImageXObject notes = null;
+            notes = PDImageXObject.createFromFile(imgFolderPath + "notes.jpg", doc);
+            content2.drawXObject(notes, 475, 649, 7, 7);
+            
+            notes = PDImageXObject.createFromFile(imgFolderPath + "notes.jpg", doc);
+            content2.drawXObject(notes, 528, 649, 7, 7);
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 12);
+            content2.moveTextPositionByAmount(50, 325);
+            content2.drawString("Ydervægge");
+            content2.endText();
+            
+            
+             content2.beginText();
+            content2.setFont(fontHelB, 8);
+            content2.moveTextPositionByAmount(325, 325);
+            content2.drawString("Bemærkning");
+            content2.endText();
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 8);
+            content2.moveTextPositionByAmount(400, 325);
+            content2.drawString("Ingen Bemærkning");
+            content2.endText();
+            
+            content2.beginText();
+            content2.setFont(fontHelB, 8);
+            content2.moveTextPositionByAmount(500, 325);
+            content2.drawString("Billede");
+            content2.endText();
+            
+            
+            
+            bsBPurpose = PDImageXObject.createFromFile(imgFolderPath+"bstring6.jpg", doc);
+            content2.drawXObject(bsBPurpose, 50, 320, 70, 2);
+            
+            
+            noNotes = PDImageXObject.createFromFile(imgFolderPath + "nonotes.jpg", doc);
+            content2.drawXObject(noNotes, 375, 325, 7, 7);
+            
+            
+            notes = PDImageXObject.createFromFile(imgFolderPath + "notes.jpg", doc);
+            content2.drawXObject(notes, 475, 325, 7, 7);
+            
+            notes = PDImageXObject.createFromFile(imgFolderPath + "notes.jpg", doc);
+            content2.drawXObject(notes, 528, 325, 7, 7);
 
              //Writes and places the Page number 2
             content2.beginText();
@@ -341,6 +426,7 @@ public class PDFCreator {
             //Closes the content creation for Page 2           
             content2.close();
 
+          
             //Open the content creation for Page 3
             PDPageContentStream content3 = new PDPageContentStream(doc, page3);
             
@@ -350,65 +436,62 @@ public class PDFCreator {
 //            tj = PDImageXObject.createFromFile("E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\tj.jpg", doc);
 //            content.drawXObject(tj, 355, 117, 25, 25);
             
-            // Adobe Acrobat uses Helvetica as a default font and 
+             //Adobe Acrobat uses Helvetica as a default font and 
         // stores that under the name '/Helv' in the resources dictionary
-        PDFont fontP3 = PDType1Font.HELVETICA;
-        PDResources resourcesP3 = new PDResources();
-        resourcesP3.put(COSName.getPDFName("Helv"), fontP3);
-        
+        PDFont font = PDType1Font.HELVETICA;
+        PDResources resources = new PDResources();
+        resources.put(COSName.getPDFName("Helv"), font);
         
         // Add a new AcroForm and add that to the document
-        PDAcroForm acroFormP3 = new PDAcroForm(doc);
-        PDAcroForm acro = new PDAcroForm(doc);
-        doc.getDocumentCatalog().setAcroForm(acroFormP3);
+        PDAcroForm acroForm = new PDAcroForm(doc);
+        doc.getDocumentCatalog().setAcroForm(acroForm);
         
         // Add and set the resources and default appearance at the form level
-        acroFormP3.setDefaultResources(resourcesP3);
+        acroForm.setDefaultResources(resources);
         
         // Acrobat sets the font size on the form level to be
         // auto sized as default. This is done by setting the font size to '0'
-        String defaultAppearanceStringP3 = "/Helv 0 Tf 0 g";
-        acroFormP3.setDefaultAppearance(defaultAppearanceStringP3);
+        String defaultAppearanceString = "/Helv 0 Tf 0 g";
+        acroForm.setDefaultAppearance(defaultAppearanceString);
         
         // Add a form field to the form.
-        PDTextField textBoxP3 = new PDTextField(acroFormP3);
-        
-        textBoxP3.setPartialName("SampleField");
+        PDTextField textBox = new PDTextField(acroForm);
+        textBox.setPartialName("SampleField");
         // Acrobat sets the font size to 12 as default
         // This is done by setting the font size to '12' on the
         // field level. 
         // The text color is set to blue in this example.
         // To use black, replace "0 0 1 rg" with "0 0 0 rg" or "0 g".
-        defaultAppearanceStringP3 = "/Helv 12 Tf 255 0 0 rg";
-        textBoxP3.setDefaultAppearance(defaultAppearanceStringP3);
+        defaultAppearanceString = "/Helv 12 Tf 255 0 0 rg";
+        textBox.setDefaultAppearance(defaultAppearanceString);
         
         // add the field to the acroform
-        acroFormP3.getFields().add(textBoxP3);
+        acroForm.getFields().add(textBox);
         
         // Specify the annotation associated with the field
-        PDAnnotationWidget widgetP3 = textBoxP3.getWidgets().get(0);
-        PDRectangle rectP3 = new PDRectangle(50, 350, 50, 50);
-        
-        widgetP3.setRectangle(rectP3);
-        widgetP3.setPage(page3);
+        PDAnnotationWidget widget = textBox.getWidgets().get(0);
+        PDRectangle rect = new PDRectangle(50, 350, 200, 50);
+        widget.setRectangle(rect);
+        widget.setPage(page3);
 
         // set green border and yellow background
         // if you prefer defaults, just delete this code block
-        PDAppearanceCharacteristicsDictionary fieldAppearanceP3 = new PDAppearanceCharacteristicsDictionary(new COSDictionary());
-        fieldAppearanceP3.setBorderColour(new PDColor(new float[]{0,0,0}, PDDeviceRGB.INSTANCE));
-        fieldAppearanceP3.setBackground(new PDColor(new float[]{255,255,255}, PDDeviceRGB.INSTANCE));
-        widgetP3.setAppearanceCharacteristics(fieldAppearanceP3);
+        PDAppearanceCharacteristicsDictionary fieldAppearance
+                = new PDAppearanceCharacteristicsDictionary(new COSDictionary());
+        fieldAppearance.setBorderColour(new PDColor(new float[]{0,255,0}, PDDeviceRGB.INSTANCE));
+        fieldAppearance.setBackground(new PDColor(new float[]{255,0,0}, PDDeviceRGB.INSTANCE));
+        widget.setAppearanceCharacteristics(fieldAppearance);
 
         // make sure the annotation is visible on screen and paper
-        widgetP3.setPrinted(true);
+        widget.setPrinted(true);
         
         // Add the annotation to the page
-        page3.getAnnotations().add(widgetP3);
+        page3.getAnnotations().add(widget);
         
         // set the field value
-        //textBoxP3.setValue("" + tj);
+        textBox.setValue("Sample field");
         //textBox.drawLine(10, 10, 10, 10);
-            
+        
          //Writes and places the Page number 3
           content3.beginText();
             content3.setFont(fontHelB, 8);
@@ -425,6 +508,7 @@ public class PDFCreator {
             //MAC CEO 
             //doc.save("/Users/Ceo/NetBeansProjects/Polygon/" + pdfName + ".pdf");
             //Saves the document at the path "savePath" and with the pdfName
+           
             doc.save(savePath + pdfName + ".pdf");
             
             //Closes the creation the entire document
@@ -499,8 +583,62 @@ public class PDFCreator {
             
             PDPageContentStream conten = new PDPageContentStream(doc, page);
             
-            PDFont font = PDType1Font.HELVETICA_BOLD;
-            
+            // Adobe Acrobat uses Helvetica as a default font and 
+        // stores that under the name '/Helv' in the resources dictionary
+        PDFont font = PDType1Font.HELVETICA;
+        PDResources resources = new PDResources();
+        resources.put(COSName.getPDFName("Helv"), font);
+        
+        // Add a new AcroForm and add that to the document
+        PDAcroForm acroForm = new PDAcroForm(doc);
+        doc.getDocumentCatalog().setAcroForm(acroForm);
+        
+        // Add and set the resources and default appearance at the form level
+        acroForm.setDefaultResources(resources);
+        
+        // Acrobat sets the font size on the form level to be
+        // auto sized as default. This is done by setting the font size to '0'
+        String defaultAppearanceString = "/Helv 0 Tf 0 g";
+        acroForm.setDefaultAppearance(defaultAppearanceString);
+        
+        // Add a form field to the form.
+        PDTextField textBox = new PDTextField(acroForm);
+        textBox.setPartialName("SampleField");
+        // Acrobat sets the font size to 12 as default
+        // This is done by setting the font size to '12' on the
+        // field level. 
+        // The text color is set to blue in this example.
+        // To use black, replace "0 0 1 rg" with "0 0 0 rg" or "0 g".
+        defaultAppearanceString = "/Helv 12 Tf 0 0 1 rg";
+        textBox.setDefaultAppearance(defaultAppearanceString);
+        
+        // add the field to the acroform
+        acroForm.getFields().add(textBox);
+        
+        // Specify the annotation associated with the field
+        PDAnnotationWidget widget = textBox.getWidgets().get(0);
+        PDRectangle rect = new PDRectangle(50, 300, 200, 50);
+        widget.setRectangle(rect);
+        widget.setPage(page);
+
+        // set green border and yellow background
+        // if you prefer defaults, just delete this code block
+        PDAppearanceCharacteristicsDictionary fieldAppearance
+                = new PDAppearanceCharacteristicsDictionary(new COSDictionary());
+        fieldAppearance.setBorderColour(new PDColor(new float[]{255,0,0}, PDDeviceRGB.INSTANCE));
+        fieldAppearance.setBackground(new PDColor(new float[]{1,1,100}, PDDeviceRGB.INSTANCE));
+        widget.setAppearanceCharacteristics(fieldAppearance);
+
+        // make sure the annotation is visible on screen and paper
+        widget.setPrinted(true);
+        
+        // Add the annotation to the page
+        page.getAnnotations().add(widget);
+        
+        // set the field value
+        textBox.setValue("Sample field");
+        
+
             conten.beginText();
             conten.setFont( font, 12 );
            conten.moveTextPositionByAmount( 100, 700 );
@@ -526,7 +664,7 @@ public class PDFCreator {
 
 //        try {
 //            
-//                // Adobe Acrobat uses Helvetica as a default font and 
+//                //// Adobe Acrobat uses Helvetica as a default font and 
 //        // stores that under the name '/Helv' in the resources dictionary
 //        PDFont font = PDType1Font.HELVETICA;
 //        PDResources resources = new PDResources();
