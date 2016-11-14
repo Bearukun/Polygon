@@ -529,7 +529,7 @@ public class FrontCustomer extends HttpServlet {
 
                     System.out.println(picturePath);
 
-                    pdfwt.pdfWithText(pdfName, bName, bAddress,
+                    pdfwt.createPDF(pdfName, bName, bAddress,
                             Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
                             Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
 
