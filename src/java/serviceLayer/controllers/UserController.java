@@ -47,8 +47,6 @@ public class UserController implements UserControllerInterface {
     public User getUser(String email) throws CustomException {
         return dbfacade.getUser(email);
     }
-    
-    
 
     @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
@@ -56,14 +54,13 @@ public class UserController implements UserControllerInterface {
         System.out.println("UserController");
         //If input fields aren't empty
         if (!email.isEmpty() && !password.isEmpty() && email != null && password != null) {
-            
+
             //Then create user with 'email', 'password' and the other fields.
             System.out.println("if down to dbfacade");
             dbfacade.createUser(email, password, name, phone, company, address, postcode, city);
 
         } else {
 
-            
             //Input fields must be empty, throw error. 
             throw new CustomException("Be sure to fill out both fields!");
 
@@ -78,8 +75,8 @@ public class UserController implements UserControllerInterface {
 
     @Override
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
-    dbfacade.editUser(selectedUser, email, password, name, phone, company, address, postcode, city);    
-    
+        dbfacade.editUser(selectedUser, email, password, name, phone, company, address, postcode, city);
+
     }
 
 }
