@@ -299,7 +299,9 @@ public class PDFCreator {
             singleTextLineWithUserInput(content3, "Lokale", "Ceo's Kontor", 10, 50, 670);
 
             //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!! 
-            checkIfPage3NeedsPopulation(true, false, content3, imgFolderPath);
+           // checkIfPage3NeedsPopulation(false, true, false, content3, imgFolderPath);
+            checkIfPage3NeedsPopulation(true, false, true, content3, imgFolderPath);
+            //if localNotes is true, set noLocalNotes to false
 
             //Closes the content creation for Page 3
             content3.close();
@@ -408,10 +410,8 @@ public class PDFCreator {
         pdfDocName(content, pdfName);
         pageNumber(content, pageNumber);
         insertJPGImage(content, imgFolderPath, "polygon.jpg", 50, 690, 150, 30);
-       
-    }
 
-    
+    }
 
     public void pdfDocName(PDPageContentStream content, String pdfName) {
         try {
@@ -526,18 +526,18 @@ public class PDFCreator {
     }
 
     public void checkBoxesPage2(PDPageContentStream content, String imgFolderPath,
-            boolean tagNotes, boolean noTagNotes, boolean tagPicture,
+            boolean roofNotes, boolean noRoofNotes, boolean roofPicture,
             boolean wallNotes, boolean noWallNotes, boolean wallPicture) {
 
         //Ydervægge
         //Bemærkning
-        checkBoxImg(tagNotes, imgFolderPath, content, 375, 624, 7, 7);
+        checkBoxImg(roofNotes, imgFolderPath, content, 375, 624, 7, 7);
 
         //  Ingen Bemærkning
-        checkBoxImg(noTagNotes, imgFolderPath, content, 475, 624, 7, 7);
+        checkBoxImg(noRoofNotes, imgFolderPath, content, 475, 624, 7, 7);
         // Billede
 
-        checkBoxImg(tagPicture, imgFolderPath, content, 528, 624, 7, 7);
+        checkBoxImg(roofPicture, imgFolderPath, content, 528, 624, 7, 7);
 
         //Ydervægge
         //Bemærkning
@@ -551,20 +551,35 @@ public class PDFCreator {
     }
 
     //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!!
-    public void checkIfPage3NeedsPopulation(boolean localNotes, boolean noLocalNotes, PDPageContentStream content, String imgFolderPath) {
+    public void checkIfPage3NeedsPopulation(boolean localNotes, boolean noLocalNotes, boolean moistScan,
+            PDPageContentStream content, String imgFolderPath) {
 
-        //NEEDS DYNAMIC USER INPUT!!! 
-        //Bemærkning
-        singleTextLine(content, "Bemærkninger", 10, 340, 670);
-        checkBoxImg(localNotes, imgFolderPath, content, 413, 670, 7, 7);
+        if (localNotes == true && noLocalNotes == false) {
 
-        //Ingen Bemærkning
-        singleTextLine(content, "Ingen bemærkninger", 10, 430, 670);
-        checkBoxImg(noLocalNotes, imgFolderPath, content, 531, 670, 7, 7);
+            //NEEDS DYNAMIC USER INPUT!!! 
+            //Bemærkning
+            singleTextLine(content, "Bemærkninger", 10, 340, 670);
+            checkBoxImg(localNotes, imgFolderPath, content, 413, 670, 7, 7);
+
+            //Ingen Bemærkning
+            singleTextLine(content, "Ingen bemærkninger", 10, 430, 670);
+            checkBoxImg(noLocalNotes, imgFolderPath, content, 531, 670, 7, 7);
+
+            checkBoxesPage3MoistScan(moistScan, content, "31/12-2016", "Ceo Office", imgFolderPath);
+        } else {
+            
+            singleTextLine(content, "Bemærkninger", 10, 340, 670);
+            checkBoxImg(localNotes, imgFolderPath, content, 413, 670, 7, 7);
+
+            //Ingen Bemærkning
+            singleTextLine(content, "Ingen bemærkninger", 10, 430, 670);
+            checkBoxImg(noLocalNotes, imgFolderPath, content, 531, 670, 7, 7);
+            
+             singleTextLine(content, "No further information", 20, 250, 250);
+            
+        }
 
         //NEEDS DYNAMIC USER INPUT!!! String moistScanned, String moistMeasurePoint
-        checkBoxesPage3MoistScan(true, content, "31/12-2016", "Ceo Office", imgFolderPath);
-
         //NEEDS DYNAMIC USER INPUT!!!
         //NEEDS DYNAMIC USER INPUT!!!
     }
@@ -581,12 +596,12 @@ public class PDFCreator {
         //Bemærkning?
         singleTextLine(content, "Er der fortaget fugtscanning?", 10, 50, 100);
 
-        if(moistScan == false){
+        if (moistScan == false) {
             singleTextLine(content, "Ja", 10, 59, 90);
             checkBoxImg(moistScan, imgFolderPath, content, 50, 90, 7, 7);
             singleTextLine(content, "Nej", 10, 59, 80);
             checkBoxImg(true, imgFolderPath, content, 50, 80, 7, 7);
-            
+
         } else if (moistScan == true) {
             singleTextLine(content, "Ja", 10, 59, 90);
             checkBoxImg(moistScan, imgFolderPath, content, 50, 90, 7, 7);
