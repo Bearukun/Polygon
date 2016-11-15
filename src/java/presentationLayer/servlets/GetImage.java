@@ -32,6 +32,7 @@ public class GetImage extends HttpServlet {
             
 
             if (photo != null) {
+
                 response.setContentType("image/jpg");
                 InputStream in = photo.getBinaryStream();
                 int length = (int) photo.length();
@@ -47,9 +48,11 @@ public class GetImage extends HttpServlet {
                 out.flush();
                 
             } else {
+                
                 response.setContentType("text/html");
                 out.println("No data to display");
                 return;
+            
             }
 
         } catch (Exception e) {

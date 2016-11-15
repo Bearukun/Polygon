@@ -117,7 +117,7 @@ public class DBFacade implements DBFacadeInterface {
     }
     
     @Override
-    public Image getImage(int image_id) throws CustomException {
+    public Image getImage(int image_id) throws Exception {
         return dmi.getImage(image_id);
     }
 }

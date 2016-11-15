@@ -22,7 +22,7 @@ import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
 /**
- * Servlet used to check what type of user is logging in.
+ * Servlet that handles the customer. 
  */
 @WebServlet(name = "FrontC", urlPatterns = {"/FrontC"})
 public class FrontCustomer extends HttpServlet {
