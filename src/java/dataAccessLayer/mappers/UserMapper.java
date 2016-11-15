@@ -28,7 +28,7 @@ public class UserMapper implements UserMapperInterface {
             //Get connection object.
             con = DBConnection.getConnection();
             //Creating string used for the prepare statement.
-            String sql = "SELECT * FROM user WHERE email = ?";
+            String sql = "SELECT * FROM user WHERE email = ? SET NAMES utf8mb4";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.

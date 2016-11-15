@@ -45,27 +45,9 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li class="active">
-                                    <a href="user.jsp?refresh">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                </li>
-                                <li>
-                                    <a href="addBuilding.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        Tilføj bygning </a>
-                                </li>
-
-                                <li class="active">
-                                    <a href="viewBuilding.jsp" target="self">
-                                        <i class="glyphicon glyphicon-user"></i>
-                                        Bruger indstillinger
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% if(request.getSession().getAttribute("source").toString().equals("user")){%>
+                            <%@ include file="userSidebar.jsp"%>
+                        <%}%>
                         <!-- END MENU -->
                     </div>
                 </div>
@@ -99,16 +81,11 @@
                         <p>By</p>  
                         <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>" />
                         <br><br>
-
-                        <!--<input type="hidden" name="selectedUser" value="<%=request.getSession().getAttribute("uUser_id")%>"-->
                         <input type="hidden" name="origin" value="editProfile" />
                         <br><br>
-                        <input class="btn btn-primary" type="submit" value="[Gem Ændringer]" name="editProfile" />
+                        <input class="btn btn-primary" type="submit" value="Gem Ændringer" />
                         <br><br>
                     </form>
-                  
-
-
                 </div>
             </div>
         </div>
