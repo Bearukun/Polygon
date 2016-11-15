@@ -53,52 +53,45 @@ public class FrontCustomer extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         
-        
-        
-        String errMsg = null;
-        String origin = request.getParameter("origin");
-
-        
-        
         try {
 
-            //If we are coming from the Front servlet
+            //If we are coming from the Front servlet, i.e. we have just logged in
             if(request.getSession().getAttribute("sourcePage").toString().equals("Front")){
-
+                request.getSession().setAttribute("sourcePage","Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
-
                 refreshBuilding(user_id);
                 request.getSession().setAttribute("userBuildings", userBuildings);
-                //response.sendRedirect("viewBuilding.jsp");
                 response.sendRedirect("user.jsp");
             }
         
-
+            String errMsg = null;
+            String origin = request.getParameter("origin");
             
             switch (origin) {
-            
-                //default:
+        
+                //If we are coming from the user's buildings overview
+                case "userOverview":
                     
-                    //break;
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+                    //Reset the source, i.e. which page we are coming from
+                    request.getSession().setAttribute("source", "");
+
+                    //Retrieve the building being edited
+                    String buildingID = request.getParameter("buildingID");
+                    request.getSession().setAttribute("buildingBeingEdited", buildingID);
+                    
+                    //Fetch areas and rooms for selected building
+                    refreshAreas(Integer.parseInt(buildingID));
+                    refreshRooms(Integer.parseInt(buildingID));
+
+                    //Save areas and rooms in Session
+                    request.getSession().setAttribute("buildingAreas", buildingAreas);
+                    request.getSession().setAttribute("buildingRooms", buildingRooms);
+
+                    //redirect to viewBuilding into the specific building being edited
+                    response.sendRedirect("viewBuilding.jsp?value=" + buildingID + "");
+
+                    break;
 
                 case "viewBuilding":
 
@@ -124,10 +117,6 @@ public class FrontCustomer extends HttpServlet {
                         
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user_id);
-                        
-                        //Fetch areas and rooms for selected building
-                        //refreshAreas(build.getBuilding_id());
-                        //refreshRooms(build.getBuilding_id());
                         
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
@@ -273,17 +262,20 @@ public class FrontCustomer extends HttpServlet {
                         //Save values to database
                         bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user.getUser_id());
-                        //request.getSession().setAttribute("userBuilding", userBuildings);
+                        refreshBuilding(user_id);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } 
                     
                     break;
-                
+                case "editProfileButton":
+                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
+                    request.getSession().setAttribute("source", "user");
+                    response.sendRedirect("editProfile.jsp");
+                    
+                    break;
+                    
                 case "editProfile":
-
-                    System.out.println("Entered edit profile");
 
                     //Retrieve form input values from editProfile.jsp
                     String uEmail = request.getParameter("email");
@@ -294,39 +286,9 @@ public class FrontCustomer extends HttpServlet {
                     String uAddress = request.getParameter("address");
                     int uPostcode = Integer.parseInt(request.getParameter("postcode"));
                     String uCity = request.getParameter("city");
-                    int uSelectedUser = user.getUser_id();
-
-                    //Displayes what data is being pulled down into the usrCtrl.editUser
-//                    System.out.println("DATA confirmed funneled down into editProfile case");
-//                    System.out.println(uEmail);
-//                    System.out.println(uPassword);
-//                    System.out.println(uName);
-//                    System.out.println(uPhone);
-//                    System.out.println(uCompany);
-//                    System.out.println(uAddress);
-//                    System.out.println(uPostcode);
-//                    System.out.println(uCity);
-//                    System.out.println(uSelectedUser);
-                    //Basic idea for checking user email ! Not working atm!
-//                    System.out.println(userList.size());                                       
-//                    System.out.println("user email: " + user.getEmail());
-//                    System.out.println("new user email:" + uEmail);
-//                    
-//                    
-//                    
-//                    for (int j = 0; j < userList.size(); j++) {
-//                        System.out.println("users: " + userList.get(j).getEmail());
-//                    }
-//                    for (int i = 0; i < userList.size(); i++) {
-//                        System.out.println("Second for-loop");
-//                        if (uEmail == userList.get(i).getEmail()) {
-//                            
-//                            System.out.println("EMAIL ALREADY EXIST!");
-//                            response.sendRedirect("user.jsp?success=EmailAlreadyExist");
-//                            
-//                        }
-//                    }
-                    //Save the users edited values to the user database
+                    int uSelectedUser = user_id;
+                    
+                    //Save the user's edited values to the user database
                     usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
 
                     //Resets/updates the userName, password and updates the displayed username
@@ -343,76 +305,17 @@ public class FrontCustomer extends HttpServlet {
                     request.getSession().setAttribute("uPostcode", uPostcode);
                     request.getSession().setAttribute("uCity", uCity);
 
-                    System.out.println("Response inc.");
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
 
-//    //fix æøå bug here!
                     break;
 
-                case "update":
-
-                case "newCustomer":
-
-                    //If no user is logged in. (user == null)
-                    if (request.getSession().getAttribute("user") == null) {
-
-                        String email = request.getParameter("email");
-                        String password = request.getParameter("password");
-                        String name = request.getParameter("name");
-                        String phone = request.getParameter("phone"); //HUSK INTEGER.PARSE!
-                        String company = request.getParameter("company");
-                        String address = request.getParameter("address");
-                        String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!
-                        String city = request.getParameter("city");
-
-//                        Check that the parameters are being read
-//                        System.out.println(email + " em");
-//              
-                        System.out.println(password + " pass");
-//                        System.out.println(name + " nam");
-//                        System.out.println(phone+ " ph");
-//                        System.out.println(company+ " com");
-//                        System.out.println(address+ " add");
-//                        System.out.println(postcode+ " post");
-//                        System.out.println(city + " city");
-
-                        //test password match
-//                        if(!request.getSession().getAttribute("password").equals(request.getSession().getAttribute("passwordConfirm")) ){
-//                            System.out.println("PASSWORD NOT MATCHING!");
-//                            JOptionPane.showMessageDialog(null, "PASSWORD NOT MATCHING!");
-//                             response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8") + " PASSWORD NOT MATCHING");
-//                        }
-                        try {
-                            System.out.println("creating user");
-                            //Create user
-                            usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
-                            //If successful, redirect
-                            System.out.println("Index redirect");
-                            response.sendRedirect("index.jsp?success");
-
-                        } catch (CustomException e) {
-
-                            errMsg = e.getMessage();
-                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
-
-                        }
-
-                    } else {
-
-                        //if user is logged in, as in not null.
-                        response.sendRedirect("user.jsp");
-
-                    }
-
-                    break;
-
+ 
                 case "createBuilding":
 
-                    //If no user is logged in. (user == null)
-                    if (user != null) {
+                    //If no user is logged in. (user == 0)
+                    if (user_id>0) {
 
-                        int user_id = user.getUser_id();
                         String assigned_tech_id = request.getParameter("assigned_tech_id");
                         String healthcheck_pending = request.getParameter("healthcheck_pending");
                         String name = request.getParameter("name");
@@ -443,115 +346,11 @@ public class FrontCustomer extends HttpServlet {
                         response.sendRedirect("index.jsp?=notLoggedIn");
 
                     }
-
-                    break;
-
-                //case "viewBuilding":
-                //needs to recieve the unique id for the user assigned to the building also.
-                //JOptionPane.showMessageDialog(null, "Test!");
-//                    if (user != null) {
-//
-//                        int user_id = user.getUser_id();
-//
-//                        String address = request.getParameter("address");
-//                        String postcode = request.getParameter("postcode");
-//                        String city = request.getParameter("city");
-//
-//                        try {
-//
-//                            //createBuilding
-//                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city);
-//                            refreshBuilding(user_id);
-//                            //If successful, redirect
-//                            response.sendRedirect("user.jsp?sucess=buildingEdited");
-//
-//                        } catch (CustomException e) {
-//
-//                            errMsg = e.getMessage();
-//                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
-//
-//                        }
-//
-//                    } else {
-//
-//                        //Redirect to index if no user is logged in.
-//                        response.sendRedirect("index.jsp?=notLoggedIn");
-//
-//                    }
-//
-//                    break;
-                case "adminUsers":
-                    break;
-
-                case "blankTestPDF":
-
-                    String testPDF = request.getParameter("pdfname");
-                    pdfwt.testBlank(testPDF);
-
-                    break;
-
-                case "pdfwithtext":
-
-                    String pdfName = request.getParameter("pdfname");
-                    String bName = request.getParameter("buildingname");
-                    String bAddress = request.getParameter("buildingadddress");
-                    String bPostCode = request.getParameter("buildingpostcode"); //String that needs to parse into int!
-                    String bCity = request.getParameter("buildingcity");
-                    String bConstructionYear = request.getParameter("constructionyear");  //String that needs to parse into int!
-                    String bSQM = request.getParameter("buildingsqm");  //String that needs to parse into int!
-                    String bPurpose = request.getParameter("buildingpurpose");
-                    String bOwner = request.getParameter("buildingsowner");
-                    String imgFolderPath = request.getParameter("folderPath");
-                    String savePath = request.getParameter("savePath");
-
-                    String systemDir = System.getProperty("user.dir");
-                    System.out.println(systemDir);
-
-//                    //Folderchooser
-//                    JFileChooser chooser = new JFileChooser();
-//                    chooser.setCurrentDirectory(new java.io.File("."));
-//                    chooser.setDialogTitle("choosertitle");
-//                    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//                    chooser.setAcceptAllFileFilterUsed(false);
-//
-//                    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-//                        System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-//                        System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
-//                    } else {
-//                        System.out.println("No Selection ");
-//
-//                    }
-                    //Filechooser for selecting an image for the generated PDF
-                    JFileChooser choose = new JFileChooser();
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
-                    choose.setFileFilter(filter);
-                    String picturePath = "";
-                    String folderPath = "";
-                    int returnVal = choose.showOpenDialog(choose);
-
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-                        picturePath = choose.getSelectedFile().getAbsolutePath();
-                        folderPath = "" + choose.getCurrentDirectory();
-                        System.out.println(picturePath);
-                        System.out.println(folderPath + " Folder sti");
-                       
-
-                    }
-
-                    System.out.println(picturePath);
-
-                    pdfwt.pdfWithText(pdfName, bName, bAddress,
-                            Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
-                            Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
-
-                    response.sendRedirect("index.jsp?sucess=PDFCreated");
-                    break;
-
+                break;
             }
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
@@ -628,5 +427,4 @@ public class FrontCustomer extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

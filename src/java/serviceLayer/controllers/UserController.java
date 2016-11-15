@@ -15,12 +15,12 @@ public class UserController implements UserControllerInterface {
 
     @Override
     public User login(String email, String password) throws CustomException {
-
+        
         if (email != null && password != null && !email.isEmpty() && !password.isEmpty()) {
 
             //Get user by that email from database.
             User user = getUser(email);
-
+        System.out.println(user.getPassword()+" . Check for æøå in database user import");
             //Check if user is null. (If null, no such user) 
             if (user != null) {
 

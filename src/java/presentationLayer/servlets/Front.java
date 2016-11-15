@@ -71,7 +71,7 @@ public class Front extends HttpServlet {
 
                             user = usrCtrl.login(email, password);
 
-                            //Retrieve of the users data, to be used in the editProfile.jsp
+                            //Retrieve all of the users data, to be used in the editProfile.jsp
                             String uEmail = user.getEmail();
                             String uPassword = user.getPassword();
                             String uName = user.getName();
@@ -179,209 +179,7 @@ public class Front extends HttpServlet {
                     response.sendRedirect("index.jsp#");
 
                     break;
-
-                case "userOverview":
-                    
-                    request.getSession().setAttribute("source", "#");
-                    
-                    //Retrieve the building being edited
-                    String buildingID = request.getParameter("buildingID");
-                    //request.getSession().setAttribute("buildingBeingEdited", buildingID);
-                    
-                    //Fetch areas and rooms for selected building
-                    refreshAreas(Integer.parseInt(buildingID));
-                    refreshRooms(Integer.parseInt(buildingID));
-
-                    //Save areas and rooms in Session
-                    request.getSession().setAttribute("buildingAreas", buildingAreas);
-                    request.getSession().setAttribute("buildingRooms", buildingRooms);
-
-                    //redirect to viewBuilding into the specific building being edited
-                    response.sendRedirect("viewBuilding.jsp?value=" + buildingID + "");
-
-                    break;
-                /*
-                case "viewBuilding":
-
-                    //Retrieve the building being edited (saved in the Session) and save it in the reference object build
-                    Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                    
-                    //If 'Request healthcheck' button was clicked
-                    if(request.getParameter("originSection").equals("healthcheckButton")){
-                        request.getSession().setAttribute("source", "healthcheckButton");
-                        
-                        int healthcheckValueToWrite;
-                        //If the building's healthcheck pending status needs setting to false
-                        if(request.getParameter("originValue").equals("cancel")){
-                            healthcheckValueToWrite = 0;
-                        }
-                        //If the building's healthcheck pending status needs setting to true
-                        else{
-                            healthcheckValueToWrite = 1;
-                        }
-                        
-                        //Save values to database
-                        bldgCtrl.toggleHealthcheck(build.getBuilding_id(), healthcheckValueToWrite);
-                        
-                        //Refresh the logged in user's buildings overview
-                        refreshBuilding(user.getUser_id());
-                        
-                        //Fetch areas and rooms for selected building
-                        //refreshAreas(build.getBuilding_id());
-                        //refreshRooms(build.getBuilding_id());
-                        
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-                    
-                    //If 'Create area' button was clicked
-                    if(request.getParameter("originSection").equals("createAreaButton")){
-                        request.getSession().setAttribute("source", "createAreaButton");
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-                    //If an area needs deleting
-                    else if(request.getParameter("originSection").equals("deleteAreaButton")){
-                        request.getSession().setAttribute("source", "deleteAreaButton");
-                        
-                        //Retrieve form input values from viewBuilding
-                        int area_id = Integer.parseInt(request.getParameter("areaId"));
-                        
-                        //Save values to database
-                        bldgCtrl.deleteArea(area_id);
-                        
-                        //Retrieve the building being edited (saved in the Session) and save it in the reference object build
-                        build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                    
-                        //Fetch areas and rooms for selected building
-                        refreshAreas(build.getBuilding_id());
-                        refreshRooms(build.getBuilding_id());
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
-
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-
-                    //If a new area needs creating
-                    else if(request.getParameter("originSection").equals("createArea")){
-                        request.getSession().setAttribute("source", "createArea");
-                        //Retrieve form input values from viewBuilding
-                        String areaName = request.getParameter("areaName");
-                        String areaDesc = request.getParameter("areaDesc");
-                        int areaSqm = Integer.parseInt(request.getParameter("areaSqm"));
-                        int building_id = build.getBuilding_id();
-                        //Save values to database
-                        bldgCtrl.createArea(areaName, areaDesc, areaSqm, building_id);
-                        
-                        //Fetch areas and rooms for selected building
-                        refreshAreas(building_id);
-                        refreshRooms(building_id);
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
-                        
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-                    
-                    //If 'Create area' button was clicked
-                    else if(request.getParameter("originSection").equals("createRoomButton")){
-                        request.getSession().setAttribute("source", "createRoomButton");
-                        request.getSession().setAttribute("areaId",request.getParameter("areaId"));
-
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-                    
-                    //If a new room needs creating
-                    else if(request.getParameter("originSection").equals("createRoom")){
-                        request.getSession().setAttribute("source", "createRoom");
-                        //Retrieve form input values from viewBuilding
-                        String roomName = request.getParameter("roomName");
-                        String roomDesc = request.getParameter("roomDesc");
-                        int roomSqm = Integer.parseInt(request.getParameter("roomSqm"));
-                        int area_id = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
-                        
-                        //Retrieve the building being edited (saved in the Session) and save it in the reference object build
-                        build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                        int building_id = build.getBuilding_id();
-
-                        //Save values to database
-                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, area_id);
-                        
-                        //Fetch areas and rooms for selected building
-                        refreshAreas(building_id);
-                        refreshRooms(building_id);
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
-                        
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-                    
-                    //If an area needs deleting
-                    else if(request.getParameter("originSection").equals("deleteRoomButton")){
-                        request.getSession().setAttribute("source", "deleteRoomButton");
-                        
-                        //Retrieve form input values from viewBuilding
-                        int room_id = Integer.parseInt(request.getParameter("roomId"));
-                        //int area_id = 6;
-                        
-                        //Save values to database
-                        bldgCtrl.deleteRoom(room_id);
-                        
-                        //Retrieve the building being edited (saved in the Session) and save it in the reference object build
-                        build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                    
-                        //Fetch areas and rooms for selected building
-                        refreshAreas(build.getBuilding_id());
-                        refreshRooms(build.getBuilding_id());
-                        //refreshRooms(building_id);
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
-
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-                    
-                    //If 'Edit building details' button was clicked
-                    else if(request.getParameter("originSection").equals("editBuildingButton")){
-                        request.getSession().setAttribute("source", "editBuildingButton");
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    }
-                    
-                    //If the building needs editing
-                    else if(request.getParameter("originSection").equals("editBuilding")){
-                        request.getSession().setAttribute("source", "editBuilding");
-                        //Retrieve form input values from viewBuilding
-                        String buildingName = request.getParameter("buildingName");
-                        String addres = request.getParameter("address");
-                        int postcod = Integer.parseInt(request.getParameter("postcode"));
-                        String cit = request.getParameter("city");
-                        int constructionYear = Integer.parseInt(request.getParameter("constructionYear"));
-                        String purpos = request.getParameter("purpose");
-                        int sq = Integer.parseInt(request.getParameter("sqm"));
-                        int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
-                        //Save values to database
-                        bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
-                        //Refresh the logged in user's buildings overview
-                        refreshBuilding(user.getUser_id());
-                        request.getSession().setAttribute("userBuilding", userBuildings);
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    } 
-                    
-                    break;
-                */
+                
                 case "editProfile":
 
                     System.out.println("Entered edit profile");
@@ -396,6 +194,7 @@ public class Front extends HttpServlet {
                     int uPostcode = Integer.parseInt(request.getParameter("postcode"));
                     String uCity = request.getParameter("city");
                     int uSelectedUser = user.getUser_id();
+                    //int uSelectedUser = (Integer) request.getSession().getAttribute("user_id");
 
                     //Displayes what data is being pulled down into the usrCtrl.editUser
 //                    System.out.println("DATA confirmed funneled down into editProfile case");
@@ -448,7 +247,6 @@ public class Front extends HttpServlet {
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
 
-//    //fix æøå bug here!
                     break;
 
                 case "update":
@@ -507,7 +305,7 @@ public class Front extends HttpServlet {
                     }
 
                     break;
-
+                    
                 case "createBuilding":
 
                     //If no user is logged in. (user == null)
@@ -547,40 +345,6 @@ public class Front extends HttpServlet {
 
                     break;
 
-                //case "viewBuilding":
-                //needs to recieve the unique id for the user assigned to the building also.
-                //JOptionPane.showMessageDialog(null, "Test!");
-//                    if (user != null) {
-//
-//                        int user_id = user.getUser_id();
-//
-//                        String address = request.getParameter("address");
-//                        String postcode = request.getParameter("postcode");
-//                        String city = request.getParameter("city");
-//
-//                        try {
-//
-//                            //createBuilding
-//                            bldgCtrl.createBuilding(user_id, address, Integer.parseInt(postcode), city);
-//                            refreshBuilding(user_id);
-//                            //If successful, redirect
-//                            response.sendRedirect("user.jsp?sucess=buildingEdited");
-//
-//                        } catch (CustomException e) {
-//
-//                            errMsg = e.getMessage();
-//                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
-//
-//                        }
-//
-//                    } else {
-//
-//                        //Redirect to index if no user is logged in.
-//                        response.sendRedirect("index.jsp?=notLoggedIn");
-//
-//                    }
-//
-//                    break;
                 case "adminUsers":
                     break;
 
@@ -642,7 +406,7 @@ public class Front extends HttpServlet {
 
                     System.out.println(picturePath);
 
-                    pdfwt.pdfWithText(pdfName, bName, bAddress,
+                    pdfwt.createPDF(pdfName, bName, bAddress,
                             Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
                             Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
 

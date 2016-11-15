@@ -47,25 +47,8 @@ if yes - then redirect - else nothing. --%>
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li class="active">
-                                    <a href="user.jsp?refresh">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                </li>
-                                <li>
-                                    <a href="addBuilding.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        Tilføj bygning </a>
-                                </li>
-                                <li>
-                                    <a href="editProfile.jsp">
-                                        <i class="glyphicon glyphicon-user"></i>
-                                        Bruger indstillinger </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "Overblik"); %>
+                        <%@ include file="userSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
                 </div>
@@ -112,7 +95,7 @@ if yes - then redirect - else nothing. --%>
                                 //Dynamically load in a row for each of the user's buildings
                                 %><tr>
                                     <td>
-                                        <form class="submitLink" action="Front" method="POST">
+                                        <form class="submitLink" action="FrontC" method="POST">
                                             <input type="submit" class="submitLink" value="<%=userBuildings.get(i).getName()%>" />
                                             <input type="hidden" name="buildingID" value="<%=userBuildings.get(i).getBuilding_id()%>" />
                                             <input type="hidden" name="origin" value="userOverview" />
