@@ -47,6 +47,9 @@ public class PDFCreator {
 
         page3Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
+        
+        page4Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear, 
+                buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         savePDF(savePath, pdfName, doc);
 
@@ -288,6 +291,38 @@ public class PDFCreator {
             System.out.println(e);
         }
     }
+    
+    //If "Ingen bemærkning" on Page 4, DOES THIS PAGE NEED TO BE GENERATED!?
+    public void page4Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
+            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+
+        //Creates a new page.
+        PDPage page4 = new PDPage();
+
+        //Adds the new page to the .doc
+        doc.addPage(page4);
+        try {
+
+            PDPageContentStream content4 = new PDPageContentStream(doc, page4);
+
+            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
+            PDFont fontHel = PDType1Font.TIMES_ROMAN;
+
+            defaultNewPageSetup(content4, imgFolderPath, pdfName, 4);
+            
+            checkBoxesPage4Walkthrough();
+            
+            singleTextLine(content4, "Hello there!", 20, 250, 250);
+
+            //Closes the content creation for Page 4
+            content4.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    
 
     public void savePDF(String savePath, String pdfName, PDDocument doc) {
         try {
