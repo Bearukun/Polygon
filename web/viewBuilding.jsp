@@ -64,30 +64,8 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li>
-                                    <a href="user.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                </li>
-                                <li>
-                                    <a href="addBuilding.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        Tilføj bygning </a>
-                                </li>
-                                <li class="active">
-                                    <a href="viewBuilding?noID" target="_self">
-                                        <i class="glyphicon glyphicon-wrench"></i>
-                                        Vis bygning </a>
-                                </li>
-                                <li>
-                                    <a href="editProfile.jsp">
-                                        <i class="glyphicon glyphicon-user"></i>
-                                        Bruger indstillinger </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "VisBygning"); %>
+                        <%@ include file="userSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
                 </div>
