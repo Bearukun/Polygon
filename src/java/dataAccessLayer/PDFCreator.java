@@ -26,9 +26,27 @@ import serviceLayer.exceptions.CustomException;
  * @author Ceo
  *
  * Clean up: split op i metoder! fjern overskyddende/dubblet billede!
- * Comments!!!!!!!
- * Need to figure out to make a method for "PDFont"!
+ * Comments!!!!!!! Need to figure out to make a method for "PDFont"!
  *
+ *
+ * Slå polygonLogo sammen med insertJPGImage
+ *
+ * noNotesCheckBoxImg , gotNotesCheckBoxImg perhaps shouldn't be merged with
+ * insertJPGImage, due to them having a specialized function in the code, the
+ * fact that they are used alot and multiple times throughout the code, and that
+ * having their own method and method name, makes it way easier and quick to
+ * understand what is happening.
+ *
+ * SPLIT THEM INTO 1 Method with a Boolean!
+ *
+ * Also, use a boolean for: // Ingen Bemærkning if(gotNoTagNotes == 0 ){
+ * noNotesCheckBoxImg(imgFolderPath, content, 475, 624, 7, 7); } else if
+ * (gotNoTagNotes == 1 ) { gotNotesCheckBoxImg(imgFolderPath, content, 475, 624,
+ * 7, 7); }
+ *
+ * Rough idea for creating a new method that can quicly setup noNotesCheckBoxImg
+ * & gotNotesCheckBoxImg, along with their switchCaseName and
+ * switchCaseParameters
  *
  *
  */
@@ -47,8 +65,8 @@ public class PDFCreator {
 
         page3Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
-        
-        page4Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear, 
+
+        page4Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         savePDF(savePath, pdfName, doc);
@@ -230,14 +248,13 @@ public class PDFCreator {
 
             singleTextLine(content2, "Tag", 12, 50, 625);
             insertJPGImage(content2, imgFolderPath, "underLineJPG.jpg", 50, 620, 23, 2);
-            singleTextLine(content2,"There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of." , 6, 50, 600);
+            singleTextLine(content2, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
 
             singleTextLine(content2, "Bemærkning", 8, 325, 625);
 
             singleTextLine(content2, "Ingen Bemærkning", 8, 400, 625);
 
             singleTextLine(content2, "Billede", 8, 500, 625);
-
 
             singleTextLine(content2, "Ydervægge", 12, 50, 310);
 
@@ -249,9 +266,9 @@ public class PDFCreator {
 
             insertJPGImage(content2, imgFolderPath, "underLineJPG.jpg", 50, 305, 70, 2);
 
-
             //NEEDS DYNAMIC USER INPUT!!!
-            checkBoxesPage2(content2, imgFolderPath, 1, 0, 1, 0, 1, 0);
+            //checkBoxesPage2(content2, imgFolderPath, true, false, true, false, true, true);
+            checkBoxesPage2(content2, imgFolderPath, false, true, false, true, false, false);
 
             //Closes the content creation for Page 2           
             content2.close();
@@ -277,12 +294,12 @@ public class PDFCreator {
             PDFont fontHel = PDType1Font.TIMES_ROMAN;
 
             defaultNewPageSetup(content3, imgFolderPath, pdfName, 3);
-            
+
             //NEEDS DYNAMIC USER INPUT!!! "Ceo's Kontor = Room Name
             singleTextLineWithUserInput(content3, "Lokale", "Ceo's Kontor", 10, 50, 670);
-            
+
             //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!! 
-            checkIfPage3NeedsPopulation(1, content3, imgFolderPath);
+            checkIfPage3NeedsPopulation(true, false, content3, imgFolderPath);
 
             //Closes the content creation for Page 3
             content3.close();
@@ -291,7 +308,7 @@ public class PDFCreator {
             System.out.println(e);
         }
     }
-    
+
     //If "Ingen bemærkning" on Page 4, DOES THIS PAGE NEED TO BE GENERATED!?
     public void page4Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
@@ -309,9 +326,9 @@ public class PDFCreator {
             PDFont fontHel = PDType1Font.TIMES_ROMAN;
 
             defaultNewPageSetup(content4, imgFolderPath, pdfName, 4);
-            
+
             checkBoxesPage4Walkthrough();
-            
+
             singleTextLine(content4, "Hello there!", 20, 250, 250);
 
             //Closes the content creation for Page 4
@@ -321,8 +338,6 @@ public class PDFCreator {
             System.out.println(e);
         }
     }
-    
-    
 
     public void savePDF(String savePath, String pdfName, PDDocument doc) {
         try {
@@ -392,22 +407,11 @@ public class PDFCreator {
         repportNumber(content);
         pdfDocName(content, pdfName);
         pageNumber(content, pageNumber);
-        polygonLogo(content, imgFolderPath);
+        insertJPGImage(content, imgFolderPath, "polygon.jpg", 50, 690, 150, 30);
+       
     }
 
-    public void polygonLogo(PDPageContentStream content, String imgFolderPath) {
-        try {
-            //Creates a image from a file and places it.
-            //Polygon logo in the top left corner of the document
-
-            PDImageXObject polygonLogo = null;
-            polygonLogo = PDImageXObject.createFromFile(imgFolderPath + "polygon.jpg", doc);
-            content.drawXObject(polygonLogo, 50, 690, 150, 30);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
+    
 
     public void pdfDocName(PDPageContentStream content, String pdfName) {
         try {
@@ -463,6 +467,26 @@ public class PDFCreator {
         }
     }
 
+    public void checkBoxImg(boolean box, String imgFolderPath, PDPageContentStream content, int xCoordinate, int yCoordinate, int imgWidth, int imgHeight) {
+
+        //Boolean box
+        //If false = no X in checkbox
+        //If true = X in Checkbox
+        try {
+            if (box == true) {
+
+                insertJPGImage(content, imgFolderPath, "notes.jpg", xCoordinate, yCoordinate, imgWidth, imgHeight);
+
+            } else {
+
+                insertJPGImage(content, imgFolderPath, "nonotes.jpg", xCoordinate, yCoordinate, imgWidth, imgHeight);
+
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     //Add a 'PDFont' parameter at a later point!
     public void singleTextLine(PDPageContentStream content, String textLine, int textSize, int xCoordinate, int yCoordinate) {
 
@@ -500,137 +524,92 @@ public class PDFCreator {
             System.out.println(e);
         }
     }
-    
-    public void checkBoxesPage2(PDPageContentStream content, String imgFolderPath, int gotTagNotes,
-            int gotNoTagNotes, int gotTagPicture, int gotWallNotes,int gotNoWallNotes, int gotWallPicture){
-        
-        // 0 = false/no
-        // 1 = true/yes
-        
-        //Got note? Yes/no
-        //Got picture? yes/No
-        
-         //Ydervægge
-        //Bemærkning
-            if(gotTagNotes == 0){
-             noNotesCheckBoxImg(imgFolderPath, content, 375, 624, 7, 7);
-             
-            } else if (gotTagNotes == 1 ){
-              gotNotesCheckBoxImg(imgFolderPath, content, 375, 624, 7, 7);
-            }
-            
-          //  Ingen Bemærkning
-            if(gotNoTagNotes == 0 ){
-             noNotesCheckBoxImg(imgFolderPath, content, 475, 624, 7, 7);
-            } else if (gotNoTagNotes == 1 ) {
-              gotNotesCheckBoxImg(imgFolderPath, content, 475, 624, 7, 7);
-            }
-            
-            // Billede
-            if(gotTagPicture == 0){
-             noNotesCheckBoxImg(imgFolderPath, content, 528, 624, 7, 7);
-            } else if(gotTagPicture == 1 ) {
-              gotNotesCheckBoxImg(imgFolderPath, content, 528, 624, 7, 7);
-                //insertJPGImage(content, imgFolderPath, placement, gotTagNotes, gotTagNotes, picture, notes);
-            }
-        
-        
-        
-        
+
+    public void checkBoxesPage2(PDPageContentStream content, String imgFolderPath,
+            boolean tagNotes, boolean noTagNotes, boolean tagPicture,
+            boolean wallNotes, boolean noWallNotes, boolean wallPicture) {
+
         //Ydervægge
         //Bemærkning
-            if(gotWallNotes == 0){
-             noNotesCheckBoxImg(imgFolderPath, content, 375, 310, 7, 7);
-             
-            } else if (gotWallNotes == 1){
-              gotNotesCheckBoxImg(imgFolderPath, content, 375, 310, 7, 7);
-            }
-            
-          //  Ingen Bemærkning
-            if(gotNoWallNotes == 0){
-             noNotesCheckBoxImg(imgFolderPath, content, 475, 310, 7, 7);
-            } else if (gotNoWallNotes == 1) {
-              gotNotesCheckBoxImg(imgFolderPath, content, 475, 310, 7, 7);
-            }
-            
-            // Billede
-            if(gotWallPicture == 0 ){
-             noNotesCheckBoxImg(imgFolderPath, content, 528, 310, 7, 7);
-            } else if(gotWallPicture == 1 ) {
-              gotNotesCheckBoxImg(imgFolderPath, content, 528, 310, 7, 7);
-              //insertJPGImage(content, imgFolderPath, placement, gotTagNotes, gotTagNotes, picture, notes);
-            }
-        
-        
+        checkBoxImg(tagNotes, imgFolderPath, content, 375, 624, 7, 7);
+
+        //  Ingen Bemærkning
+        checkBoxImg(noTagNotes, imgFolderPath, content, 475, 624, 7, 7);
+        // Billede
+
+        checkBoxImg(tagPicture, imgFolderPath, content, 528, 624, 7, 7);
+
+        //Ydervægge
+        //Bemærkning
+        checkBoxImg(wallNotes, imgFolderPath, content, 375, 310, 7, 7);
+        //  Ingen Bemærkning
+        checkBoxImg(noWallNotes, imgFolderPath, content, 475, 310, 7, 7);
+
+        // Billede
+        checkBoxImg(wallPicture, imgFolderPath, content, 528, 310, 7, 7);
+
     }
-    
+
     //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!!
-    public void checkIfPage3NeedsPopulation(int localNotes, PDPageContentStream content, String imgFolderPath ){
-        
-                    
-            //NEEDS DYNAMIC USER INPUT!!!            
-            if(localNotes == 1){
-                
-                
-                singleTextLine(content, "Bemærkninger", 10, 340, 670);
-                gotNotesCheckBoxImg(imgFolderPath, content, 413, 670, 7, 7);
-                singleTextLine(content, "Ingen bemærkninger", 10, 430, 670);
-                noNotesCheckBoxImg(imgFolderPath, content, 531, 670, 7, 7);
-              
-                //NEEDS DYNAMIC USER INPUT!!! String moistScanned, String moistMeasurePoint
-              checkBoxesPage3MoistScan(1, content, "31/12-2016", "Ceo Office", imgFolderPath);
-                
-              //NEEDS DYNAMIC USER INPUT!!!
-            } else if (localNotes == 0){
-                singleTextLine(content, "Bemærkninger", 10, 340, 670);
-                noNotesCheckBoxImg(imgFolderPath, content, 413, 670, 7, 7);
-                singleTextLine(content, "Ingen bemærkninger", 10, 430, 670);
-                gotNotesCheckBoxImg(imgFolderPath, content, 531, 670, 7, 7);
-            }
-            
-            
-            //NEEDS DYNAMIC USER INPUT!!!
-            
+    public void checkIfPage3NeedsPopulation(boolean localNotes, boolean noLocalNotes, PDPageContentStream content, String imgFolderPath) {
 
-        
-    }
-    
-    public void checkBoxesPage3DamageAndRepair(){
-        
+        //NEEDS DYNAMIC USER INPUT!!! 
+        //Bemærkning
+        singleTextLine(content, "Bemærkninger", 10, 340, 670);
+        checkBoxImg(localNotes, imgFolderPath, content, 413, 670, 7, 7);
+
+        //Ingen Bemærkning
+        singleTextLine(content, "Ingen bemærkninger", 10, 430, 670);
+        checkBoxImg(noLocalNotes, imgFolderPath, content, 531, 670, 7, 7);
+
+        //NEEDS DYNAMIC USER INPUT!!! String moistScanned, String moistMeasurePoint
+        checkBoxesPage3MoistScan(true, content, "31/12-2016", "Ceo Office", imgFolderPath);
+
+        //NEEDS DYNAMIC USER INPUT!!!
+        //NEEDS DYNAMIC USER INPUT!!!
     }
 
-    
-    public void checkBoxesPage3MoistScan(int moistScan,PDPageContentStream content,String moistScanned, String moistMeasurePoint, String imgFolderPath ){
-        
+    public void checkBoxesPage3DamageAndRepair() {
+
+    }
+
+    public void checkBoxesPage3MoistScan(boolean moistScan, PDPageContentStream content, String moistScanned, String moistMeasurePoint, String imgFolderPath) {
+
         //Has a Moistscan been performed?
-        
         //Hvad er målepunkt?
         //Hvad er fugtscanning?
         //Bemærkning?
         singleTextLine(content, "Er der fortaget fugtscanning?", 10, 50, 100);
-        
-        if(moistScan == 0){           
-            singleTextLine(content, "Ja", 10, 59,90);
-            noNotesCheckBoxImg(imgFolderPath, content, 50, 90, 7, 7); 
-            singleTextLine(content, "Nej", 10, 59,80);
-            gotNotesCheckBoxImg(imgFolderPath, content, 50, 80, 7, 7);
-                    } else if (moistScan == 1){
-            singleTextLine(content, "Ja", 10, 59,90);
-            gotNotesCheckBoxImg(imgFolderPath, content, 50, 90, 7, 7); 
-            singleTextLine(content, "Nej", 10, 59,80);
-            noNotesCheckBoxImg(imgFolderPath, content, 50, 80, 7, 7);
+
+        if(moistScan == false){
+            singleTextLine(content, "Ja", 10, 59, 90);
+            checkBoxImg(moistScan, imgFolderPath, content, 50, 90, 7, 7);
+            singleTextLine(content, "Nej", 10, 59, 80);
+            checkBoxImg(true, imgFolderPath, content, 50, 80, 7, 7);
+            
+        } else if (moistScan == true) {
+            singleTextLine(content, "Ja", 10, 59, 90);
+            checkBoxImg(moistScan, imgFolderPath, content, 50, 90, 7, 7);
+            singleTextLine(content, "Nej", 10, 59, 80);
+            checkBoxImg(false, imgFolderPath, content, 50, 80, 7, 7);
             singleTextLineWithUserInput(content, "Fugtscanning", moistScanned, 10, 50, 70);
-            singleTextLineWithUserInput(content, "Målepunkt", moistMeasurePoint, 10,50, 60);
+            singleTextLineWithUserInput(content, "Målepunkt", moistMeasurePoint, 10, 50, 60);
             singleTextLineWithUserInput(content, "Note:", "Vi har konstateret fugtskade under kontorbordet!", 10, 50, 50);
         }
-        
-        
+
     }
-    
-    public void checkBoxesPage4Walkthrough(){
-        
-        
+
+    //Can't possibly fufill all your needs? What if the case also needs some text?
+//    public void gotNotesAndNoNotesCheckBoxsImages(int switchMechanismName, int switchMechanismInput,  PDPageContentStream content, 
+//            int xGotNotesCoordinate, int yGotNotesCoordinate, int xNoNotesCoordinate, int yNoNotesCoordinate, int imgWidth, int imgHeight){
+//        
+//        
+//        
+//    }
+    public void checkBoxesPage4Walkthrough() {
+
     }
+
     public void testBlank(String pdfName) throws CustomException {
 
         String pdfname2 = "test2312";
