@@ -307,7 +307,7 @@ public class PDFCreator {
 
             singleTextLine(content3, "Har der været skade i lokalet?", 10, 50, 625);
 
-            page3DamageAndRepair(true, content3, imgFolderPath, false,false,false,false,false);
+            page3DamageAndRepair(true, content3, imgFolderPath, false, false, false, false, false);
 
             //Closes the content creation for Page 3
             content3.close();
@@ -335,13 +335,16 @@ public class PDFCreator {
 
             defaultNewPageSetup(content4, imgFolderPath, pdfName, 4);
 
-            
             singleTextLineWithUserInput(content4, "Lokale", "Ceo's Kontor", 10, 50, 665);
-            
-            
-            checkBoxesPage4Walkthrough(content4);
 
-            
+            checkBoxesPage4Walkthrough(content4, imgFolderPath,
+                    true, false, true,
+                    false, true, false,
+                    false, true, true,
+                    true, false, false,
+                    true, false, true,
+                    false, false, false,
+                    true, true, true);
 
             //Closes the content creation for Page 4
             content4.close();
@@ -697,9 +700,117 @@ public class PDFCreator {
 //        
 //        
 //    }
-    public void checkBoxesPage4Walkthrough(PDPageContentStream content) {
-        
+    public void checkBoxesPage4Walkthrough(PDPageContentStream content, String imgFolderPath,
+            boolean ceilingNotes, boolean noCeilingNotes, boolean ceilingPicture,
+            boolean wallNotes, boolean noWallNotes, boolean wallPicture,
+            boolean floorNotes, boolean noFloorNotes, boolean floorPicture,
+            boolean windowNotes, boolean noWindowNotes, boolean windowPicture,
+            boolean doorNotes, boolean noDoorNotes, boolean doorPicture,
+            boolean other1Notes, boolean noOther1Notes, boolean other1Picture,
+            boolean other2Notes, boolean noOther2Notes, boolean other2Picture) {
+
         singleTextLine(content, "Gennemgang af lokalet", 12, 50, 640);
+
+        singleTextLine(content, "Bemærkning", 10, 300, 620);
+        singleTextLine(content, "Ingen Bemærkning", 10, 390, 620);
+        singleTextLine(content, "Billede", 10, 510, 620);
+
+        singleTextLine(content, "Vægge", 10, 50, 600);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 595, 37, 2);
+        singleTextLineWithUserInput(content, "Væg tekst", "væææææææææææææææææææg", 8, 50, 584);
+
+        singleTextLine(content, "Loft", 10, 50, 525);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 522, 22, 2);
+        singleTextLineWithUserInput(content, "Loft tekst", "loooooooooooft", 8, 50, 511);
+
+        singleTextLine(content, "Gulv", 10, 50, 450);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 447, 23, 2);
+        singleTextLineWithUserInput(content, "Gulv tekst", "guuuuuuuuuuuuuuuuuvl", 8, 50, 436);
+
+        singleTextLine(content, "Vinduer", 10, 50, 375);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 372, 40, 2);
+        singleTextLineWithUserInput(content, "Vindue tekst", "vinduuuuuuuuuuuue", 8, 50, 361);
+
+        singleTextLine(content, "Døre", 10, 50, 300);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 297, 25, 2);
+        singleTextLineWithUserInput(content, "Dør tekst", "døøøøøøøøøøøøøøøøøøør", 8, 50, 286);
+
+        singleTextLine(content, "Andet", 10, 50, 225);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 222, 30, 2);
+        singleTextLineWithUserInput(content, "Andet 1 tekst", "Andddddddeeeeeeeeeeetttt 1", 8, 50, 211);
+
+        singleTextLine(content, "Andet", 10, 50, 150);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 147, 30, 2);
+        singleTextLineWithUserInput(content, "Andet 2 tekst", "Andddddddeeeeeeeeeeetttt 2", 8, 50, 136);
+
+        //Wall
+        //Bemærkning
+        checkBoxImg(wallNotes, imgFolderPath, content, 324, 600, 7, 7);
+        //  Ingen Bemærkning
+        checkBoxImg(noWallNotes, imgFolderPath, content, 428, 600, 7, 7);
+
+        // Billede
+        checkBoxImg(wallPicture, imgFolderPath, content, 524, 600, 7, 7);
+
+        //Ceiling
+        //Bemærkning
+        checkBoxImg(ceilingNotes, imgFolderPath, content, 324, 525, 7, 7);
+
+        //  Ingen Bemærkning
+        checkBoxImg(noCeilingNotes, imgFolderPath, content, 428, 525, 7, 7);
+        // Billede
+
+        checkBoxImg(ceilingPicture, imgFolderPath, content, 524, 525, 7, 7);
+
+        //Floor
+        //Bemærkning
+        checkBoxImg(floorNotes, imgFolderPath, content, 324, 450, 7, 7);
+
+        //  Ingen Bemærkning
+        checkBoxImg(noFloorNotes, imgFolderPath, content, 428, 450, 7, 7);
+        // Billede
+
+        checkBoxImg(floorPicture, imgFolderPath, content, 524, 450, 7, 7);
+
+        //Windows
+        //Bemærkning
+        checkBoxImg(windowNotes, imgFolderPath, content, 324, 375, 7, 7);
+
+        //  Ingen Bemærkning
+        checkBoxImg(noWindowNotes, imgFolderPath, content, 428, 375, 7, 7);
+        // Billede
+
+        checkBoxImg(windowPicture, imgFolderPath, content, 524, 375, 7, 7);
+
+        //Doors
+        //Bemærkning
+        checkBoxImg(doorNotes, imgFolderPath, content, 324, 300, 7, 7);
+
+        //  Ingen Bemærkning
+        checkBoxImg(doorNotes, imgFolderPath, content, 428, 300, 7, 7);
+        // Billede
+
+        checkBoxImg(doorPicture, imgFolderPath, content, 524, 300, 7, 7);
+
+        //other1
+        //Bemærkning
+        checkBoxImg(other1Notes, imgFolderPath, content, 324, 225, 7, 7);
+
+        //  Ingen Bemærkning
+        checkBoxImg(other1Notes, imgFolderPath, content, 428, 225, 7, 7);
+        // Billede
+
+        checkBoxImg(other1Picture, imgFolderPath, content, 524, 225, 7, 7);
+
+        //other2
+        //Bemærkning
+        checkBoxImg(other1Notes, imgFolderPath, content, 324, 150, 7, 7);
+
+        //  Ingen Bemærkning
+        checkBoxImg(other1Notes, imgFolderPath, content, 428, 150, 7, 7);
+        // Billede
+
+        checkBoxImg(other1Picture, imgFolderPath, content, 524, 150, 7, 7);
 
     }
 
