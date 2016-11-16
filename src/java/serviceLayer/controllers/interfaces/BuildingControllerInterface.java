@@ -1,6 +1,5 @@
 package serviceLayer.controllers.interfaces;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -9,8 +8,6 @@ import serviceLayer.exceptions.CustomException;
 
 
 public interface BuildingControllerInterface {
-
-    
     
     void createBuilding( String name, String address, Integer postcode, String city,  Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException;
     
@@ -33,4 +30,5 @@ public interface BuildingControllerInterface {
     public void deleteRoom(int room_id) throws CustomException;
     
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException;
+    
 }

@@ -1,21 +1,31 @@
-
-
 package serviceLayer.entities;
 
 import java.sql.Timestamp;
 
+
 public class Building {
     
+    /**
+     * Enum used to show a buildings different conditions.  
+     */
     public enum condition {
 
         GOOD, MEDIUM, POOR, NONE
 
     }
     
+    /**
+     * Variables corresponding to its database counterpart. 
+     */
     private int building_id, postcode, construction_year, sqm, healthcheck_pending, user_id, assigned_tech_id;   
     private String name, address, city, purpose;
     private Timestamp date_created;
     private condition condition;
+    
+    
+    /**
+     * Empty constructor. 
+     */
     public Building() {
     }
 
@@ -35,6 +45,11 @@ public class Building {
         this.user_id = user_id;
     }
 
+    
+    /**
+     * Getters and setters (WE NEED TO CLEAN UP HERE BOYS) 
+     */
+    
     public int getBuilding_id() {
         return building_id;
     }
