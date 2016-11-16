@@ -2,6 +2,7 @@ package dataAccessLayer.mappers;
 
 import dataAccessLayer.DBConnection;
 import dataAccessLayer.mappers.interfaces.DataMapperInterface;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +13,7 @@ import serviceLayer.exceptions.CustomException;
 public class DataMapper implements DataMapperInterface {
 
     @Override
-    public Image getImage(int image_id) throws CustomException {
+    public Image getImage(int image_id) throws Exception {
 
         Image img = new Image();
 
@@ -45,7 +46,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new CustomException("SQL Error:@DataMapper.getImage." + e.getMessage());
+            throw new Exception("SQL Error:@DataMapper.getImage." + e.getMessage());
 
         } finally {
 
@@ -69,5 +70,15 @@ public class DataMapper implements DataMapperInterface {
         return img;
 
     }
+
+    @Override
+    public void uploadIssueImage(int image_id, int issue_id, String img_name, Blob img_file) throws Exception {
+        
+        
+        
+        
+        
+    }
+
 
 }
