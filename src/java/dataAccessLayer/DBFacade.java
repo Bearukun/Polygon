@@ -7,6 +7,7 @@ import dataAccessLayer.mappers.UserMapper;
 import dataAccessLayer.mappers.interfaces.BuildingMapperInterface;
 import dataAccessLayer.mappers.interfaces.DataMapperInterface;
 import dataAccessLayer.mappers.interfaces.UserMapperInterface;
+import java.sql.Blob;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -15,41 +16,43 @@ import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
+
 /**
  * The purpose of DBFacade is to provide an encapsulated access to the database
  * (No SQL outside of the data-layer)
  */
 public class DBFacade implements DBFacadeInterface {
+
     
     UserMapperInterface umi = new UserMapper();
     BuildingMapperInterface bmi = new BuildingMapper();
     DataMapperInterface dmi = new DataMapper();
-
+    
+    
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
 
         return bmi.getBuildings(user_id);
-       
+
     }
 
     @Override
     public User getUser(String email) throws CustomException {
 
         return umi.getUser(email);
-        
+
+    }
+
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
+
+        umi.createUser(email, password, name, phone, company, address, postcode, city, type);
+
     }
 
     @Override
-    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException {
 
-       umi.createUser(email, password, name, phone, company, address, postcode, city);
-        
-    }
-
-    @Override
-    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id ) throws CustomException {
-
-       bmi.createBuilding(name, address, postcode, city, construction_year, purpose, sqm, 0);
+        bmi.createBuilding(name, address, postcode, city, construction_year, purpose, sqm, 0);
 
     }
 
@@ -57,7 +60,7 @@ public class DBFacade implements DBFacadeInterface {
     public ArrayList<User> getUsers() throws CustomException {
 
         return umi.getUsers();
-        
+
     }
 
     @Override
@@ -69,16 +72,16 @@ public class DBFacade implements DBFacadeInterface {
 
     @Override
     public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
-        
-       bmi.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpose, sqm);
-        
+
+        bmi.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpose, sqm);
+
     }
 
     @Override
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
-        
+
         umi.editUser(selectedUser, email, password, name, phone, company, address, postcode, city);
-        
+
     }
 
     @Override
@@ -115,9 +118,22 @@ public class DBFacade implements DBFacadeInterface {
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
         bmi.toggleHealthcheck(building_id, healthcheck_pending);
     }
-    
+
     @Override
     public Image getImage(int image_id) throws Exception {
         return dmi.getImage(image_id);
+    }
+
+    public void uploadIssueImage(int issue_id, String img_name, Blob img_file) throws Exception {
+        dmi.uploadIssueImage(issue_id, img_name, img_file);
+    }
+
+    public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
+        dmi.uploadBuildingImage(building_id, img_name, img_file);
+    }
+
+    @Override
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

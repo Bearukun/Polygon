@@ -48,7 +48,6 @@ public class UserController implements UserControllerInterface {
         return dbfacade.getUser(email);
     }
 
-    @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
 
         System.out.println("UserController");
@@ -77,6 +76,11 @@ public class UserController implements UserControllerInterface {
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
         dbfacade.editUser(selectedUser, email, password, name, phone, company, address, postcode, city);
 
+    }
+
+    @Override
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
