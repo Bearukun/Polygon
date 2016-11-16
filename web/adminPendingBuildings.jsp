@@ -76,7 +76,7 @@
                     <div id="container" class="container-fluid">
                         <h1>Anmodninger:</h1>
 
-                        <% 
+                        <%
                             ArrayList<Building> allBuildings = new ArrayList();
 
                             allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
@@ -98,10 +98,8 @@
                                     <td><b>KvadratMeter</b></td>
                                     <td><b>Vælg tekniker</b></td>
                                 </tr>
-                                <%
-                                   
-                                        for(int x = 0; x < allBuildings.size(); x++){
-                                            if(allBuildings.get(x).isHealthchech_pending()){
+                                <%                                    for (int x = 0; x < allBuildings.size(); x++) {
+                                        if (allBuildings.get(x).isHealthchech_pending()) {
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  
@@ -113,9 +111,10 @@
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>
-                                    
+
                                 </tr>
-                                <%}}
+                                <%}
+                                    }
                                 %>
                             </tbody>
                         </table>

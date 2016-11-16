@@ -18,12 +18,12 @@
         <!--Adding our own css-->
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
         <script type="text/javascript">
-$(document).ready(function() {
-$('#slectboxid option').click(function(){
-    $('#textboxid').val($(this).val());
-        });
-});
-</script>
+            $(document).ready(function () {
+                $('#slectboxid option').click(function () {
+                    $('#textboxid').val($(this).val());
+                });
+            });
+        </script>
     </head>
     <body>
         <div class="container-fluid">
@@ -84,25 +84,25 @@ $('#slectboxid option').click(function(){
                         <h1>Ny bruger</h1>
                         <div class="container">
                             <form class="form-add-user" action="Front" method="POST">
-                               <input class="form-control" type="text" name="email" placeholder="Email">
-                        <input class="form-control" type="password" name="password" placeholder="Adgangskode">
-                        <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
-                        <select name="type" id="slectboxid">
-                            
-                            <option value="ADMIN">Admin</option>
-                            <option value="TECHNICIAN">Teknikker</option>
-                            <option value="CUSTOMER">Kunde</option>
-                            
-                        </select>
-                        <h5>Ydeligere information</h5><br><!-- Skal centreres -->
-                        <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
-                        <input class="form-control" type="text" name="phone" value="" placeholder="Telefon" />
-                        <input class="form-control" type="text" name="company" value="" placeholder="Firma" />
-                        <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
-                        <input class="form-control" type="text" name="postcode" value="" placeholder="Postnr." />
-                        <input class="form-control" type="text" name="city" value="" placeholder="By" />
-                        <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
-                        <input type="hidden" name="origin" value="newCustomer" />
+                                <input class="form-control" type="text" name="email" placeholder="Email">
+                                <input class="form-control" type="password" name="password" placeholder="Adgangskode">
+                                <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
+                                <select name="type" id="slectboxid">
+
+                                    <option value="ADMIN">Admin</option>
+                                    <option value="TECHNICIAN">Teknikker</option>
+                                    <option value="CUSTOMER">Kunde</option>
+
+                                </select>
+                                <h5>Ydeligere information</h5><br><!-- Skal centreres -->
+                                <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
+                                <input class="form-control" type="text" name="phone" value="" placeholder="Telefon" />
+                                <input class="form-control" type="text" name="company" value="" placeholder="Firma" />
+                                <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
+                                <input class="form-control" type="text" name="postcode" value="" placeholder="Postnr." />
+                                <input class="form-control" type="text" name="city" value="" placeholder="By" />
+                                <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
+                                <input type="hidden" name="origin" value="newCustomer" />
                             </form>
                         </div>
 
