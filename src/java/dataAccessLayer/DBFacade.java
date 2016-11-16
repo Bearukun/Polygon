@@ -22,10 +22,12 @@ import serviceLayer.exceptions.CustomException;
  */
 public class DBFacade implements DBFacadeInterface {
 
+    
     UserMapperInterface umi = new UserMapper();
     BuildingMapperInterface bmi = new BuildingMapper();
     DataMapperInterface dmi = new DataMapper();
-
+    
+    
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
 

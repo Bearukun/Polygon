@@ -1,7 +1,6 @@
 package presentationLayer.servlets;
 
 import dataAccessLayer.PDFCreator;
-import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
