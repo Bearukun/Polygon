@@ -93,7 +93,7 @@ public class UserMapper implements UserMapperInterface {
     }
 
     @Override
-    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -118,18 +118,19 @@ public class UserMapper implements UserMapperInterface {
 
                 //Prepare statement, notice that we don't need to specify 'type' here, hence
                 //default type is CUSTOMER. 
-                sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `name`, `phone`, `company`, `address`, `postcode`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                sql = "INSERT INTO `polygon`.`user` (`email`, `password`, `type`, `name`, `phone`, `company`, `address`, `postcode`, `city`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
                 //Creating prepare statement.
                 stmt = con.prepareStatement(sql);
                 //Insert variables if into prepareStatement.
                 stmt.setString(1, email);
                 stmt.setString(2, password);
-                stmt.setString(3, name);
-                stmt.setInt(4, phone);
-                stmt.setString(5, company);
-                stmt.setString(6, address);
-                stmt.setInt(7, postcode);
-                stmt.setString(8, city);
+                stmt.setString(3, type.toString());
+                stmt.setString(4, name);
+                stmt.setInt(5, phone);
+                stmt.setString(6, company);
+                stmt.setString(7, address);
+                stmt.setInt(8, postcode);
+                stmt.setString(9, city);
                 //Execute update
                 stmt.executeUpdate();
 

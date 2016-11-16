@@ -1,7 +1,6 @@
 package presentationLayer.servlets;
 
 import dataAccessLayer.PDFCreator;
-import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
@@ -285,7 +283,7 @@ public class Front extends HttpServlet {
                         try {
                             System.out.println("creating user");
                             //Create user
-                            usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
+                            usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
                             //If successful, redirect
                             System.out.println("Index redirect");
                             response.sendRedirect("index.jsp?success");
