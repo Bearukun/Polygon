@@ -1,7 +1,6 @@
 package presentationLayer.servlets;
 
 import dataAccessLayer.PDFCreator;
-import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;

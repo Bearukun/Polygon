@@ -77,7 +77,7 @@
                                 <input class="form-control" type="number" name="construction_year" value="" placeholder="Bygget i år:" />
                                 <input class="form-control" type="text" name="purpose" value="" placeholder="Formål" />
                                 <input class="form-control" type="number" name="sqm" value="" placeholder="areal" />
-                                
+
                                 <input type="hidden" name="origin" value="createBuilding" />
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Opret bygning" name="" />
                             </form>

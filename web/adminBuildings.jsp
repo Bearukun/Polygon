@@ -99,10 +99,9 @@
                                     <td><b>KvadratMeter</b></td>
                                     <td><b>Bruger(ID)</b></td>
                                 </tr>
-                                <%
-                                    for (int i = 0; i < userList.size(); i++) {
-                                        for(int x = 0; x < allBuildings.size(); x++){
-                                            if(userList.get(i).getUser_id() ==  allBuildings.get(x).getUser_id()){
+                                <%                                    for (int i = 0; i < userList.size(); i++) {
+                                        for (int x = 0; x < allBuildings.size(); x++) {
+                                            if (userList.get(i).getUser_id() == allBuildings.get(x).getUser_id()) {
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  
@@ -116,7 +115,9 @@
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>  
                                     <td><%out.println(userList.get(i).getEmail());%></td> 
                                 </tr>
-                                <%}}}
+                                <%}
+                                        }
+                                    }
                                 %>
                             </tbody>
                         </table>

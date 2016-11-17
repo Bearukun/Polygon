@@ -16,18 +16,17 @@ import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
+
 /**
  * The purpose of DBFacade is to provide an encapsulated access to the database
  * (No SQL outside of the data-layer)
  */
 public class DBFacade implements DBFacadeInterface {
 
-    
     UserMapperInterface umi = new UserMapper();
     BuildingMapperInterface bmi = new BuildingMapper();
     DataMapperInterface dmi = new DataMapper();
-    
-    
+
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
 
@@ -41,7 +40,6 @@ public class DBFacade implements DBFacadeInterface {
         return umi.getUser(email);
 
     }
-
 
     @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
@@ -134,6 +132,4 @@ public class DBFacade implements DBFacadeInterface {
     public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
         dmi.uploadBuildingImage(building_id, img_name, img_file);
     }
-
- 
 }
