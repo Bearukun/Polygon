@@ -16,7 +16,6 @@ import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
-
 /**
  * The purpose of DBFacade is to provide an encapsulated access to the database
  * (No SQL outside of the data-layer)
@@ -43,6 +42,8 @@ public class DBFacade implements DBFacadeInterface {
 
     }
 
+
+    @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
 
         umi.createUser(email, password, name, phone, company, address, postcode, city, type);
@@ -124,16 +125,15 @@ public class DBFacade implements DBFacadeInterface {
         return dmi.getImage(image_id);
     }
 
+    @Override
     public void uploadIssueImage(int issue_id, String img_name, Blob img_file) throws Exception {
         dmi.uploadIssueImage(issue_id, img_name, img_file);
     }
 
+    @Override
     public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
         dmi.uploadBuildingImage(building_id, img_name, img_file);
     }
 
-    @Override
-    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+ 
 }
