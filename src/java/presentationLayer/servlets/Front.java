@@ -70,7 +70,6 @@ public class Front extends HttpServlet {
                         try {
 
                             user = usrCtrl.login(email, password);
-
                             //Retrieve all of the users data, to be used in the editProfile.jsp
                             String uEmail = user.getEmail();
                             String uPassword = user.getPassword();
@@ -81,6 +80,7 @@ public class Front extends HttpServlet {
                             int uPostcode = user.getPostcode();
                             String uCity = user.getCity();
                             int uUser_id = user.getUser_id();
+                            request.getSession().setAttribute("user_id", uUser_id);
 
                             //Takes the retrieved user data/information and sends it 
                             //to the editProfile.jsp page.
@@ -97,6 +97,7 @@ public class Front extends HttpServlet {
                             if (user != null) {
 
                                 request.getSession().setAttribute("email", user.getEmail().toString());
+                                
 
                                 //Translate user type:
                                 if (user.getType().toString().equals("CUSTOMER")) {

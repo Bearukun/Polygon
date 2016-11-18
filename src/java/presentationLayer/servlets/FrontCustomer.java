@@ -60,6 +60,7 @@ public class FrontCustomer extends HttpServlet {
                 request.getSession().setAttribute("sourcePage","Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
+                //user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
                 refreshBuilding(user_id);
                 request.getSession().setAttribute("userBuildings", userBuildings);
                 response.sendRedirect("user.jsp");
