@@ -87,7 +87,7 @@
                     <div id="container" class="container-fluid">
                         <h1>Nyt område:</h1>
 
-                        <form class="form-view-building" id="newArea" action="FrontC" method="POST">
+                        <form class="form-view-building" id="newArea" action="CustomerServlet" method="POST">
                             <p>Områdenavn</p>
                             <input type="text" name="areaName" />
                             <br><br>
@@ -114,7 +114,7 @@
                     <div id="container" class="container-fluid">
                         <h1>Nyt lokale:</h1>
 
-                        <form class="form-view-building" id="newRoom" action="FrontC" method="POST">
+                        <form class="form-view-building" id="newRoom" action="CustomerServlet" method="POST">
                             <p>Lokalenavn</p>
                             <input type="text" name="roomName" />
                             <br><br>
@@ -150,7 +150,7 @@
                         }
                     %>
                         <h1>Rediger bygning</h1>
-                        <form class="form-view-building" id="editBuilding" action="FrontC" method="POST">
+                        <form class="form-view-building" id="editBuilding" action="CustomerServlet" method="POST">
                             <p>Bygningsnavn</p>
                             <input type="text" name="buildingName" value="<%=build.getName()%>" />
                             <br><br>
@@ -240,7 +240,7 @@
                                     Kvadratmeter: <%=build.getSqm()%>
                                 </td>
                                 <td>
-                                    <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                    <form class="form-view-building" id="viewBuilding" action="CustomerServlet" method="POST">
                                         <input type="hidden" name="origin" value="viewBuilding" />
                                         <input type="hidden" name="originSection" value="editBuildingButton" />
                                         <input class="btn btn-primary" type="submit" value="Rediger" />
@@ -251,7 +251,7 @@
                     </table>  
                     <br><br>
                     
-                    <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                    <form class="form-view-building" id="viewBuilding" action="CustomerServlet" method="POST">
                         <input type="hidden" name="origin" value="viewBuilding" />
                         <input type="hidden" name="originSection" value="createAreaButton" />
                         <input class="btn btn-primary" type="submit" value="Nyt område" />
@@ -259,14 +259,14 @@
                     <br><br>
                     
                     <% if(build.getHealthcheck_pending()==1){%>
-                        <form class="form-view-building" action="FrontC" method="POST">
+                        <form class="form-view-building" action="CustomerServlet" method="POST">
                             <input type="hidden" name="origin" value="viewBuilding" />
                             <input type="hidden" name="originSection" value="healthcheckButton" />
                             <input type="hidden" name="originValue" value="cancel" />
                             <input class="btn btn-primary" type="submit" value="Aflys sundhedscheck" />
                         </form>
                     <%}else if(build.getHealthcheck_pending()==0){%>
-                        <form class="form-view-building" action="FrontC" method="POST">
+                        <form class="form-view-building" action="CustomerServlet" method="POST">
                             <input type="hidden" name="origin" value="viewBuilding" />
                             <input type="hidden" name="originSection" value="healthcheckButton" />
                             <input type="hidden" name="originValue" value="order" />
@@ -285,7 +285,7 @@
                                         <th colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></th>
                                         <th colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></th>
                                         <th colspan="1">
-                                            <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                            <form class="form-view-building" id="viewBuilding" action="CustomerServlet" method="POST">
                                                 <input type="hidden" name="origin" value="viewBuilding" />
                                                 <input type="hidden" name="originSection" value="deleteAreaButton" />
                                                 <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
@@ -293,7 +293,7 @@
                                             </form>
                                         </th>
                                         <th colspan="1">
-                                            <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                            <form class="form-view-building" id="viewBuilding" action="CustomerServlet" method="POST">
                                                 <input type="hidden" name="origin" value="viewBuilding" />
                                                 <input type="hidden" name="originSection" value="createRoomButton" />
                                                 <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
@@ -310,7 +310,7 @@
                                                 <td><%=buildingRooms.get(j).getDescription()%></td>
                                                 <td><%=buildingRooms.get(j).getSqm()%></td>
                                                 <td>
-                                                    <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                                    <form class="form-view-building" id="viewBuilding" action="CustomerServlet" method="POST">
                                                         <input type="hidden" name="origin" value="viewBuilding" />
                                                         <input type="hidden" name="originSection" value="deleteRoomButton" />
                                                         <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />

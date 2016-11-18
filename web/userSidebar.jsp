@@ -25,7 +25,7 @@
         </li>
         <li>
            <a>
-                <form action="FrontC" method="POST">
+                <form action="CustomerServlet" method="POST">
                     <input type="hidden" name="origin" value="editProfileButton" />
                     <label for="mySubmit" span role="button" style="font-weight: normal">
                         <i class="glyphicon glyphicon-user"></i>

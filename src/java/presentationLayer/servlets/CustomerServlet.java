@@ -21,8 +21,8 @@ import serviceLayer.exceptions.CustomException;
 /**
  * Servlet that handles the customer. 
  */
-@WebServlet(name = "FrontC", urlPatterns = {"/FrontC"})
-public class FrontCustomer extends HttpServlet {
+@WebServlet(name = "CustomerServlet", urlPatterns = {"/CustomerServlet"})
+public class CustomerServlet extends HttpServlet {
 
     private ArrayList<Building> userBuildings = new ArrayList();
     private ArrayList<User> userList = new ArrayList();
@@ -52,12 +52,11 @@ public class FrontCustomer extends HttpServlet {
         
         try {
 
-            //If we are coming from the Front servlet, i.e. we have just logged in
-            if(request.getSession().getAttribute("sourcePage").toString().equals("Front")){
+            //If we are coming from the LoginServlet servlet, i.e. we have just logged in
+            if(request.getSession().getAttribute("sourcePage").toString().equals("LoginServlet")){
                 request.getSession().setAttribute("sourcePage","Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
-                //user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
                 refreshBuilding(user_id);
                 request.getSession().setAttribute("userBuildings", userBuildings);
                 response.sendRedirect("user.jsp");

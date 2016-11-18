@@ -54,7 +54,7 @@
                     <h1>Rediger Profil</h1>
 
 
-                    <form class="form-edit-profile" action="FrontC" method="POST"> 
+                    <form class="form-edit-profile" action="CustomerServlet" method="POST"> 
                         <p>Email</p>                      
                         <input type="text" name="email" value="<%=request.getSession().getAttribute("uEmail")%>" />
                         <br><br>

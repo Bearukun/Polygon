@@ -25,7 +25,7 @@ if yes - then redirect - else nothing. --%>
             <div class="modal-dialog">
                 <div class="loginmodal-container">
                     <h1>Opret ny bruger</h1><br>
-                    <form class="form-signin" name="ValidationForm" action="Front" method="POST">
+                    <form class="form-signin" name="ValidationForm" action="LoginServlet" method="POST">
                         <input class="form-control" type="text" name="email" placeholder="Email">
                         <input class="form-control" type="password" name="password" placeholder="Adgangskode">
                         <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
@@ -47,7 +47,7 @@ if yes - then redirect - else nothing. --%>
         </div>
         <!-- Login div -->
         <div class="login_container">
-            <form class="form-signin" action="Front" method="POST">
+            <form class="form-signin" action="LoginServlet" method="POST">
                 <img src="./img/logo.png" class="img-responsive center-block" alt="Responsive image">
                 <input class="form-control" type="text" name="email" value="" placeholder="Email" />
                 <input class="form-control" type="password" name="password" value="" placeholder="Adgangskode" />
