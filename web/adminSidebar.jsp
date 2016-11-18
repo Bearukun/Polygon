@@ -1,13 +1,13 @@
 <div class="profile-usermenu">
     <ul class="nav">
-        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("Overblik")){%>
-            <li class="active">
-        <%} else{%>
-            <li>
-        <%}%>
-                <a href="admin.jsp?refresh">
-                    <i class="glyphicon glyphicon-home"></i>
-                    Overblik </a>
+        <% if (request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("Overblik")) {%>
+        <li class="active">
+            <%} else {%>
+        <li>
+            <%}%>
+            <a href="admin.jsp?refresh">
+                <i class="glyphicon glyphicon-home"></i>
+                Overblik </a>
         </li>
         <li>
             <a href="adminBuildings.jsp" target="_self">

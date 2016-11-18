@@ -10,9 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Area;
@@ -22,7 +19,7 @@ import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
 /**
- * Servlet used to check what type of user is logging in.
+ * Servlet that handles the customer. 
  */
 @WebServlet(name = "FrontC", urlPatterns = {"/FrontC"})
 public class FrontCustomer extends HttpServlet {
