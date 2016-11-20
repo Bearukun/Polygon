@@ -44,19 +44,8 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li>
-                                    <a href="technician.jsp?refresh">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                     <li>
-                                    <a href="createPDF.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-file"></i>
-                                        Sundhedscheck </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "Overblik");%>
+                        <%@ include file="technicianSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
                 </div>
