@@ -59,7 +59,7 @@ public class DataMapper implements DataMapperInterface {
 
             } catch (SQLException ex) {
 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                 throw new CustomException("SQL Error:@DataMapper.getImage." + ex.getMessage());
 
             }
@@ -107,7 +107,7 @@ public class DataMapper implements DataMapperInterface {
 
             } catch (SQLException ex) {
 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                 throw new CustomException("SQL Error:@DataMapper.uploadIssueImage." + ex.getMessage());
 
             }
@@ -152,7 +152,7 @@ public class DataMapper implements DataMapperInterface {
 
             } catch (SQLException ex) {
 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                 throw new CustomException("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
 
             }

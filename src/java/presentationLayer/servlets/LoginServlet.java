@@ -119,7 +119,7 @@ public class LoginServlet extends HttpServlet {
                                     request.getSession().setAttribute("user_id", user.getUser_id());
                                     
                                     //Redirect to Customer servlet
-                                    response.sendRedirect("CustomerServlet");
+                                    response.sendRedirect("UserServlet");
 
                                     break;
 
@@ -324,7 +324,7 @@ public class LoginServlet extends HttpServlet {
                             Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
                             Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
 
-                    response.sendRedirect("index.jsp?sucess=PDFCreated");
+                    response.sendRedirect("index.jsp?success=PDFCreated");
                     break;
 
             }

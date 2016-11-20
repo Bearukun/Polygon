@@ -43,8 +43,13 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "Brugerindstillinger"); %>
                         <% if(request.getSession().getAttribute("source").toString().equals("user")){%>
                             <%@ include file="userSidebar.jsp"%>
+                        <%} else if(request.getSession().getAttribute("source").toString().equals("technician")){%>
+                            <%@ include file="technicianSidebar.jsp"%>
+                        <%} else if(request.getSession().getAttribute("source").toString().equals("admin")){%>
+                            <%@ include file="adminSidebar.jsp"%>
                         <%}%>
                         <!-- END MENU -->
                     </div>
@@ -54,7 +59,7 @@
                     <h1>Rediger Profil</h1>
 
 
-                    <form class="form-edit-profile" action="CustomerServlet" method="POST"> 
+                    <form class="form-edit-profile" action="NavigatorServlet" method="POST"> 
                         <p>Email</p>                      
                         <input type="text" name="email" value="<%=request.getSession().getAttribute("uEmail")%>" />
                         <br><br>
@@ -80,6 +85,7 @@
                         <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>" />
                         <br><br>
                         <input type="hidden" name="origin" value="editProfile" />
+                        <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
                         <br><br>
                         <input class="btn btn-primary" type="submit" value="Gem Ændringer" />
                         <br><br>

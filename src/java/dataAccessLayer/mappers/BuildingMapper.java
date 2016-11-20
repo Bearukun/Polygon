@@ -87,7 +87,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -144,7 +144,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -153,6 +153,36 @@ public class BuildingMapper implements BuildingMapperInterface {
         
     }
 
+    @Override
+    public void deleteBuilding(int building_id) throws CustomException {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "DELETE FROM building WHERE building_id = ?;ALTER TABLE building AUTO_INCREMENT=1;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, building_id);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new CustomException("SQL Error:@DBFacade.deleteBuilding."+ex.getMessage());
+            }
+        }
+    }
+    
     @Override
     public ArrayList<Building> getAllBuildings() throws CustomException {
         
@@ -218,7 +248,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -263,7 +293,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
                 rs.close();
             } catch (SQLException ex) {
-                //Throw error if not sucessful. 
+                //Throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getAreas."+ex.getMessage());
             }
         }
@@ -311,7 +341,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -353,7 +383,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
                 rs.close();
             } catch (SQLException ex) {
-                //Throw error if not sucessful. 
+                //Throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getRooms."+ex.getMessage());
             }
         }
@@ -388,7 +418,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 con.close();
                 stmt.close();
             } catch (SQLException ex) {
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.createArea."+ex.getMessage());
             }
         }
@@ -418,7 +448,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 con.close();
                 stmt.close();
             } catch (SQLException ex) {
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.deleteArea."+ex.getMessage());
             }
         }
@@ -451,7 +481,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 con.close();
                 stmt.close();
             } catch (SQLException ex) {
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.createRoom."+ex.getMessage());
             }
         }
@@ -481,7 +511,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 con.close();
                 stmt.close();
             } catch (SQLException ex) {
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.deleteRoom."+ex.getMessage());
             }
         }
@@ -510,7 +540,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 con.close();
                 stmt.close();
             } catch (SQLException ex) {
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.toggleHealthcheck."+ex.getMessage());
             }
         }

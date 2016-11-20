@@ -50,11 +50,14 @@ public class DBFacade implements DBFacadeInterface {
 
     @Override
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException {
-
-        bmi.createBuilding(name, address, postcode, city, construction_year, purpose, sqm, 0);
-
+        bmi.createBuilding(name, address, postcode, city, construction_year, purpose, sqm, user_id);
     }
 
+    @Override
+    public void deleteBuilding(int building_id) throws CustomException {
+        bmi.deleteBuilding(building_id);
+    }
+    
     @Override
     public ArrayList<User> getUsers() throws CustomException {
 

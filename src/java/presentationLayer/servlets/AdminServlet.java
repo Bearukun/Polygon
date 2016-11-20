@@ -242,13 +242,14 @@ public class AdminServlet extends HttpServlet {
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } 
                     
-                    break;
+                break;
+                
                 case "editProfileButton":
                     //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
                     request.getSession().setAttribute("source", "admin");
                     response.sendRedirect("editProfile.jsp");
                     
-                    break;
+                break;
                     
                 case "editProfile":
 
@@ -283,7 +284,7 @@ public class AdminServlet extends HttpServlet {
                     //redirect to user.jsp
                     response.sendRedirect("admin.jsp?success=UpdateSuccessful");
 
-                    break;
+                break;
             }
 
         } catch (Exception e) {

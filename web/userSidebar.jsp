@@ -9,10 +9,21 @@
                 <i class="glyphicon glyphicon-home"></i>
                 Overblik </a>
         </li>
-        <li>
-            <a href="addBuilding.jsp" target="_self">
-                <i class="glyphicon glyphicon-plus"></i>
-                Tilføj bygning </a>
+        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("TilføjBygning")){%>
+            <li class="active">
+        <%} else{%>
+            <li>
+        <%}%>
+           <a>
+                <form action="UserServlet" method="POST">
+                    <input type="hidden" name="origin" value="addBuildingButton" />
+                    <label for="addBuildingSubmit" span role="button" style="font-weight: normal">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        Tilføj bygning
+                    </label>
+                    <input id="addBuildingSubmit" type="submit" class="hidden" />
+                </form>
+            </a>
         </li>
         <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("VisBygning")){%>
             <li class="active">
@@ -23,15 +34,19 @@
                 <i class="glyphicon glyphicon-wrench"></i>
                 Vis bygning </a>
         </li>
-        <li>
+        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("Brugerindstillinger")){%>
+            <li class="active">
+        <%} else{%>
+            <li>
+        <%}%>
            <a>
-                <form action="CustomerServlet" method="POST">
+                <form action="UserServlet" method="POST">
                     <input type="hidden" name="origin" value="editProfileButton" />
-                    <label for="mySubmit" span role="button" style="font-weight: normal">
+                    <label for="editProfileSubmit" span role="button" style="font-weight: normal">
                         <i class="glyphicon glyphicon-user"></i>
                         Brugerindstillinger
                     </label>
-                    <input id="mySubmit" type="submit" class="hidden" />
+                    <input id="editProfileSubmit" type="submit" class="hidden" />
                 </form>
             </a>
         </li>

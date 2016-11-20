@@ -44,30 +44,8 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li>
-                                    <a href="admin.jsp?refresh">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                </li>
-                                <li class="active">
-                                    <a href="adminBuildings.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-object-align-bottom"></i>
-                                        Vis bygninger </a>
-                                </li>
-                                <li>
-                                    <a href="adminUsers.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-th-list"></i>
-                                        Håndter brugere </a>
-                                </li>
-                                <li>
-                                    <a href="adminPendingBuildings.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-list"></i>
-                                        Healthchecks </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "VisBygninger");%>
+                        <%@ include file="adminSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
                 </div>
@@ -88,7 +66,7 @@
                             <tbody>
                                 <tr>
                                     <td><b>Building(ID)</b></td>
-                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Bygningsnavn</b></td>
                                     <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnummer</b></td>

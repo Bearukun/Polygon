@@ -21,8 +21,8 @@ import serviceLayer.exceptions.CustomException;
 /**
  * Servlet that handles the customer. 
  */
-@WebServlet(name = "CustomerServlet", urlPatterns = {"/CustomerServlet"})
-public class CustomerServlet extends HttpServlet {
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet"})
+public class UserServlet extends HttpServlet {
 
     private ArrayList<Building> userBuildings = new ArrayList();
     private ArrayList<User> userList = new ArrayList();
@@ -269,80 +269,12 @@ public class CustomerServlet extends HttpServlet {
                     //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
                     request.getSession().setAttribute("source", "user");
                     response.sendRedirect("editProfile.jsp");
-                    
-                    break;
-                    
-                case "editProfile":
-
-                    //Retrieve form input values from editProfile.jsp
-                    String uEmail = request.getParameter("email");
-                    String uPassword = request.getParameter("password");
-                    String uName = request.getParameter("name");
-                    int uPhone = Integer.parseInt(request.getParameter("phonenumber"));
-                    String uCompany = request.getParameter("company");
-                    String uAddress = request.getParameter("address");
-                    int uPostcode = Integer.parseInt(request.getParameter("postcode"));
-                    String uCity = request.getParameter("city");
-                    int uSelectedUser = user_id;
-                    
-                    //Save the user's edited values to the user database
-                    usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
-
-                    //Resets/updates the userName, password and updates the displayed username
-                    request.getSession().setAttribute("email", uEmail);
-                    request.getSession().setAttribute("password", uPassword);
-
-                    //Updates the editUserTable with the new/updated user information
-                    request.getSession().setAttribute("uEmail", uEmail);
-                    request.getSession().setAttribute("uPassword", uPassword);
-                    request.getSession().setAttribute("uName", uName);
-                    request.getSession().setAttribute("uPhonenumber", uPhone);
-                    request.getSession().setAttribute("uCompany", uCompany);
-                    request.getSession().setAttribute("uAddress", uAddress);
-                    request.getSession().setAttribute("uPostcode", uPostcode);
-                    request.getSession().setAttribute("uCity", uCity);
-
-                    //redirect to user.jsp
-                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
-
-                    break;
-
- 
-                case "createBuilding":
-
-                    //If no user is logged in. (user == 0)
-                    if (user_id>0) {
-
-                        String assigned_tech_id = request.getParameter("assigned_tech_id");
-                        String healthcheck_pending = request.getParameter("healthcheck_pending");
-                        String name = request.getParameter("name");
-                        String address = request.getParameter("address");
-                        String postcode = request.getParameter("postcode");
-                        String city = request.getParameter("city");
-                        String construction_year = request.getParameter("construction_year");
-                        String purpose = request.getParameter("purpose");
-                        String sqm = request.getParameter("sqm");
-                        try {
-
-                            //createBuilding
-                            bldgCtrl.createBuilding(name, address, Integer.parseInt(postcode), city, Integer.parseInt(construction_year), purpose, Integer.parseInt(sqm), user_id);
-                            refreshBuilding(user_id);
-                            //If successful, redirect
-                            response.sendRedirect("user.jsp?sucess=buildingAdded");
-
-                        } catch (CustomException e) {
-
-                            errMsg = e.getMessage();
-                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
-
-                        }
-
-                    } else {
-
-                        //Redirect to index if no user is logged in.
-                        response.sendRedirect("index.jsp?=notLoggedIn");
-
-                    }
+                break;
+                
+                case "addBuildingButton":
+                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
+                    request.getSession().setAttribute("source", "user");
+                    response.sendRedirect("addBuilding.jsp");
                 break;
             }
 

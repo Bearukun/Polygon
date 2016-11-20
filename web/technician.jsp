@@ -52,7 +52,7 @@
                 <!-- SITE CONTENT -->
                  <div class="col-sm-10">
                     <div id="container" class="container-fluid">
-                        <h1>Bygninger:</h1>
+                        <h1>Overblik:</h1>
 
                         <% ArrayList<User> userList = new ArrayList();
                             ArrayList<Building> allBuildings = new ArrayList();
@@ -65,8 +65,8 @@
                         <table border="1" text-align="left" class="table table-striped">
                             <tbody>
                                 <tr>
-                                    <td><b>Building(ID)</b></td>
-                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Bygnings-ID</b></td>
+                                    <td><b>Bygningsnavn</b></td>
                                     <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnummer</b></td>

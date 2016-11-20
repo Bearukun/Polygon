@@ -231,8 +231,7 @@ public class TechnicianServlet extends HttpServlet {
                     //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
                     request.getSession().setAttribute("source", "technician");
                     response.sendRedirect("editProfile.jsp");
-
-                    break;
+                break;
 
                 case "editProfile":
 

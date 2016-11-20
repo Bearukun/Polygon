@@ -87,7 +87,7 @@
                             <tbody>
                                 <tr>
                                     <td><b>Building(ID)</b></td>
-                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Bygningsnavn</b></td>
                                     <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnummer</b></td>

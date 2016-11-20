@@ -56,7 +56,7 @@ if yes - then redirect - else nothing. --%>
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
 
-                        <h1>Bygninger:</h1>
+                        <h1>Overblik:</h1>
 
                         <% ArrayList<Building> userBuildings = new ArrayList();
 
@@ -79,23 +79,22 @@ if yes - then redirect - else nothing. --%>
                         <table border="1" text-align="left" class="table table-striped">
                             <tbody>
                                 <tr>
-                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>Bygningsnavn</b></td>
                                     <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnr.</b></td>
                                     <td><b>By</b></td>
                                     <td><b>Tilstand</b></td>
-                                    <td><b>Opførelses År</b></td>
+                                    <td><b>Opførelsesår</b></td>
                                     <td><b>Formål</b></td>
-                                    <td><b>KvadratMeter</b></td>
-                                    
+                                    <td><b>Kvadratmeter</b></td>
                                 </tr>
                                 <%
                                     for (int i = 0; i < userBuildings.size(); i++) {
                                 //Dynamically load in a row for each of the user's buildings
                                 %><tr>
                                     <td>
-                                        <form class="submitLink" action="CustomerServlet" method="POST">
+                                        <form class="submitLink" action="UserServlet" method="POST">
                                             <input type="submit" class="submitLink" value="<%=userBuildings.get(i).getName()%>" />
                                             <input type="hidden" name="buildingID" value="<%=userBuildings.get(i).getBuilding_id()%>" />
                                             <input type="hidden" name="origin" value="userOverview" />
@@ -108,7 +107,7 @@ if yes - then redirect - else nothing. --%>
                                     <td><%out.println(userBuildings.get(i).getCondition());%></td>  
                                     <td><%out.println(userBuildings.get(i).getConstruction_year());%></td>  
                                     <td><%out.println(userBuildings.get(i).getPurpose());%></td>  
-                                    <td><%out.println(userBuildings.get(i).getSqm());%></td>  
+                                    <td><%out.println(userBuildings.get(i).getSqm());%></td>
                                 </tr>
                                 <%}
                                 %>
