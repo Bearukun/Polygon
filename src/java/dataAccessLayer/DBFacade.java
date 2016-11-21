@@ -135,4 +135,10 @@ public class DBFacade implements DBFacadeInterface {
     public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
         dmi.uploadBuildingImage(building_id, img_name, img_file);
     }
+
+    @Override
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException {
+        bmi.assignHealthcheck(buildingId, technicianId);
+    }
+
 }

@@ -34,6 +34,7 @@ public class UserServlet extends HttpServlet {
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
     private int user_id;
+    private String origin = "";
     PDFCreator pdfwt = new PDFCreator();
 
     /**
@@ -63,7 +64,9 @@ public class UserServlet extends HttpServlet {
             }
         
             String errMsg = null;
-            String origin = request.getParameter("origin");
+            if(request.getParameter("origin")!=null){
+                origin = request.getParameter("origin");
+            }
             
             switch (origin) {
         

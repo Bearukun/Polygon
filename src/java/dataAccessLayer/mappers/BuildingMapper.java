@@ -545,4 +545,34 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
         }
     }
+
+    @Override
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            String sql = "UPDATE polygon.building SET assigned_tech_id=?, healthcheck_pending=? WHERE building_id=?";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, technicianId);
+            stmt.setInt(2, 2);
+            stmt.setInt(3, buildingId);
+            //Execute update.
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new CustomException("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new CustomException("SQL Error:@DBFacade.assignHealthcheck."+ex.getMessage());
+            }
+        }
+    }
 }

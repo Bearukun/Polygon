@@ -33,4 +33,5 @@ public interface BuildingControllerInterface {
     
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException;
     
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException; 
 }

@@ -49,4 +49,6 @@ public interface DBFacadeInterface {
 
     public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception;
 
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException; 
+    
 }

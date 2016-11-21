@@ -32,10 +32,16 @@
         <%} else{%>
             <li>
         <%}%>
-            <a href="#">
-            <!--<a href="adminPendingBuildings.jsp" target="_self">-->
-                <i class="glyphicon glyphicon-list"></i>
-                Healthchecks </a>
+            <a>
+                <form action="AdminServlet" method="POST">
+                    <input type="hidden" name="origin" value="healthcheckButton" />
+                    <label for="healthcheckSubmit" span role="button" style="font-weight: normal">
+                        <i class="glyphicon glyphicon-list"></i>
+                        Healthchecks
+                    </label>
+                    <input id="healthcheckSubmit" type="submit" class="hidden" />
+                </form>
+            </a>
         </li>
         <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("Brugerindstillinger")){%>
             <li class="active">

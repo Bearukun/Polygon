@@ -31,4 +31,6 @@ public interface BuildingMapperInterface {
     public void deleteRoom(int room_id) throws CustomException;
     
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException;
+    
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException; 
 }

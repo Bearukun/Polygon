@@ -73,4 +73,9 @@ public class BuildingController implements BuildingControllerInterface{
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
         dbfacade.toggleHealthcheck(building_id, healthcheck_pending);
     }
+
+    @Override
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException {
+        dbfacade.assignHealthcheck(buildingId, technicianId);
+    }
 }

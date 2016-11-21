@@ -1,6 +1,7 @@
 package presentationLayer.servlets;
 
 import dataAccessLayer.PDFCreator;
+import java.awt.AWTEventMulticaster;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
@@ -31,6 +32,7 @@ public class AdminServlet extends HttpServlet {
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
     private int user_id;
+    private String origin = "";
     PDFCreator pdfwt = new PDFCreator();
 
     /**
@@ -62,7 +64,9 @@ public class AdminServlet extends HttpServlet {
             }
         
             String errMsg = null;
-            String origin = request.getParameter("origin");
+            if(request.getParameter("origin")!=null){
+                origin = request.getParameter("origin");
+            }
             
             switch (origin) {
         
@@ -252,7 +256,6 @@ public class AdminServlet extends HttpServlet {
                 break;
                     
                 case "editProfile":
-
                     //Retrieve form input values from editProfile.jsp
                     String uEmail = request.getParameter("email");
                     String uPassword = request.getParameter("password");
@@ -283,8 +286,21 @@ public class AdminServlet extends HttpServlet {
 
                     //redirect to user.jsp
                     response.sendRedirect("admin.jsp?success=UpdateSuccessful");
-
                 break;
+                case "healthcheckButton":
+                    
+                    //Save list of technicians in the Session
+                    request.getSession().setAttribute("techniciansList", getTechnicians());
+                    response.sendRedirect("adminPendingBuildings.jsp");
+                break;
+                
+                case "assignHealthcheckButton":
+                    int buildingId = Integer.parseInt(request.getParameter("buildingId"));
+                    int technicianId = Integer.parseInt(request.getParameter("technicianId"));
+                    bldgCtrl.assignHealthcheck(buildingId, technicianId);
+                    refreshAllBuildings();
+                    response.sendRedirect("adminPendingBuildings.jsp");
+                break;   
             }
 
         } catch (Exception e) {
@@ -293,6 +309,17 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    //Deducts a list of technicians from the user list
+    public ArrayList<User> getTechnicians() throws CustomException {
+        ArrayList<User> techniciansList = new ArrayList();
+        for (User thisUser : userList) {
+            if(thisUser.getType().toString().equals("TECHNICIAN")){
+                techniciansList.add(new User(thisUser.getUser_id(), thisUser.getEmail(), thisUser.getName()));
+            }
+        }
+        return techniciansList; 
+    }
+    
     //Refreshes the list of buildings
     public void refreshBuilding(int user_id) throws CustomException {
 
