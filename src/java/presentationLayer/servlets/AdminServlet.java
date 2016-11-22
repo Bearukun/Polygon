@@ -301,6 +301,27 @@ public class AdminServlet extends HttpServlet {
                     refreshAllBuildings();
                     response.sendRedirect("adminPendingBuildings.jsp");
                 break;   
+                
+                case "newCustomer":
+                    
+                    String newUserEmail = request.getParameter("email");
+                    String newUserPassword = request.getParameter("password");
+                    String newUserConfirmedPassword = request.getParameter("passwordConfirm");               
+                    String newUserName = request.getParameter("name");                  
+                    int newUserPhone = Integer.parseInt(request.getParameter("phone"));              
+                    String newUserCompany = request.getParameter("company");                
+                    String newUserAddress = request.getParameter("address");                   
+                    int newUserPostcode = Integer.parseInt(request.getParameter("postcode"));          
+                    String newUserCity = request.getParameter("city");
+                    String newUserType = request.getParameter("type");
+                     
+                    usrCtrl.createUser(newUserEmail, newUserPassword, newUserName, newUserPhone, newUserCompany, newUserAddress, newUserPostcode, newUserCity, User.type.valueOf(newUserType));
+                   
+                    
+                   
+                    response.sendRedirect("adminUsers.jsp");
+                    
+                    break; 
             }
 
         } catch (Exception e) {
