@@ -56,7 +56,8 @@
 
                         <% ArrayList<User> userList = new ArrayList();
                             ArrayList<Building> allBuildings = new ArrayList();
-                            
+                            int user_id = (Integer) request.getSession().getAttribute("user_id");
+                            String user_email = request.getSession().getAttribute("user_email").toString();
                             userList = (ArrayList<User>) request.getSession().getAttribute("userList");
                             allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
 
@@ -72,15 +73,15 @@
                                     <td><b>Postnummer</b></td>
                                     <td><b>By</b></td>
                                     <td><b>Tilstand</b></td>
-                                    <td><b>Opførelses år</b></td>
+                                    <td><b>Opførelsesår</b></td>
                                     <td><b>Formål</b></td>
-                                    <td><b>KvadratMeter</b></td>
+                                    <td><b>Kvadratmeter</b></td>
                                     <td><b>Bruger(ID)</b></td>
                                 </tr>
                                 <%
-                                    for (int i = 0; i < userList.size(); i++) {
+                                    
                                         for(int x = 0; x < allBuildings.size(); x++){
-                                            if(userList.get(i).getUser_id() ==  allBuildings.get(x).getAssigned_tech_id()){
+                                            if(user_id ==  allBuildings.get(x).getAssigned_tech_id()){
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  
@@ -92,9 +93,9 @@
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>  
-                                    <td><%out.println(userList.get(i).getEmail());%></td> 
+                                    <td><%out.println(user_email);%></td> 
                                 </tr>
-                                <%}}}
+                                <%}}
                                 %>
                             </tbody>
                         </table>

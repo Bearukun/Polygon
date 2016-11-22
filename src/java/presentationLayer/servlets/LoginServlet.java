@@ -73,6 +73,7 @@ public class LoginServlet extends HttpServlet {
                             String uCity = user.getCity();
                             int uUser_id = user.getUser_id();
                             request.getSession().setAttribute("user_id", uUser_id);
+                            request.getSession().setAttribute("user_email", uEmail);
 
                             //Takes the retrieved user data/information and sends it 
                             //to the editProfile.jsp page.
