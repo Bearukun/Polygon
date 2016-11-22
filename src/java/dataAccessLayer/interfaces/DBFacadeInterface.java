@@ -22,7 +22,7 @@ public interface DBFacadeInterface {
     void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException;
 
     public void deleteBuilding(int building_id) throws CustomException;
-    
+
     ArrayList<User> getUsers() throws CustomException;
 
     public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException;
@@ -43,12 +43,17 @@ public interface DBFacadeInterface {
 
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException;
 
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException;
+
+    //Functions to the DataMapper
     public Image getImage(int image_id) throws Exception;
+    
+    public Image getBuildingImage(int building_id) throws Exception;
+    
+    public Image getIssueImage(int issue_id) throws Exception;
 
     public void uploadIssueImage(int issue_id, String img_name, Blob img_file) throws Exception;
 
     public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception;
 
-    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException; 
-    
 }

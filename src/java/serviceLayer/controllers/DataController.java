@@ -13,7 +13,21 @@ public class DataController implements DataControllerInterface {
     @Override
     public Image getImage(int image_id) throws Exception {
 
-        return dbfacade.getImage(image_id);
+        return checkIfImageExists(dbfacade.getImage(image_id));
+
+    }
+
+    @Override
+    public Image getBuildingImage(int building_id) throws Exception {
+
+        return checkIfImageExists(dbfacade.getBuildingImage(building_id));
+
+    }
+
+    @Override
+    public Image getIssueImage(int issue_id) throws Exception {
+
+        return checkIfImageExists(dbfacade.getIssueImage(issue_id));
 
     }
 
@@ -28,6 +42,29 @@ public class DataController implements DataControllerInterface {
     public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
 
         dbfacade.uploadBuildingImage(building_id, img_name, img_file);
+
+    }
+
+    /**
+     * Method used to return the default image if the requested img does not
+     * exist.
+     *
+     * @param img The Image to be examined.
+     * @return returns either a existing image, or the default.
+     * @throws Exception
+     */
+    @Override
+    public Image checkIfImageExists(Image img) throws Exception {
+
+        if (img.getImg_file() == null) {
+
+            return img = dbfacade.getImage(1);
+
+        } else {
+
+            return img;
+
+        }
 
     }
 
