@@ -68,6 +68,10 @@ public class PDFCreator {
 
         page4Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
+        
+                page5Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
+ 
+       page6Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
 
         savePDF(savePath, pdfName, doc);
 
@@ -350,6 +354,126 @@ public class PDFCreator {
             System.out.println(e);
         }
     }
+        
+        public void page5Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+ 
+         //Creates a new page.
+         PDPage page5 = new PDPage();
+ 
+        //Adds the new page to the .doc
+         doc.addPage(page5);
+         try {
+ 
+             PDPageContentStream content5 = new PDPageContentStream(doc, page5);
+ 
+             PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
+             PDFont fontHel = PDType1Font.TIMES_ROMAN;
+ 
+             defaultNewPageSetup(content5, imgFolderPath, pdfName, 5);
+ 
+             singleTextLine(content5, "Konklusion", 14, 50, 650);
+ 
+             singleTextLine(content5, "Lokale", 10, 50, 600);
+             singleTextLine(content5, "Anbefalinger", 10, 200, 600);
+ 
+             //Closes the content creation for Page 5
+             content5.close();
+ 
+         } catch (Exception e) {
+             System.out.println(e);
+         }
+     }
+ 
+     public void page6Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+ 
+         //Creates a new page.
+         PDPage page6 = new PDPage();
+ 
+         //Adds the new page to the .doc
+         doc.addPage(page6);
+         try {
+ 
+             PDPageContentStream content6 = new PDPageContentStream(doc, page6);
+ 
+             PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
+             PDFont fontHel = PDType1Font.TIMES_ROMAN;
+ 
+             defaultNewPageSetup(content6, imgFolderPath, pdfName, 6);
+ 
+             //Needs real user input
+             singleTextLineWithUserInput(content6, "Bygningsgennemgang er fortaget af", "The Ceo" + " , Polygon", 10, 50, 650);
+ 
+             //Needs real user input
+             singleTextLineWithUserInput(content6, "i samarbejde med ", "The other Ceo" + " (bygningsansvarlig).", 10, 50, 630);
+ 
+             singleTextLine(content6, "Bygningen er katagoriseret som", 14, 50, 600);
+ 
+             singleTextLine(content6, "Tilstand", 12, 50, 580);
+ 
+             singleTextLine(content6, "Tilstandsgrad 1", 10, 50, 560);
+             insertJPGImage(content6, imgFolderPath, "underLineJPG.jpg", 50, 555, 70, 2);
+             singleTextLine(content6, "God Tilstand", 10, 50, 545);
+ 
+             singleTextLine(content6, "Tilstandsgrad 2", 10, 50, 520);
+             insertJPGImage(content6, imgFolderPath, "underLineJPG.jpg", 50, 515, 70, 2);
+             singleTextLine(content6, "Middel Tilstand", 10, 50, 505);
+ 
+            singleTextLine(content6, "Tilstandsgrad 3", 10, 50, 480);
+             insertJPGImage(content6, imgFolderPath, "underLineJPG.jpg", 50, 475, 70, 2);
+             singleTextLine(content6, "Dårlig Tilstand", 10, 50, 465);
+ 
+             singleTextLine(content6, "Beskrivelse af bygningen", 10, 200, 580);
+ 
+             //God Tilstand
+             singleTextLine(content6, "Der er ingen problemer med bygningen; ", 8, 140, 560);
+             singleTextLine(content6, "Bygningens funktion er uden problemer", 8, 140, 550);
+ 
+             //Middel Tilstand
+             singleTextLine(content6, "Der er slid og skader på bygningen eller risiko for potentielle problemer med bygningen.", 8, 140, 520);
+             singleTextLine(content6, "Bygningens funktion er nedsat, eller der er risiko for, at funktionen bliver nedsat.", 8, 140, 510);
+ 
+             //Dårlig tilstand
+             singleTextLine(content6, "Der er problemer med bygningen.", 8, 140, 480);
+             singleTextLine(content6, "Bygningen er begyndt at forfalde, har defekte komponenter, er nedbrudt eller bør udskiftes", 8, 140, 470);
+             singleTextLine(content6, "Bygningens funktion er nedsat, eller bygningen er næsten eller helt ubrulig.", 8, 140, 460);
+ 
+             singleTextLine(content6, "Tilstandsgrad", 12, 515, 580);
+             
+             //Skal bruges en boolean at styre sig efter
+             
+             //God Tilstand
+             checkBoxImg(true, imgFolderPath, content6, 550, 560, 7, 7);
+             //Middel Tilstand
+             checkBoxImg(true, imgFolderPath, content6, 550, 520, 7, 7);
+             //Dårlig Tilstand
+             checkBoxImg(true, imgFolderPath, content6, 550, 480, 7, 7);
+             
+             //Terms of Use (?)
+             singleTextLine(content6, "Denne rapport og bygningsgennemgang er lavet for at klarlægge umiddelbare visuelle problemstillinger.", 8, 50, 400);
+             singleTextLine(content6, "Vores formål er at sikre, at bygningens anvendelse kan opretholdes", 8, 50, 390);
+             singleTextLine(content6, "Vi udbedrer ikke skader som en del af bygningsgennemgangen/rapporten.", 8, 50, 380);
+             singleTextLine(content6, "Gennemgangen af bygningen indeholder ikke fugtmålinger af hele bygningen,", 8, 50, 370);
+             singleTextLine(content6, "men vi kan foretage fugtscanninger enkelte steder i bygningen, hvis vi finder det nødvendigt.", 8, 50, 360);
+             singleTextLine(content6, "Hvis vi finder kritiske områder i bygningen vil vi fremlægge anbefalinger angående yderligere tiltag så som yderligere undersøgelser,", 8, 50, 350);
+             singleTextLine(content6, "reparationer eller bygningsopdateringer.", 8, 50, 340);
+             singleTextLine(content6, "Bemærk at vi skal have adgang til hele bygningen for at kunne udføre en fuld gennemgang", 8, 50, 330);
+             singleTextLine(content6, "(dette inkluderer adgang til tag, tagrum, kælder, krybekælder eller andre aflukkede områder). ", 8, 50, 320);
+             singleTextLine(content6, "Denne bygningsgennemgang er ikke-destruktiv. Hvis der skal laves destruktive indgreb, ", 8, 50, 310);
+             singleTextLine(content6, "skal dette først godkendes af de bygningsansvarlige.", 8, 50, 300);
+             singleTextLine(content6, "Destruktive indgreb er ikke en del af denne rapport eller bygningsgennemgang. ", 8, 50, 290);
+             singleTextLine(content6, "Den bygningsansvarlige skal udlevere plantegning over bygningen inden bygningsgennemgangen kan foretages. ", 8, 50, 260);
+             
+             
+             
+             //Closes the content creation for Page 6
+             content6.close();
+ 
+         } catch (Exception e) {
+             System.out.println(e);
+         }
+     }
+ 
+    
 
     public void savePDF(String savePath, String pdfName, PDDocument doc) {
         try {
