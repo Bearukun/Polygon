@@ -2,18 +2,17 @@ package serviceLayer.controllers.interfaces;
 
 import java.util.ArrayList;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.CustomException;
 
 public interface UserControllerInterface {
 
-    User login(String email, String password) throws CustomException;
+    User login(String email, String password) throws Exception;
 
-    User getUser(String email) throws CustomException;
+    User getUser(String email) throws Exception;
 
-    void createUser (String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException;
+    void createUser (String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception;
     
-    ArrayList<User> getUsers() throws CustomException;
+    ArrayList<User> getUsers() throws Exception;
         
-    void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException;
+    void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws Exception;
     
 }

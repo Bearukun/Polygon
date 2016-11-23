@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import serviceLayer.entities.Image;
-import serviceLayer.exceptions.CustomException;
 
 /**
  * Class dealing with file data
@@ -69,7 +68,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new CustomException("SQL Error:@DataMapper.getImage." + ex.getMessage());
+                throw new Exception("SQL Error:@DataMapper.getImage." + ex.getMessage());
 
             }
 
@@ -134,7 +133,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new CustomException("SQL Error:@DataMapper.getBuildingImage." + ex.getMessage());
+                throw new Exception("SQL Error:@DataMapper.getBuildingImage." + ex.getMessage());
 
             }
 
@@ -199,7 +198,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new CustomException("SQL Error:@DataMapper.getIssueImage." + ex.getMessage());
+                throw new Exception("SQL Error:@DataMapper.getIssueImage." + ex.getMessage());
 
             }
 
@@ -254,7 +253,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new CustomException("SQL Error:@DataMapper.uploadIssueImage." + ex.getMessage());
+                throw new Exception("SQL Error:@DataMapper.uploadIssueImage." + ex.getMessage());
 
             }
 
@@ -306,7 +305,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new CustomException("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
+                throw new Exception("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
 
             }
 

@@ -19,7 +19,6 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceCharacteristicsDictionary;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
-import serviceLayer.exceptions.CustomException;
 
 /**
  *
@@ -827,7 +826,7 @@ public class PDFCreator {
 
     }
 
-    public void testBlank(String pdfName) throws CustomException {
+    public void testBlank(String pdfName) throws Exception {
 
         String pdfname2 = "test2312";
 

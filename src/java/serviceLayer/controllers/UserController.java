@@ -7,14 +7,13 @@ import javax.swing.JOptionPane;
 
 import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.CustomException;
 
 public class UserController implements UserControllerInterface {
 
     private final DBFacadeInterface dbfacade = new DBFacade();
 
     @Override
-    public User login(String email, String password) throws CustomException {
+    public User login(String email, String password) throws Exception {
         
         if (email != null && password != null && !email.isEmpty() && !password.isEmpty()) {
 
@@ -31,7 +30,7 @@ public class UserController implements UserControllerInterface {
                     //If password is incorrect.     
                 } else {
 
-                    throw new CustomException("Password or username incorrect..!");
+                    throw new Exception("Password or username incorrect..!");
 
                 }
 
@@ -44,12 +43,12 @@ public class UserController implements UserControllerInterface {
     }
 
     @Override
-    public User getUser(String email) throws CustomException {
+    public User getUser(String email) throws Exception {
         return dbfacade.getUser(email);
     }
 
     @Override
-    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception {
 
         //If input fields aren't empty
         if (!email.isEmpty() && !password.isEmpty() && email != null && password != null) {
@@ -60,19 +59,19 @@ public class UserController implements UserControllerInterface {
         } else {
 
             //Input fields must be empty, throw error. 
-            throw new CustomException("Be sure to fill out both fields!");
+            throw new Exception("Be sure to fill out both fields!");
 
         }
 
     }
 
     @Override
-    public ArrayList<User> getUsers() throws CustomException {
+    public ArrayList<User> getUsers() throws Exception {
         return dbfacade.getUsers();
     }
 
     @Override
-    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws Exception {
         dbfacade.editUser(selectedUser, email, password, name, phone, company, address, postcode, city);
 
     }

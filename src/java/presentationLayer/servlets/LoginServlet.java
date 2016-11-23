@@ -3,7 +3,6 @@ package presentationLayer.servlets;
 import dataAccessLayer.PDFCreator;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
-import serviceLayer.entities.Area;
-import serviceLayer.entities.Building;
-import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.CustomException;
 
 /**
  * Servlet used to check what type of user is logging in.
@@ -129,7 +124,7 @@ public class LoginServlet extends HttpServlet {
                             }
 
                             //If something goes wrong, we need a way to show it.
-                        } catch (CustomException e) {
+                        } catch (Exception e) {
 
                             response.sendRedirect("#" + e.getMessage());
 
@@ -261,7 +256,7 @@ public class LoginServlet extends HttpServlet {
                             System.out.println("Index redirect");
                             response.sendRedirect("index.jsp?success");
 
-                        } catch (CustomException e) {
+                        } catch (Exception e) {
 
                             errMsg = e.getMessage();
                             response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
