@@ -11,8 +11,17 @@ import java.sql.SQLException;
 import serviceLayer.entities.Image;
 import serviceLayer.exceptions.CustomException;
 
+/**
+ * Class dealing with file data
+ */
 public class DataMapper implements DataMapperInterface {
 
+    /**
+     * Method to retrieve an image
+     * @param image_id int specifying which image to retrieve
+     * @return An object of type Image
+     * @throws Exception 
+     */
     @Override
     public Image getImage(int image_id) throws Exception {
 
@@ -71,6 +80,12 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method to retrieve a building image
+     * @param building_id int specifying which building's image to retrieve
+     * @return An object of type Image
+     * @throws Exception 
+     */
     @Override
     public Image getBuildingImage(int building_id) throws Exception {
 
@@ -130,6 +145,12 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method to retrieve an issue's image
+     * @param issue_id int specifying which issue's image to retrieve
+     * @return An object of type Image
+     * @throws Exception 
+     */
     @Override
     public Image getIssueImage(int issue_id) throws Exception {
 
@@ -189,6 +210,13 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method to upload an issue image
+     * @param issue_id int specifying which issue for which to upload an image
+     * @param img_name String detailing the image name
+     * @param img_file InputStream containing the image data
+     * @throws Exception 
+     */
     @Override
     public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception {
 
@@ -234,6 +262,13 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method to upload a building image
+     * @param building_id int specifying which building the image is pertaining
+     * @param img_name String detailing the image name
+     * @param img_file InputStream containing the image data
+     * @throws Exception 
+     */
     @Override
     public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
 

@@ -201,8 +201,8 @@
                     <form method="post" action="UserServlet" enctype="multipart/form-data">
                         <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
                         <div class="panel panel-default">
-                            <div class="panel-heading">Upload et billed</div>
-                            <div class="panel-body">Upload et billed af din bygning så vi har et overblik over hvordan den ser ud.</div>
+                            <div class="panel-heading">Upload et billede</div>
+                            <div class="panel-body">Upload et billede af din bygning så vi har et overblik over hvordan den ser ud.</div>
                         </div>
                         <input class="panel-body" type="file" name="img" size="50" accept="image/*" />
                         <input type="hidden" name="originSection" value="editBuildingImage" />

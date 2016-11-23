@@ -16,7 +16,7 @@ public interface BuildingMapperInterface {
     
     public ArrayList<Building> getAllBuildings() throws CustomException;
 
-    public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException;
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException;
 
     public ArrayList<Area> getAreas(int building_id) throws CustomException;
     

@@ -252,7 +252,7 @@ public class UserServlet extends HttpServlet {
                         int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
                         
                         //Save values to database
-                        bldgCtrl.viewBuilding(selectedBuilding, buildingName, address, postcod, cit, constructionYear, purpos, sq);
+                        bldgCtrl.editBuilding(selectedBuilding, buildingName, address, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user_id);
                         //redirect to viewBuilding into the specific building being edited

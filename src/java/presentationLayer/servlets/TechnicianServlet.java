@@ -222,7 +222,7 @@ public class TechnicianServlet extends HttpServlet {
                         int sq = Integer.parseInt(request.getParameter("sqm"));
                         int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
                         //Save values to database
-                        bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
+                        bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user_id);
                         //redirect to viewBuilding into the specific building being edited

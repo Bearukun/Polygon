@@ -11,7 +11,9 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.exceptions.CustomException;
-
+/**
+ * Class dealing with building data
+ */
 public class BuildingMapper implements BuildingMapperInterface {
 
     //Declare and instantiate ArrayLists.
@@ -23,7 +25,7 @@ public class BuildingMapper implements BuildingMapperInterface {
     
     /**
      * Method to retrieve all buildings pertaining a specific user
-     * @param user_id Takes an int as parameter
+     * @param user_id int identifying the user whose buildings are to be retrieved
      * @return An ArrayList of type Building
      * @throws CustomException 
      */
@@ -104,7 +106,18 @@ public class BuildingMapper implements BuildingMapperInterface {
         return userBuilding;
         
     }
-
+    /**
+     * Method to create a new building
+     * @param name String detailing the building's name
+     * @param address String detailing the building's address
+     * @param postcode int detailing the building's postcode
+     * @param city String detailing the building's city
+     * @param construction_year int detailing the building's year of construction
+     * @param purpose String detailing the building's designated purpose
+     * @param sqm int detailing the building's size in square metres
+     * @param user_id int identifying the user who needs to be linked to the new building
+     * @throws CustomException 
+     */
     @Override
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException {
         
@@ -158,7 +171,11 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
         
     }
-
+    /**
+     * Method to delete a specific building
+     * @param building_id int informing which building is to be deleted
+     * @throws CustomException 
+     */
     @Override
     public void deleteBuilding(int building_id) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.
@@ -188,7 +205,11 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
         }
     }
-    
+    /**
+     * Method to retrieve all buildings
+     * @return An ArrayList of type Building
+     * @throws CustomException 
+     */
     @Override
     public ArrayList<Building> getAllBuildings() throws CustomException {
         
@@ -265,7 +286,12 @@ public class BuildingMapper implements BuildingMapperInterface {
         
     }
 
-    
+    /**
+     * Method to retrieve all areas pertaining a specific building
+     * @param building_id int specifying which building's areas are to be retrieved
+     * @return An ArrayList of type Area
+     * @throws CustomException 
+     */
     @Override
     public ArrayList<Area> getAreas(int building_id) throws CustomException {
         
@@ -307,8 +333,21 @@ public class BuildingMapper implements BuildingMapperInterface {
         return buildingAreas;
     }
     
+    /**
+     * Method to edit a building's details
+     * @param selectedBuilding int specifying which building's details are to be edited
+     * @param buildingName String detailing the building's name
+     * @param addres String detailing the building's address
+     * @param postcod int detailing the building's postcode
+     * @param cit String detailing the building's city
+     * @param constructionYear int detailing the building's year of construction
+     * @param purpose String detailing the building's designated purpose
+     * @param sqm int detailing the building's size in square metres
+     * @throws CustomException 
+     */
+             
     @Override
-    public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -355,7 +394,13 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
         
     }
-
+    
+    /**
+     * Method to retrieve all rooms pertaining a specific building
+     * @param building_id int specifying which building's rooms are to be retrieved
+     * @return An ArrayList of type Room
+     * @throws CustomException 
+     */
     @Override
     public ArrayList<Room> getRooms(int building_id) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.
@@ -397,6 +442,14 @@ public class BuildingMapper implements BuildingMapperInterface {
         return buildingRooms;
     }
 
+    /**
+     * Method to create a new area
+     * @param name String detailing the name for the new area
+     * @param description String detailing the description for the new area
+     * @param sqm int detailing the number of square metres for the new area
+     * @param building_id String specifying the building for which the new area needs creating
+     * @throws CustomException 
+     */
     @Override
     public void createArea(String name, String description, int sqm, int building_id) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.
@@ -430,6 +483,11 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
     }
 
+    /**
+     * Method to delete an area
+     * @param area_id int specifying which area is to be deleted
+     * @throws CustomException 
+     */
     @Override
     public void deleteArea(int area_id) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.
@@ -460,6 +518,14 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
     }
 
+    /**
+     * Method to create a new room
+     * @param name String detailing the name for the new room
+     * @param description String detailing the description for the new room
+     * @param sqm int detailing the number of square metres for the new room
+     * @param area_id String specifying the area for which a new room needs creating
+     * @throws CustomException 
+     */
     @Override
     public void createRoom(String name, String description, int sqm, int area_id) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.
@@ -493,6 +559,11 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
     }
 
+    /**
+     * Method to delete a room
+     * @param room_id int specifying which room is to be deleted
+     * @throws CustomException 
+     */
     @Override
     public void deleteRoom(int room_id) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.
@@ -523,6 +594,12 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
     }
 
+    /**
+     * Method to change status for a healthcheck, either 'order' or 'cancel' 
+     * @param building_id int specifying which building for which the healthcheck option needs toggling
+     * @param healthcheck_pending int detailing the new status for the healthcheck
+     * @throws CustomException 
+     */
     @Override
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.
@@ -552,6 +629,12 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
     }
 
+    /**
+     * Method to reassign a healthcheck from status pending on to a technician
+     * @param buildingId int specifying which building for which the healthcheck needs reassigning
+     * @param technicianId int detailing which technician should be assigned the healthcheck 
+     * @throws CustomException 
+     */
     @Override
     public void assignHealthcheck(int buildingId, int technicianId) throws CustomException {
         //Declare new objects of the Connection and PrepareStatement.

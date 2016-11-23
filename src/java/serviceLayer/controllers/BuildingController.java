@@ -35,8 +35,8 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
-    public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
-        dbfacade.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpose, sqm);
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
+        dbfacade.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpose, sqm);
     }
 
     @Override

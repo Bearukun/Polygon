@@ -10,11 +10,20 @@ import java.util.ArrayList;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
+/**
+ * Class dealing with user data
+ */
 public class UserMapper implements UserMapperInterface {
 
     //Declare and instantiate ArrayLists.
     private ArrayList<User> allUsers = new ArrayList();
 
+    /**
+     * Method to retrieve a specific user
+     * @param email String specifying which user needs retrieving
+     * @return An object of type User
+     * @throws CustomException 
+     */
     @Override
     public User getUser(String email) throws CustomException {
         
@@ -93,6 +102,19 @@ public class UserMapper implements UserMapperInterface {
         
     }
 
+    /**
+     * Method to create a new user
+     * @param email String detailing the new user's email
+     * @param password String detailing the new user's password
+     * @param name String detailing the new user's name
+     * @param phone int detailing the new user's telephone number
+     * @param company String detailing the new user's company
+     * @param address String detailing the new user's address
+     * @param postcode int detailing the new user's postcode
+     * @param city int detailing the new user's city
+     * @param type Enum detailing the new user's user category
+     * @throws CustomException 
+     */
     @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
         
@@ -166,6 +188,11 @@ public class UserMapper implements UserMapperInterface {
 
     }
 
+    /**
+     * Method to retrieve all users
+     * @return An ArrayList of type User
+     * @throws CustomException 
+     */
     @Override
     public ArrayList<User> getUsers() throws CustomException {
         
@@ -214,6 +241,19 @@ public class UserMapper implements UserMapperInterface {
         return allUsers;
     }
 
+    /**
+     * Method to edit a user's details
+     * @param selectedUser int specifying which user's details are to be edited
+     * @param email String detailing the user's email
+     * @param password String detailing the user's password
+     * @param name String detailing the user's name
+     * @param phone int detailing the user's telephone number
+     * @param company String detailing the user's company
+     * @param address String detailing the user's address
+     * @param postcode int detailing the user's postcode
+     * @param city String detailing the user's city
+     * @throws CustomException 
+     */
     @Override
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
         

@@ -73,9 +73,9 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException {
 
-        bmi.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpose, sqm);
+        bmi.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpose, sqm);
 
     }
 
