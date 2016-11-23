@@ -40,7 +40,6 @@ public class DataMapper implements DataMapperInterface {
                 img.setImage_id(rs.getInt(1));
                 img.setImg_name(rs.getString(2));
                 img.setImg_file(rs.getBlob(3));
-                img.setIssue_id(rs.getInt(4));
 
             }
 
@@ -61,6 +60,124 @@ public class DataMapper implements DataMapperInterface {
 
                 //throw error if not successful. 
                 throw new CustomException("SQL Error:@DataMapper.getImage." + ex.getMessage());
+
+            }
+
+        }
+
+        //Return image.
+        return img;
+
+    }
+
+    @Override
+    public Image getBuildingImage(int building_id) throws Exception {
+
+        Image img = new Image();
+
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.image WHERE building_id = ?;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, building_id);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                img.setImage_id(rs.getInt(1));
+                img.setImg_name(rs.getString(2));
+                img.setImg_file(rs.getBlob(3));
+                img.setBuilding_id(rs.getInt(5));
+
+            }
+
+        } catch (Exception e) {
+
+            throw new Exception("SQL Error:@DataMapper.getBuildingImage." + e.getMessage());
+
+        } finally {
+
+            //Try releasing objects. 
+            try {
+
+                con.close();
+                stmt.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+
+                //throw error if not successful. 
+                throw new CustomException("SQL Error:@DataMapper.getBuildingImage." + ex.getMessage());
+
+            }
+
+        }
+
+        //Return image.
+        return img;
+
+    }
+
+    @Override
+    public Image getIssueImage(int issue_id) throws Exception {
+
+        Image img = new Image();
+
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.image WHERE issue_id = ?;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, issue_id);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                img.setImage_id(rs.getInt(1));
+                img.setImg_name(rs.getString(2));
+                img.setImg_file(rs.getBlob(3));
+                img.setIssue_id(rs.getInt(4));
+
+            }
+
+        } catch (Exception e) {
+
+            throw new Exception("SQL Error:@DataMapper.getIssueImage." + e.getMessage());
+
+        } finally {
+
+            //Try releasing objects. 
+            try {
+
+                con.close();
+                stmt.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+
+                //throw error if not successful. 
+                throw new CustomException("SQL Error:@DataMapper.getIssueImage." + ex.getMessage());
 
             }
 
