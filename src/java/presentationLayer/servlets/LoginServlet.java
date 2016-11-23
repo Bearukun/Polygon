@@ -316,7 +316,7 @@ public class LoginServlet extends HttpServlet {
         
     }
     
-    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws CustomException{
+    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws Exception{
         try{
             if (user.getType().toString().equals("CUSTOMER")) {
                 request.getSession().setAttribute("type", "Kunde");
