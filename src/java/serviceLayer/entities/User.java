@@ -36,7 +36,11 @@ public class User {
     public User() {
     }
     
-    
+    public User(int user_id, String email, String name) {
+        this.user_id = user_id;
+        this.email = email;
+        this.name = name;
+    }
 
     public int getUser_id() {
         return user_id;

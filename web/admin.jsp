@@ -44,8 +44,7 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <% request.getSession().setAttribute("ActiveSidebarMenu", "Overblik");
-                        %>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "Overblik");%>
                         <%@ include file="adminSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
@@ -55,8 +54,7 @@
 
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
-
-                        <h1>Bygninger:</h1>
+                        <h1>Overblik:</h1>
                     </div>
                 </div>
             </div>

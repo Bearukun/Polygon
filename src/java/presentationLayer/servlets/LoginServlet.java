@@ -22,14 +22,8 @@ import serviceLayer.exceptions.CustomException;
 /**
  * Servlet used to check what type of user is logging in.
  */
-@WebServlet(name = "Front", urlPatterns = {"/Front"})
-public class Front extends HttpServlet {
-
-    private ArrayList<Building> userBuildings = new ArrayList();
-    private ArrayList<User> userList = new ArrayList();
-    private ArrayList<Building> allBuildings = new ArrayList();
-    private ArrayList<Area> buildingAreas = new ArrayList();
-    private ArrayList<Room> buildingRooms = new ArrayList();
+@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
+public class LoginServlet extends HttpServlet {
 
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
@@ -68,7 +62,6 @@ public class Front extends HttpServlet {
                         try {
 
                             user = usrCtrl.login(email, password);
-
                             //Retrieve all of the users data, to be used in the editProfile.jsp
                             String uEmail = user.getEmail();
                             String uPassword = user.getPassword();
@@ -79,6 +72,8 @@ public class Front extends HttpServlet {
                             int uPostcode = user.getPostcode();
                             String uCity = user.getCity();
                             int uUser_id = user.getUser_id();
+                            request.getSession().setAttribute("user_id", uUser_id);
+                            request.getSession().setAttribute("user_email", uEmail);
 
                             //Takes the retrieved user data/information and sends it 
                             //to the editProfile.jsp page.
@@ -95,6 +90,8 @@ public class Front extends HttpServlet {
                             if (user != null) {
 
                                 request.getSession().setAttribute("email", user.getEmail().toString());
+                                //Save where (which page) we are coming from
+                                request.getSession().setAttribute("sourcePage", "LoginServlet");
 
                                 //Translate user type:
                                 if (user.getType().toString().equals("CUSTOMER")) {
@@ -109,45 +106,21 @@ public class Front extends HttpServlet {
 
                                     request.getSession().setAttribute("type", "Administration");
                                 }
-
+                                
                                 if (user.getType().equals(User.type.ADMIN)) {
-                                    refreshUsers();
-                                    refreshAllBuildings();
-                                    request.getSession().setAttribute("userList", userList);
-                                    request.getSession().setAttribute("allBuildings", allBuildings);
-                                    response.sendRedirect("admin.jsp");
+                                    response.sendRedirect("AdminServlet");
                                     break;
 
                                 } else if (user.getType().equals(User.type.TECHNICIAN)) {
-
-                                    refreshUsers();
-                                    refreshAllBuildings();
-                                    request.getSession().setAttribute("userList", userList);
-                                    request.getSession().setAttribute("allBuildings", allBuildings);
-
-                                    // refreshBuilding(building.getAssigned_tech_id());
-                                    //request.getSession().setAttribute("userBuildings", userBuildings);
-                                    response.sendRedirect("technician.jsp");
+                                    response.sendRedirect("TechnicianServlet");
                                     break;
 
                                 } else {
-
-                                    refreshUsers();
-                                    //System.out.println("after ref: " + userList.size());
-                                    //Refreshes and populates the arrayList with buildings for the user.
-                                    refreshBuilding(user.getUser_id());
-
-                                    //Setup user's buildings
-                                    //request.getSession().setAttribute("userBuildings", userBuildings);
-                                    
                                     //Save the logged in user's id
                                     request.getSession().setAttribute("user_id", user.getUser_id());
                                     
-                                    //Save where (which page) we are coming from
-                                    request.getSession().setAttribute("sourcePage", "Front");
-                                    
                                     //Redirect to Customer servlet
-                                    response.sendRedirect("FrontC");
+                                    response.sendRedirect("UserServlet");
 
                                     break;
 
@@ -303,48 +276,6 @@ public class Front extends HttpServlet {
                     }
 
                     break;
-                    
-                case "createBuilding":
-
-                    //If no user is logged in. (user == null)
-                    if (user != null) {
-
-                        int user_id = user.getUser_id();
-                        String assigned_tech_id = request.getParameter("assigned_tech_id");
-                        String healthcheck_pending = request.getParameter("healthcheck_pending");
-                        String name = request.getParameter("name");
-                        String address = request.getParameter("address");
-                        String postcode = request.getParameter("postcode");
-                        String city = request.getParameter("city");
-                        String construction_year = request.getParameter("construction_year");
-                        String purpose = request.getParameter("purpose");
-                        String sqm = request.getParameter("sqm");
-                        try {
-
-                            //createBuilding
-                            bldgCtrl.createBuilding(name, address, Integer.parseInt(postcode), city, Integer.parseInt(construction_year), purpose, Integer.parseInt(sqm), user_id);
-                            refreshBuilding(user_id);
-                            //If successful, redirect
-                            response.sendRedirect("user.jsp?sucess=buildingAdded");
-
-                        } catch (CustomException e) {
-
-                            errMsg = e.getMessage();
-                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
-
-                        }
-
-                    } else {
-
-                        //Redirect to index if no user is logged in.
-                        response.sendRedirect("index.jsp?=notLoggedIn");
-
-                    }
-
-                    break;
-
-                case "adminUsers":
-                    break;
 
                 case "blankTestPDF":
 
@@ -370,20 +301,6 @@ public class Front extends HttpServlet {
                     String systemDir = System.getProperty("user.dir");
                     System.out.println(systemDir);
 
-//                    //Folderchooser
-//                    JFileChooser chooser = new JFileChooser();
-//                    chooser.setCurrentDirectory(new java.io.File("."));
-//                    chooser.setDialogTitle("choosertitle");
-//                    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//                    chooser.setAcceptAllFileFilterUsed(false);
-//
-//                    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-//                        System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-//                        System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
-//                    } else {
-//                        System.out.println("No Selection ");
-//
-//                    }
                     //Filechooser for selecting an image for the generated PDF
                     JFileChooser choose = new JFileChooser();
                     FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
@@ -408,7 +325,7 @@ public class Front extends HttpServlet {
                             Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
                             Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
 
-                    response.sendRedirect("index.jsp?sucess=PDFCreated");
+                    response.sendRedirect("index.jsp?success=PDFCreated");
                     break;
 
             }
@@ -417,40 +334,6 @@ public class Front extends HttpServlet {
 
         }
 
-    }
-
-    //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws CustomException {
-
-        userBuildings.clear();
-        userBuildings = bldgCtrl.getBuildings(user_id);
-
-    }
-    //Refreshes the list of buildings
-
-    public void refreshAllBuildings() throws CustomException {
-
-        allBuildings.clear();
-        allBuildings = bldgCtrl.getAllBuildings();
-
-    }
-
-    //Refreshes the list of building areas
-    public void refreshAreas(int building_id) throws CustomException {
-        buildingAreas.clear();
-        buildingAreas = bldgCtrl.getAreas(building_id);
-    }
-
-    //Refreshes the list of building rooms
-    public void refreshRooms(int building_id) throws CustomException {
-        buildingRooms.clear();
-        buildingRooms = bldgCtrl.getRooms(building_id);
-    }
-
-    public void refreshUsers() throws CustomException {
-
-        userList.clear();
-        userList = usrCtrl.getUsers();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

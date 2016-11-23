@@ -24,21 +24,21 @@
     </head>
     <body>
 
-        
-        
+
+
         <% ArrayList<Area> buildingAreas = new ArrayList();
-           buildingAreas = (ArrayList<Area>) request.getSession().getAttribute("buildingAreas");
+            buildingAreas = (ArrayList<Area>) request.getSession().getAttribute("buildingAreas");
         %>
         <% ArrayList<Room> buildingRooms = new ArrayList();
-           //buildingRooms.add(new Room(8, "name", "description", 100, 1, 1));
+            //buildingRooms.add(new Room(8, "name", "description", 100, 1, 1));
             buildingRooms = (ArrayList<Room>) request.getSession().getAttribute("buildingRooms");
-            
+
             ArrayList<Building> userBuildings = new ArrayList();
             int user_id = (Integer) request.getSession().getAttribute("user_id");
             userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
             Building build = new Building();
         %>
-            <!--request.getSession().getAttribute("buildingBeingEdited");-->
+        <!--request.getSession().getAttribute("buildingBeingEdited");-->
         <div class="container-fluid">
             <div class="siteContent">
                 <div class="col-sm-2">
@@ -64,30 +64,28 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <% request.getSession().setAttribute("ActiveSidebarMenu", "VisBygning"); %>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "VisBygning");
+                           %>
                         <%@ include file="userSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
                 </div>
                 <!-- SITE CONTENT -->
-            <!-- If else statements show different page contents depending on whether a building is 'just' being viewed or whether it is being edited -->    
-            <% 
-                
-            
-            
-            String source = "";
-            if(request.getSession().getAttribute("source")!=null){
-                source = request.getSession().getAttribute("source").toString();
-            }
-            switch (source) {
-                
-                case "createAreaButton":
-                    %>
-                    <div class="col-sm-10">
+                <!-- If else statements show different page contents depending on whether a building is 'just' being viewed or whether it is being edited -->    
+                <%
+                    String source = "";
+                    if (request.getSession().getAttribute("source") != null) {
+                        source = request.getSession().getAttribute("source").toString();
+                    }
+                    switch (source) {
+
+                        case "createAreaButton":
+                %>
+                <div class="col-sm-10">
                     <div id="container" class="container-fluid">
                         <h1>Nyt område:</h1>
 
-                        <form class="form-view-building" id="newArea" action="FrontC" method="POST">
+                        <form class="form-view-building" id="newArea" action="UserServlet" method="POST">
                             <p>Områdenavn</p>
                             <input type="text" name="areaName" />
                             <br><br>
@@ -105,16 +103,16 @@
                         </form>
                     </div>
                 </div>
-                    <%
-                    break;
-                
-                case "createRoomButton":
-                    %>
-                    <div class="col-sm-10">
+                <%
+                        break;
+
+                    case "createRoomButton":
+                %>
+                <div class="col-sm-10">
                     <div id="container" class="container-fluid">
                         <h1>Nyt lokale:</h1>
 
-                        <form class="form-view-building" id="newRoom" action="FrontC" method="POST">
+                        <form class="form-view-building" id="newRoom" action="UserServlet" method="POST">
                             <p>Lokalenavn</p>
                             <input type="text" name="roomName" />
                             <br><br>
@@ -131,13 +129,13 @@
                         </form>
                     </div>
                 </div>
-                    <%
-                    break;
-                
-                //If the building's details are being edited
-                case "editBuildingButton":
+                <%
+                        break;
+
+                    //If the building's details are being edited
+                    case "editBuildingButton":
                 %>
-                    <div class="col-sm-10">
+                <div class="col-sm-10">
                     <%
                         //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
@@ -149,27 +147,27 @@
                             }
                         }
                     %>
-                        <h1>Rediger bygning</h1>
-                        <form class="form-view-building" id="editBuilding" action="FrontC" method="POST">
-                            <p>Bygningsnavn</p>
-                            <input type="text" name="buildingName" value="<%=build.getName()%>" />
-                            <br><br>
-                            <p>Adresse</p>
-                            <input type="text" name="address" value="<%=build.getAddress()%>" />
-                            <br><br>
-                            <p>Postnr.</p>
-                            <input type="number" name="postcode" min="1000" max="9999" value="<%=build.getPostcode()%>" />
-                            <br><br>
-                            <p>By</p>
-                            <input type="text" name="city" value="<%=build.getCity()%>" />
-                            <br><br>
-                            <p>Opførelsesår</p>
-                            <input type="text" name="constructionYear" value="<%=build.getConstruction_year()%>" />
-                            <br><br>
-                            <p>Formål</p>
-                            <select name="purpose">
+                    <h1>Rediger bygning</h1>
+                    <form class="form-view-building" id="editBuilding" action="UserServlet" method="POST">
+                        <p>Bygningsnavn</p>
+                        <input type="text" name="buildingName" value="<%=build.getName()%>" />
+                        <br><br>
+                        <p>Adresse</p>
+                        <input type="text" name="address" value="<%=build.getAddress()%>" />
+                        <br><br>
+                        <p>Postnr.</p>
+                        <input type="number" name="postcode" min="1000" max="9999" value="<%=build.getPostcode()%>" />
+                        <br><br>
+                        <p>By</p>
+                        <input type="text" name="city" value="<%=build.getCity()%>" />
+                        <br><br>
+                        <p>Opførelsesår</p>
+                        <input type="text" name="constructionYear" value="<%=build.getConstruction_year()%>" />
+                        <br><br>
+                        <p>Formål</p>
+                        <select name="purpose">
                             <!-- Scriptlet section to ensure the correct option is selected as default  -->
-                            <% 
+                            <%
                                 ArrayList<String> bldgPurpose = new ArrayList();
                                 bldgPurpose.add("Landbrug");
                                 bldgPurpose.add("Erhverv");
@@ -183,37 +181,35 @@
                                 bldgPurpose.add("Andet");
 
                                 for (int i = 0; i < bldgPurpose.size(); i++) {
-                                    if(build.getPurpose().equals(bldgPurpose.get(i))){
-                                        %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                    }
-                                    else{
-                                        %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                    }
-                                }
-                            %>
-                            </select>
-                            <br><br>
-                            <p>Kvadratmeter</p>
-                            <input type="number" name="sqm" max="51660" value="<%=build.getSqm()%>" />
-                            <br><br>
-                            <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
-                            <input type="hidden" name="origin" value="viewBuilding" />
-                            <input type="hidden" name="originSection" value="editBuilding" />
-                            <input class="btn btn-primary" type="submit" value="Gem ændringer" />
-                        </form>
-                    </div>
-                
-                
+                                    if (build.getPurpose().equals(bldgPurpose.get(i))) {
+                            %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
+                                        } else {
+                            %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
+                                                }
+                                            }
+                                %>
+                        </select>
+                        <br><br>
+                        <p>Kvadratmeter</p>
+                        <input type="number" name="sqm" max="51660" value="<%=build.getSqm()%>" />
+                        <br><br>
+                        <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                        <input type="hidden" name="origin" value="viewBuilding" />
+                        <input type="hidden" name="originSection" value="editBuilding" />
+                        <input class="btn btn-primary" type="submit" value="Gem ændringer" />
+                    </form>
+                </div>
+
+
                 <%
-                    break;
-                
-                //If none of the building's details are being edited
-                default:
-                
+                        break;
+
+                    //If none of the building's details are being edited
+                    default:
+
                 %>    
-                    <div class="col-sm-10">
-                    <%
-                        //Loop through entire buildings list
+                <div class="col-sm-10">
+                    <%                        //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
                             if (userBuildings.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
@@ -228,7 +224,7 @@
                     <table text-align="left" class="table">
                         <tbody>
                             <tr bgcolor='cyan'>
-                                <th colspan="3"><b>Staminformationer</b></th>
+                                <th colspan="4"><b>Staminformationer</b></th>
                             </tr>
                             <tr>
                                 <td><%=build.getName()%><br>
@@ -240,66 +236,81 @@
                                     Kvadratmeter: <%=build.getSqm()%>
                                 </td>
                                 <td>
-                                    <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                    <img src="./GetImage?type=building&id=<%=build.getBuilding_id()%>" class="img-fluid " height="250" alt="Responsive image">
+                                </td>    
+                                <td>
+                                    <form class="form-view-building" id="editBuilding" action="UserServlet" method="POST">
                                         <input type="hidden" name="origin" value="viewBuilding" />
                                         <input type="hidden" name="originSection" value="editBuildingButton" />
                                         <input class="btn btn-primary" type="submit" value="Rediger" />
+                                    </form>
+                                    <br>
+                                    <form class="form-view-building" id="deleteBuilding" action="NavigatorServlet" method="POST">
+                                        <input type="hidden" name="origin" value="deleteBuildingButton" />
+                                        <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
+                                        <input class="btn btn-danger" type="submit" value="Slet bygning" />
                                     </form>
                                 </td>
                             </tr>
                         </tbody>
                     </table>  
                     <br><br>
-                    
-                    <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+
+                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
                         <input type="hidden" name="origin" value="viewBuilding" />
                         <input type="hidden" name="originSection" value="createAreaButton" />
                         <input class="btn btn-primary" type="submit" value="Nyt område" />
                     </form>
                     <br><br>
-                    
-                    <% if(build.getHealthcheck_pending()==1){%>
-                        <form class="form-view-building" action="FrontC" method="POST">
-                            <input type="hidden" name="origin" value="viewBuilding" />
-                            <input type="hidden" name="originSection" value="healthcheckButton" />
-                            <input type="hidden" name="originValue" value="cancel" />
-                            <input class="btn btn-primary" type="submit" value="Aflys sundhedscheck" />
-                        </form>
-                    <%}else if(build.getHealthcheck_pending()==0){%>
-                        <form class="form-view-building" action="FrontC" method="POST">
-                            <input type="hidden" name="origin" value="viewBuilding" />
-                            <input type="hidden" name="originSection" value="healthcheckButton" />
-                            <input type="hidden" name="originValue" value="order" />
-                            <input class="btn btn-primary" type="submit" value="Rekvirer sundhedscheck" />
-                        </form>
+
+                    <% if (build.getHealthcheck_pending() == 1) {%>
+                    <form class="form-view-building" action="UserServlet" method="POST">
+                        <input type="hidden" name="origin" value="viewBuilding" />
+                        <input type="hidden" name="originSection" value="healthcheckButton" />
+                        <input type="hidden" name="originValue" value="cancel" />
+                        <input class="btn btn-primary" type="submit" value="Aflys sundhedscheck" />
+                    </form>
+                    <%} else if (build.getHealthcheck_pending() == 0) {%>
+                    <form class="form-view-building" action="UserServlet" method="POST">
+                        <input type="hidden" name="origin" value="viewBuilding" />
+                        <input type="hidden" name="originSection" value="healthcheckButton" />
+                        <input type="hidden" name="originValue" value="order" />
+                        <input class="btn btn-primary" type="submit" value="Rekvirer sundhedscheck" />
+                    </form>
                     <%}%>
-                    
+
                     <br><br>
-                    <% 
-                        for (int i = 0; i < buildingAreas.size(); i++) {
-                    %>
                             <table text-align="left" class="table">
                                 <tbody>
-                                    <tr bgcolor='cyan' height="100">
-                                        <th colspan="1"><b><%=buildingAreas.get(i).getName()%></b></th>
-                                        <th colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></th>
-                                        <th colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></th>
-                                        <th colspan="1">
-                                            <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                    <tr bgcolor='cyan'>
+                                        <th>Navn</th>
+                                        <th>Beskrivelse</th>
+                                        <th>Kvadratmeter</th>
+                                        <th colspan="2">Muligheder</th>
+                                    </tr>    
+                                    <% 
+                        for (int i = 0; i < buildingAreas.size(); i++) {
+                    %>
+                                    <tr bgcolor='A9F5F2' height="100">
+                                        <td colspan="1"><b><%=buildingAreas.get(i).getName()%></b></td>
+                                        <td colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></td>
+                                        <td colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></td>
+                                        <td colspan="1">
+                                            <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
                                                 <input type="hidden" name="origin" value="viewBuilding" />
                                                 <input type="hidden" name="originSection" value="deleteAreaButton" />
                                                 <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
                                                 <input class="btn btn-primary" type="submit" value="Slet område" />
                                             </form>
-                                        </th>
-                                        <th colspan="1">
-                                            <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                        </td>
+                                        <td colspan="1">
+                                            <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
                                                 <input type="hidden" name="origin" value="viewBuilding" />
                                                 <input type="hidden" name="originSection" value="createRoomButton" />
                                                 <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
                                                 <input class="btn btn-primary" type="submit" value="Nyt lokale" />
                                             </form>
-                                        </th>
+                                        </td>
                                     </tr>
                                     <% 
                                     for (int j = 0; j < buildingRooms.size(); j++) {
@@ -309,8 +320,8 @@
                                                 <td><%=buildingRooms.get(j).getName()%></td>
                                                 <td><%=buildingRooms.get(j).getDescription()%></td>
                                                 <td><%=buildingRooms.get(j).getSqm()%></td>
-                                                <td>
-                                                    <form class="form-view-building" id="viewBuilding" action="FrontC" method="POST">
+                                                <td colspan="2">
+                                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
                                                         <input type="hidden" name="origin" value="viewBuilding" />
                                                         <input type="hidden" name="originSection" value="deleteRoomButton" />
                                                         <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />
@@ -321,15 +332,15 @@
                                         <%}
                                     }
                                     %>
+                       <%}%>
                                 </tbody>
                             </table>        
                     <br><br>    
-                       <%}
-                    %>
+                    
                     
                     
                     <br><br><br><br><br><br><br><br><br>  
-                    
+
                     <table text-align="left" class="table">
                         <tbody>
                             <tr bgcolor='cyan'>
@@ -373,12 +384,12 @@
                         </tbody>
                     </table>  
                 </div>
-                <%break;    
-                
-               } 
+                <%break;
+
+                    }
                 %>
-                
-            
+
+
             </div>
         </div>
     </body>

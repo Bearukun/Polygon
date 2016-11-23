@@ -28,7 +28,8 @@ public class UserMapper implements UserMapperInterface {
             //Get connection object.
             con = DBConnection.getConnection();
             //Creating string used for the prepare statement.
-            String sql = "SELECT * FROM user WHERE email = ? SET NAMES utf8mb4";
+            String sql = "SELECT * FROM user WHERE email = ?";
+            //SET NAMES utf8mb4
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.
@@ -83,7 +84,7 @@ public class UserMapper implements UserMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -156,7 +157,7 @@ public class UserMapper implements UserMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
@@ -174,7 +175,6 @@ public class UserMapper implements UserMapperInterface {
         ResultSet rs = null;
         
         try {
-            
             //Get connection object.
             con = DBConnection.getConnection();
             //Creating string used for the prepare statement.
@@ -183,56 +183,35 @@ public class UserMapper implements UserMapperInterface {
             stmt = con.prepareStatement(sql);
             //Execute query, and save the resultset in rs.
             rs = stmt.executeQuery();
-
             //Loop through the resultSet.
             while (rs.next()) {
-
                 //Declare and instantiate type.
                 User.type type;
-                
                 //If-condition, checking the condition of the building.
                 //The local varible gets assigned the ENUM from the rs.
                 if (rs.getString(4).equals(User.type.ADMIN.toString())) {
-                    
                     type = User.type.ADMIN;
-                    
                 } else if (rs.getString(4).equals(User.type.TECHNICIAN.toString())) {
-                    
                     type = User.type.TECHNICIAN;
-
                 } else {
-                    
                     type = User.type.CUSTOMER;
-                    
                 }
-
                 allUsers.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
-            
             }
         } catch (Exception e) {
-            
             throw new CustomException("SQL Error: getUsers failed in facade.");
-            
         }finally{
-        
             //Try releasing objects. 
             try {
-                
                 con.close();
                 stmt.close();
                 rs.close();
-                
             } catch (SQLException ex) {
-                
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
-            
             }
-            
         }
-
         return allUsers;
-        
     }
 
     @Override
@@ -277,7 +256,7 @@ public class UserMapper implements UserMapperInterface {
                 
             } catch (SQLException ex) {
                 
-                //throw error if not sucessful. 
+                //throw error if not successful. 
                  throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }

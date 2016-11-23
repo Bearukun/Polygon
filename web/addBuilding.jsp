@@ -42,25 +42,14 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li>
-                                    <a href="user.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                </li>
-                                <li class="active">
-                                    <a href="addBuilding.jsp?refresh" target="_self">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        Tilføj bygning </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="glyphicon glyphicon-user"></i>
-                                        Bruger indstillinger </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "TilføjBygning"); %>
+                        <% if(request.getSession().getAttribute("source").toString().equals("user")){%>
+                            <%@ include file="userSidebar.jsp"%>
+                        <%} else if(request.getSession().getAttribute("source").toString().equals("technician")){%>
+                            <%@ include file="technicianSidebar.jsp"%>
+                        <%} else if(request.getSession().getAttribute("source").toString().equals("admin")){%>
+                            <%@ include file="adminSidebar.jsp"%>
+                        <%}%>
                         <!-- END MENU -->
                     </div>
                 </div>
@@ -69,16 +58,16 @@
                     <div id="container" class="container-fluid">
                         <h1>Tilføj bygning</h1>
                         <div class="container">
-                            <form class="form-add-building" action="Front" method="POST">
+                            <form class="form-add-building" action="NavigatorServlet" method="POST">
                                 <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
                                 <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
-                                <input class="form-control" type="number" name="postcode" value="" placeholder="Postnummer" />
+                                <input class="form-control" type="number" min="1000" max="9999" name="postcode" value="" placeholder="Postnummer" />
                                 <input class="form-control" type="text" name="city" value="" placeholder="By" />
-                                <input class="form-control" type="number" name="construction_year" value="" placeholder="Bygget i år:" />
+                                <input class="form-control" type="number" min="0" max="2500" name="construction_year" value="" placeholder="Byggeår:" />
                                 <input class="form-control" type="text" name="purpose" value="" placeholder="Formål" />
-                                <input class="form-control" type="number" name="sqm" value="" placeholder="areal" />
-
+                                <input class="form-control" type="number" name="sqm" value="" placeholder="Areal" />
                                 <input type="hidden" name="origin" value="createBuilding" />
+                                <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
                                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Opret bygning" name="" />
                             </form>
                         </div>

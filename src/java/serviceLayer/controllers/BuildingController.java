@@ -20,6 +20,11 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
+    public void deleteBuilding(int building_id) throws CustomException {
+        dbfacade.deleteBuilding(building_id);
+    }
+    
+    @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
         return dbfacade.getBuildings(user_id);
     }
@@ -67,5 +72,10 @@ public class BuildingController implements BuildingControllerInterface{
     @Override
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException {
         dbfacade.toggleHealthcheck(building_id, healthcheck_pending);
+    }
+
+    @Override
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException {
+        dbfacade.assignHealthcheck(buildingId, technicianId);
     }
 }

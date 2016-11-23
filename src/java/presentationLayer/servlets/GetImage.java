@@ -25,11 +25,27 @@ public class GetImage extends HttpServlet {
 
         ServletOutputStream out = response.getOutputStream();
         try {
-            
-            img = dat.getImage(Integer.parseInt(request.getParameter("id")));
-            
+
+            String type = request.getParameter("type");
+
+            switch (type) {
+                case "image":
+                    img = dat.getImage(Integer.parseInt(request.getParameter("id")));
+                    break;
+                case "building":
+                    img = dat.getBuildingImage(Integer.parseInt(request.getParameter("id")));
+                    break;
+                case "issue":
+                    img = dat.getIssueImage(Integer.parseInt(request.getParameter("id")));
+                    break;
+
+                default:
+
+                    img = dat.getImage(1);
+
+            }
+
             Blob photo = img.getImg_file();
-            
 
             if (photo != null) {
 
@@ -46,13 +62,13 @@ public class GetImage extends HttpServlet {
 
                 in.close();
                 out.flush();
-                
+
             } else {
-                
+
                 response.setContentType("text/html");
                 out.println("No data to display");
                 return;
-            
+
             }
 
         } catch (Exception e) {

@@ -16,7 +16,6 @@ import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.CustomException;
 
-
 /**
  * The purpose of DBFacade is to provide an encapsulated access to the database
  * (No SQL outside of the data-layer)
@@ -50,9 +49,12 @@ public class DBFacade implements DBFacadeInterface {
 
     @Override
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException {
+        bmi.createBuilding(name, address, postcode, city, construction_year, purpose, sqm, user_id);
+    }
 
-        bmi.createBuilding(name, address, postcode, city, construction_year, purpose, sqm, 0);
-
+    @Override
+    public void deleteBuilding(int building_id) throws CustomException {
+        bmi.deleteBuilding(building_id);
     }
 
     @Override
@@ -119,8 +121,24 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException {
+        bmi.assignHealthcheck(buildingId, technicianId);
+    }
+
+    //Functions to the DataMapper
+    @Override
     public Image getImage(int image_id) throws Exception {
         return dmi.getImage(image_id);
+    }
+
+    @Override
+    public Image getBuildingImage(int building_id) throws Exception {
+        return dmi.getBuildingImage(building_id);
+    }
+
+    @Override
+    public Image getIssueImage(int issue_id) throws Exception {
+        return dmi.getIssueImage(issue_id);
     }
 
     @Override
@@ -132,4 +150,5 @@ public class DBFacade implements DBFacadeInterface {
     public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
         dmi.uploadBuildingImage(building_id, img_name, img_file);
     }
+
 }

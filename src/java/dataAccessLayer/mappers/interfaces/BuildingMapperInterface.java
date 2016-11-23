@@ -12,6 +12,8 @@ public interface BuildingMapperInterface {
 
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws CustomException;
 
+    public void deleteBuilding(int building_id) throws CustomException;
+    
     public ArrayList<Building> getAllBuildings() throws CustomException;
 
     public void viewBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws CustomException;
@@ -29,4 +31,6 @@ public interface BuildingMapperInterface {
     public void deleteRoom(int room_id) throws CustomException;
     
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws CustomException;
+    
+    public void assignHealthcheck(int buildingId, int technicianId) throws CustomException; 
 }

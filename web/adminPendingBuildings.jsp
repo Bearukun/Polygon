@@ -44,30 +44,8 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li>
-                                    <a href="admin.jsp?refresh">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                </li>
-                                <li>
-                                    <a href="adminBuildings.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-object-align-bottom"></i>
-                                        Vis bygninger </a>
-                                </li>
-                                <li>
-                                    <a href="adminUsers.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-th-list"></i>
-                                        Håndter brugere </a>
-                                </li>
-                                <li class="active">
-                                    <a href="adminPendingBuildings.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-list"></i>
-                                        healthchecks </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "Sundhedscheck");%>
+                        <%@ include file="adminSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
                 </div>
@@ -86,20 +64,20 @@
                         <table border="1" text-align="left" class="table table-striped">
                             <tbody>
                                 <tr>
-                                    <td><b>Building(ID)</b></td>
-                                    <td><b>Bygnings Navn</b></td>
+                                    <td><b>ID</b></td>
+                                    <td><b>Bygningsnavn</b></td>
                                     <td><b>Oprettet den</b></td>
                                     <td><b>Adresse</b></td>
                                     <td><b>Postnummer</b></td>
                                     <td><b>By</b></td>
                                     <td><b>Tilstand</b></td>
-                                    <td><b>Opførelses år</b></td>
+                                    <td><b>Opførelsesår</b></td>
                                     <td><b>Formål</b></td>
-                                    <td><b>KvadratMeter</b></td>
-                                    <td><b>Vælg tekniker</b></td>
+                                    <td><b>Kvadratmeter</b></td>
+                                    <td colspan="2"><b>Vælg tekniker</b></td>
                                 </tr>
-                                <%                                    for (int x = 0; x < allBuildings.size(); x++) {
-                                        if (allBuildings.get(x).isHealthchech_pending()) {
+                                <%  for (int x = 0; x < allBuildings.size(); x++) {
+                                        if (allBuildings.get(x).getHealthcheck_pending()==1) {
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  
@@ -111,7 +89,25 @@
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>
-
+                                    <td>
+                                        <select name="technician">
+                                            <% 
+                                            ArrayList<User> techniciansList = new ArrayList();
+                                            techniciansList = (ArrayList<User>) request.getSession().getAttribute("techniciansList");
+                                            for (int i = 0; i < techniciansList.size(); i++) {
+                                                request.getSession().setAttribute("technicianId", techniciansList.get(i).getUser_id());
+                                                %><option value="<%=techniciansList.get(i).getName()%>"><%=techniciansList.get(i).getName()%></option><%
+                                            }%>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <form action="AdminServlet" method="POST">
+                                            <input type="hidden" name="origin" value="assignHealthcheckButton" />
+                                            <input type="hidden" name="technicianId" value="<%=request.getSession().getAttribute("technicianId")%>" />
+                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getBuilding_id()%>" />
+                                            <input class="btn btn-primary" type="submit" value="Tildel" />
+                                        </form>
+                                    </td>
                                 </tr>
                                 <%}
                                     }

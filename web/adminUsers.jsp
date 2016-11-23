@@ -52,30 +52,8 @@
                     </div>
                     <!-- END SIDEBAR BUTTONS -->
                     <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                    <div class="profile-usermenu">
-                        <ul class="nav">
-                            <li>
-                                <a href="admin.jsp?refresh">
-                                    <i class="glyphicon glyphicon-home"></i>
-                                    Overblik </a>
-                            </li>
-                            <li>
-                                <a href="adminBuildings.jsp" target="_self">
-                                    <i class="glyphicon glyphicon-object-align-bottom"></i>
-                                    Vis bygninger </a>
-                            </li>
-                            <li class="active">
-                                <a href="adminUsers.jsp" target="_self">
-                                    <i class="glyphicon glyphicon-th-list"></i>
-                                    Håndter brugere </a>
-                            </li>
-                            <li>
-                                <a href="adminPendingBuildings.jsp" target="_self">
-                                    <i class="glyphicon glyphicon-list"></i>
-                                    Healthchecks </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <% request.getSession().setAttribute("ActiveSidebarMenu", "HåndterBrugere");%>
+                        <%@ include file="adminSidebar.jsp" %>
                     <!-- END MENU -->
                 </div>
             </div>
@@ -130,27 +108,22 @@
                         </tbody>
                     </table>
 
-
-
-
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+<div>
+<form class="form-add-user" action="AdminServlet" method="POST">
 <input class="form-control" type="text" name="email" placeholder="Email">
 <input class="form-control" type="password" name="password" placeholder="Adgangskode">
 <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
 <select name="type" id="slectboxid">
 
-    <option value="ADMIN">Admin</option>
-    <option value="TECHNICIAN">Teknikker</option>
-    <option value="CUSTOMER">Kunde</option>
+    <option value="ADMIN" selected="ADMIN">Admin</option>
+    <option value="TECHNICIAN" selected="TECHNICIAN">Teknikker</option>
+    <option value="CUSTOMER" selected="CUSTOMER">Kunde</option>
 
 </select>
+
+    
+
+
 <input type="text" name="text" placeholder="Vælg brugertype" id="textboxid" />
 <h5>Ydeligere information</h5><br><!-- Skal centreres -->
 <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
@@ -161,3 +134,17 @@
 <input class="form-control" type="text" name="city" value="" placeholder="By" />
 <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
 <input type="hidden" name="origin" value="newCustomer" />
+</div>
+</form>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+    
