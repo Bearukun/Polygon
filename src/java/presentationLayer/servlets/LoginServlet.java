@@ -52,6 +52,20 @@ public class LoginServlet extends HttpServlet {
 
             switch (origin) {
 
+                case "loginAsUser":
+                    //Retrieve user email from adminUsers.jsp
+                    String userEmail = request.getParameter("userEmail");
+                    //Get user object with the above email
+                    user = usrCtrl.getUser(userEmail);
+                    //Save where (which page) we are coming from
+                    request.getSession().setAttribute("sourcePage", "LoginServlet");
+                    //Save user values to Session
+                    request.getSession().setAttribute("user_id", user.getUser_id());
+                    request.getSession().setAttribute("email", user.getEmail());
+                    //Set user type and redirect
+                    userTypeRedirect(user, request, response);
+                break;
+                
                 case "login":
 
                     if (request.getSession().getAttribute("user") == null) {
@@ -72,9 +86,9 @@ public class LoginServlet extends HttpServlet {
                             int uPostcode = user.getPostcode();
                             String uCity = user.getCity();
                             int uUser_id = user.getUser_id();
-                            request.getSession().setAttribute("user_id", uUser_id);
-                            request.getSession().setAttribute("user_email", uEmail);
-
+                            request.getSession().setAttribute("user_id", user.getUser_id());
+                            request.getSession().setAttribute("email", user.getEmail());
+                            
                             //Takes the retrieved user data/information and sends it 
                             //to the editProfile.jsp page.
                             request.getSession().setAttribute("uEmail", uEmail);
@@ -88,44 +102,13 @@ public class LoginServlet extends HttpServlet {
                             request.getSession().setAttribute("uUser_id", uUser_id);
 
                             if (user != null) {
-
-                                request.getSession().setAttribute("email", user.getEmail().toString());
+                                
                                 //Save where (which page) we are coming from
                                 request.getSession().setAttribute("sourcePage", "LoginServlet");
 
-                                //Translate user type:
-                                if (user.getType().toString().equals("CUSTOMER")) {
-
-                                    request.getSession().setAttribute("type", "Kunde");
-
-                                } else if (user.getType().toString().equals("TECHNICIAN")) {
-
-                                    request.getSession().setAttribute("type", "Tekniker");
-
-                                } else {
-
-                                    request.getSession().setAttribute("type", "Administration");
-                                }
+                                //Set user type and redirect
+                                userTypeRedirect(user, request, response);
                                 
-                                if (user.getType().equals(User.type.ADMIN)) {
-                                    response.sendRedirect("AdminServlet");
-                                    break;
-
-                                } else if (user.getType().equals(User.type.TECHNICIAN)) {
-                                    response.sendRedirect("TechnicianServlet");
-                                    break;
-
-                                } else {
-                                    //Save the logged in user's id
-                                    request.getSession().setAttribute("user_id", user.getUser_id());
-                                    
-                                    //Redirect to Customer servlet
-                                    response.sendRedirect("UserServlet");
-
-                                    break;
-
-                                }
-
                             }
 
                             //If something goes wrong, we need a way to show it.
@@ -334,8 +317,25 @@ public class LoginServlet extends HttpServlet {
 
         }
 
+        
+        
     }
-
+    
+    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws CustomException{
+        try{
+            if (user.getType().toString().equals("CUSTOMER")) {
+                request.getSession().setAttribute("type", "Kunde");
+                response.sendRedirect("UserServlet");
+            } else if (user.getType().toString().equals("TECHNICIAN")) {
+                request.getSession().setAttribute("type", "Tekniker");
+                response.sendRedirect("TechnicianServlet");
+            } else {
+                request.getSession().setAttribute("type", "Administration");
+                response.sendRedirect("AdminServlet");
+            }
+        } catch (Exception e) {
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
