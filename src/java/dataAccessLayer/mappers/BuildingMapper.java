@@ -21,6 +21,12 @@ public class BuildingMapper implements BuildingMapperInterface {
     private ArrayList<Room> buildingRooms = new ArrayList();
 
     
+    /**
+     * Method to retrieve all buildings pertaining a specific user
+     * @param user_id Takes an int as parameter
+     * @return An ArrayList of type Building
+     * @throws CustomException 
+     */
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws CustomException {
         
