@@ -7,6 +7,7 @@ import dataAccessLayer.mappers.UserMapper;
 import dataAccessLayer.mappers.interfaces.BuildingMapperInterface;
 import dataAccessLayer.mappers.interfaces.DataMapperInterface;
 import dataAccessLayer.mappers.interfaces.UserMapperInterface;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
@@ -142,12 +143,12 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void uploadIssueImage(int issue_id, String img_name, Blob img_file) throws Exception {
+    public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception {
         dmi.uploadIssueImage(issue_id, img_name, img_file);
     }
 
     @Override
-    public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
+    public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
         dmi.uploadBuildingImage(building_id, img_name, img_file);
     }
 
