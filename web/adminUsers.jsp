@@ -65,10 +65,12 @@
 
                     <h1>Brugere:</h1>
                     <br>
-
+                    
+                    <h4>
                     <a href="adminCreateUser.jsp" target="_self">
                         <i class="glyphicon glyphicon-plus"></i>
-                        Ny bruger </a>
+                        Ny bruger </a></h4>
+                        
 
                     <% ArrayList<User> tempUL = new ArrayList();
 
@@ -115,33 +117,8 @@
                         </tbody>
                     </table>
 
-<div>
-<form class="form-add-user" action="AdminServlet" method="POST">
-<input class="form-control" type="text" name="email" placeholder="Email">
-<input class="form-control" type="password" name="password" placeholder="Adgangskode">
-<input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
-<select name="type" id="slectboxid">
-
-    <option value="ADMIN" selected="ADMIN">Admin</option>
-    <option value="TECHNICIAN" selected="TECHNICIAN">Teknikker</option>
-    <option value="CUSTOMER" selected="CUSTOMER">Kunde</option>
-
-</select>
-
-    
 
 
-<input type="text" name="text" placeholder="Vælg brugertype" id="textboxid" />
-<h5>Ydeligere information</h5><br><!-- Skal centreres -->
-<input class="form-control" type="text" name="name" value="" placeholder="Navn" />
-<input class="form-control" type="text" name="phone" value="" placeholder="Telefon" />
-<input class="form-control" type="text" name="company" value="" placeholder="Firma" />
-<input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
-<input class="form-control" type="text" name="postcode" value="" placeholder="Postnr." />
-<input class="form-control" type="text" name="city" value="" placeholder="By" />
-<input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
-<input type="hidden" name="origin" value="newCustomer" />
-</div>
 </form>
 
 
