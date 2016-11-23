@@ -65,7 +65,7 @@
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
                         <% request.getSession().setAttribute("ActiveSidebarMenu", "VisBygning");
-                           %>
+                        %>
                         <%@ include file="userSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
@@ -183,10 +183,10 @@
                                 for (int i = 0; i < bldgPurpose.size(); i++) {
                                     if (build.getPurpose().equals(bldgPurpose.get(i))) {
                             %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                        } else {
+                            } else {
                             %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                                }
-                                            }
+                                    }
+                                }
                                 %>
                         </select>
                         <br><br>
@@ -197,6 +197,16 @@
                         <input type="hidden" name="origin" value="viewBuilding" />
                         <input type="hidden" name="originSection" value="editBuilding" />
                         <input class="btn btn-primary" type="submit" value="Gem ændringer" />
+                    </form>
+                    <form method="post" action="UserServlet" enctype="multipart/form-data">
+                        <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Upload et billed</div>
+                            <div class="panel-body">Upload et billed af din bygning så vi har et overblik over hvordan den ser ud.</div>
+                        </div>
+                        <input class="panel-body" type="file" name="img" size="50" accept="image/*" />
+                        <input type="hidden" name="originSection" value="editBuildingImage" />
+                        <input class="btn btn-primary" type="submit" value="Upload billed" />
                     </form>
                 </div>
 

@@ -2,6 +2,7 @@ package dataAccessLayer.mappers;
 
 import dataAccessLayer.DBConnection;
 import dataAccessLayer.mappers.interfaces.DataMapperInterface;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -189,7 +190,7 @@ public class DataMapper implements DataMapperInterface {
     }
 
     @Override
-    public void uploadIssueImage(int issue_id, String img_name, Blob img_file) throws Exception {
+    public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -234,7 +235,7 @@ public class DataMapper implements DataMapperInterface {
     }
 
     @Override
-    public void uploadBuildingImage(int building_id, String img_name, Blob img_file) throws Exception {
+    public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
