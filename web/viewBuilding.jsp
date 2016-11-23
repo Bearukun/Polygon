@@ -65,7 +65,7 @@
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
                         <% request.getSession().setAttribute("ActiveSidebarMenu", "VisBygning");
-                           %>
+                        %>
                         <%@ include file="userSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
@@ -183,10 +183,10 @@
                                 for (int i = 0; i < bldgPurpose.size(); i++) {
                                     if (build.getPurpose().equals(bldgPurpose.get(i))) {
                             %><option selected="<%=bldgPurpose.get(i)%>" value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                        } else {
+                            } else {
                             %><option value="<%=bldgPurpose.get(i)%>"><%=bldgPurpose.get(i)%></option><%
-                                                }
-                                            }
+                                    }
+                                }
                                 %>
                         </select>
                         <br><br>
@@ -197,6 +197,16 @@
                         <input type="hidden" name="origin" value="viewBuilding" />
                         <input type="hidden" name="originSection" value="editBuilding" />
                         <input class="btn btn-primary" type="submit" value="Gem ændringer" />
+                    </form>
+                    <form method="post" action="UserServlet" enctype="multipart/form-data">
+                        <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Upload et billede</div>
+                            <div class="panel-body">Upload et billede af din bygning så vi har et overblik over hvordan den ser ud.</div>
+                        </div>
+                        <input class="panel-body" type="file" name="img" size="50" accept="image/*" />
+                        <input type="hidden" name="originSection" value="editBuildingImage" />
+                        <input class="btn btn-primary" type="submit" value="Upload billed" />
                     </form>
                 </div>
 
@@ -256,14 +266,7 @@
                     </table>  
                     <br><br>
 
-                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
-                        <input type="hidden" name="origin" value="viewBuilding" />
-                        <input type="hidden" name="originSection" value="createAreaButton" />
-                        <input class="btn btn-primary" type="submit" value="Nyt område" />
-                    </form>
-                    <br><br>
-
-                    <% if (build.getHealthcheck_pending() == 1) {%>
+                    <% if (build.getHealthcheck_pending() > 1) {%>
                     <form class="form-view-building" action="UserServlet" method="POST">
                         <input type="hidden" name="origin" value="viewBuilding" />
                         <input type="hidden" name="originSection" value="healthcheckButton" />
@@ -278,66 +281,74 @@
                         <input class="btn btn-primary" type="submit" value="Rekvirer sundhedscheck" />
                     </form>
                     <%}%>
-
                     <br><br>
-                            <table text-align="left" class="table">
-                                <tbody>
-                                    <tr bgcolor='cyan'>
-                                        <th>Navn</th>
-                                        <th>Beskrivelse</th>
-                                        <th>Kvadratmeter</th>
-                                        <th colspan="2">Muligheder</th>
-                                    </tr>    
-                                    <% 
-                        for (int i = 0; i < buildingAreas.size(); i++) {
-                    %>
-                                    <tr bgcolor='A9F5F2' height="100">
-                                        <td colspan="1"><b><%=buildingAreas.get(i).getName()%></b></td>
-                                        <td colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></td>
-                                        <td colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></td>
-                                        <td colspan="1">
-                                            <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
-                                                <input type="hidden" name="origin" value="viewBuilding" />
-                                                <input type="hidden" name="originSection" value="deleteAreaButton" />
-                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                                <input class="btn btn-primary" type="submit" value="Slet område" />
-                                            </form>
-                                        </td>
-                                        <td colspan="1">
-                                            <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
-                                                <input type="hidden" name="origin" value="viewBuilding" />
-                                                <input type="hidden" name="originSection" value="createRoomButton" />
-                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                                <input class="btn btn-primary" type="submit" value="Nyt lokale" />
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <% 
-                                    for (int j = 0; j < buildingRooms.size(); j++) {
-                                       if(buildingAreas.get(i).getArea_id()==buildingRooms.get(j).getArea_id()){
-                                        %> 
-                                            <tr>
-                                                <td><%=buildingRooms.get(j).getName()%></td>
-                                                <td><%=buildingRooms.get(j).getDescription()%></td>
-                                                <td><%=buildingRooms.get(j).getSqm()%></td>
-                                                <td colspan="2">
-                                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
-                                                        <input type="hidden" name="origin" value="viewBuilding" />
-                                                        <input type="hidden" name="originSection" value="deleteRoomButton" />
-                                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />
-                                                        <input class="btn btn-primary" type="submit" value="Slet lokale" />
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        <%}
-                                    }
-                                    %>
-                       <%}%>
-                                </tbody>
-                            </table>        
+                    
+                    <!--Table of building areas and rooms -->
+                    <table text-align="left" class="table">
+                        <tbody>
+                            <tr bgcolor='cyan'>
+                                <th>Navn</th>
+                                <th>Beskrivelse</th>
+                                <th>Kvadratmeter</th>
+                                <th>Muligheder</th>
+                                <th>
+                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                        <input type="hidden" name="originSection" value="createAreaButton" />
+                                        <input class="btn btn-primary" type="submit" value="Nyt område" />
+                                    </form>
+                                </th>
+                            </tr>
+                            <% if(buildingAreas.size()==0){%>
+                                <tr>
+                                    <td colspan="5">Ingen områder oprettet</td>
+                                </tr>
+                            <%}%> 
+                            <% for (int i = 0; i < buildingAreas.size(); i++) {
+                            %>
+                                <tr>
+                                    <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getName()%></b></td>
+                                    <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getDescription()%></b></td>
+                                    <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getSqm()%></b></td>
+                                    <td colspan="1" style="border-top: 1px solid #000000">
+                                        <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                            <input type="hidden" name="origin" value="viewBuilding" />
+                                            <input type="hidden" name="originSection" value="deleteAreaButton" />
+                                            <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                            <input class="btn btn-primary" type="submit" value="Slet område" />
+                                        </form>
+                                    </td>
+                                    <td colspan="1" style="border-top: 1px solid #000000">
+                                        <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                            <input type="hidden" name="origin" value="viewBuilding" />
+                                            <input type="hidden" name="originSection" value="createRoomButton" />
+                                            <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                            <input class="btn btn-primary" type="submit" value="Nyt lokale" />
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% for (int j = 0; j < buildingRooms.size(); j++) {
+                                    if(buildingAreas.get(i).getArea_id()==buildingRooms.get(j).getArea_id()){
+                                %>
+                                        <tr>
+                                            <td>&nbsp;<%=buildingRooms.get(j).getName()%></td>
+                                            <td><%=buildingRooms.get(j).getDescription()%></td>
+                                            <td><%=buildingRooms.get(j).getSqm()%></td>
+                                            <td colspan="2">
+                                                <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                                    <input type="hidden" name="originSection" value="deleteRoomButton" />
+                                                    <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />
+                                                    <input class="btn btn-primary" type="submit" value="Slet lokale" />
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <%}
+                                }%>
+                            <%}%>
+                        </tbody>
+                    </table>
                     <br><br>    
-                    
-                    
                     
                     <br><br><br><br><br><br><br><br><br>  
 

@@ -8,15 +8,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.CustomException;
 
+/**
+ * Class dealing with user data
+ */
 public class UserMapper implements UserMapperInterface {
 
     //Declare and instantiate ArrayLists.
     private ArrayList<User> allUsers = new ArrayList();
 
+    /**
+     * Method to retrieve a specific user
+     * @param email String specifying which user needs retrieving
+     * @return An object of type User
+     * @throws Exception 
+     */
     @Override
-    public User getUser(String email) throws CustomException {
+    public User getUser(String email) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -65,13 +73,13 @@ public class UserMapper implements UserMapperInterface {
 
             } else {
                 
-                throw new CustomException("BDFacade:@getUser-No match for passwd and email.");
+                throw new Exception("BDFacade:@getUser-No match for passwd and email.");
                 
             }
             
         } catch (Exception e) {
             
-            throw new CustomException("SQL Error: Database connection failed.");
+            throw new Exception("SQL Error: Database connection failed.");
             
         }finally{
         
@@ -85,7 +93,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException ex) {
                 
                 //throw error if not successful. 
-                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new Exception("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
             
@@ -93,8 +101,21 @@ public class UserMapper implements UserMapperInterface {
         
     }
 
+    /**
+     * Method to create a new user
+     * @param email String detailing the new user's email
+     * @param password String detailing the new user's password
+     * @param name String detailing the new user's name
+     * @param phone int detailing the new user's telephone number
+     * @param company String detailing the new user's company
+     * @param address String detailing the new user's address
+     * @param postcode int detailing the new user's postcode
+     * @param city int detailing the new user's city
+     * @param type Enum detailing the new user's user category
+     * @throws Exception 
+     */
     @Override
-    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws CustomException {
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -138,13 +159,13 @@ public class UserMapper implements UserMapperInterface {
             } else {
 
                 //If the ResultSet returns positive on email.
-                throw new CustomException("Email in use.");
+                throw new Exception("Email in use.");
 
             }
 
         } catch (Exception e) {
 
-            throw new CustomException("SQL Error: Email in use.");
+            throw new Exception("SQL Error: Email in use.");
 
         }finally{
         
@@ -158,7 +179,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException ex) {
                 
                 //throw error if not successful. 
-                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new Exception("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
             
@@ -166,8 +187,13 @@ public class UserMapper implements UserMapperInterface {
 
     }
 
+    /**
+     * Method to retrieve all users
+     * @return An ArrayList of type User
+     * @throws Exception 
+     */
     @Override
-    public ArrayList<User> getUsers() throws CustomException {
+    public ArrayList<User> getUsers() throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -199,7 +225,7 @@ public class UserMapper implements UserMapperInterface {
                 allUsers.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
             }
         } catch (Exception e) {
-            throw new CustomException("SQL Error: getUsers failed in facade.");
+            throw new Exception("SQL Error: getUsers failed in facade.");
         }finally{
             //Try releasing objects. 
             try {
@@ -208,14 +234,27 @@ public class UserMapper implements UserMapperInterface {
                 rs.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new Exception("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             }
         }
         return allUsers;
     }
 
+    /**
+     * Method to edit a user's details
+     * @param selectedUser int specifying which user's details are to be edited
+     * @param email String detailing the user's email
+     * @param password String detailing the user's password
+     * @param name String detailing the user's name
+     * @param phone int detailing the user's telephone number
+     * @param company String detailing the user's company
+     * @param address String detailing the user's address
+     * @param postcode int detailing the user's postcode
+     * @param city String detailing the user's city
+     * @throws Exception 
+     */
     @Override
-    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws CustomException {
+    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -244,7 +283,7 @@ public class UserMapper implements UserMapperInterface {
             
         } catch (Exception e) {
             
-            throw new CustomException("SQL Error: Connection problem.");
+            throw new Exception("SQL Error: Connection problem.");
             
         }finally{
         
@@ -257,7 +296,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException ex) {
                 
                 //throw error if not successful. 
-                 throw new CustomException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new Exception("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             
             }
             

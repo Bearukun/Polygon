@@ -16,7 +16,6 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.CustomException;
 
 @WebServlet(name = "TechnicianServlet", urlPatterns = {"/TechnicianServlet"})
 public class TechnicianServlet extends HttpServlet {
@@ -222,7 +221,7 @@ public class TechnicianServlet extends HttpServlet {
                         int sq = Integer.parseInt(request.getParameter("sqm"));
                         int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
                         //Save values to database
-                        bldgCtrl.viewBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
+                        bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user_id);
                         //redirect to viewBuilding into the specific building being edited
@@ -279,7 +278,7 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws CustomException {
+    public void refreshBuilding(int user_id) throws Exception {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -287,7 +286,7 @@ public class TechnicianServlet extends HttpServlet {
     }
     //Refreshes the list of buildings
 
-    public void refreshAllBuildings() throws CustomException {
+    public void refreshAllBuildings() throws Exception {
 
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
@@ -295,18 +294,18 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int building_id) throws CustomException {
+    public void refreshAreas(int building_id) throws Exception {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(building_id);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int building_id) throws CustomException {
+    public void refreshRooms(int building_id) throws Exception {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(building_id);
     }
 
-    public void refreshUsers() throws CustomException {
+    public void refreshUsers() throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();

@@ -57,7 +57,7 @@
                         <% ArrayList<User> userList = new ArrayList();
                             ArrayList<Building> allBuildings = new ArrayList();
                             int user_id = (Integer) request.getSession().getAttribute("user_id");
-                            String user_email = request.getSession().getAttribute("user_email").toString();
+                            String email = request.getSession().getAttribute("email").toString();
                             userList = (ArrayList<User>) request.getSession().getAttribute("userList");
                             allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
 
@@ -93,7 +93,7 @@
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>  
-                                    <td><%out.println(user_email);%></td> 
+                                    <td><%out.println(email);%></td> 
                                 </tr>
                                 <%}}
                                 %>

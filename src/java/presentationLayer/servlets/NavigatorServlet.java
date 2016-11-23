@@ -15,7 +15,6 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.CustomException;
 
 /**
  * Servlet that handles the customer. 
@@ -80,7 +79,7 @@ public class NavigatorServlet extends HttpServlet {
                             refreshBuilding(user_id);
                             request.getSession().setAttribute("userBuildings", userBuildings);
                             redirectUser(request, response);
-                        } catch (CustomException e) {
+                        } catch (Exception e) {
 
                             errMsg = e.getMessage();
                             response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
@@ -104,7 +103,7 @@ public class NavigatorServlet extends HttpServlet {
                         refreshBuilding(user_id);
                         request.getSession().setAttribute("userBuildings", userBuildings);
                         redirectUser(request, response);
-                    } catch (CustomException e) {
+                    } catch (Exception e) {
 
                         errMsg = e.getMessage();
                         response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
@@ -154,7 +153,7 @@ public class NavigatorServlet extends HttpServlet {
     }
     
     //Redirects the user to the appropriate page
-    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws CustomException {
+    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
             if(request.getParameter("originSection").equals("Kunde")){
                 response.sendRedirect("user.jsp?success");
@@ -171,7 +170,7 @@ public class NavigatorServlet extends HttpServlet {
     }
     
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws CustomException {
+    public void refreshBuilding(int user_id) throws Exception {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -179,7 +178,7 @@ public class NavigatorServlet extends HttpServlet {
     }
     //Refreshes the list of buildings
 
-    public void refreshAllBuildings() throws CustomException {
+    public void refreshAllBuildings() throws Exception {
 
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
@@ -187,18 +186,18 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int building_id) throws CustomException {
+    public void refreshAreas(int building_id) throws Exception {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(building_id);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int building_id) throws CustomException {
+    public void refreshRooms(int building_id) throws Exception {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(building_id);
     }
 
-    public void refreshUsers() throws CustomException {
+    public void refreshUsers() throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();
