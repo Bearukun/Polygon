@@ -317,9 +317,11 @@ public class AdminServlet extends HttpServlet {
                      
                     usrCtrl.createUser(newUserEmail, newUserPassword, newUserName, newUserPhone, newUserCompany, newUserAddress, newUserPostcode, newUserCity, User.type.valueOf(newUserType));
                    
-                    
+                    refreshUsers();
                    
                     response.sendRedirect("adminUsers.jsp");
+                    
+                    
                     
                     break; 
             }

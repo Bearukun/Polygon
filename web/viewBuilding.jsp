@@ -290,59 +290,65 @@
                     <%}%>
 
                     <br><br>
-                    <%
+                            <table text-align="left" class="table">
+                                <tbody>
+                                    <tr bgcolor='cyan'>
+                                        <th>Navn</th>
+                                        <th>Beskrivelse</th>
+                                        <th>Kvadratmeter</th>
+                                        <th colspan="2">Muligheder</th>
+                                    </tr>    
+                                    <% 
                         for (int i = 0; i < buildingAreas.size(); i++) {
                     %>
-                    <table text-align="left" class="table">
-                        <tbody>
-                            <tr bgcolor='cyan' height="100">
-                                <th colspan="1"><b><%=buildingAreas.get(i).getName()%></b></th>
-                                <th colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></th>
-                                <th colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></th>
-                                <th colspan="1">
-                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
-                                        <input type="hidden" name="origin" value="viewBuilding" />
-                                        <input type="hidden" name="originSection" value="deleteAreaButton" />
-                                        <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                        <input class="btn btn-primary" type="submit" value="Slet område" />
-                                    </form>
-                                </th>
-                                <th colspan="1">
-                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
-                                        <input type="hidden" name="origin" value="viewBuilding" />
-                                        <input type="hidden" name="originSection" value="createRoomButton" />
-                                        <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                        <input class="btn btn-primary" type="submit" value="Nyt lokale" />
-                                    </form>
-                                </th>
-                            </tr>
-                            <%
-                                for (int j = 0; j < buildingRooms.size(); j++) {
-                                    if (buildingAreas.get(i).getArea_id() == buildingRooms.get(j).getArea_id()) {
-                            %> 
-                            <tr>
-                                <td><%=buildingRooms.get(j).getName()%></td>
-                                <td><%=buildingRooms.get(j).getDescription()%></td>
-                                <td><%=buildingRooms.get(j).getSqm()%></td>
-                                <td>
-                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
-                                        <input type="hidden" name="origin" value="viewBuilding" />
-                                        <input type="hidden" name="originSection" value="deleteRoomButton" />
-                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />
-                                        <input class="btn btn-primary" type="submit" value="Slet lokale" />
-                                    </form>
-                                </td>
-                            </tr>
-                            <%}
-                                }
-                            %>
-                        </tbody>
-                    </table>        
+                                    <tr bgcolor='A9F5F2' height="100">
+                                        <td colspan="1"><b><%=buildingAreas.get(i).getName()%></b></td>
+                                        <td colspan="1"><b><%=buildingAreas.get(i).getDescription()%></b></td>
+                                        <td colspan="1"><b><%=buildingAreas.get(i).getSqm()%></b></td>
+                                        <td colspan="1">
+                                            <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                <input type="hidden" name="originSection" value="deleteAreaButton" />
+                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                <input class="btn btn-primary" type="submit" value="Slet område" />
+                                            </form>
+                                        </td>
+                                        <td colspan="1">
+                                            <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                <input type="hidden" name="originSection" value="createRoomButton" />
+                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                <input class="btn btn-primary" type="submit" value="Nyt lokale" />
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% 
+                                    for (int j = 0; j < buildingRooms.size(); j++) {
+                                       if(buildingAreas.get(i).getArea_id()==buildingRooms.get(j).getArea_id()){
+                                        %> 
+                                            <tr>
+                                                <td><%=buildingRooms.get(j).getName()%></td>
+                                                <td><%=buildingRooms.get(j).getDescription()%></td>
+                                                <td><%=buildingRooms.get(j).getSqm()%></td>
+                                                <td colspan="2">
+                                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                                        <input type="hidden" name="originSection" value="deleteRoomButton" />
+                                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />
+                                                        <input class="btn btn-primary" type="submit" value="Slet lokale" />
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <%}
+                                    }
+                                    %>
+                       <%}%>
+                                </tbody>
+                            </table>        
                     <br><br>    
-                    <%}
-                    %>
-
-
+                    
+                    
+                    
                     <br><br><br><br><br><br><br><br><br>  
 
                     <table text-align="left" class="table">
