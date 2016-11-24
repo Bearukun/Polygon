@@ -17,4 +17,5 @@ public interface UserControllerInterface {
         
     void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws Exception;
     
+    void deleteUser(int user_id) throws Exception;
 }

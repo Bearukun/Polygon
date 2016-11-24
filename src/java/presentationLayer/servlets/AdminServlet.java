@@ -321,7 +321,12 @@ public class AdminServlet extends HttpServlet {
                     
                     
                     
-                    break; 
+                break; 
+                    
+                case "createUserButton":
+                    request.getSession().setAttribute("source", "admin");
+                    response.sendRedirect("adminCreateUser.jsp");
+                break;
             }
 
         } catch (Exception e) {

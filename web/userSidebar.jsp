@@ -27,13 +27,12 @@
         </li>
         <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("VisBygning")){%>
             <li class="active">
-        <%} else{%>
-            <li>
+                <a href="" target="_self">
+                    <i class="glyphicon glyphicon-wrench"></i>
+                    Vis bygning 
+                </a>
+            </li>
         <%}%>
-            <a href="" target="_self">
-                <i class="glyphicon glyphicon-wrench"></i>
-                Vis bygning </a>
-        </li>
         <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("Brugerindstillinger")){%>
             <li class="active">
         <%} else{%>
