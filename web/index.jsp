@@ -18,6 +18,8 @@ if yes - then redirect - else nothing. --%>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!--Adding our own css-->
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
+       
+        
     </head>
     <body>
         <!-- Register user div, as modal window -->
@@ -38,41 +40,17 @@ if yes - then redirect - else nothing. --%>
                         <input class="form-control" type="text" name="city" value="" placeholder="By" />
                         <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
                         <input type="hidden" name="origin" value="newCustomer" />
-
-
-                    
-
                     </form>
-
-
                 </div>
             </div>
         </div>
-        
-        <!-- Check password Script-->
-        <script>
-            var password = document.getElementById("password")
-                    , confirm_password = document.getElementById("passwordConfirm");
-
-            function validatePassword() {
-                if (password.value != confirm_password.value) {
-                    confirm_password.setCustomValidity("Password stemmer ikke overens!");
-                } else {
-                    confirm_password.setCustomValidity('');
-                }
-            }
-            //onchange????
-            password.onchange = validatePassword;
-            //onkeyup????
-            confirm_password.onkeyup = validatePassword;
-        </script>
+        <script src="scripts/passwordChecker.js" type="text/javascript"></script>
         <!-- Login div -->
         <div class="login_container">
             <form class="form-signin" action="LoginServlet" method="POST">
                 <img src="./img/logo.png" class="img-responsive center-block" alt="Responsive image">
                 <input class="form-control" type="text" name="email" value="" placeholder="Email" />
                 <input class="form-control" type="password" name="password" value="" placeholder="Adgangskode" />
-
                 <input type="hidden" name="origin" value="login" />
                 <input class="btn btn-lg btn-primary btn-block" type="submit" value="Log ind" name="" />
                 <br>
