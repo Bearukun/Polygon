@@ -241,7 +241,7 @@ public class LoginServlet extends HttpServlet {
                          try {
                             System.out.println("creating user");
                             //Create user
-                          //  usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
+                          usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
                             //If successful, redirect
                             System.out.println("Index redirect");
                             response.sendRedirect("index.jsp?success");
