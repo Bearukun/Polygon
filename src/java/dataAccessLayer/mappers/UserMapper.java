@@ -93,7 +93,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException ex) {
                 
                 //throw error if not successful. 
-                 throw new Exception("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new Exception("SQL Error:@DBFacade.getUserByEmail."+ex.getMessage());
             
             }
             
@@ -101,6 +101,90 @@ public class UserMapper implements UserMapperInterface {
         
     }
 
+    /**
+     * Method to retrieve a specific user
+     * @param user_id int specifying which user needs retrieving
+     * @return An object of type User
+     * @throws Exception 
+     */
+    @Override
+    public User getUser(int user_id) throws Exception {
+        
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM user WHERE user_id = ?";
+            //SET NAMES utf8mb4
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, user_id);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+
+            //If-statement checking what kind of user is loggin in. 
+            if (rs.next()) {
+                
+                //Declare and instantiate type.
+                User.type type;
+
+                if (rs.getString(4).equals(User.type.ADMIN.toString())) {
+                    
+                    //If admin.
+                    type = User.type.ADMIN;
+                    
+                } else if (rs.getString(4).equals(User.type.TECHNICIAN.toString())) {
+                    
+                    //If tech.
+                    type = User.type.TECHNICIAN;
+
+                } else {
+                    
+                    //If cust.
+                    type = User.type.CUSTOMER;
+                    
+                }
+                
+                //User(int user_id, String email, String password, type type, String name, int phone, String company, String address, int postcode, String city)
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10));
+
+            } else {
+                
+                throw new Exception("BDFacade:@getUser-No match for passwd and email.");
+                
+            }
+            
+        } catch (Exception e) {
+            
+            throw new Exception("SQL Error: Database connection failed.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.getUser."+ex.getMessage());
+            
+            }
+            
+        }
+        
+    }
+    
     /**
      * Method to create a new user
      * @param email String detailing the new user's email

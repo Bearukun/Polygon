@@ -71,31 +71,9 @@ public class LoginServlet extends HttpServlet {
                         try {
 
                             user = usrCtrl.login(email, password);
-                            //Retrieve all of the users data, to be used in the editProfile.jsp
-                            String uEmail = user.getEmail();
-                            String uPassword = user.getPassword();
-                            String uName = user.getName();
-                            int uPhone = user.getPhone();
-                            String uCompany = user.getCompany();
-                            String uAddress = user.getAddress();
-                            int uPostcode = user.getPostcode();
-                            String uCity = user.getCity();
-                            int uUser_id = user.getUser_id();
                             request.getSession().setAttribute("user_id", user.getUser_id());
                             request.getSession().setAttribute("email", user.getEmail());
                             
-                            //Takes the retrieved user data/information and sends it 
-                            //to the editProfile.jsp page.
-                            request.getSession().setAttribute("uEmail", uEmail);
-                            request.getSession().setAttribute("uPassword", uPassword);
-                            request.getSession().setAttribute("uName", uName);
-                            request.getSession().setAttribute("uPhone", uPhone);
-                            request.getSession().setAttribute("uCompany", uCompany);
-                            request.getSession().setAttribute("uAddress", uAddress);
-                            request.getSession().setAttribute("uPostcode", uPostcode);
-                            request.getSession().setAttribute("uCity", uCity);
-                            request.getSession().setAttribute("uUser_id", uUser_id);
-
                             if (user != null) {
                                 
                                 //Save where (which page) we are coming from

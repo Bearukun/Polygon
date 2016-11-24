@@ -91,7 +91,7 @@
                                 <td><b>Adresse</b></td>
                                 <td><b>Postnr.</b></td>
                                 <td><b>By</b></td>
-                                <td><b>Muligheder</b></td>
+                                <td colspan="2"><b>Muligheder</b></td>
                             </tr>
                             <%                                    for (int i = 0; i < tempUL.size(); i++) {
                             %><tr>
@@ -109,6 +109,14 @@
                                         <input type="hidden" name="origin" value="loginAsUser" />
                                         <input type="hidden" name="userEmail" value="<%=tempUL.get(i).getEmail()%>" />
                                         <input class="btn btn-primary" type="submit" value="Login som bruger" />
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="NavigatorServlet" method="POST">
+                                        <input type="hidden" name="origin" value="editOtherProfileButton" />
+                                        <input type="hidden" name="userEmail" value="<%=tempUL.get(i).getEmail()%>" />
+                                        <input type="hidden" name="source" value="admin" />
+                                        <input class="btn btn-primary" type="submit" value="Rediger bruger" />
                                     </form>
                                 </td>
                             </tr>

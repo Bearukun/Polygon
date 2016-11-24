@@ -24,8 +24,9 @@
             <li>
         <%}%>
            <a>
-                <form action="TechnicianServlet" method="POST">
+                <form action="NavigatorServlet" method="POST">
                     <input type="hidden" name="origin" value="editProfileButton" />
+                    <input type="hidden" name="source" value="technician" />
                     <label for="mySubmit" span role="button" style="font-weight: normal">
                         <i class="glyphicon glyphicon-user"></i>
                         Brugerindstillinger

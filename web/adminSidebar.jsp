@@ -49,8 +49,9 @@
             <li>
         <%}%>
            <a>
-                <form action="AdminServlet" method="POST">
+                <form action="NavigatorServlet" method="POST">
                     <input type="hidden" name="origin" value="editProfileButton" />
+                    <input type="hidden" name="source" value="admin" />
                     <label for="editProfileSubmit" span role="button" style="font-weight: normal">
                         <i class="glyphicon glyphicon-user"></i>
                         Brugerindstillinger

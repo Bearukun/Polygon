@@ -55,10 +55,8 @@ public class AdminServlet extends HttpServlet {
                 request.getSession().setAttribute("sourcePage","Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
-                refreshUsers();
-                refreshAllBuildings();
-                request.getSession().setAttribute("userList", userList);
-                request.getSession().setAttribute("allBuildings", allBuildings);
+                refreshUsers(request);
+                refreshAllBuildings(request);
                 response.sendRedirect("admin.jsp");
             }
         
@@ -247,13 +245,14 @@ public class AdminServlet extends HttpServlet {
                     
                 break;
                 
-                case "editProfileButton":
-                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
-                    request.getSession().setAttribute("source", "admin");
-                    response.sendRedirect("editProfile.jsp");
+                case "editOtherProfileButton":
+                    
+                    
+                    
                     
                 break;
-                    
+                
+                        
                 case "editProfile":
                     //Retrieve form input values from editProfile.jsp
                     String uEmail = request.getParameter("email");
@@ -297,7 +296,7 @@ public class AdminServlet extends HttpServlet {
                     int buildingId = Integer.parseInt(request.getParameter("buildingId"));
                     int technicianId = Integer.parseInt(request.getParameter("technicianId"));
                     bldgCtrl.assignHealthcheck(buildingId, technicianId);
-                    refreshAllBuildings();
+                    refreshAllBuildings(request);
                     response.sendRedirect("adminPendingBuildings.jsp");
                 break;   
                 
@@ -316,7 +315,7 @@ public class AdminServlet extends HttpServlet {
                      
                     usrCtrl.createUser(newUserEmail, newUserPassword, newUserName, newUserPhone, newUserCompany, newUserAddress, newUserPostcode, newUserCity, User.type.valueOf(newUserType));
                    
-                    refreshUsers();
+                    refreshUsers(request);
                    
                     response.sendRedirect("adminUsers.jsp");
                     
@@ -349,13 +348,12 @@ public class AdminServlet extends HttpServlet {
         userBuildings = bldgCtrl.getBuildings(user_id);
 
     }
+    
     //Refreshes the list of buildings
-
-    public void refreshAllBuildings() throws Exception {
-
+    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
-
+        request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
@@ -370,10 +368,11 @@ public class AdminServlet extends HttpServlet {
         buildingRooms = bldgCtrl.getRooms(building_id);
     }
 
-    public void refreshUsers() throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();
+        request.getSession().setAttribute("userList", userList);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

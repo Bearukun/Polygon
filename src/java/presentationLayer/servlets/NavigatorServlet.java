@@ -31,10 +31,18 @@ public class NavigatorServlet extends HttpServlet {
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
-    private int user_id;
+    private String uEmail, uPassword, uName, uCompany, uAddress, uCity;
+    private int user_id, uPhone, uPostcode, uUser_id;
+    private boolean editingOtherUserProfile = false;
     private Building build;
     PDFCreator pdfwt = new PDFCreator();
 
+    
+        
+
+    
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,6 +61,9 @@ public class NavigatorServlet extends HttpServlet {
 
             //Save the logged in user's id
             user_id = (Integer) request.getSession().getAttribute("user_id");
+            String email = request.getSession().getAttribute("email").toString();
+            //Get user object with the above email
+            user = usrCtrl.getUser(email);
             build  = (Building) request.getSession().getAttribute("buildingBeingEdited");
         
             String errMsg = null;
@@ -111,26 +122,46 @@ public class NavigatorServlet extends HttpServlet {
                     }
                 break;
                 
-                case "editProfile":
-
-                    //Retrieve form input values from editProfile.jsp
-                    String uEmail = request.getParameter("email");
-                    String uPassword = request.getParameter("password");
-                    String uName = request.getParameter("name");
-                    int uPhone = Integer.parseInt(request.getParameter("phonenumber"));
-                    String uCompany = request.getParameter("company");
-                    String uAddress = request.getParameter("address");
-                    int uPostcode = Integer.parseInt(request.getParameter("postcode"));
-                    String uCity = request.getParameter("city");
-                    int uSelectedUser = user_id;
+                case "editOtherProfileButton":
+                    User userToEdit = usrCtrl.getUser(request.getParameter("userEmail"));
+                    populateEditUserPage(request, userToEdit);
+                    //Toggle boolean
+                    editingOtherUserProfile = true;
+                    request.getSession().setAttribute("userToEdit", userToEdit.getUser_id());
+                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
+                    request.getSession().setAttribute("source", request.getParameter("source"));
+                    response.sendRedirect("editProfile.jsp");
+                break;
+                
+                case "editProfileButton":
+                    populateEditUserPage(request, user);
+                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
+                    request.getSession().setAttribute("source", request.getParameter("source"));
+                    response.sendRedirect("editProfile.jsp");
+                break;
                     
-                    //Save the user's edited values to the user database
-                    usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
-
+                case "editProfile":
+                    
+                    //Check if editing another user's profile or one's own profile
+                    if(editingOtherUserProfile){
+                        editUser(request, (Integer) request.getSession().getAttribute("userToEdit"));
+                        editingOtherUserProfile=false;
+                    }
+                    else if(!editingOtherUserProfile){
+                        editUser(request, user_id);
+                    }
+                    
+                    //Fetch user from the user's id
+                    user = usrCtrl.getUser(user_id); 
+                    
                     //Resets/updates the userName, password and updates the displayed username
-                    request.getSession().setAttribute("email", uEmail);
-                    request.getSession().setAttribute("password", uPassword);
-
+                    request.getSession().setAttribute("email", user.getEmail());
+                    request.getSession().setAttribute("password", user.getPassword());
+                    
+                    refreshUsers(request);
+                    
+            
+                    /*
                     //Updates the editUserTable with the new/updated user information
                     request.getSession().setAttribute("uEmail", uEmail);
                     request.getSession().setAttribute("uPassword", uPassword);
@@ -140,7 +171,7 @@ public class NavigatorServlet extends HttpServlet {
                     request.getSession().setAttribute("uAddress", uAddress);
                     request.getSession().setAttribute("uPostcode", uPostcode);
                     request.getSession().setAttribute("uCity", uCity);
-                    
+                    */
                     redirectUser(request, response);
 
                     break;
@@ -169,6 +200,48 @@ public class NavigatorServlet extends HttpServlet {
             }
     }
     
+    
+    //Populates the editUser.jsp fields
+    public void populateEditUserPage(HttpServletRequest request, User user) throws Exception {
+        //Retrieve the user's data
+        uEmail = user.getEmail();
+        uPassword = user.getPassword();
+        uName = user.getName();
+        uPhone = user.getPhone();
+        uCompany = user.getCompany();
+        uAddress = user.getAddress();
+        uPostcode = user.getPostcode();
+        uCity = user.getCity();
+        uUser_id = user.getUser_id();
+
+        //Save data to Session
+        request.getSession().setAttribute("uEmail", uEmail);
+        request.getSession().setAttribute("uPassword", uPassword);
+        request.getSession().setAttribute("uName", uName);
+        request.getSession().setAttribute("uPhone", uPhone);
+        request.getSession().setAttribute("uCompany", uCompany);
+        request.getSession().setAttribute("uAddress", uAddress);
+        request.getSession().setAttribute("uPostcode", uPostcode);
+        request.getSession().setAttribute("uCity", uCity);
+        request.getSession().setAttribute("uUser_id", uUser_id);
+    }
+        
+    //Edits the user's details
+    public void editUser(HttpServletRequest request, int user_id) throws Exception {
+        //Retrieve form input values from editProfile.jsp
+        uEmail = request.getParameter("email");
+        uPassword = request.getParameter("password");
+        uName = request.getParameter("name");
+        uPhone = Integer.parseInt(request.getParameter("phonenumber"));
+        uCompany = request.getParameter("company");
+        uAddress = request.getParameter("address");
+        uPostcode = Integer.parseInt(request.getParameter("postcode"));
+        uCity = request.getParameter("city");
+        int uSelectedUser = user_id;
+        //Save the user's edited values to the user database
+        usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
+    }
+    
     //Refreshes the list of buildings
     public void refreshBuilding(int user_id) throws Exception {
 
@@ -176,13 +249,12 @@ public class NavigatorServlet extends HttpServlet {
         userBuildings = bldgCtrl.getBuildings(user_id);
 
     }
+    
     //Refreshes the list of buildings
-
-    public void refreshAllBuildings() throws Exception {
-
+    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
-
+        request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
@@ -197,10 +269,11 @@ public class NavigatorServlet extends HttpServlet {
         buildingRooms = bldgCtrl.getRooms(building_id);
     }
 
-    public void refreshUsers() throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();
+        request.getSession().setAttribute("userList", userList);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

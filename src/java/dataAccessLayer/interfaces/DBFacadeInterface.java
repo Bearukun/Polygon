@@ -12,6 +12,8 @@ import serviceLayer.entities.User;
 public interface DBFacadeInterface {
 
     User getUser(String email) throws Exception;
+    
+    User getUser(int user_id) throws Exception;
 
     void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception;
 

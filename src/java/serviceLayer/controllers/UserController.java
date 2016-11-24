@@ -48,6 +48,11 @@ public class UserController implements UserControllerInterface {
     }
 
     @Override
+    public User getUser(int user_id) throws Exception {
+        return dbfacade.getUser(user_id);
+    }
+    
+    @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception {
 
         //If input fields aren't empty
