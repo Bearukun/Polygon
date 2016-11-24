@@ -71,31 +71,9 @@ public class LoginServlet extends HttpServlet {
                         try {
 
                             user = usrCtrl.login(email, password);
-                            //Retrieve all of the users data, to be used in the editProfile.jsp
-                            String uEmail = user.getEmail();
-                            String uPassword = user.getPassword();
-                            String uName = user.getName();
-                            int uPhone = user.getPhone();
-                            String uCompany = user.getCompany();
-                            String uAddress = user.getAddress();
-                            int uPostcode = user.getPostcode();
-                            String uCity = user.getCity();
-                            int uUser_id = user.getUser_id();
                             request.getSession().setAttribute("user_id", user.getUser_id());
                             request.getSession().setAttribute("email", user.getEmail());
                             
-                            //Takes the retrieved user data/information and sends it 
-                            //to the editProfile.jsp page.
-                            request.getSession().setAttribute("uEmail", uEmail);
-                            request.getSession().setAttribute("uPassword", uPassword);
-                            request.getSession().setAttribute("uName", uName);
-                            request.getSession().setAttribute("uPhone", uPhone);
-                            request.getSession().setAttribute("uCompany", uCompany);
-                            request.getSession().setAttribute("uAddress", uAddress);
-                            request.getSession().setAttribute("uPostcode", uPostcode);
-                            request.getSession().setAttribute("uCity", uCity);
-                            request.getSession().setAttribute("uUser_id", uUser_id);
-
                             if (user != null) {
                                 
                                 //Save where (which page) we are coming from
@@ -207,17 +185,19 @@ public class LoginServlet extends HttpServlet {
 
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
+                        String confirmPassword = request.getParameter("passwordConfirm");
                         String name = request.getParameter("name");
-                        String phone = request.getParameter("phone"); //HUSK INTEGER.PARSE!
+                        String phone = request.getParameter("phone"); //HUSK INTEGER.PARSE!*/
                         String company = request.getParameter("company");
                         String address = request.getParameter("address");
-                        String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!
+                        String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!*/
                         String city = request.getParameter("city");
 
 //                        Check that the parameters are being read
 //                        System.out.println(email + " em");
 //              
                         System.out.println(password + " pass");
+                        System.out.println(confirmPassword + " con pass");
 //                        System.out.println(name + " nam");
 //                        System.out.println(phone+ " ph");
 //                        System.out.println(company+ " com");
@@ -225,16 +205,21 @@ public class LoginServlet extends HttpServlet {
 //                        System.out.println(postcode+ " post");
 //                        System.out.println(city + " city");
 
+                        //Redundant method: Being handled by JS in the index.jsp
                         //test password match
-//                        if(!request.getSession().getAttribute("password").equals(request.getSession().getAttribute("passwordConfirm")) ){
+//                        if(!password.equalsIgnoreCase(confirmPassword)){
 //                            System.out.println("PASSWORD NOT MATCHING!");
-//                            JOptionPane.showMessageDialog(null, "PASSWORD NOT MATCHING!");
-//                             response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8") + " PASSWORD NOT MATCHING");
+//                            
+//                            response.sendRedirect("index.jsp?error=" + "PasswordNotMatching");
+//                            
 //                        }
-                        try {
+                        
+                        
+                    
+                         try {
                             System.out.println("creating user");
                             //Create user
-                            usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
+                          usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
                             //If successful, redirect
                             System.out.println("Index redirect");
                             response.sendRedirect("index.jsp?success");

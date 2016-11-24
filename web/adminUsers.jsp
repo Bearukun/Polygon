@@ -65,10 +65,12 @@
 
                     <h1>Brugere:</h1>
                     <br>
-
+                    
+                    <h4>
                     <a href="adminCreateUser.jsp" target="_self">
                         <i class="glyphicon glyphicon-plus"></i>
-                        Ny bruger </a>
+                        Ny bruger </a></h4>
+                        
 
                     <% ArrayList<User> tempUL = new ArrayList();
 
@@ -89,7 +91,7 @@
                                 <td><b>Adresse</b></td>
                                 <td><b>Postnr.</b></td>
                                 <td><b>By</b></td>
-                                <td><b>Muligheder</b></td>
+                                <td colspan="2"><b>Muligheder</b></td>
                             </tr>
                             <%                                    for (int i = 0; i < tempUL.size(); i++) {
                             %><tr>
@@ -109,39 +111,22 @@
                                         <input class="btn btn-primary" type="submit" value="Login som bruger" />
                                     </form>
                                 </td>
+                                <td>
+                                    <form action="NavigatorServlet" method="POST">
+                                        <input type="hidden" name="origin" value="editOtherProfileButton" />
+                                        <input type="hidden" name="userEmail" value="<%=tempUL.get(i).getEmail()%>" />
+                                        <input type="hidden" name="source" value="admin" />
+                                        <input class="btn btn-primary" type="submit" value="Rediger bruger" />
+                                    </form>
+                                </td>
                             </tr>
                             <%}
                             %>
                         </tbody>
                     </table>
 
-<div>
-<form class="form-add-user" action="AdminServlet" method="POST">
-<input class="form-control" type="text" name="email" placeholder="Email">
-<input class="form-control" type="password" name="password" placeholder="Adgangskode">
-<input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
-<select name="type" id="slectboxid">
-
-    <option value="ADMIN" selected="ADMIN">Admin</option>
-    <option value="TECHNICIAN" selected="TECHNICIAN">Teknikker</option>
-    <option value="CUSTOMER" selected="CUSTOMER">Kunde</option>
-
-</select>
-
-    
 
 
-<input type="text" name="text" placeholder="Vælg brugertype" id="textboxid" />
-<h5>Ydeligere information</h5><br><!-- Skal centreres -->
-<input class="form-control" type="text" name="name" value="" placeholder="Navn" />
-<input class="form-control" type="text" name="phone" value="" placeholder="Telefon" />
-<input class="form-control" type="text" name="company" value="" placeholder="Firma" />
-<input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
-<input class="form-control" type="text" name="postcode" value="" placeholder="Postnr." />
-<input class="form-control" type="text" name="city" value="" placeholder="By" />
-<input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
-<input type="hidden" name="origin" value="newCustomer" />
-</div>
 </form>
 
 

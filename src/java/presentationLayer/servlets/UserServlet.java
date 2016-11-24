@@ -271,11 +271,6 @@ public class UserServlet extends HttpServlet {
                     }
 
                     break;
-                case "editProfileButton":
-                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
-                    request.getSession().setAttribute("source", "user");
-                    response.sendRedirect("editProfile.jsp");
-                    break;
 
                 case "addBuildingButton":
                     //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
@@ -298,13 +293,12 @@ public class UserServlet extends HttpServlet {
         userBuildings = bldgCtrl.getBuildings(user_id);
 
     }
+    
     //Refreshes the list of buildings
-
-    public void refreshAllBuildings() throws Exception {
-
+    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
-
+        request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
@@ -319,10 +313,11 @@ public class UserServlet extends HttpServlet {
         buildingRooms = bldgCtrl.getRooms(building_id);
     }
 
-    public void refreshUsers() throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();
+        request.getSession().setAttribute("userList", userList);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
