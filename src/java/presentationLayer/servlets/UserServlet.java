@@ -62,8 +62,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("sourcePage", "Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
-                refreshBuilding(user_id);
-                request.getSession().setAttribute("userBuildings", userBuildings);
+                refreshBuilding(request, user_id);
                 response.sendRedirect("user.jsp");
             }
 
@@ -119,7 +118,7 @@ public class UserServlet extends HttpServlet {
                         bldgCtrl.toggleHealthcheck(build.getBuilding_id(), healthcheckValueToWrite);
 
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user_id);
+                        refreshBuilding(request, user_id);
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
@@ -253,7 +252,7 @@ public class UserServlet extends HttpServlet {
                         //Save values to database
                         bldgCtrl.editBuilding(selectedBuilding, buildingName, address, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user_id);
+                        refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     }else if (request.getParameter("originSection").equals("editBuildingImage")) {
@@ -264,7 +263,7 @@ public class UserServlet extends HttpServlet {
                         //Save values to database
                         dat.uploadBuildingImage(Integer.parseInt(request.getParameter("selectedBuilding")), "img", inputStream);
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user_id);
+                        refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
                         
@@ -287,11 +286,11 @@ public class UserServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws Exception {
+    public void refreshBuilding(HttpServletRequest request, int user_id) throws Exception {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
-
+        request.getSession().setAttribute("userBuildings", userBuildings);
     }
     
     //Refreshes the list of buildings
