@@ -109,6 +109,8 @@
                                 <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
                                 <input class="form-control" type="text" name="postcode" value="" placeholder="Postnr." />
                                 <input class="form-control" type="text" name="city" value="" placeholder="By" />
+                                <br>
+                                <br>
                                 <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
                                 <input type="hidden" name="origin" value="newCustomer" />
 

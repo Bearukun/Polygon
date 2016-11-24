@@ -5,7 +5,7 @@ We need to check if a user is logged in,
 if yes - then redirect - else nothing. --%>
 <html>
     <head>
-       
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
@@ -27,8 +27,8 @@ if yes - then redirect - else nothing. --%>
                     <h1>Opret ny bruger</h1><br>
                     <form class="form-signin" name="ValidationForm" action="LoginServlet" method="POST">
                         <input class="form-control" type="text" name="email" placeholder="Email">
-                        <input class="form-control" type="password" name="password" placeholder="Adgangskode">
-                        <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode">
+                        <input class="form-control" type="password" name="password" placeholder="Adgangskode" id="password">
+                        <input class="form-control" type="password" name="passwordConfirm" placeholder="Bekræft Adgangskode" id="passwordConfirm">
                         <h5>Ydeligere information</h5><br><!-- Skal centreres -->
                         <input class="form-control" type="text" name="name" value="" placeholder="Navn" />
                         <input class="form-control" type="text" name="phone" value="" placeholder="Telefon" />
@@ -38,13 +38,34 @@ if yes - then redirect - else nothing. --%>
                         <input class="form-control" type="text" name="city" value="" placeholder="By" />
                         <input class="btn btn-lg btn-success btn-block" type="submit" name="login"  value="Registrer">
                         <input type="hidden" name="origin" value="newCustomer" />
-                        
-                    </form>
+
+
                     
+
+                    </form>
+
 
                 </div>
             </div>
         </div>
+        
+        <!-- Check password Script-->
+        <script>
+            var password = document.getElementById("password")
+                    , confirm_password = document.getElementById("passwordConfirm");
+
+            function validatePassword() {
+                if (password.value != confirm_password.value) {
+                    confirm_password.setCustomValidity("Password stemmer ikke overens!");
+                } else {
+                    confirm_password.setCustomValidity('');
+                }
+            }
+            //onchange????
+            password.onchange = validatePassword;
+            //onkeyup????
+            confirm_password.onkeyup = validatePassword;
+        </script>
         <!-- Login div -->
         <div class="login_container">
             <form class="form-signin" action="LoginServlet" method="POST">
@@ -62,7 +83,7 @@ if yes - then redirect - else nothing. --%>
                 <br>
                 <a href="createPDF.jsp"> Opret test PDF </a>
             </form>
-            
+
         </div>
     </body>
 </html>

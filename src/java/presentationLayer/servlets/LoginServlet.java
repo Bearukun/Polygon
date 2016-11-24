@@ -207,17 +207,19 @@ public class LoginServlet extends HttpServlet {
 
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
+                        String confirmPassword = request.getParameter("passwordConfirm");
                         String name = request.getParameter("name");
-                        String phone = request.getParameter("phone"); //HUSK INTEGER.PARSE!
+                        String phone = request.getParameter("phone"); //HUSK INTEGER.PARSE!*/
                         String company = request.getParameter("company");
                         String address = request.getParameter("address");
-                        String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!
+                        String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!*/
                         String city = request.getParameter("city");
 
 //                        Check that the parameters are being read
 //                        System.out.println(email + " em");
 //              
                         System.out.println(password + " pass");
+                        System.out.println(confirmPassword + " con pass");
 //                        System.out.println(name + " nam");
 //                        System.out.println(phone+ " ph");
 //                        System.out.println(company+ " com");
@@ -225,16 +227,21 @@ public class LoginServlet extends HttpServlet {
 //                        System.out.println(postcode+ " post");
 //                        System.out.println(city + " city");
 
+                        //Redundant method: Being handled by JS in the index.jsp
                         //test password match
-//                        if(!request.getSession().getAttribute("password").equals(request.getSession().getAttribute("passwordConfirm")) ){
+//                        if(!password.equalsIgnoreCase(confirmPassword)){
 //                            System.out.println("PASSWORD NOT MATCHING!");
-//                            JOptionPane.showMessageDialog(null, "PASSWORD NOT MATCHING!");
-//                             response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8") + " PASSWORD NOT MATCHING");
+//                            
+//                            response.sendRedirect("index.jsp?error=" + "PasswordNotMatching");
+//                            
 //                        }
-                        try {
+                        
+                        
+                    
+                         try {
                             System.out.println("creating user");
                             //Create user
-                            usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
+                          //  usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
                             //If successful, redirect
                             System.out.println("Index redirect");
                             response.sendRedirect("index.jsp?success");
