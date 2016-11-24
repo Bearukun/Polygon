@@ -81,4 +81,9 @@ public class UserController implements UserControllerInterface {
 
     }
 
+    @Override
+    public void deleteUser(int user_id) throws Exception {
+        dbfacade.deleteUser(user_id);
+    }
+
 }

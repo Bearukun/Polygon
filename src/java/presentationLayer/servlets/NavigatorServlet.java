@@ -36,12 +36,6 @@ public class NavigatorServlet extends HttpServlet {
     private boolean editingOtherUserProfile = false;
     private Building build;
     PDFCreator pdfwt = new PDFCreator();
-
-    
-        
-
-    
-    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -174,7 +168,14 @@ public class NavigatorServlet extends HttpServlet {
                     */
                     redirectUser(request, response);
 
-                    break;
+                break;
+                    
+                case "deleteUser":
+                    int userIdToDelete = Integer.parseInt(request.getParameter("userIdToDelete"));
+                    usrCtrl.deleteUser(userIdToDelete);
+                    refreshUsers(request);
+                    redirectUser(request, response);
+                break;
             }
 
         } catch (Exception e) {

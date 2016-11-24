@@ -51,30 +51,8 @@
                         </div>
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                        <div class="profile-usermenu">
-                            <ul class="nav">
-                                <li>
-                                    <a href="admin.jsp?refresh">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                        Overblik </a>
-                                </li>
-                                <li>
-                                    <a href="adminBuildings.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-object-align-bottom"></i>
-                                        Vis bygninger </a>
-                                </li>
-                                <li class="active">
-                                    <a href="adminUsers.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-th-list"></i>
-                                        Håndter brugere </a>
-                                </li>
-                                <li>
-                                    <a href="adminPendingBuildings.jsp" target="_self">
-                                        <i class="glyphicon glyphicon-list"></i>
-                                        Healthchecks </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <% request.getSession().setAttribute("ActiveSidebarMenu", "NyBruger");%>
+                        <%@ include file="adminSidebar.jsp" %>
                         <!-- END MENU -->
                     </div>
                 </div>
