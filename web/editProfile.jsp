@@ -44,12 +44,12 @@
                         <!-- END SIDEBAR BUTTONS -->
                         <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
                         <% request.getSession().setAttribute("ActiveSidebarMenu", "Brugerindstillinger"); %>
-                        <% if(request.getSession().getAttribute("source").toString().equals("user")){%>
-                            <%@ include file="userSidebar.jsp"%>
-                        <%} else if(request.getSession().getAttribute("source").toString().equals("technician")){%>
-                            <%@ include file="technicianSidebar.jsp"%>
-                        <%} else if(request.getSession().getAttribute("source").toString().equals("admin")){%>
-                            <%@ include file="adminSidebar.jsp"%>
+                        <% if (request.getSession().getAttribute("source").toString().equals("user")) {%>
+                        <%@ include file="userSidebar.jsp"%>
+                        <%} else if (request.getSession().getAttribute("source").toString().equals("technician")) {%>
+                        <%@ include file="technicianSidebar.jsp"%>
+                        <%} else if (request.getSession().getAttribute("source").toString().equals("admin")) {%>
+                        <%@ include file="adminSidebar.jsp"%>
                         <%}%>
                         <!-- END MENU -->
                     </div>
@@ -60,36 +60,62 @@
 
 
                     <form class="form-edit-profile" action="NavigatorServlet" method="POST"> 
-                        <p>Email</p>                      
-                        <input type="text" name="email" value="<%=request.getSession().getAttribute("uEmail")%>" />
-                        <br><br>
-                        <p>Password</p>                      
-                        <input type="text" name="password" value="<%=request.getSession().getAttribute("uPassword")%>" />
-                        <br><br>
-                        <p>Navn</p>                      
-                        <input type="text" name="name" value="<%=request.getSession().getAttribute("uName")%>" />
-                        <br><br>
-                        <p>Telefon Nummer</p>                      
-                        <input type="number" name="phonenumber" value="<%=request.getSession().getAttribute("uPhone")%>" />
-                        <br><br>                       
-                        <p>Firma</p> 
-                        <input type="text" name="company" value="<%=request.getSession().getAttribute("uCompany")%>" />
-                        <br><br>
-                        <p>Adresse</p> 
-                        <input type="text" name="address" value="<%=request.getSession().getAttribute("uAddress")%>" />
-                        <br><br>
-                        <p>Postnr.</p> 
-                        <input type="number" name="postcode" value="<%=request.getSession().getAttribute("uPostcode")%>" />
-                        <br><br>
-                        <p>By</p>  
-                        <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>" />
-                        <br><br>
-                        <input type="hidden" name="origin" value="editProfile" />
-                        <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
-                        <br><br>
-                        <input class="btn btn-primary" type="submit" value="Gem Ændringer" />
-                        <br><br>
-                    </form>
+                        <div class="container-fluid">
+                            <div class="row" style="height: auto; width: auto; margin-bottom: auto" >
+                                <div class="col-sm-4">
+
+                                    <p>Email</p>                      
+                                    <input type="text" name="email" value="<%=request.getSession().getAttribute("uEmail")%>" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <p>Password</p>                      
+                                    <input type="password" name="password" value="<%=request.getSession().getAttribute("uPassword")%>" id="password"style="height: auto; width: auto; margin-bottom: 1px; margin-top: 1px;"   />
+                                    <br><br>
+                                    <p>Bekræft Password</p>                      
+                                    <input type="password" name="passwordConfirm" value="" id="passwordConfirm" style="height: auto;width: auto;margin-bottom: 1px; margin-top: 1px;"/>
+                                    <br><br>
+                                    
+                                </div>
+                                <div class="col-sm-4">
+                                  
+                                    <p>Navn</p>                      
+                                    <input type="text" name="name" value="<%=request.getSession().getAttribute("uName")%>" style="height: auto; width: auto;"/>
+
+                                    <br><br>
+                                    <p>Firma</p> 
+                                    <input type="text" name="company" value="<%=request.getSession().getAttribute("uCompany")%>" style="height: auto; width: auto;"/>
+                                    <br><br>
+                                    <p>Telefon Nummer</p>                      
+                                    <input type="number" name="phonenumber" value="<%=request.getSession().getAttribute("uPhone")%>" style="height: auto; width: auto;"/>
+                                    <br><br>  
+                                    <br><br>
+                                    
+                                    <input class="btn btn-primary" type="submit" value="Gem Ændringer" />
+                                </div>
+                                <div class="col-sm-4">
+                                    
+                                    <p>Adresse</p> 
+                                    <input type="text" name="address" value="<%=request.getSession().getAttribute("uAddress")%>"style="height: auto; width: auto;" />
+                                    <br><br>
+                                    <p>Postnr.</p> 
+                                    <input type="number" name="postcode" value="<%=request.getSession().getAttribute("uPostcode")%>"style="height: auto; width: auto;" />
+                                    <br><br>
+                                    <p>By</p>  
+                                    <input type="text" name="city" value="<%=request.getSession().getAttribute("uCity")%>"style="height: auto; width: auto;" />
+                                    <br><br>
+                                </div>
+                                <div class="col-sm-4">
+                                    
+                                    
+                                </div>
+                                <input type="hidden" name="origin" value="editProfile" />
+                                <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
+                                <br><br>
+                                
+                                <br><br>
+                                </form>
+                            </div>
+                        </div>
+                                <script src="scripts/passwordChecker.js" type="text/javascript"></script>
                 </div>
             </div>
         </div>
