@@ -55,43 +55,45 @@
                 </div>
                 <!-- SITE CONTENT -->
                 <div class="col-sm-10">
-                        <h2>Tilføj bygning</h2>
-                        <div>
-                                <div class="col-xs-6">
+                    <h2>Tilføj bygning</h2>
+                    <div>
+                        <form class="form-add-building" action="NavigatorServlet" method="POST">
 
-                                    <form class="form-add-building" action="NavigatorServlet" method="POST">
-                                        <h4>Bygningens navn</h4>
-                                        <p>Her skal navnet på bygningen skrives</p>
-                                        <input class="form-control" type="text" name="name" value="" placeholder="Navn" maxlength="20"/>
-                                        <h4>Bygningens adresse</h4>
-                                        <p>Bygnigens vejnavn og nummer</p>
-                                        <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
-                                        <h4>Bygningens postnummer</h4>
-                                        <p>Her skal kun postnummeret skrives</p>
-                                        <input class="form-control" type="number" min="1000" max="9999" name="postcode" value="" placeholder="Postnummer" />
-                                        <h4>Bygnignens tilsvarende by</h4>
-                                        <p>Her skal der stå den by postnummeret svarer til</p>
-                                        <input class="form-control" type="text" name="city" value="" placeholder="By" />
-                                        <br>
-                                    </form>
-                                </div>
-                                <div class="col-xs-6">
-                                    <form class="form-add-building" action="NavigatorServlet" method="POST">
-                                        <h4>Bygningens opførelsesår</h4>
-                                        <p>Det år bygningen blev bygget</p>
-                                        <input class="form-control" type="number" min="0" max="2500" name="construction_year" value="" placeholder="Byggeår:" />
-                                        <h4>Bygningens formål</h4>
-                                        <p>Hvad bliver bygningen brugt til</p>
-                                        <input class="form-control" type="text" name="purpose" value="" placeholder="Formål" />
-                                        <h4>Bygningens areal</h4>
-                                        <p>Hvad er bygningens totale areal</p>
-                                        <input class="form-control" type="number" name="sqm" value="" placeholder="Areal" />
-                                        <input type="hidden" name="origin" value="createBuilding" />
-                                        <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
-                                    </form>
-                                </div>
+                            <div class="col-xs-6">
+
+
+                                <h4>Bygningens navn</h4>
+                                <p>Her skal navnet på bygningen skrives</p>
+                                <input class="form-control" type="text" name="name" value="" placeholder="Navn" maxlength="20"/>
+                                <h4>Bygningens adresse</h4>
+                                <p>Bygnigens vejnavn og nummer</p>
+                                <input class="form-control" type="text" name="address" value="" placeholder="Adresse" />
+                                <h4>Bygningens postnummer</h4>
+                                <p>Her skal kun postnummeret skrives</p>
+                                <input class="form-control" type="number" min="1000" max="9999" name="postcode" value="" placeholder="Postnummer" />
+                                <h4>Bygnignens tilsvarende by</h4>
+                                <p>Her skal der stå den by postnummeret svarer til</p>
+                                <input class="form-control" type="text" name="city" value="" placeholder="By" />
+                                <br>
+                            </div>
+                            <div class="col-xs-6">
+                                <h4>Bygningens opførelsesår</h4>
+                                <p>Det år bygningen blev bygget</p>
+                                <input class="form-control" type="number" min="0" max="2500" name="construction_year" value="" placeholder="Byggeår:" />
+                                <h4>Bygningens formål</h4>
+                                <p>Hvad bliver bygningen brugt til</p>
+                                <input class="form-control" type="text" name="purpose" value="" placeholder="Formål" />
+                                <h4>Bygningens areal</h4>
+                                <p>Hvad er bygningens totale areal</p>
+                                <input class="form-control" type="number" name="sqm" value="" placeholder="Areal" />
+
+
+                            </div>
+                            <input type="hidden" name="origin" value="createBuilding" />
+                            <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
                             <input class="btn btn-lg btn-primary btn-block" type="submit" value="Opret bygning" name=""/>
-                        </div>
+                        </form>
+                    </div>
                 </div>
             </div>
     </body>
