@@ -58,10 +58,7 @@
                     <h2>Tilføj bygning</h2>
                     <div>
                         <form class="form-add-building" action="NavigatorServlet" method="POST">
-
                             <div class="col-xs-6">
-
-
                                 <h4>Bygningens navn</h4>
                                 <p>Her skal navnet på bygningen skrives</p>
                                 <input class="form-control" type="text" name="name" value="" placeholder="Navn" maxlength="20"/>
@@ -86,8 +83,6 @@
                                 <h4>Bygningens areal</h4>
                                 <p>Hvad er bygningens totale areal</p>
                                 <input class="form-control" type="number" name="sqm" value="" placeholder="Areal" />
-
-
                             </div>
                             <input type="hidden" name="origin" value="createBuilding" />
                             <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
