@@ -388,4 +388,39 @@ public class UserMapper implements UserMapperInterface {
         
     }
 
+    /**
+     * Method to delete a user
+     * @param user_id int specifying which user is to be deleted
+     * @throws Exception 
+     */
+    @Override
+    public void deleteUser(int user_id) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "DELETE FROM user WHERE user_id = ?;ALTER TABLE user AUTO_INCREMENT=1;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, user_id);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.deleteUser."+ex.getMessage());
+            }
+        }
+    }
+
 }

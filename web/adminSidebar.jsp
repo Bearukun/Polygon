@@ -27,6 +27,21 @@
                 <i class="glyphicon glyphicon-th-list"></i>
                 Håndter brugere </a>
         </li>
+        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("NyBruger")){%>
+            <li class="active">
+                <a>
+                    <form action="AdminServlet" method="POST">
+                        <input type="hidden" name="origin" value="createUserButton" />
+                        <label for="createUserSubmit" span role="button" style="font-weight: normal">
+                            <i class="glyphicon glyphicon-list"></i>
+                            Ny bruger
+                        </label>
+                        <input id="createUserSubmit" type="submit" class="hidden" />
+                    </form>
+                </a>
+            </li>
+        <%}%>
+        
         <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("Sundhedscheck")){%>
             <li class="active">
         <%} else{%>

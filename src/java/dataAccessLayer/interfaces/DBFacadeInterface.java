@@ -58,4 +58,5 @@ public interface DBFacadeInterface {
 
     public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception;
 
+    void deleteUser(int user_id) throws Exception;
 }

@@ -55,6 +55,78 @@
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
                         <h1>Overblik:</h1>
+                       
+                        <% ArrayList<User> userList = new ArrayList();
+                            ArrayList<Building> allBuildings = new ArrayList();
+
+                            userList = (ArrayList<User>) request.getSession().getAttribute("userList");
+                            allBuildings = (ArrayList<Building>) request.getSession().getAttribute("allBuildings");
+                            
+                            ArrayList<String> bldgPurpose = new ArrayList();
+                                bldgPurpose.add("Landbrug");
+                                bldgPurpose.add("Erhverv");
+                                bldgPurpose.add("Bolig");
+                                bldgPurpose.add("Uddannelse");
+                                bldgPurpose.add("Offentlig");
+                                bldgPurpose.add("Industriel");
+                                bldgPurpose.add("Militær");
+                                bldgPurpose.add("Religiøs");
+                                bldgPurpose.add("Transport");
+                                bldgPurpose.add("Andet");
+                            %>
+                        
+                        <br><br>
+                        <table text-align="left" class="table">
+                            <tbody>
+                                <tr bgcolor='cyan'>
+                                    <th colspan="2"><b>Brugere</b></th>
+                                </tr>
+                                <tr>
+                                    <td><b>Brugertype</b></td>
+                                    <td><b>Antal brugere</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Kunde</td>
+                                    <td><%=request.getSession().getAttribute("countOfCustomers")%></td>
+                                </tr>
+                                <tr>
+                                    <td>Tekniker</td>
+                                    <td><%=request.getSession().getAttribute("countOfTechnicians")%></td>
+                                </tr>
+                                <tr>
+                                    <td>Administrator</td>
+                                    <td><%=request.getSession().getAttribute("countOfAdministrators")%></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Total</b></td>
+                                    <td><b><%=(Integer) request.getSession().getAttribute("countOfCustomers")+(Integer) request.getSession().getAttribute("countOfAdministrators")+(Integer) request.getSession().getAttribute("countOfAdministrators")%></b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <br><br>
+                        <table text-align="left" class="table">
+                            <tbody>
+                                <tr bgcolor='cyan'>
+                                    <th colspan="4"><b>Bygninger</b></th>
+                                </tr>
+                                <tr>
+                                    <td><b>Type</b></td>
+                                    <td><b>Antal bygninger</b></td>
+                                </tr>
+                                
+                                <% for (int i = 0; i < bldgPurpose.size(); i++) {%>
+                                <tr>
+                                    <td><%=bldgPurpose.get(i)%></td>
+                                    <td><%=request.getSession().getAttribute("countOf"+bldgPurpose.get(i)+"")%></td>
+                                </tr>
+                                <%}%>
+                                <tr>
+                                    <td><b>Total</b></td>
+                                    <td><b><%=allBuildings.size()%></b></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

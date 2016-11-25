@@ -66,10 +66,14 @@
                     <h1>Brugere:</h1>
                     <br>
                     
-                    <h4>
-                    <a href="adminCreateUser.jsp" target="_self">
-                        <i class="glyphicon glyphicon-plus"></i>
-                        Ny bruger </a></h4>
+                    <form action="AdminServlet" method="POST">
+                        <input type="hidden" name="origin" value="createUserButton" />
+                        <label for="createUserSubmit" span role="button" style="font-weight: normal">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            Ny Bruger
+                        </label>
+                        <input id="createUserSubmit" type="submit" class="hidden" />
+                    </form>
                         
 
                     <% ArrayList<User> tempUL = new ArrayList();
@@ -91,7 +95,7 @@
                                 <td><b>Adresse</b></td>
                                 <td><b>Postnr.</b></td>
                                 <td><b>By</b></td>
-                                <td colspan="2"><b>Muligheder</b></td>
+                                <td colspan="3"><b>Muligheder</b></td>
                             </tr>
                             <%                                    for (int i = 0; i < tempUL.size(); i++) {
                             %><tr>
@@ -108,7 +112,7 @@
                                     <form action="LoginServlet" method="POST">
                                         <input type="hidden" name="origin" value="loginAsUser" />
                                         <input type="hidden" name="userEmail" value="<%=tempUL.get(i).getEmail()%>" />
-                                        <input class="btn btn-primary" type="submit" value="Login som bruger" />
+                                        <input class="btn btn-primary" type="submit" value="Login som" />
                                     </form>
                                 </td>
                                 <td>
@@ -116,7 +120,15 @@
                                         <input type="hidden" name="origin" value="editOtherProfileButton" />
                                         <input type="hidden" name="userEmail" value="<%=tempUL.get(i).getEmail()%>" />
                                         <input type="hidden" name="source" value="admin" />
-                                        <input class="btn btn-primary" type="submit" value="Rediger bruger" />
+                                        <input class="btn btn-primary" type="submit" value="Rediger" />
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="NavigatorServlet" method="POST">
+                                        <input type="hidden" name="origin" value="deleteUser" />
+                                        <input type="hidden" name="originSection" value="Administration" />
+                                        <input type="hidden" name="userIdToDelete" value="<%=tempUL.get(i).getUser_id()%>" />
+                                        <input class="btn btn-danger" type="submit" value="Slet" />
                                     </form>
                                 </td>
                             </tr>

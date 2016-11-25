@@ -156,4 +156,9 @@ public class DBFacade implements DBFacadeInterface {
         dmi.uploadBuildingImage(building_id, img_name, img_file);
     }
 
+    @Override
+    public void deleteUser(int user_id) throws Exception {
+        umi.deleteUser(user_id);
+    }
+
 }

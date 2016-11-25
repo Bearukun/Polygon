@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +27,7 @@ public class AdminServlet extends HttpServlet {
     private ArrayList<Building> allBuildings = new ArrayList();
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
+    private ArrayList<String> buildingPurposes = new ArrayList(Arrays.asList("Landbrug","Erhverv","Bolig","Uddannelse","Offentlig","Industriel","Militær","Religiøs","Transport","Andet"));
 
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
@@ -57,6 +59,8 @@ public class AdminServlet extends HttpServlet {
                 user_id = (Integer) request.getSession().getAttribute("user_id");
                 refreshUsers(request);
                 refreshAllBuildings(request);
+                compileAdminOverviewStats(request);
+                compileAdminOverviewBuildingStats(request);
                 response.sendRedirect("admin.jsp");
             }
         
@@ -321,7 +325,12 @@ public class AdminServlet extends HttpServlet {
                     
                     
                     
-                    break; 
+                break; 
+                    
+                case "createUserButton":
+                    request.getSession().setAttribute("source", "admin");
+                    response.sendRedirect("adminCreateUser.jsp");
+                break;
             }
 
         } catch (Exception e) {
@@ -330,6 +339,100 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    //Compiles user statistics to display on admin overview page
+    public void compileAdminOverviewStats(HttpServletRequest request){
+        int countOfCustomers = 0;
+        int countOfTechnicians = 0;
+        int countOfAdministrators = 0;
+
+        for (int i = 0; i < userList.size(); i++) {
+            if(userList.get(i).getType().toString().equals("CUSTOMER")){
+                countOfCustomers++;
+            }
+            else if(userList.get(i).getType().toString().equals("TECHNICIAN")){
+                countOfTechnicians++;
+            }
+            else if(userList.get(i).getType().toString().equals("ADMIN")){
+                countOfAdministrators++;
+            }
+        }
+        
+        request.getSession().setAttribute("countOfCustomers", countOfCustomers);
+        request.getSession().setAttribute("countOfTechnicians", countOfTechnicians);
+        request.getSession().setAttribute("countOfAdministrators", countOfAdministrators);
+    }
+     
+    //Compiles building statistics to display on admin overview page
+    public void compileAdminOverviewBuildingStats(HttpServletRequest request){
+        
+        int countOfLandbrug=0;
+        int countOfErhverv=0;
+        int countOfBolig=0;
+        int countOfUddannelse=0;
+        int countOfOffentlig=0;
+        int countOfIndustriel=0;
+        int countOfMilitær=0;
+        int countOfReligiøs=0;
+        int countOfTransport=0;
+        int countOfAndet=0;
+        for (int i = 0; i < allBuildings.size(); i++) {
+            String buildingPurpose = allBuildings.get(i).getPurpose();
+            switch (buildingPurpose){  
+                case "Landbrug":
+                    countOfLandbrug++;
+                    break;
+
+                case "Erhverv":
+                    countOfErhverv++;
+                    break;
+
+                case "Bolig":
+                    countOfBolig++;
+                    break;
+
+                case "Uddannelse":
+                    countOfUddannelse++;
+                    break;
+
+                case "Offentlig":
+                    countOfOffentlig++;
+                    break;
+
+                case "Industriel":
+                    countOfIndustriel++;
+                    break;
+
+                case "Militær":
+                    countOfMilitær++;
+                    break;
+
+                case "Religiøs":
+                    countOfReligiøs++;
+                    break;
+
+                case "Transport":
+                    countOfTransport++;
+                    break;
+
+                case "Andet":
+                    countOfAndet++;
+                    break;
+            }
+            
+        }
+        
+        request.getSession().setAttribute("countOfLandbrug", countOfLandbrug);
+        request.getSession().setAttribute("countOfErhverv", countOfErhverv);
+        request.getSession().setAttribute("countOfBolig", countOfBolig);
+        request.getSession().setAttribute("countOfUddannelse", countOfUddannelse);
+        request.getSession().setAttribute("countOfOffentlig", countOfOffentlig);
+        request.getSession().setAttribute("countOfIndustriel", countOfIndustriel);
+        request.getSession().setAttribute("countOfMilitær", countOfMilitær);
+        request.getSession().setAttribute("countOfReligiøs", countOfReligiøs);
+        request.getSession().setAttribute("countOfTransport", countOfTransport);
+        request.getSession().setAttribute("countOfAndet", countOfAndet);
+    }
+    
     //Deducts a list of technicians from the user list
     public ArrayList<User> getTechnicians() throws Exception {
         ArrayList<User> techniciansList = new ArrayList();
