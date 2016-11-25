@@ -112,9 +112,7 @@
                                 </tr>
                                 <tr>
                                     <td><b>Type</b></td>
-                                    <td><b># Bygninger</b></td>
-                                    <td><b># Områder</b></td>
-                                    <td><b># Lokaler</b></td>
+                                    <td><b>Antal bygninger</b></td>
                                 </tr>
                                 
                                 <% for (int i = 0; i < bldgPurpose.size(); i++) {%>
@@ -126,8 +124,6 @@
                                 <tr>
                                     <td><b>Total</b></td>
                                     <td><b><%=allBuildings.size()%></b></td>
-                                    <td><b></b></td>
-                                    <td><b></b></td>
                                 </tr>
                             </tbody>
                         </table>
