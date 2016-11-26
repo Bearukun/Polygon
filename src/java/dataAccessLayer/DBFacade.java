@@ -8,7 +8,6 @@ import dataAccessLayer.mappers.interfaces.BuildingMapperInterface;
 import dataAccessLayer.mappers.interfaces.DataMapperInterface;
 import dataAccessLayer.mappers.interfaces.UserMapperInterface;
 import java.io.InputStream;
-import java.sql.Blob;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -44,7 +43,7 @@ public class DBFacade implements DBFacadeInterface {
     public User getUser(int user_id) throws Exception {
         return umi.getUser(user_id);
     }
-    
+
     @Override
     public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception {
 
@@ -147,6 +146,11 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
+    public boolean hasImage(DataMapperInterface.ImageType imageType, int issue_id, int building_id) throws Exception {
+        return dmi.hasImage(imageType, issue_id, building_id);
+    }
+
+    @Override
     public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception {
         dmi.uploadIssueImage(issue_id, img_name, img_file);
     }
@@ -154,6 +158,11 @@ public class DBFacade implements DBFacadeInterface {
     @Override
     public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
         dmi.uploadBuildingImage(building_id, img_name, img_file);
+    }
+
+    @Override
+    public void updateImage(DataMapperInterface.ImageType imageType, int issue_id, int building_id, String img_name, InputStream img_file) throws Exception {
+        dmi.updateImage(imageType, issue_id, building_id, img_name, img_file);
     }
 
     @Override

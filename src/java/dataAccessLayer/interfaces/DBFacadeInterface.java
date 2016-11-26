@@ -1,7 +1,7 @@
 package dataAccessLayer.interfaces;
 
+import dataAccessLayer.mappers.interfaces.DataMapperInterface;
 import java.io.InputStream;
-import java.sql.Blob;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -30,6 +30,8 @@ public interface DBFacadeInterface {
     public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws Exception;
 
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws Exception;
+    
+    void deleteUser(int user_id) throws Exception;
 
     public ArrayList<Area> getAreas(int building_id) throws Exception;
 
@@ -53,10 +55,13 @@ public interface DBFacadeInterface {
     public Image getBuildingImage(int building_id) throws Exception;
     
     public Image getIssueImage(int issue_id) throws Exception;
+    
+    public boolean hasImage(DataMapperInterface.ImageType imageType, int issue_id, int building_id) throws Exception;
 
+    public void updateImage(DataMapperInterface.ImageType imageType, int issue_id, int building_id, String img_name, InputStream img_file) throws Exception;
+    
     public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception;
-
+    
     public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception;
 
-    void deleteUser(int user_id) throws Exception;
 }

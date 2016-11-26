@@ -2,6 +2,7 @@ package serviceLayer.controllers;
 
 import dataAccessLayer.DBFacade;
 import dataAccessLayer.interfaces.DBFacadeInterface;
+import dataAccessLayer.mappers.interfaces.DataMapperInterface;
 import java.io.InputStream;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
 import serviceLayer.entities.Image;
@@ -34,14 +35,31 @@ public class DataController implements DataControllerInterface {
     @Override
     public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception {
 
-        dbfacade.uploadIssueImage(issue_id, img_name, img_file);
+        if (dbfacade.hasImage(DataMapperInterface.ImageType.issue, issue_id, 0)) {
+
+            dbfacade.updateImage(DataMapperInterface.ImageType.issue, issue_id, 0, img_name, img_file);
+
+        } else {
+
+            dbfacade.uploadIssueImage(issue_id, img_name, img_file);
+
+        }
+
 
     }
 
     @Override
     public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
 
-        dbfacade.uploadBuildingImage(building_id, img_name, img_file);
+        if (dbfacade.hasImage(DataMapperInterface.ImageType.building, 0, building_id)) {
+
+            dbfacade.updateImage(DataMapperInterface.ImageType.building, 0, building_id, img_name, img_file);
+
+        } else {
+
+            dbfacade.uploadBuildingImage(building_id, img_name, img_file);
+
+        }
 
     }
 
