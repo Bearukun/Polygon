@@ -17,6 +17,14 @@
                 </a>
             </li>
         <%}%>
+        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("RegistrerProblem")){%>
+            <li class="active">
+                <a href="" target="_self">
+                    <i class="glyphicon glyphicon-flag"></i>
+                    Registrer problem 
+                </a>
+            </li>
+        <%}%>
         <% if (request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("Sundhedscheck")) {%>
         <li class="active">
             <%} else {%>

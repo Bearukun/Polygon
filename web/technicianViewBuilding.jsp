@@ -79,6 +79,85 @@
                     }
                     switch (source) {
 
+                    
+                    case "addIssueButton":
+                    %>
+                <div class="col-sm-10">
+                    <div id="container" class="container-fluid">    
+                        <h1>Registrer problem</h1>
+                        
+                        <div class="container-fluid">
+                            <form class="form-edit-profile" action="TechnicianServlet" method="POST"> 
+                                <div class="col-sm-4">
+                                    <p>Beskrivelse</p>                      
+                                    <input type="text" name="description" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <p>Anbefalet behandling</p>                      
+                                    <input type="text" name="recommendation" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <br><br>
+                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                    <input type="hidden" name="originSection" value="addIssue" />
+                                    <input class="btn btn-primary" type="submit" value="Registrer" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                <%
+                        break;    
+                    case "createAreaButton":
+                %>
+                <div class="col-sm-10">
+                    <div id="container" class="container-fluid">
+                        <h1>Nyt område:</h1>
+
+                        <form class="form-view-building" id="newArea" action="TechnicianServlet" method="POST">
+                            <p>Områdenavn</p>
+                            <input type="text" name="areaName" />
+                            <br><br>
+                            <p>Beskrivelse</p>
+                            <input type="text" name="areaDesc" />
+                            <br><br>
+                            <p>Kvadratmeter</p>
+                            <input type="number" name="areaSqm" />
+                            <br><br>
+                            <p>Bygning dropdown</p>
+                            <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                            <input type="hidden" name="origin" value="viewBuilding" />
+                            <input type="hidden" name="originSection" value="createArea" />
+                            <input class="btn btn-primary" type="submit" value="Opret område" />
+                        </form>
+                    </div>
+                </div>
+                <%
+                        break;
+                        
+                    case "createRoomButton":
+                %>
+                <div class="col-sm-10">
+                    <div id="container" class="container-fluid">
+                        <h1>Nyt lokale:</h1>
+
+                        <form class="form-view-building" id="newRoom" action="TechnicianServlet" method="POST">
+                            <p>Lokalenavn</p>
+                            <input type="text" name="roomName" />
+                            <br><br>
+                            <p>Beskrivelse</p>
+                            <input type="text" name="roomDesc" />
+                            <br><br>
+                            <p>Kvadratmeter</p>
+                            <input type="number" name="roomSqm" />
+                            <br><br>
+                            <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
+                            <input type="hidden" name="origin" value="viewBuilding" />
+                            <input type="hidden" name="originSection" value="createRoom" />
+                            <input class="btn btn-primary" type="submit" value="Opret lokale" />
+                        </form>
+                    </div>
+                </div>
+                <%
+                        break;
+                        
                     //If the building's details are being edited
                     case "editBuildingButton":
                 %>
@@ -260,6 +339,12 @@
                                         <input type="hidden" name="originSection" value="createRoomButton" />
                                         <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
                                         <input class="btn btn-primary" type="submit" value="Nyt lokale" />
+                                    </form>
+                                    <form class="form-view-building" id="createIssue" action="TechnicianServlet" method="POST">
+                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                        <input type="hidden" name="originSection" value="addIssueButton" />
+                                        <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                        <input class="btn btn-primary" type="submit" value="Registrer problem" />
                                     </form>
                                 </td>
                             </tr>

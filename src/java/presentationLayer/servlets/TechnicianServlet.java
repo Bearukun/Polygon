@@ -122,6 +122,13 @@ public class TechnicianServlet extends HttpServlet {
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If an area needs deleting
+                    //If 'Create issue' button was clicked
+                    else if(request.getParameter("originSection").equals("addIssueButton")){
+                        request.getSession().setAttribute("source", "addIssueButton");
+                        request.getSession().setAttribute("ActiveSidebarMenu","RegistrerProblem");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    
                     else if (request.getParameter("originSection").equals("deleteAreaButton")) {
                         request.getSession().setAttribute("source", "deleteAreaButton");
 
@@ -165,7 +172,7 @@ public class TechnicianServlet extends HttpServlet {
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
-                    } //If 'Create area' button was clicked
+                    } //If 'Create room' button was clicked
                     else if (request.getParameter("originSection").equals("createRoomButton")) {
                         request.getSession().setAttribute("source", "createRoomButton");
                         request.getSession().setAttribute("areaId", request.getParameter("areaId"));
@@ -245,6 +252,21 @@ public class TechnicianServlet extends HttpServlet {
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                    }
+                    //If an issue needs creating
+                    else if(request.getParameter("originSection").equals("addIssue")){
+                        request.getSession().setAttribute("source", "");
+                        
+                        String description = request.getParameter("issueDescription");
+                        String recommendation = request.getParameter("issueTreatment");
+                        int building_id = build.getBuilding_id();
+                        int area_id = 0;
+                        int room_id = 0;
+                        
+                        //create new issue
+                        bldgCtrl.createIssue(building_id, area_id, room_id, description, recommendation);
+                        
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     }
 

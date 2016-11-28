@@ -82,4 +82,8 @@ public class BuildingController implements BuildingControllerInterface{
     public void acceptHealthcheck(int buildingId, int technicianId) throws Exception {
         dbfacade.acceptHealthcheck(buildingId, technicianId);
     }
+
+    public void createIssue(int buildingId, int areaId, int roomId, String sueDescription, String sueTreatment) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
