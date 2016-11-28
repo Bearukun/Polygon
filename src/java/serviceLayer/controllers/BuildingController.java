@@ -77,4 +77,9 @@ public class BuildingController implements BuildingControllerInterface{
     public void assignHealthcheck(int buildingId, int technicianId) throws Exception {
         dbfacade.assignHealthcheck(buildingId, technicianId);
     }
+
+    @Override
+    public void acceptHealthcheck(int buildingId, int technicianId) throws Exception {
+        dbfacade.acceptHealthcheck(buildingId, technicianId);
+    }
 }

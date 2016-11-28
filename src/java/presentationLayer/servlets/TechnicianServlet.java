@@ -66,6 +66,28 @@ public class TechnicianServlet extends HttpServlet {
 
             switch (origin) {
 
+                case "technicianOverview":
+
+                    //Reset the source, i.e. which page we are coming from
+                    request.getSession().setAttribute("source", "");
+
+                    //Retrieve the building being edited
+                    String buildingID = request.getParameter("buildingID");
+                    request.getSession().setAttribute("buildingBeingEdited", buildingID);
+
+                    //Fetch areas and rooms for selected building
+                    refreshAreas(Integer.parseInt(buildingID));
+                    refreshRooms(Integer.parseInt(buildingID));
+
+                    //Save areas and rooms in Session
+                    request.getSession().setAttribute("buildingAreas", buildingAreas);
+                    request.getSession().setAttribute("buildingRooms", buildingRooms);
+                    System.out.println(buildingID);
+                    //redirect to viewBuilding into the specific building being edited
+                    response.sendRedirect("technicianViewBuilding.jsp?value=" + buildingID + "");
+
+                    break;
+                    
                 case "viewBuilding":
 
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
@@ -88,17 +110,17 @@ public class TechnicianServlet extends HttpServlet {
                         bldgCtrl.toggleHealthcheck(build.getBuilding_id(), healthcheckValueToWrite);
 
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user_id);
+                        refreshBuilding(request, user_id);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     }
 
                     //If 'Create area' button was clicked
                     if (request.getParameter("originSection").equals("createAreaButton")) {
                         request.getSession().setAttribute("source", "createAreaButton");
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If an area needs deleting
                     else if (request.getParameter("originSection").equals("deleteAreaButton")) {
                         request.getSession().setAttribute("source", "deleteAreaButton");
@@ -121,7 +143,7 @@ public class TechnicianServlet extends HttpServlet {
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If a new area needs creating
                     else if (request.getParameter("originSection").equals("createArea")) {
                         request.getSession().setAttribute("source", "createArea");
@@ -142,14 +164,14 @@ public class TechnicianServlet extends HttpServlet {
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If 'Create area' button was clicked
                     else if (request.getParameter("originSection").equals("createRoomButton")) {
                         request.getSession().setAttribute("source", "createRoomButton");
                         request.getSession().setAttribute("areaId", request.getParameter("areaId"));
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If a new room needs creating
                     else if (request.getParameter("originSection").equals("createRoom")) {
                         request.getSession().setAttribute("source", "createRoom");
@@ -175,7 +197,7 @@ public class TechnicianServlet extends HttpServlet {
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If an area needs deleting
                     else if (request.getParameter("originSection").equals("deleteRoomButton")) {
                         request.getSession().setAttribute("source", "deleteRoomButton");
@@ -200,12 +222,12 @@ public class TechnicianServlet extends HttpServlet {
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If 'Edit building details' button was clicked
                     else if (request.getParameter("originSection").equals("editBuildingButton")) {
                         request.getSession().setAttribute("source", "editBuildingButton");
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     } //If the building needs editing
                     else if (request.getParameter("originSection").equals("editBuilding")) {
                         request.getSession().setAttribute("source", "editBuilding");
@@ -221,9 +243,9 @@ public class TechnicianServlet extends HttpServlet {
                         //Save values to database
                         bldgCtrl.editBuilding(selectedBuilding, buildingName, addres, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
-                        refreshBuilding(user_id);
+                        refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
                     }
 
                     break;
@@ -262,6 +284,20 @@ public class TechnicianServlet extends HttpServlet {
                     response.sendRedirect("technician.jsp?success=UpdateSuccessful");
 
                     break;
+                    
+                case "acceptHealthcheckButton":
+                    System.out.println("a");
+                    //Save parameters from technician.jsp: buildingId and technicianID
+                    int technicianId = (Integer) request.getSession().getAttribute("user_id");
+                    //int technicianId = 12;
+                    int buildingId = Integer.parseInt(request.getParameter("buildingId"));
+                    System.out.println("b "+buildingId);
+                    //Call method to modify database
+                    bldgCtrl.acceptHealthcheck(buildingId, technicianId);
+                    refreshAllBuildings(request);
+                    //redirect to user.jsp
+                    response.sendRedirect("technician.jsp?success=UpdateSuccessful");
+                    break;
             }
 
         } catch (Exception e) {
@@ -271,11 +307,10 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws Exception {
-
+    public void refreshBuilding(HttpServletRequest request, int user_id) throws Exception {
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
-
+        request.getSession().setAttribute("userBuildings", userBuildings);
     }
   
     //Refreshes the list of buildings

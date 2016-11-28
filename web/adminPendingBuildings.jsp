@@ -89,25 +89,24 @@
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>
+                                        <form action="AdminServlet" method="POST">
                                     <td>
-                                        <select name="technician">
+                                        <select id="selectedTechnician" name="selectedTechnician">
                                             <% 
                                             ArrayList<User> techniciansList = new ArrayList();
                                             techniciansList = (ArrayList<User>) request.getSession().getAttribute("techniciansList");
                                             for (int i = 0; i < techniciansList.size(); i++) {
-                                                request.getSession().setAttribute("technicianId", techniciansList.get(i).getUser_id());
-                                                %><option value="<%=techniciansList.get(i).getName()%>"><%=techniciansList.get(i).getName()%></option><%
+                                                String option = techniciansList.get(i).getUser_id()+"| "+techniciansList.get(i).getName();
+                                                %><option value="<%=option%>"><%=option%></option><%
                                             }%>
                                         </select>
                                     </td>
                                     <td>
-                                        <form action="AdminServlet" method="POST">
                                             <input type="hidden" name="origin" value="assignHealthcheckButton" />
-                                            <input type="hidden" name="technicianId" value="<%=request.getSession().getAttribute("technicianId")%>" />
                                             <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getBuilding_id()%>" />
                                             <input class="btn btn-primary" type="submit" value="Tildel" />
-                                        </form>
                                     </td>
+                                        </form>
                                 </tr>
                                 <%}
                                     }

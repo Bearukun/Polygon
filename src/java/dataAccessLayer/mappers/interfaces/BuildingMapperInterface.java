@@ -31,5 +31,7 @@ public interface BuildingMapperInterface {
     
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws Exception;
     
-    public void assignHealthcheck(int buildingId, int technicianId) throws Exception; 
+    public void assignHealthcheck(int buildingId, int technicianId) throws Exception;
+    
+    public void acceptHealthcheck(int buildingId, int technicianId) throws Exception;
 }

@@ -298,7 +298,7 @@ public class AdminServlet extends HttpServlet {
                 
                 case "assignHealthcheckButton":
                     int buildingId = Integer.parseInt(request.getParameter("buildingId"));
-                    int technicianId = Integer.parseInt(request.getParameter("technicianId"));
+                    int technicianId = Integer.parseInt(request.getParameter("selectedTechnician").split("\\|")[0]);
                     bldgCtrl.assignHealthcheck(buildingId, technicianId);
                     refreshAllBuildings(request);
                     response.sendRedirect("adminPendingBuildings.jsp");
