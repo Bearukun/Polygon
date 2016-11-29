@@ -170,4 +170,9 @@ public class DBFacade implements DBFacadeInterface {
         umi.deleteUser(user_id);
     }
 
+    @Override
+    public void acceptHealthcheck(int buildingId, int technicianId) throws Exception {
+        bmi.acceptHealthcheck(buildingId, technicianId);
+    }
+
 }

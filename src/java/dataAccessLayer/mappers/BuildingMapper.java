@@ -663,4 +663,35 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
         }
     }
+
+    @Override
+    public void acceptHealthcheck(int buildingId, int technicianId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            String sql = "UPDATE polygon.building SET healthcheck_pending=? WHERE building_id=?; INSERT INTO polygon.healthcheck (tech_id, building_id) VALUES (?, ?);";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 3);
+            stmt.setInt(2, buildingId);
+            stmt.setInt(3, technicianId);
+            stmt.setInt(4, buildingId);
+            //Execute update.
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.acceptHealthcheck."+ex.getMessage());
+            }
+        }
+    }
 }

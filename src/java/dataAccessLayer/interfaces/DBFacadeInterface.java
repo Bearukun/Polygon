@@ -64,4 +64,6 @@ public interface DBFacadeInterface {
     
     public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception;
 
+    public void acceptHealthcheck(int buildingId, int technicianId) throws Exception;
+    
 }

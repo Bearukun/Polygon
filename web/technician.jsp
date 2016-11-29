@@ -77,6 +77,7 @@
                                     <td><b>Formål</b></td>
                                     <td><b>Kvadratmeter</b></td>
                                     <td><b>Bruger(ID)</b></td>
+                                    <td></td>
                                 </tr>
                                 <%
                                     
@@ -84,7 +85,17 @@
                                             if(user_id ==  allBuildings.get(x).getAssigned_tech_id()){
                                 %><tr>
                                     <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getName());%></td>  
+                                    <% if(allBuildings.get(x).getHealthcheck_pending()==2){%>
+                                        <td><%out.println(allBuildings.get(x).getName());%></td>
+                                        <%} else{%>
+                                        <td>
+                                            <form class="submitLink" action="TechnicianServlet" method="POST">
+                                                <input type="submit" class="submitLink" value="<%=allBuildings.get(x).getName()%>" />
+                                                <input type="hidden" name="buildingID" value="<%=allBuildings.get(x).getBuilding_id()%>" />
+                                                <input type="hidden" name="origin" value="technicianOverview" />
+                                            </form>
+                                        </td>
+                                        <%}%>
                                     <td><%out.println(allBuildings.get(x).getDate_created());%></td>  
                                     <td><%out.println(allBuildings.get(x).getAddress());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPostcode());%></td>  
@@ -93,7 +104,14 @@
                                     <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
                                     <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
                                     <td><%out.println(allBuildings.get(x).getSqm());%></td>  
-                                    <td><%out.println(email);%></td> 
+                                    <td><%out.println(email);%></td>
+                                    <td>
+                                        <form action="TechnicianServlet" method="POST">
+                                            <input type="hidden" name="origin" value="acceptHealthcheckButton" />
+                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getBuilding_id()%>" />
+                                            <input class="btn btn-primary" type="submit" value="Påbegynd" />
+                                        </form>
+                                    </td>
                                 </tr>
                                 <%}}
                                 %>
