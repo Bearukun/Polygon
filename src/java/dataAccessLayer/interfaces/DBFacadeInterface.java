@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Image;
+import serviceLayer.entities.Issue;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -35,15 +37,15 @@ public interface DBFacadeInterface {
 
     public ArrayList<Area> getAreas(int building_id) throws Exception;
 
-    public void deleteArea(int area_id) throws Exception;
+    public void deleteArea(int areaId) throws Exception;
 
     public ArrayList<Room> getRooms(int building_id) throws Exception;
 
     public void createArea(String name, String description, int sqm, int building_id) throws Exception;
 
-    public void createRoom(String name, String description, int sqm, int area_id) throws Exception;
+    public void createRoom(String name, String description, int sqm, int areaId) throws Exception;
 
-    public void deleteRoom(int room_id) throws Exception;
+    public void deleteRoom(int roomId) throws Exception;
 
     public void toggleHealthcheck(int building_id, int healthcheck_pending) throws Exception;
 
@@ -66,4 +68,11 @@ public interface DBFacadeInterface {
 
     public void acceptHealthcheck(int buildingId, int technicianId) throws Exception;
     
+    public void createIssue(int building_id, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception;
+    
+    public ArrayList<Healthcheck> getAllHealthchecks() throws Exception;
+    
+    public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception;
+    
+    public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception;
 }

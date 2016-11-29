@@ -2,27 +2,27 @@ package serviceLayer.entities;
 
 public class Room {
     
-    private int room_id, sqm, moisture_scan, area_id;   
+    private int roomId, sqm, moisture_scan, areaId;   
     private String name, description;
 
     public Room() {
     }
 
-    public Room(int room_id, String name, String description, int sqm, int moisture_scan, int area_id) {
-        this.room_id = room_id;
+    public Room(int roomId, String name, String description, int sqm, int moisture_scan, int areaId) {
+        this.roomId = roomId;
         this.name = name;
         this.description = description;
         this.sqm = sqm;
         this.moisture_scan = moisture_scan;
-        this.area_id = area_id;
+        this.areaId = areaId;
     }
 
     public int getRoom_id() {
-        return room_id;
+        return roomId;
     }
 
-    public void setRoom_id(int room_id) {
-        this.room_id = room_id;
+    public void setRoom_id(int roomId) {
+        this.roomId = roomId;
     }
 
     public int getSqm() {
@@ -42,11 +42,11 @@ public class Room {
     }
 
     public int getArea_id() {
-        return area_id;
+        return areaId;
     }
 
-    public void setArea_id(int area_id) {
-        this.area_id = area_id;
+    public void setArea_id(int areaId) {
+        this.areaId = areaId;
     }
 
     public String getName() {

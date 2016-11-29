@@ -134,10 +134,10 @@ public class UserServlet extends HttpServlet {
                         request.getSession().setAttribute("source", "deleteAreaButton");
 
                         //Retrieve form input values from viewBuilding
-                        int area_id = Integer.parseInt(request.getParameter("areaId"));
+                        int areaId = Integer.parseInt(request.getParameter("areaId"));
 
                         //Save values to database
-                        bldgCtrl.deleteArea(area_id);
+                        bldgCtrl.deleteArea(areaId);
 
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
@@ -187,14 +187,14 @@ public class UserServlet extends HttpServlet {
                         String roomName = request.getParameter("roomName");
                         String roomDesc = request.getParameter("roomDesc");
                         int roomSqm = Integer.parseInt(request.getParameter("roomSqm"));
-                        int area_id = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
+                        int areaId = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
 
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
                         int building_id = build.getBuilding_id();
 
                         //Save values to database
-                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, area_id);
+                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, areaId);
 
                         //Fetch areas and rooms for selected building
                         refreshAreas(building_id);
@@ -211,11 +211,11 @@ public class UserServlet extends HttpServlet {
                         request.getSession().setAttribute("source", "deleteRoomButton");
 
                         //Retrieve form input values from viewBuilding
-                        int room_id = Integer.parseInt(request.getParameter("roomId"));
-                        //int area_id = 6;
+                        int roomId = Integer.parseInt(request.getParameter("roomId"));
+                        //int areaId = 6;
 
                         //Save values to database
-                        bldgCtrl.deleteRoom(room_id);
+                        bldgCtrl.deleteRoom(roomId);
 
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");

@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Image;
+import serviceLayer.entities.Issue;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -105,18 +107,18 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void deleteArea(int area_id) throws Exception {
-        bmi.deleteArea(area_id);
+    public void deleteArea(int areaId) throws Exception {
+        bmi.deleteArea(areaId);
     }
 
     @Override
-    public void createRoom(String name, String description, int sqm, int area_id) throws Exception {
-        bmi.createRoom(name, description, sqm, area_id);
+    public void createRoom(String name, String description, int sqm, int areaId) throws Exception {
+        bmi.createRoom(name, description, sqm, areaId);
     }
 
     @Override
-    public void deleteRoom(int room_id) throws Exception {
-        bmi.deleteRoom(room_id);
+    public void deleteRoom(int roomId) throws Exception {
+        bmi.deleteRoom(roomId);
     }
 
     @Override
@@ -175,4 +177,23 @@ public class DBFacade implements DBFacadeInterface {
         bmi.acceptHealthcheck(buildingId, technicianId);
     }
 
+    @Override
+    public void createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception {
+        bmi.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
+    }
+
+    @Override
+    public ArrayList<Healthcheck> getAllHealthchecks() throws Exception {
+        return bmi.getAllHealthchecks();
+    }
+    
+    @Override
+    public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception {
+        return bmi.getBuildingHealthchecks(buildingId);
+    }
+
+    @Override
+    public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception {
+        return bmi.getHealthcheckIssues(healthcheckId);
+    }
 }
