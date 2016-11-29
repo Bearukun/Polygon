@@ -24,8 +24,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
  *
  * @author Ceo
  *
- * COMMENTS!!!! 
- * 
+ * COMMENTS!!!!
+ *
  * Clean up: split op i metoder! fjern overskyddende/dubblet billede!
  * Comments!!!!!!! Need to figure out to make a method for "PDFont"!
  *
@@ -49,17 +49,23 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
  * & gotNotesCheckBoxImg, along with their switchCaseName and
  * switchCaseParameters
  *
- * //Reminder of how to move.
-            //content.moveTextPositionByAmount(tx, ty);
-            //tx = Width; (Max 450-500!)
-            //ty = Height (max 800!)
-            //Opens ContentStream for writting to the PDF document
+ * //Reminder of how to move. //content.moveTextPositionByAmount(tx, ty); //tx
+ * = Width; (Max 450-500!) //ty = Height (max 800!) //Opens ContentStream for
+ * writting to the PDF document
  *
  */
 public class PDFCreator {
 
     //sourceFolder sf = new sourceFolder();
     PDDocument doc = doc = new PDDocument();
+
+    //Creates various text font objects
+    PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
+    PDFont fontHel = PDType1Font.TIMES_ROMAN;
+
+    int pageNumber = 1;
+    String pageNumberTitel = "page" + pageNumber;
+    String pageContentStreamNumber = "content" + pageNumber;
 
     //Method that creates the PDF pages.
     //Way too much input
@@ -69,20 +75,56 @@ public class PDFCreator {
         page1Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
+        pageNumber++;
+
         page2Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
+
+        pageNumber++;
 
         page3Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
+        pageNumber++;
+
         page4Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
-        
-                page5Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
- 
-       page6Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
 
+        pageNumber++;
+
+        page5Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
+
+        pageNumber++;
+
+        page6Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
+
+        pageNumber++;
+
+        for (int i = 0; i < 10; i++) {
+            pageGeneration(doc, pdfName, imgFolderPath);
+            pageNumber++;
+            System.out.println(pageNumber);
+
+        }
         savePDF(savePath, pdfName, doc);
 
+    }
+
+    //BASIC AUTOPAGE GENERATOR!!!
+    public void pageGeneration(PDDocument doc, String pdfName, String imgFolderPath) {
+        PDPage pageNumberTitel = new PDPage();
+        //PDPage page8 = new PDPage();
+        doc.addPage(pageNumberTitel);
+        try {
+
+            PDPageContentStream pageContentNumber = new PDPageContentStream(doc, pageNumberTitel);
+
+            defaultNewPageSetup(pageContentNumber, imgFolderPath, pdfName);
+
+            pageContentNumber.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     //Setup of Page 1
@@ -96,196 +138,179 @@ public class PDFCreator {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
 
-        //Initiates new PDPAge
-        PDPage page1 = new PDPage();
+        //Initiates new PDPAge Object
+        PDPage pageNumberTitel = new PDPage();
 
         //Adds the page to the .doc
-        doc.addPage(page1);
+        doc.addPage(pageNumberTitel);
 
         try {
 
-            //Creates various text font objects
-            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-            PDFont fontHel = PDType1Font.TIMES_ROMAN;
-
             //Creates a new PDPageContentStream object,
             //which consist of a PDDocument object and PDPAge object
-            PDPageContentStream content = new PDPageContentStream(doc, page1);
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
 
             //Method that writes and places the default information that is required for each page of the PDF document.
-            defaultNewPageSetup(content, imgFolderPath, pdfName, 1);
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //Writes and places the "Bygningens gennemgang"
-            singleTextLine(content, "Bygnings Gennemgang", 12, 235, 647);
+            singleTextLine(pageContentStreamNumber, "Bygnings Gennemgang", 12, 235, 647);
 
             //Writtes and places bygningens navn and the date of the PDF
             //The placement of the "date" is tied to the placement of 
             //Bygningens navn
-            
             //Start writting text
-            content.beginText();
+            pageContentStreamNumber.beginText();
             //Sets the font and text size
-            content.setFont(fontHelB, 10);
+            pageContentStreamNumber.setFont(fontHelB, 10);
             //Set Coordinates for the first line of text
-            content.moveTextPositionByAmount(50, 610);
+            pageContentStreamNumber.moveTextPositionByAmount(50, 610);
             //First line of text
-            content.drawString("" + buildingName);
+            pageContentStreamNumber.drawString("" + buildingName);
             //Coordinates for the next line of text,
             //which are offset from the previous line of text            
-            content.newLineAtOffset(0, -12);
-            content.drawString("Bygnings navn");
+            pageContentStreamNumber.newLineAtOffset(0, -12);
+            pageContentStreamNumber.drawString("Bygnings navn");
             //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(300, 0);
+            pageContentStreamNumber.newLineAtOffset(300, 0);
             //Second line of text
-            content.drawString("Dato");
+            pageContentStreamNumber.drawString("Dato");
             //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(0, 12);
+            pageContentStreamNumber.newLineAtOffset(0, 12);
             //Third line of text (which is the date + time, which is autogenerated)
-            content.drawString("" + cal.getTime());
+            pageContentStreamNumber.drawString("" + cal.getTime());
             //End writting text
-            content.endText();
+            pageContentStreamNumber.endText();
 
             //Creates a image from a file and places it.
             //Underline for "bygningens navn"             
-            insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 606, 200, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 606, 200, 2);
 
             //Creates a image from a file and places it.
             //Underline for "the date "
-            insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 350, 606, 200, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 350, 606, 200, 2);
 
             //Writes and places the Bygnings Adresse
             //Start writting text
-            content.beginText();
-             //Sets the font and text size
-            content.setFont(fontHelB, 10);
+            pageContentStreamNumber.beginText();
+            //Sets the font and text size
+            pageContentStreamNumber.setFont(fontHelB, 10);
             //Set Coordinates for the first line of text
-            content.moveTextPositionByAmount(50, 545);
+            pageContentStreamNumber.moveTextPositionByAmount(50, 545);
             //First line of text
-            content.drawString("Bygnings Adresse");
-             //Coordinates for the next line of text,
+            pageContentStreamNumber.drawString("Bygnings Adresse");
+            //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(0, 12);
+            pageContentStreamNumber.newLineAtOffset(0, 12);
             //Second line of text
-            content.drawString("" + buildingAddress);
+            pageContentStreamNumber.drawString("" + buildingAddress);
             //End writting text
-            content.endText();
+            pageContentStreamNumber.endText();
 
             //Creates a image from a file and places it.
             //Underline for the "bygnings adresse"            
-            insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 553, 200, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 553, 200, 2);
 
             //Writes and places the Bygnings By and Post Kode.
             //The placement of Postkode is dependent of Bygningens By 
             //placement
             //Start writting text
-            content.beginText();
+            pageContentStreamNumber.beginText();
             //Sets the font and text size
-            content.setFont(fontHelB, 10);
+            pageContentStreamNumber.setFont(fontHelB, 10);
             //Set Coordinates for the first line of text
-            content.moveTextPositionByAmount(50, 475);
+            pageContentStreamNumber.moveTextPositionByAmount(50, 475);
             //First line of text
-            content.drawString("Postnr. / By ");
+            pageContentStreamNumber.drawString("Postnr. / By ");
             //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(0, 12);
+            pageContentStreamNumber.newLineAtOffset(0, 12);
             //Second line of text
-            content.drawString("" + buildingPostcode);
-             //Coordinates for the next line of text,
+            pageContentStreamNumber.drawString("" + buildingPostcode);
+            //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(45, 0);
+            pageContentStreamNumber.newLineAtOffset(45, 0);
             //Third line of text
-            content.drawString("" + buildingCity);
+            pageContentStreamNumber.drawString("" + buildingCity);
             //End writting text
-            content.endText();
+            pageContentStreamNumber.endText();
 
             //Creates a image from a file and places it.
             //Underline for the "bygningens by & post kode."
-            insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 483, 200, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 483, 200, 2);
 
             //Writes and places the Polygon information.
             //The intial placement is done by the 'Polygon' text and all other 
             //lines are placed accordingly to the 'Polygon' text.
-            
             //Start writting text
-            content.beginText();
+            pageContentStreamNumber.beginText();
             //Sets the font and text size
-            content.setFont(fontHelB, 12);            
+            pageContentStreamNumber.setFont(fontHelB, 12);
             //Set Coordinates for the first line of text
-            content.moveTextPositionByAmount(500, 560);
+            pageContentStreamNumber.moveTextPositionByAmount(500, 560);
             //First line of text
-            content.drawString("Polygon");
-             //Coordinates for the next line of text,
+            pageContentStreamNumber.drawString("Polygon");
+            //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(-19, -13);
+            pageContentStreamNumber.newLineAtOffset(-19, -13);
             //Scond line of text
-            content.drawString("Rypevang 5");
-             //Coordinates for the next line of text,
+            pageContentStreamNumber.drawString("Rypevang 5");
+            //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(-6, -13);
+            pageContentStreamNumber.newLineAtOffset(-6, -13);
             //Third line of text
-            content.drawString("3450 Allerød");
-             //Coordinates for the next line of text,
+            pageContentStreamNumber.drawString("3450 Allerød");
+            //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(-5, -18);
+            pageContentStreamNumber.newLineAtOffset(-5, -18);
             //Fourth line of text
-            content.drawString("Tlf. 4814 0055");
-             //Coordinates for the next line of text,
+            pageContentStreamNumber.drawString("Tlf. 4814 0055");
+            //Coordinates for the next line of text,
             //which are offset from the previous line of text
-            content.newLineAtOffset(-90, -13);
+            pageContentStreamNumber.newLineAtOffset(-90, -13);
             //Fifth line of text
-            content.drawString("sundebygninger@polygon.dk");
+            pageContentStreamNumber.drawString("sundebygninger@polygon.dk");
             //End writting text
-            content.endText();
+            pageContentStreamNumber.endText();
 
             //Creates a image from a file and places it.
             //Places the "Sundebygninger" logo in the top right corner of the document
             PDImageXObject sundBygLogo = null;
             sundBygLogo = PDImageXObject.createFromFile(imgFolderPath + "logoJ.jpg", doc);
-            content.drawXObject(sundBygLogo, 400, 690, 150, 65);
+            pageContentStreamNumber.drawXObject(sundBygLogo, 400, 690, 150, 65);
 
             //Creates a image from a file and places it.
             //Places the Default or user selected picture of the building in the PDF document.                  
-            userPicture(picturePath, imgFolderPath, content, 125, 225, 375, 215);
+            userPicture(picturePath, imgFolderPath, pageContentStreamNumber, 125, 225, 375, 215);
 
             //Writes and places the text line "Generel information om bygning"           
-            singleTextLine(content, "Generel information om bygningen:", 12, 50, 200);
-            
+            singleTextLine(pageContentStreamNumber, "Generel information om bygningen:", 12, 50, 200);
+
             //Writes and places the text line "Bygge år"
-            singleTextLineWithUserInput(content, "Bygge år", buildingContructionYear.toString(), 10, 50, 175);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Bygge år", buildingContructionYear.toString(), 10, 50, 175);
 
             //Creates a image from a file and places it.
             //Underline for the "Bygge År "           
-            insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 98, 172, 25, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 98, 172, 25, 2);
 
-            //Writes and places the Bygningens Areal
-            //Start writting text
-            content.beginText();
-//            //Sets the font and text size
-//            content.setFont(fontHelB, 10);
-//            //Set Coordinates for the text
-//            content.moveTextPositionByAmount(50, 145);
-//            
-//            content.drawString("Bygningens Areal: " + buildingSQM + " Kvadrat Meter");
             //Writes and places the text line "Bygningens Areal"
-            singleTextLineWithUserInput(content, "Bygningens Areal:", buildingSQM + " Kvadrat Meter", 10, 50, 145);
-             //End writting text
-            content.endText();
+            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningens Areal", buildingSQM + " Kvadrat Meter", 10, 50, 145);
 
             //Creates a image from a file and places it.
             //Underline for the "Bygningens Areal"
-            insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 140, 142, 120, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 140, 142, 120, 2);
 
             //Writes and places the text line "Hvad bruges bygningen til / Hvad har bygningen været brugt til?" + the users input
-            singleTextLineWithUserInput(content, "Hvad bruges bygningen til / Hvad har bygningen været brugt til?", buildingPurpose, 10, 50, 120);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Hvad bruges bygningen til / Hvad har bygningen været brugt til?", buildingPurpose, 10, 50, 120);
 
             //Creates a image from a file and places it.
             //Underline for the "Hvad bruges bygningen til / Hvad har bygningen været brugt til?"
-            insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 358, 117, 120, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 358, 117, 120, 2);
 
             //closes the page for anymore content to be written.
-            content.close();
+            pageContentStreamNumber.close();
 
             System.out.println("End of testMethod");
 
@@ -294,74 +319,70 @@ public class PDFCreator {
         }
 
     }
-    
+
     //Setup of Page 2
     public void page2Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
-        //Creates a new page
-        PDPage page2 = new PDPage();
+        //Creates a new page Object
+        PDPage pageNumberTitel = new PDPage();
 
         //Adds the page to the .doc
-        doc.addPage(page2);
+        doc.addPage(pageNumberTitel);
 
         try {
             //Creates a new PDPageContentStream object,
             //which consist of a PDDocument object and PDPAge object
-            PDPageContentStream content2 = new PDPageContentStream(doc, page2);
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
 
-            //Creates various text font objects
-            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-            PDFont fontHel = PDType1Font.TIMES_ROMAN;
-            
             //Method that writes and places the default information that is required for each page of the PDF document.
-            defaultNewPageSetup(content2, imgFolderPath, pdfName, 2);
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //Writes and places the text line "Gennemgang af bygningen udvendig "
-            singleTextLine(content2, "Gennemgang af bygningen udvendig ", 16, 50, 660);
+            singleTextLine(pageContentStreamNumber, "Gennemgang af bygningen udvendig ", 16, 50, 660);
 
             //Writes and places the text line "Tag"
-            singleTextLine(content2, "Tag", 12, 50, 625);
+            singleTextLine(pageContentStreamNumber, "Tag", 12, 50, 625);
             //Creates a image from a file and places it.
             //Underline for "Tag"
-            insertJPGImage(content2, imgFolderPath, "underLineJPG.jpg", 50, 620, 23, 2);
-            
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 620, 23, 2);
+
             //Some test Text !TO BE REMOVED!
-            singleTextLine(content2, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
+            singleTextLine(pageContentStreamNumber, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
 
             //Writes and places the text line "Bemærkning" for "Tag"
-            singleTextLine(content2, "Bemærkning", 8, 325, 625);
+            singleTextLine(pageContentStreamNumber, "Bemærkning", 8, 325, 625);
 
             //Writes and places the text line "Ingen Bemærkning" for "Tag"
-            singleTextLine(content2, "Ingen Bemærkning", 8, 400, 625);
+            singleTextLine(pageContentStreamNumber, "Ingen Bemærkning", 8, 400, 625);
 
             //Writes and places the text line "Billede" for "Tag"
-            singleTextLine(content2, "Billede", 8, 500, 625);
+            singleTextLine(pageContentStreamNumber, "Billede", 8, 500, 625);
 
             //Writes and places the text line "Ydervægge" 
-            singleTextLine(content2, "Ydervægge", 12, 50, 310);
+            singleTextLine(pageContentStreamNumber, "Ydervægge", 12, 50, 310);
 
             //Writes and places the text line "Bemærkning" for "Ydervægge"
-            singleTextLine(content2, "Bemærkning", 8, 325, 310);
+            singleTextLine(pageContentStreamNumber, "Bemærkning", 8, 325, 310);
 
             //Writes and places the text line "Ingen Bemærkning" for "Ydervægge"
-            singleTextLine(content2, "Ingen Bemærkning", 8, 400, 310);
+            singleTextLine(pageContentStreamNumber, "Ingen Bemærkning", 8, 400, 310);
 
             //Writes and places the text line "Billede" for "Ydervægge"
-            singleTextLine(content2, "Billede", 8, 500, 310);
+            singleTextLine(pageContentStreamNumber, "Billede", 8, 500, 310);
 
-             //Creates a image from a file and places it.
+            //Creates a image from a file and places it.
             //Underline for "Ydervægge"
-            insertJPGImage(content2, imgFolderPath, "underLineJPG.jpg", 50, 305, 70, 2);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 305, 70, 2);
 
             //NEEDS DYNAMIC USER INPUT!!!
             //Sets the checkboxes for:
             //"Tag" (Bemærkning, Ingen bemærkning, Billede) and 
             //Ydervægge (Bemærkning, Ingen bemærkning, Billede)
-            //checkBoxesPage2(content2, imgFolderPath, true, false, true, false, true, true);
-            checkBoxesPage2(content2, imgFolderPath, false, true, false, true, false, false);
+            //checkBoxesPage2(pageContentStreamNumber, imgFolderPath, true, false, true, false, true, true);
+            checkBoxesPage2(pageContentStreamNumber, imgFolderPath, false, true, false, true, false, false);
 
             //Closes the content creation for Page 2           
-            content2.close();
+            pageContentStreamNumber.close();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -372,39 +393,36 @@ public class PDFCreator {
     public void page3Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
-        //Creates a new page.
-        PDPage page3 = new PDPage();
+        //Creates a new page Object
+        PDPage pageNumberTitel = new PDPage();
 
         //Adds the new page to the .doc
-        doc.addPage(page3);
+        doc.addPage(pageNumberTitel);
         try {
 
-             //Creates a new PDPageContentStream object,
+            //Creates a new PDPageContentStream object,
             //which consist of a PDDocument object and PDPAge object
-            PDPageContentStream content3 = new PDPageContentStream(doc, page3);
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
 
-            //Creates various text font objects
-            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-            PDFont fontHel = PDType1Font.TIMES_ROMAN;
-
-            defaultNewPageSetup(content3, imgFolderPath, pdfName, 3);
+            //Method that writes and places the default information that is required for each page of the PDF document.
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //NEEDS DYNAMIC USER INPUT!!! "Ceo's Kontor = Room Name
-            singleTextLineWithUserInput(content3, "Lokale", "Ceo's Kontor", 10, 50, 665);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", "Ceo's Kontor", 10, 50, 665);
 
             //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!! 
             // checkIfPage3NeedsPopulation(false, true, false, content3, imgFolderPath);
-            checkIfPage3NeedsPopulation(true, false, true, content3, imgFolderPath);
+            checkIfPage3NeedsPopulation(true, false, true, pageContentStreamNumber, imgFolderPath);
             //if localNotes is true, set noLocalNotes to false
 
-            singleTextLine(content3, "Skade og Reparation", 12, 50, 642);
+            singleTextLine(pageContentStreamNumber, "Skade og Reparation", 12, 50, 642);
 
-            singleTextLine(content3, "Har der været skade i lokalet?", 10, 50, 625);
+            singleTextLine(pageContentStreamNumber, "Har der været skade i lokalet?", 10, 50, 625);
 
-            page3DamageAndRepair(true, content3, imgFolderPath, false,false,false,false,false);
+            page3DamageAndRepair(true, pageContentStreamNumber, imgFolderPath, false, false, false, false, false);
 
             //Closes the content creation for Page 3
-            content3.close();
+            pageContentStreamNumber.close();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -416,169 +434,162 @@ public class PDFCreator {
     public void page4Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
-        //Creates a new page.
-        PDPage page4 = new PDPage();
+        //Creates a new page Object
+        PDPage pageNumberTitel = new PDPage();
 
         //Adds the new page to the .doc
-        doc.addPage(page4);
+        doc.addPage(pageNumberTitel);
         try {
 
             //Creates a new PDPageContentStream object,
             //which consist of a PDDocument object and PDPAge object
-            PDPageContentStream content4 = new PDPageContentStream(doc, page4);
-
-            //Creates various text font objects
-            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-            PDFont fontHel = PDType1Font.TIMES_ROMAN;
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
 
             //Method that writes and places the default information that is required for each page of the PDF document.
-            defaultNewPageSetup(content4, imgFolderPath, pdfName, 4);
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //NEEDS USER INPUT!
-            singleTextLineWithUserInput(content4, "Lokale", "Ceo's Kontor", 10, 50, 665);
-            
-            
-            checkBoxesPage4Walkthrough(content4);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", "Ceo's Kontor", 10, 50, 665);
 
-            
+            checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
 
             //Closes the content creation for Page 4
-            content4.close();
+            pageContentStreamNumber.close();
 
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-        //Setup of Page 5
-        public void page5Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
- 
-         //Creates a new page.
-         PDPage page5 = new PDPage();
- 
+    //Setup of Page 5
+
+    public void page5Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+
+        //Creates a new page Object
+        PDPage pageNumberTitel = new PDPage();
+
         //Adds the new page to the .doc
-         doc.addPage(page5);
-         try {
- 
+        doc.addPage(pageNumberTitel);
+        try {
+
             //Creates a new PDPageContentStream object,
             //which consist of a PDDocument object and PDPAge object
-             PDPageContentStream content5 = new PDPageContentStream(doc, page5);
- 
-             //Creates various text font objects
-             PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-             PDFont fontHel = PDType1Font.TIMES_ROMAN;
- 
-             //Method that writes and places the default information that is required for each page of the PDF document.
-             defaultNewPageSetup(content5, imgFolderPath, pdfName, 5);
- 
-             singleTextLine(content5, "Konklusion", 14, 50, 650);
- 
-             singleTextLine(content5, "Lokale", 10, 50, 600);
-             singleTextLine(content5, "Anbefalinger", 10, 200, 600);
- 
-             //Closes the content creation for Page 5
-             content5.close();
- 
-         } catch (Exception e) {
-             System.out.println(e);
-         }
-     }
-    
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
+
+            //Method that writes and places the default information that is required for each page of the PDF document.
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
+
+            singleTextLine(pageContentStreamNumber, "Konklusion", 14, 50, 650);
+
+            singleTextLine(pageContentStreamNumber, "Lokale", 10, 50, 600);
+            singleTextLine(pageContentStreamNumber, "Anbefalinger", 10, 200, 600);
+
+            //Closes the content creation for Page 5
+            pageContentStreamNumber.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     //Setup of Page 6
-     public void page6Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
- 
-         //Creates a new page.
-         PDPage page6 = new PDPage();
- 
-         //Adds the new page to the .doc
-         doc.addPage(page6);
-         try {
-             
+    public void page6Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+
+        //Creates a new page Object
+        PDPage pageNumberTitel = new PDPage();
+
+        //Adds the new page to the .doc
+        doc.addPage(pageNumberTitel);
+        try {
+
             //Creates a new PDPageContentStream object,
             //which consist of a PDDocument object and PDPAge object
-             PDPageContentStream content6 = new PDPageContentStream(doc, page6);
- 
-             //Creates various text font objects
-             PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-             PDFont fontHel = PDType1Font.TIMES_ROMAN;
- 
-             //Method that writes and places the default information that is required for each page of the PDF document.
-             defaultNewPageSetup(content6, imgFolderPath, pdfName, 6);
- 
-             //Needs real user input
-             singleTextLineWithUserInput(content6, "Bygningsgennemgang er fortaget af", /*INPUT HER*/"The Ceo" + " , Polygon", 10, 50, 650);
- 
-             //Needs real user input
-             singleTextLineWithUserInput(content6, "i samarbejde med ", /*INPUT HER*/"The other Ceo" + " (bygningsansvarlig).", 10, 50, 630);
- 
-             singleTextLine(content6, "Bygningen er katagoriseret som", 14, 50, 600);
- 
-             singleTextLine(content6, "Tilstand", 12, 50, 580);
- 
-             singleTextLine(content6, "Tilstandsgrad 1", 10, 50, 560);
-             insertJPGImage(content6, imgFolderPath, "underLineJPG.jpg", 50, 555, 70, 2);
-             singleTextLine(content6, "God Tilstand", 10, 50, 545);
- 
-             singleTextLine(content6, "Tilstandsgrad 2", 10, 50, 520);
-             insertJPGImage(content6, imgFolderPath, "underLineJPG.jpg", 50, 515, 70, 2);
-             singleTextLine(content6, "Middel Tilstand", 10, 50, 505);
- 
-             singleTextLine(content6, "Tilstandsgrad 3", 10, 50, 480);
-             insertJPGImage(content6, imgFolderPath, "underLineJPG.jpg", 50, 475, 70, 2);
-             singleTextLine(content6, "Dårlig Tilstand", 10, 50, 465);
- 
-             singleTextLine(content6, "Beskrivelse af bygningen", 10, 200, 580);
- 
-             //God Tilstand
-             singleTextLine(content6, "Der er ingen problemer med bygningen; ", 8, 140, 560);
-             singleTextLine(content6, "Bygningens funktion er uden problemer", 8, 140, 550);
- 
-             //Middel Tilstand
-             singleTextLine(content6, "Der er slid og skader på bygningen eller risiko for potentielle problemer med bygningen.", 8, 140, 520);
-             singleTextLine(content6, "Bygningens funktion er nedsat, eller der er risiko for, at funktionen bliver nedsat.", 8, 140, 510);
- 
-             //Dårlig tilstand
-             singleTextLine(content6, "Der er problemer med bygningen.", 8, 140, 480);
-             singleTextLine(content6, "Bygningen er begyndt at forfalde, har defekte komponenter, er nedbrudt eller bør udskiftes", 8, 140, 470);
-             singleTextLine(content6, "Bygningens funktion er nedsat, eller bygningen er næsten eller helt ubrulig.", 8, 140, 460);
- 
-             singleTextLine(content6, "Tilstandsgrad", 12, 515, 580);
-             
-             //Skal bruges en boolean at styre sig efter
-             
-             //Sets the checkbox for "God Tilstand"
-             checkBoxImg(true, imgFolderPath, content6, 550, 560, 7, 7);
-             //Sets the Checkbox for "Middel Tilstand"
-             checkBoxImg(true, imgFolderPath, content6, 550, 520, 7, 7);
-             //Sets the checkbox for "Dårlig Tilstand"
-             checkBoxImg(true, imgFolderPath, content6, 550, 480, 7, 7);
-             
-             //Writes the Terms of Use (?)
-             singleTextLine(content6, "Denne rapport og bygningsgennemgang er lavet for at klarlægge umiddelbare visuelle problemstillinger.", 8, 50, 400);
-             singleTextLine(content6, "Vores formål er at sikre, at bygningens anvendelse kan opretholdes", 8, 50, 390);
-             singleTextLine(content6, "Vi udbedrer ikke skader som en del af bygningsgennemgangen/rapporten.", 8, 50, 380);
-             singleTextLine(content6, "Gennemgangen af bygningen indeholder ikke fugtmålinger af hele bygningen,", 8, 50, 370);
-             singleTextLine(content6, "men vi kan foretage fugtscanninger enkelte steder i bygningen, hvis vi finder det nødvendigt.", 8, 50, 360);
-             singleTextLine(content6, "Hvis vi finder kritiske områder i bygningen vil vi fremlægge anbefalinger angående yderligere tiltag så som yderligere undersøgelser,", 8, 50, 350);
-             singleTextLine(content6, "reparationer eller bygningsopdateringer.", 8, 50, 340);
-             singleTextLine(content6, "Bemærk at vi skal have adgang til hele bygningen for at kunne udføre en fuld gennemgang", 8, 50, 330);
-             singleTextLine(content6, "(dette inkluderer adgang til tag, tagrum, kælder, krybekælder eller andre aflukkede områder). ", 8, 50, 320);
-             singleTextLine(content6, "Denne bygningsgennemgang er ikke-destruktiv. Hvis der skal laves destruktive indgreb, ", 8, 50, 310);
-             singleTextLine(content6, "skal dette først godkendes af de bygningsansvarlige.", 8, 50, 300);
-             singleTextLine(content6, "Destruktive indgreb er ikke en del af denne rapport eller bygningsgennemgang. ", 8, 50, 290);
-             singleTextLine(content6, "Den bygningsansvarlige skal udlevere plantegning over bygningen inden bygningsgennemgangen kan foretages. ", 8, 50, 260);
-             
-             
-             
-             //Closes the content creation for Page 6
-             content6.close();
- 
-         } catch (Exception e) {
-             System.out.println(e);
-         }
-     }
- 
-    
-     
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
+
+            //Method that writes and places the default information that is required for each page of the PDF document.
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
+
+            //Needs real user input
+            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningsgennemgang er fortaget af", /*INPUT HER*/ "The Ceo" + " , Polygon", 10, 50, 650);
+
+            //Needs real user input
+            singleTextLineWithUserInput(pageContentStreamNumber, "i samarbejde med ", /*INPUT HER*/ "The other Ceo" + " (bygningsansvarlig).", 10, 50, 630);
+
+            //Writes and places the text-line "Bygningen er katagoriseret som"
+            singleTextLine(pageContentStreamNumber, "Bygningen er katagoriseret som", 14, 50, 600);
+
+            //Writes and places the text-line ""Tilstand"
+            singleTextLine(pageContentStreamNumber, "Tilstand", 12, 50, 580);
+
+            //Writes and places the text-line ""Tilstandsgrad 1"
+            singleTextLine(pageContentStreamNumber, "Tilstandsgrad 1", 10, 50, 560);
+            //Places the "underline.jpg"-image, as an underline for the "Tilstandsgrad 1"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 555, 70, 2);
+            //Writes and places the text-line ""God Tilstand"
+            singleTextLine(pageContentStreamNumber, "God Tilstand", 10, 50, 545);
+
+            //Writes and places the text-line ""Tilstandsgrad2"
+            singleTextLine(pageContentStreamNumber, "Tilstandsgrad 2", 10, 50, 520);
+            //Places the "underline.jpg"-image, as an underline for the "Tilstandsgrad 2"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 515, 70, 2);
+            //Writes and places the text-line ""Middel Tilstand"
+            singleTextLine(pageContentStreamNumber, "Middel Tilstand", 10, 50, 505);
+
+            //Writes and places the text-line ""Tilstandsgrad3"
+            singleTextLine(pageContentStreamNumber, "Tilstandsgrad 3", 10, 50, 480);
+            //Places the "underline.jpg"-image, as an underline for the "Tilstandsgrad 3"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 475, 70, 2);
+            //Writes and places the text-line ""Dårlig Tilstand"
+            singleTextLine(pageContentStreamNumber, "Dårlig Tilstand", 10, 50, 465);
+
+            //Writes and places the text-line "Beskrivelse af bygningen"
+            singleTextLine(pageContentStreamNumber, "Beskrivelse af bygningen", 10, 200, 580);
+
+            //God Tilstand
+            singleTextLine(pageContentStreamNumber, "Der er ingen problemer med bygningen; ", 8, 140, 560);
+            singleTextLine(pageContentStreamNumber, "Bygningens funktion er uden problemer", 8, 140, 550);
+
+            //Middel Tilstand
+            singleTextLine(pageContentStreamNumber, "Der er slid og skader på bygningen eller risiko for potentielle problemer med bygningen.", 8, 140, 520);
+            singleTextLine(pageContentStreamNumber, "Bygningens funktion er nedsat, eller der er risiko for, at funktionen bliver nedsat.", 8, 140, 510);
+
+            //Dårlig tilstand
+            singleTextLine(pageContentStreamNumber, "Der er problemer med bygningen.", 8, 140, 480);
+            singleTextLine(pageContentStreamNumber, "Bygningen er begyndt at forfalde, har defekte komponenter, er nedbrudt eller bør udskiftes", 8, 140, 470);
+            singleTextLine(pageContentStreamNumber, "Bygningens funktion er nedsat, eller bygningen er næsten eller helt ubrulig.", 8, 140, 460);
+
+            singleTextLine(pageContentStreamNumber, "Tilstandsgrad", 12, 515, 580);
+
+            //Skal bruges en boolean at styre sig efter
+            //Sets the checkbox for "God Tilstand"
+            checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 560, 7, 7);
+            //Sets the Checkbox for "Middel Tilstand"
+            checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 520, 7, 7);
+            //Sets the checkbox for "Dårlig Tilstand"
+            checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
+
+            //Writes the Terms of Use (?)
+            singleTextLine(pageContentStreamNumber, "Denne rapport og bygningsgennemgang er lavet for at klarlægge umiddelbare visuelle problemstillinger.", 8, 50, 400);
+            singleTextLine(pageContentStreamNumber, "Vores formål er at sikre, at bygningens anvendelse kan opretholdes", 8, 50, 390);
+            singleTextLine(pageContentStreamNumber, "Vi udbedrer ikke skader som en del af bygningsgennemgangen/rapporten.", 8, 50, 380);
+            singleTextLine(pageContentStreamNumber, "Gennemgangen af bygningen indeholder ikke fugtmålinger af hele bygningen,", 8, 50, 370);
+            singleTextLine(pageContentStreamNumber, "men vi kan foretage fugtscanninger enkelte steder i bygningen, hvis vi finder det nødvendigt.", 8, 50, 360);
+            singleTextLine(pageContentStreamNumber, "Hvis vi finder kritiske områder i bygningen vil vi fremlægge anbefalinger angående yderligere tiltag så som yderligere undersøgelser,", 8, 50, 350);
+            singleTextLine(pageContentStreamNumber, "reparationer eller bygningsopdateringer.", 8, 50, 340);
+            singleTextLine(pageContentStreamNumber, "Bemærk at vi skal have adgang til hele bygningen for at kunne udføre en fuld gennemgang", 8, 50, 330);
+            singleTextLine(pageContentStreamNumber, "(dette inkluderer adgang til tag, tagrum, kælder, krybekælder eller andre aflukkede områder). ", 8, 50, 320);
+            singleTextLine(pageContentStreamNumber, "Denne bygningsgennemgang er ikke-destruktiv. Hvis der skal laves destruktive indgreb, ", 8, 50, 310);
+            singleTextLine(pageContentStreamNumber, "skal dette først godkendes af de bygningsansvarlige.", 8, 50, 300);
+            singleTextLine(pageContentStreamNumber, "Destruktive indgreb er ikke en del af denne rapport eller bygningsgennemgang. ", 8, 50, 290);
+            singleTextLine(pageContentStreamNumber, "Den bygningsansvarlige skal udlevere plantegning over bygningen inden bygningsgennemgangen kan foretages. ", 8, 50, 260);
+
+            //Closes the content creation for Page 6
+            pageContentStreamNumber.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     //Method to save the PDF document 
     public void savePDF(String savePath, String pdfName, PDDocument doc) {
         try {
@@ -611,9 +622,8 @@ public class PDFCreator {
     }
 
     //Method that writes and places the Page number
-    public void pageNumber(PDPageContentStream content, int pageNumber) {
+    public void pageNumber(PDPageContentStream content) {
         try {
-            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
 
             content.beginText();
             content.setFont(fontHelB, 8);
@@ -629,8 +639,7 @@ public class PDFCreator {
     //Method that writes and places the reportnumber
     public void reportNumber(PDPageContentStream content) {
 
-        PDFont fontHel = PDType1Font.TIMES_ROMAN;
-
+        //
         try {
 
             //Writes and places the Rapport Nr.
@@ -644,7 +653,7 @@ public class PDFCreator {
             content.drawString("Rapport nr.: ");
             //End writting text
             content.endText();
-            
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -652,21 +661,19 @@ public class PDFCreator {
     }
 
     //Method that writes and places the default information that is required for each page of the PDF document.
-    public void defaultNewPageSetup(PDPageContentStream content, String imgFolderPath, String pdfName, int pageNumber) {
+    public void defaultNewPageSetup(PDPageContentStream content, String imgFolderPath, String pdfName) {
 
         reportNumber(content);
         pdfDocName(content, pdfName);
-        pageNumber(content, pageNumber);
+        pageNumber(content);
         insertJPGImage(content, imgFolderPath, "polygon.jpg", 50, 690, 150, 30);
 
     }
 
     //Method for the user to write the name of the PDF Document.
     //The name will be displayed in the PDF document and will also be the pdfdocuments filename.
-     public void pdfDocName(PDPageContentStream content, String pdfName) {
+    public void pdfDocName(PDPageContentStream content, String pdfName) {
         try {
-            //Create a PDFont to be used later
-            PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
 
             //Begin writting text
             content.beginText();
@@ -676,29 +683,29 @@ public class PDFCreator {
             content.setFont(fontHelB, 8);
             //Write the text
             content.drawString("PDF Navn: " + pdfName);
-            
+
             //Stop writting
             content.endText();
-            
+
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-     //Method for handling a user selected/uploaded picture.
+    //Method for handling a user selected/uploaded picture.
     public void userPicture(String picturePath, String imgFolderPath, PDPageContentStream content, int xCoordinate, int yCoordinate, int imgWidth, int imgHeight) {
 
         try {
 
             //Creates the picture object for later use.
             PDImageXObject userBygning = null;
-            
+
             //If no picture has been uploaded by the user, the PDF will take and use a specified default picture
             if (picturePath.equals("")) {
 
                 //Default picture
                 userBygning = PDImageXObject.createFromFile(imgFolderPath + "whouse.jpg", doc);
-                
+
 //If the user has decided to uploade a picure
             } else {
                 //User picture
@@ -730,7 +737,6 @@ public class PDFCreator {
 //            System.out.println(e);
 //        }
 //    }
-    
     //Method to handle the "checked"- and "unchecked"-checkbox image
     //Also req. coordinates as paramters, for where the boxes needs to be placed.
     public void checkBoxImg(boolean box, String imgFolderPath, PDPageContentStream content, int xCoordinate, int yCoordinate, int imgWidth, int imgHeight) {
@@ -767,23 +773,23 @@ public class PDFCreator {
             checkBoxImg(roomDamage, imgFolderPath, content, 215, 625, 7, 7);
 
             checkBoxImg(true, imgFolderPath, content, 250, 625, 7, 7);
-        //If "Ja"
+            //If "Ja"
         } else {
 
             checkBoxImg(roomDamage, imgFolderPath, content, 215, 625, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 250, 625, 7, 7);
 
             //Input from user 
-            singleTextLineWithUserInput(content, "Hvornår? ", /*INPUT HER*/"Test31", 10, 50, 590);
+            singleTextLineWithUserInput(content, "Hvornår? ", /*INPUT HER*/ "Test31", 10, 50, 590);
 
             //Input from user
-            singleTextLineWithUserInput(content, "Hvor? ", /*INPUT HER*/"Test det er sket her", 10, 200, 590);
+            singleTextLineWithUserInput(content, "Hvor? ", /*INPUT HER*/ "Test det er sket her", 10, 200, 590);
 
             //Input from user
-            singleTextLineWithUserInput(content, "Hvad er der sket?", /*INPUT HER*/"Katten legede med sin kugle under border og den trillede væk...", 10, 50, 560);
+            singleTextLineWithUserInput(content, "Hvad er der sket?", /*INPUT HER*/ "Katten legede med sin kugle under border og den trillede væk...", 10, 50, 560);
 
             //Input from user
-            singleTextLineWithUserInput(content, "Hvad er der repareret", /*INPUT HER*/"Katten fik en ny bold og en lillebror", 10, 50, 540);
+            singleTextLineWithUserInput(content, "Hvad er der repareret", /*INPUT HER*/ "Katten fik en ny bold og en lillebror", 10, 50, 540);
 
             //Input from user
             singleTextLine(content, "Skade", 10, 50, 520);
@@ -822,7 +828,7 @@ public class PDFCreator {
             if (otherDamage == true) {
                 checkBoxImg(otherDamage, imgFolderPath, content, 50, 475, 7, 7);
                 //needs user input
-                singleTextLineWithUserInput(content, "", /*NEEDS USERINPUT*/"The kat is on freaking fire", 10, 130, 475);
+                singleTextLineWithUserInput(content, "", /*NEEDS USERINPUT*/ "The kat is on freaking fire", 10, 130, 475);
                 insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 128, 472, 120, 2);
             } else {
                 checkBoxImg(otherDamage, imgFolderPath, content, 50, 475, 7, 7);
@@ -835,11 +841,8 @@ public class PDFCreator {
     //Method to simplify the creation of text-lines       
     public void singleTextLine(PDPageContentStream content, String textLine, int textSize, int xCoordinate, int yCoordinate) {
 
-        //Creates various text font objects
-        PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-
         try {
-            
+
             //Start writting text
             content.beginText();
             //Sets the font and text size
@@ -862,13 +865,11 @@ public class PDFCreator {
     //which also contains user input.
     public void singleTextLineWithUserInput(PDPageContentStream content, String textLine, String userInput, int textSize, int xCoordinate, int yCoordinate) {
 
-        PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-
         try {
 
             //Start writting text
             content.beginText();
-             //Sets the font and text size
+            //Sets the font and text size
             content.setFont(fontHelB, textSize);
             //Set Coordinates for the first line of text
             content.moveTextPositionByAmount(xCoordinate, yCoordinate);
@@ -883,8 +884,8 @@ public class PDFCreator {
     }
 
     //Sets the checkboxes for Page 2:
-            //"Tag" (Bemærkning, Ingen bemærkning, Billede) and 
-            //Ydervægge (Bemærkning, Ingen bemærkning, Billede)
+    //"Tag" (Bemærkning, Ingen bemærkning, Billede) and 
+    //Ydervægge (Bemærkning, Ingen bemærkning, Billede)
     public void checkBoxesPage2(PDPageContentStream content, String imgFolderPath,
             boolean roofNotes, boolean noRoofNotes, boolean roofPicture,
             boolean wallNotes, boolean noWallNotes, boolean wallPicture) {
@@ -944,7 +945,6 @@ public class PDFCreator {
         //NEEDS DYNAMIC USER INPUT!!!
     }
 
-
     //Method specifically for Page 3
     //Setups various checkboxes in Page 3, based on wether or not there has been performed a MoistScan
     public void checkBoxesPage3MoistScan(boolean moistScan, PDPageContentStream content, String moistScanned, String moistMeasurePoint, String imgFolderPath) {
@@ -955,12 +955,14 @@ public class PDFCreator {
         //Bemærkning?
         singleTextLine(content, "Er der fortaget fugtscanning?", 10, 50, 400);
 
+        //To be displayed if NO moistScan has been performed
         if (moistScan == false) {
             singleTextLine(content, "Ja", 10, 250, 400);
             checkBoxImg(moistScan, imgFolderPath, content, 240, 400, 7, 7);
             singleTextLine(content, "Nej", 10, 280, 400);
             checkBoxImg(true, imgFolderPath, content, 270, 400, 7, 7);
 
+            //To be displayed if moistScan has been performed
         } else if (moistScan == true) {
             singleTextLine(content, "Ja", 10, 250, 400);
             checkBoxImg(moistScan, imgFolderPath, content, 240, 400, 7, 7);
@@ -980,12 +982,222 @@ public class PDFCreator {
 //        
 //        
 //    }
-    
     //NEEDS USER INPUT
-    public void checkBoxesPage4Walkthrough(PDPageContentStream content) {
-        
-        singleTextLine(content, "Gennemgang af lokalet", 12, 50, 640);
+    //METHOD NEEDS BOOLEAN PARAMTERS!
+    public void checkBoxesPage4Walkthrough(PDPageContentStream content, String imgFolderPath) {
 
+        singleTextLine(content, "Gennemgang af lokalet", 12, 50, 640);
+        singleTextLine(content, "Bemærkning", 10, 335, 610);
+        singleTextLine(content, "Ingen Bemærkning", 10, 420, 610);
+        singleTextLine(content, "Billede", 10, 540, 610);
+//        
+//        boolean wallNotes = false;
+//        boolean wallPicture = false;
+
+        boolean ceilingNotes = false;
+        boolean ceilingPicture = false;
+
+        boolean floorNotes = false;
+        boolean floorPicture = false;
+
+        boolean windowNotes = false;
+        boolean windowPicture = false;
+
+        boolean doorNotes = false;
+        boolean doorPicture = false;
+
+        boolean other1Notes = false;
+        boolean other1Picture = false;
+
+        boolean other2Notes = false;
+        boolean other2Picture = false;
+
+        //Test of method
+        wallWalkthrough(content, imgFolderPath, true, true, "it works!",
+                600, 596, 590, 600, 600, 0);
+        //Loft
+        singleTextLine(content, "Loft", 10, 50, 520);
+        //Underlinde-jpg
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 516, 20, 2);
+        //Bemærkning / Ingen Bemærkning
+        if (ceilingNotes == true) {
+            //set "Bermærkninger" true
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 510);
+
+            checkBoxImg(true, imgFolderPath, content, 360, 520, 7, 7);
+
+            //Set "ingen bemærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 460, 520, 7, 7);
+
+        } else if (ceilingNotes != true || ceilingNotes == false) {
+            //set "Bermærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 360, 520, 7, 7);
+            //Set "ingen bemærkninger" true
+            checkBoxImg(true, imgFolderPath, content, 460, 520, 7, 7);
+        }
+
+        //Billede
+        if (ceilingPicture == true) {
+            //set "Picture" true
+            checkBoxImg(true, imgFolderPath, content, 553, 520, 7, 7);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+
+        } else if (ceilingPicture != true || ceilingPicture == false) {
+            // set "Picture" false
+            checkBoxImg(false, imgFolderPath, content, 553, 520, 7, 7);
+        }
+
+        //Gulv
+        singleTextLine(content, "Gulv", 10, 50, 440);
+        //Underlinde-jpg
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 436, 23, 2);
+        //Bemærkning / Ingen Bemærkning
+        if (floorNotes == true) {
+            //set "Bermærkninger" true
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 430);
+
+            checkBoxImg(true, imgFolderPath, content, 360, 440, 7, 7);
+
+            //Set "ingen bemærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 460, 440, 7, 7);
+
+        } else if (floorNotes != true || floorNotes == false) {
+            //set "Bermærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 360, 440, 7, 7);
+            //Set "ingen bemærkninger" true
+            checkBoxImg(true, imgFolderPath, content, 460, 440, 7, 7);
+        }
+        //Billede
+        if (floorPicture == true) {
+            //set "Picture" true
+            checkBoxImg(true, imgFolderPath, content, 553, 440, 7, 7);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+        } else if (floorPicture != true || floorPicture == false) {
+            // set "Picture" false
+            checkBoxImg(false, imgFolderPath, content, 553, 440, 7, 7);
+        }
+
+        //Vinduer
+        singleTextLine(content, "Vinduer", 10, 50, 360);
+        //Underlinde-jpg
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 356, 45, 2);
+        if (windowNotes == true) {
+            //set "Bermærkninger" true
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
+
+            checkBoxImg(true, imgFolderPath, content, 360, 360, 7, 7);
+
+            //Set "ingen bemærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 460, 360, 7, 7);
+
+        } else if (windowNotes != true || windowNotes == false) {
+            //set "Bermærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 360, 360, 7, 7);
+            //Set "ingen bemærkninger" true
+            checkBoxImg(true, imgFolderPath, content, 460, 360, 7, 7);
+        }
+        //Billede
+        if (windowPicture == true) {
+            //set "Picture" true
+            checkBoxImg(true, imgFolderPath, content, 553, 360, 7, 7);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+        } else if (windowPicture != true || windowPicture == false) {
+            // set "Picture" false
+            checkBoxImg(false, imgFolderPath, content, 553, 360, 7, 7);
+        }
+
+        //Døre
+        singleTextLine(content, "Døre", 10, 50, 280);
+        //Underlinde-jpg
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 276, 23, 2);
+        if (doorNotes == true) {
+            //set "Bermærkninger" true
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
+
+            checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
+
+            //Set "ingen bemærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 460, 280, 7, 7);
+
+        } else if (doorNotes != true || doorNotes == false) {
+            //set "Bermærkninger" false
+            checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
+            //Set "ingen bemærkninger" true
+            checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
+        }
+        //Billede
+        if (doorPicture == true) {
+            //set "Picture" true
+            checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+        } else if (doorPicture != true || doorPicture == false) {
+            // set "Picture" false
+            checkBoxImg(false, imgFolderPath, content, 553, 280, 7, 7);
+        }
+
+        //Andet 1
+        //Underlinde-jpg
+        //Bemærkning / Ingen Bemærkning
+        //Billede
+        //Andet 2
+        //Underlinde-jpg
+        //Bemærkning / Ingen Bemærkning
+        //Billede
+    }
+
+    //int wallTitelXCoordinate, int wallTitelYCoordinate
+    //int underlineJPGXCoordinate, int underlineJPGYCoordinate,
+    //int wallNotesCheckBoxImgXCoordinate, int wallNotesCheckBoxImgYCoordinate
+    //int pictureCheckBoxImgXCoordinate, int pictureCheckBoxBoxImgYCoordinate
+    //int pictureIMGXCoordinate, int pictureIMGYCoordinate
+    public void wallWalkthrough(PDPageContentStream content, String imgFolderPath,
+            boolean wallNotes, boolean wallPicture, String wallNoteText,
+            int wallTitelYCoordinate, int underlineJPGYCoordinate,
+            int wallNoteTextYCoordinate, int wallNotesCheckBoxImgYCoordinate,
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate
+    ) {
+        //Vægge
+        // singleTextLine(content, "Vægge", 10, 50, 600);
+        singleTextLine(content, "Vægge", 10, 50, wallTitelYCoordinate);
+
+        //Underlinde-jpg
+        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 596, 37, 2);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 37, 2);
+        //Bemærkning / Ingen Bemærkning
+        if (wallNotes == true) {
+            //set "Bermærkninger" true
+            //singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 590);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + wallNoteText, 8, 50, wallNoteTextYCoordinate);
+
+            //checkBoxImg(true, imgFolderPath, content, 360, 600, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 360, wallNotesCheckBoxImgYCoordinate, 7, 7);
+
+            //Set "ingen bemærkninger" false + 100!
+            //checkBoxImg(false, imgFolderPath, content, 460, 600, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 460, wallNotesCheckBoxImgYCoordinate, 7, 7);
+
+        } else if (wallNotes != true || wallNotes == false) {
+            //set "Bermærkninger" false
+            //checkBoxImg(false, imgFolderPath, content, 360, 600, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 360, wallNotesCheckBoxImgYCoordinate, 7, 7);
+            //Set "ingen bemærkninger" true + 100!
+            //checkBoxImg(true, imgFolderPath, content, 460, 600, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 460, wallNotesCheckBoxImgYCoordinate, 7, 7);
+        }
+
+        //Billede
+        if (wallPicture == true) {
+            //set "Picture" true
+
+            //checkBoxImg(true, imgFolderPath, content, 553, 600, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 50, 25);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 50, 25);
+        } else if (wallPicture != true || wallPicture == false) {
+            // set "Picture" false
+            //checkBoxImg(false, imgFolderPath, content, 553, 600, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+        }
     }
 
     //ONLY FOR TESTING THE SAVE MECHANIC AND TEXT BOX!!! 
