@@ -14,6 +14,8 @@ import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Healthcheck;
+import serviceLayer.entities.Issue;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -23,13 +25,16 @@ public class TechnicianServlet extends HttpServlet {
     private ArrayList<Building> userBuildings = new ArrayList();
     private ArrayList<User> userList = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
+    private ArrayList<Healthcheck> allHealthchecks = new ArrayList();
+    private ArrayList<Healthcheck> buildingHealthchecks = new ArrayList();
+    private ArrayList<Issue> healthcheckIssues = new ArrayList();
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
 
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
-    private int user_id;
+    private int user_id, buildingId = 0;
     private String origin = "";
     PDFCreator pdfwt = new PDFCreator();
 
@@ -56,6 +61,7 @@ public class TechnicianServlet extends HttpServlet {
                 user_id = (Integer) request.getSession().getAttribute("user_id");
                 refreshUsers(request);
                 refreshAllBuildings(request);
+                refreshAllHealthchecks(request);
                 response.sendRedirect("technician.jsp");
             }
 
@@ -67,24 +73,24 @@ public class TechnicianServlet extends HttpServlet {
             switch (origin) {
 
                 case "technicianOverview":
-
+                    
                     //Reset the source, i.e. which page we are coming from
                     request.getSession().setAttribute("source", "");
-
+                    
                     //Retrieve the building being edited
-                    String buildingID = request.getParameter("buildingID");
-                    request.getSession().setAttribute("buildingBeingEdited", buildingID);
-
+                    buildingId = Integer.parseInt(request.getParameter("buildingId"));
+                    request.getSession().setAttribute("buildingBeingEdited", buildingId);
+                    
                     //Fetch areas and rooms for selected building
-                    refreshAreas(Integer.parseInt(buildingID));
-                    refreshRooms(Integer.parseInt(buildingID));
+                    refreshAreas(request, buildingId);
+                    refreshRooms(request, buildingId);
+                    
+                    //Fetch the current healthcheck and its issues for the chosen building 
+                    int healthcheckId = getBuildingHealthcheck(request, buildingId);
+                    getHealthcheckIssues(request, healthcheckId);
 
-                    //Save areas and rooms in Session
-                    request.getSession().setAttribute("buildingAreas", buildingAreas);
-                    request.getSession().setAttribute("buildingRooms", buildingRooms);
-                    System.out.println(buildingID);
                     //redirect to viewBuilding into the specific building being edited
-                    response.sendRedirect("technicianViewBuilding.jsp?value=" + buildingID + "");
+                    response.sendRedirect("technicianViewBuilding.jsp?value=" + buildingId + "");
 
                     break;
                     
@@ -92,7 +98,7 @@ public class TechnicianServlet extends HttpServlet {
 
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                     Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-
+                    
                     //If 'Request healthcheck' button was clicked
                     if (request.getParameter("originSection").equals("healthcheckButton")) {
                         request.getSession().setAttribute("source", "healthcheckButton");
@@ -107,50 +113,51 @@ public class TechnicianServlet extends HttpServlet {
                         }
 
                         //Save values to database
-                        bldgCtrl.toggleHealthcheck(build.getBuilding_id(), healthcheckValueToWrite);
+                        bldgCtrl.toggleHealthcheck(build.getbuildingId(), healthcheckValueToWrite);
 
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(request, user_id);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
 
                     //If 'Create area' button was clicked
                     if (request.getParameter("originSection").equals("createAreaButton")) {
                         request.getSession().setAttribute("source", "createAreaButton");
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If an area needs deleting
                     //If 'Create issue' button was clicked
                     else if(request.getParameter("originSection").equals("addIssueButton")){
                         request.getSession().setAttribute("source", "addIssueButton");
                         request.getSession().setAttribute("ActiveSidebarMenu","RegistrerProblem");
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        request.getSession().setAttribute("areaId", request.getParameter("areaId"));
+                        request.getSession().setAttribute("roomId", request.getParameter("roomId"));
+                        
+                        //Save to Session if coming from add issue for room or for area
+                        request.getSession().setAttribute("originType",request.getParameter("originType"));
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     
                     else if (request.getParameter("originSection").equals("deleteAreaButton")) {
                         request.getSession().setAttribute("source", "deleteAreaButton");
 
                         //Retrieve form input values from viewBuilding
-                        int area_id = Integer.parseInt(request.getParameter("areaId"));
+                        int areaId = Integer.parseInt(request.getParameter("areaId"));
 
                         //Save values to database
-                        bldgCtrl.deleteArea(area_id);
+                        bldgCtrl.deleteArea(areaId);
 
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
 
                         //Fetch areas and rooms for selected building
-                        refreshAreas(build.getBuilding_id());
-                        refreshRooms(build.getBuilding_id());
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+                        refreshAreas(request, build.getbuildingId());
+                        refreshRooms(request, build.getbuildingId());
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If a new area needs creating
                     else if (request.getParameter("originSection").equals("createArea")) {
                         request.getSession().setAttribute("source", "createArea");
@@ -158,27 +165,23 @@ public class TechnicianServlet extends HttpServlet {
                         String areaName = request.getParameter("areaName");
                         String areaDesc = request.getParameter("areaDesc");
                         int areaSqm = Integer.parseInt(request.getParameter("areaSqm"));
-                        int building_id = build.getBuilding_id();
+                        buildingId = build.getbuildingId();
                         //Save values to database
-                        bldgCtrl.createArea(areaName, areaDesc, areaSqm, building_id);
+                        bldgCtrl.createArea(areaName, areaDesc, areaSqm, buildingId);
 
                         //Fetch areas and rooms for selected building
-                        refreshAreas(building_id);
-                        refreshRooms(building_id);
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+                        refreshAreas(request, buildingId);
+                        refreshRooms(request, buildingId);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If 'Create room' button was clicked
                     else if (request.getParameter("originSection").equals("createRoomButton")) {
                         request.getSession().setAttribute("source", "createRoomButton");
                         request.getSession().setAttribute("areaId", request.getParameter("areaId"));
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If a new room needs creating
                     else if (request.getParameter("originSection").equals("createRoom")) {
                         request.getSession().setAttribute("source", "createRoom");
@@ -186,55 +189,46 @@ public class TechnicianServlet extends HttpServlet {
                         String roomName = request.getParameter("roomName");
                         String roomDesc = request.getParameter("roomDesc");
                         int roomSqm = Integer.parseInt(request.getParameter("roomSqm"));
-                        int area_id = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
+                        int areaId = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
 
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                        int building_id = build.getBuilding_id();
+                        buildingId = build.getbuildingId();
 
                         //Save values to database
-                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, area_id);
+                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, areaId);
 
                         //Fetch areas and rooms for selected building
-                        refreshAreas(building_id);
-                        refreshRooms(building_id);
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+                        refreshAreas(request, buildingId);
+                        refreshRooms(request, buildingId);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If an area needs deleting
                     else if (request.getParameter("originSection").equals("deleteRoomButton")) {
                         request.getSession().setAttribute("source", "deleteRoomButton");
 
                         //Retrieve form input values from viewBuilding
-                        int room_id = Integer.parseInt(request.getParameter("roomId"));
-                        //int area_id = 6;
+                        int roomId = Integer.parseInt(request.getParameter("roomId"));
+                        //int areaId = 6;
 
                         //Save values to database
-                        bldgCtrl.deleteRoom(room_id);
+                        bldgCtrl.deleteRoom(roomId);
 
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
 
                         //Fetch areas and rooms for selected building
-                        refreshAreas(build.getBuilding_id());
-                        refreshRooms(build.getBuilding_id());
-                        //refreshRooms(building_id);
-
-                        //Save areas and rooms in Session
-                        request.getSession().setAttribute("buildingAreas", buildingAreas);
-                        request.getSession().setAttribute("buildingRooms", buildingRooms);
+                        refreshAreas(request, build.getbuildingId());
+                        refreshRooms(request, build.getbuildingId());
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If 'Edit building details' button was clicked
                     else if (request.getParameter("originSection").equals("editBuildingButton")) {
                         request.getSession().setAttribute("source", "editBuildingButton");
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If the building needs editing
                     else if (request.getParameter("originSection").equals("editBuilding")) {
                         request.getSession().setAttribute("source", "editBuilding");
@@ -252,25 +246,104 @@ public class TechnicianServlet extends HttpServlet {
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     //If an issue needs creating
                     else if(request.getParameter("originSection").equals("addIssue")){
                         request.getSession().setAttribute("source", "");
-                        
-                        String description = request.getParameter("issueDescription");
-                        String recommendation = request.getParameter("issueTreatment");
-                        int building_id = build.getBuilding_id();
-                        int area_id = 0;
-                        int room_id = 0;
-                        
+                        buildingId = build.getbuildingId();
+                        int healthcheck_id = getBuildingHealthcheck(request, buildingId);
+                        String description = request.getParameter("description");
+                        String recommendation = request.getParameter("recommendation");
+                        int areaId = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
+                        int roomId = Integer.parseInt(request.getSession().getAttribute("roomId").toString());
                         //create new issue
-                        bldgCtrl.createIssue(building_id, area_id, room_id, description, recommendation);
+                        bldgCtrl.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
                         
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        //Fetch the current healthcheck and its issues for the chosen building 
+                        healthcheckId = getBuildingHealthcheck(request, buildingId);
+                        getHealthcheckIssues(request, healthcheckId);
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If an issue needs deleting
+                    else if(request.getParameter("originSection").equals("deleteIssueButton")){
+                        int issueId = Integer.parseInt(request.getParameter("issueId"));
+                        //Delete issue
+                        bldgCtrl.deleteIssue(issueId);
+                        
+                        //Fetch the current healthcheck and its issues for the chosen building 
+                        healthcheckId = getBuildingHealthcheck(request, buildingId);
+                        getHealthcheckIssues(request, healthcheckId);
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If a healthcheck PDF report needs deleting
+                    else if(request.getParameter("originSection").equals("createPDFButton")){
+                        
+                        
+                        
+                        
+                        String pdfName = "newpdfname";
+                        //String bName = build.getName();
+                        String bName = "aaa";
+                        String bAddress = "";
+                        String bPostCode = "2800";
+                        String bCity = "";
+                        String bConstructionYear = "1980";
+                        String bSQM = "200";
+                        String bPurpose = "";
+                        String bOwner = "";
+                        
+                        
+                        String folderPath = "C:\\Users\\Martin\\Documents\\NetBeansProjects\\Polygon\\web\\img";
+                        String filePath ="C:\\Users\\Martin\\Documents\\NetBeansProjects\\Polygon\\";
+                                
+                        String imgFolderPath = folderPath;
+                        String savePath = filePath;
+
+                        
+                        
+                        
+                        
+                        String systemDir = System.getProperty("user.dir");
+                        System.out.println(systemDir);
+
+                        String picturePath = "";
+                        /*
+                        //Filechooser for selecting an image for the generated PDF
+                        JFileChooser choose = new JFileChooser();
+                        FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
+                        choose.setFileFilter(filter);
+                        String picturePath = "";
+                        String folderPath = "";
+                        int returnVal = choose.showOpenDialog(choose);
+
+                        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+                            picturePath = choose.getSelectedFile().getAbsolutePath();
+                            folderPath = "" + choose.getCurrentDirectory();
+                            System.out.println(picturePath);
+                            System.out.println(folderPath + " Folder sti");
+
+                            System.out.println(picturePath);
+                        }*/
+
+                        pdfwt.createPDF(pdfName, bName, bAddress,
+                                Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
+                                Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
+
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    break;
+
+                        
+                        
+                        
+                        
                     }
 
                     break;
+                    
+                    
+                    
 
                 case "editProfile":
 
@@ -308,12 +381,10 @@ public class TechnicianServlet extends HttpServlet {
                     break;
                     
                 case "acceptHealthcheckButton":
-                    System.out.println("a");
                     //Save parameters from technician.jsp: buildingId and technicianID
                     int technicianId = (Integer) request.getSession().getAttribute("user_id");
                     //int technicianId = 12;
-                    int buildingId = Integer.parseInt(request.getParameter("buildingId"));
-                    System.out.println("b "+buildingId);
+                    buildingId = Integer.parseInt(request.getParameter("buildingId"));
                     //Call method to modify database
                     bldgCtrl.acceptHealthcheck(buildingId, technicianId);
                     refreshAllBuildings(request);
@@ -327,7 +398,44 @@ public class TechnicianServlet extends HttpServlet {
         }
 
     }
+    
+    //Fetches the issues for the current healthcheck
+    public void getHealthcheckIssues(HttpServletRequest request, int healthcheckId){
+        try {
+            healthcheckIssues.clear();
+            healthcheckIssues = bldgCtrl.getHealthcheckIssues(healthcheckId);
+            request.getSession().setAttribute("healthcheckIssues", healthcheckIssues);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    //Get the current healthcheck for a building
+    public int getBuildingHealthcheck(HttpServletRequest request, int buildingId){
+        int healthcheck_id = 0;
+        try {
+            buildingHealthchecks.clear();
+            buildingHealthchecks = bldgCtrl.getBuildingHealthchecks(buildingId);
+            request.getSession().setAttribute("buildingHealthchecks", buildingHealthchecks);
+            for (int i = 0; i < buildingHealthchecks.size(); i++) {
+                if(buildingHealthchecks.get(i).getbuildingId()==buildingId){
+                    healthcheck_id = buildingHealthchecks.get(i).getHealthcheck_id();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        request.getSession().setAttribute("healthcheckId", healthcheck_id);
+        return healthcheck_id;
+    }
 
+    //Refreshes the list of all healthchecks
+    public void refreshAllHealthchecks(HttpServletRequest request) throws Exception {
+        allHealthchecks.clear();
+        allHealthchecks = bldgCtrl.getAllHealthchecks();
+        request.getSession().setAttribute("allHealthchecks", allHealthchecks);
+    }
+    
     //Refreshes the list of buildings
     public void refreshBuilding(HttpServletRequest request, int user_id) throws Exception {
         userBuildings.clear();
@@ -343,15 +451,17 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int building_id) throws Exception {
+    public void refreshAreas(HttpServletRequest request, int buildingId) throws Exception {
         buildingAreas.clear();
-        buildingAreas = bldgCtrl.getAreas(building_id);
+        buildingAreas = bldgCtrl.getAreas(buildingId);
+        request.getSession().setAttribute("buildingAreas", buildingAreas);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int building_id) throws Exception {
+    public void refreshRooms(HttpServletRequest request, int buildingId) throws Exception {
         buildingRooms.clear();
-        buildingRooms = bldgCtrl.getRooms(building_id);
+        buildingRooms = bldgCtrl.getRooms(buildingId);
+        request.getSession().setAttribute("buildingRooms", buildingRooms);
     }
 
     public void refreshUsers(HttpServletRequest request) throws Exception {
@@ -399,5 +509,4 @@ public class TechnicianServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

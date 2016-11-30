@@ -79,7 +79,7 @@
                                 <%  for (int x = 0; x < allBuildings.size(); x++) {
                                         if (allBuildings.get(x).getHealthcheck_pending()==1) {
                                 %><tr>
-                                    <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getbuildingId());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  
                                     <td><%out.println(allBuildings.get(x).getDate_created());%></td>  
                                     <td><%out.println(allBuildings.get(x).getAddress());%></td>  
@@ -103,7 +103,7 @@
                                     </td>
                                     <td>
                                             <input type="hidden" name="origin" value="assignHealthcheckButton" />
-                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getBuilding_id()%>" />
+                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getbuildingId()%>" />
                                             <input class="btn btn-primary" type="submit" value="Tildel" />
                                     </td>
                                         </form>

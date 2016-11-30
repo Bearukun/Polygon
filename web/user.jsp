@@ -96,7 +96,7 @@ if yes - then redirect - else nothing. --%>
                                     <td>
                                         <form class="submitLink" action="UserServlet" method="POST">
                                             <input type="submit" class="submitLink" value="<%=userBuildings.get(i).getName()%>" />
-                                            <input type="hidden" name="buildingID" value="<%=userBuildings.get(i).getBuilding_id()%>" />
+                                            <input type="hidden" name="buildingId" value="<%=userBuildings.get(i).getbuildingId()%>" />
                                             <input type="hidden" name="origin" value="userOverview" />
                                         </form>
                                     </td>

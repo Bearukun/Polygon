@@ -102,8 +102,8 @@ public class NavigatorServlet extends HttpServlet {
                 case "deleteBuildingButton":
                 
                     try {
-                        int building_id = build.getBuilding_id();
-                        bldgCtrl.deleteBuilding(building_id);
+                        int buildingId = build.getbuildingId();
+                        bldgCtrl.deleteBuilding(buildingId);
                         //Refresh the user's buildings
                         refreshBuilding(user_id);
                         request.getSession().setAttribute("userBuildings", userBuildings);
@@ -259,15 +259,15 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int building_id) throws Exception {
+    public void refreshAreas(int buildingId) throws Exception {
         buildingAreas.clear();
-        buildingAreas = bldgCtrl.getAreas(building_id);
+        buildingAreas = bldgCtrl.getAreas(buildingId);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int building_id) throws Exception {
+    public void refreshRooms(int buildingId) throws Exception {
         buildingRooms.clear();
-        buildingRooms = bldgCtrl.getRooms(building_id);
+        buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
     public void refreshUsers(HttpServletRequest request) throws Exception {
