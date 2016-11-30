@@ -19,9 +19,9 @@ public class DataController implements DataControllerInterface {
     }
 
     @Override
-    public Image getBuildingImage(int building_id) throws Exception {
+    public Image getBuildingImage(int buildingId) throws Exception {
 
-        return checkIfImageExists(dbfacade.getBuildingImage(building_id));
+        return checkIfImageExists(dbfacade.getBuildingImage(buildingId));
 
     }
 
@@ -49,15 +49,15 @@ public class DataController implements DataControllerInterface {
     }
 
     @Override
-    public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
+    public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws Exception {
 
-        if (dbfacade.hasImage(DataMapperInterface.ImageType.building, 0, building_id)) {
+        if (dbfacade.hasImage(DataMapperInterface.ImageType.building, 0, buildingId)) {
 
-            dbfacade.updateImage(DataMapperInterface.ImageType.building, 0, building_id, img_name, img_file);
+            dbfacade.updateImage(DataMapperInterface.ImageType.building, 0, buildingId, img_name, img_file);
 
         } else {
 
-            dbfacade.uploadBuildingImage(building_id, img_name, img_file);
+            dbfacade.uploadBuildingImage(buildingId, img_name, img_file);
 
         }
 

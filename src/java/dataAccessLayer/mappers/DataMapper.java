@@ -114,7 +114,7 @@ public class DataMapper implements DataMapperInterface {
                 img.setImage_id(rs.getInt(1));
                 img.setImg_name(rs.getString(2));
                 img.setImg_file(rs.getBlob(3));
-                img.setBuilding_id(rs.getInt(5));
+                img.setbuildingId(rs.getInt(5));
 
             }
 

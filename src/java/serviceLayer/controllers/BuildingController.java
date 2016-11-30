@@ -21,8 +21,8 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
-    public void deleteBuilding(int building_id) throws Exception {
-        dbfacade.deleteBuilding(building_id);
+    public void deleteBuilding(int buildingId) throws Exception {
+        dbfacade.deleteBuilding(buildingId);
     }
     
     @Override
@@ -41,18 +41,18 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
-    public ArrayList<Area> getAreas(int building_id) throws Exception {
-        return dbfacade.getAreas(building_id);
+    public ArrayList<Area> getAreas(int buildingId) throws Exception {
+        return dbfacade.getAreas(buildingId);
     }
 
     @Override
-    public ArrayList<Room> getRooms(int building_id) throws Exception {
-        return dbfacade.getRooms(building_id);
+    public ArrayList<Room> getRooms(int buildingId) throws Exception {
+        return dbfacade.getRooms(buildingId);
     }
 
     @Override
-    public void createArea(String name, String description, int sqm, int building_id) throws Exception {
-        dbfacade.createArea(name, description, sqm, building_id);
+    public void createArea(String name, String description, int sqm, int buildingId) throws Exception {
+        dbfacade.createArea(name, description, sqm, buildingId);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
-    public void toggleHealthcheck(int building_id, int healthcheck_pending) throws Exception {
-        dbfacade.toggleHealthcheck(building_id, healthcheck_pending);
+    public void toggleHealthcheck(int buildingId, int healthcheck_pending) throws Exception {
+        dbfacade.toggleHealthcheck(buildingId, healthcheck_pending);
     }
 
     @Override
@@ -91,6 +91,11 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
+    public void deleteIssue(int issueId) throws Exception {
+        dbfacade.deleteIssue(issueId);
+    }
+    
+    @Override
     public ArrayList<Healthcheck> getAllHealthchecks() throws Exception {
         return dbfacade.getAllHealthchecks();
     }
@@ -104,4 +109,5 @@ public class BuildingController implements BuildingControllerInterface{
     public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception {
         return dbfacade.getHealthcheckIssues(healthcheckId);
     }
+
 }

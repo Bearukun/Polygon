@@ -140,7 +140,7 @@
                         //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
-                            if (userBuildings.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
+                            if (userBuildings.get(i).getbuildingId() == Integer.parseInt(request.getParameter("value"))) {
                                 //Save the building in the reference object build so its details can be shown on page
                                 build = userBuildings.get(i);
                                 request.getSession().setAttribute("buildingBeingEdited", build);
@@ -223,7 +223,7 @@
                     <%                        //Loop through entire buildings list
                         for (int i = 0; i < userBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
-                            if (userBuildings.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
+                            if (userBuildings.get(i).getbuildingId() == Integer.parseInt(request.getParameter("value"))) {
                                 //Save the building in the reference object build so its details can be shown on page
                                 build = userBuildings.get(i);
                                 request.getSession().setAttribute("buildingBeingEdited", build);
@@ -247,7 +247,7 @@
                                     Kvadratmeter: <%=build.getSqm()%>
                                 </td>
                                 <td>
-                                    <img src="./GetImage?type=building&id=<%=build.getBuilding_id()%>" class="img-fluid " height="250" alt="Responsive image">
+                                    <img src="./GetImage?type=building&id=<%=build.getbuildingId()%>" class="img-fluid " height="250" alt="Responsive image">
                                 </td>    
                                 <td>
                                     <form class="form-view-building" id="editBuilding" action="UserServlet" method="POST">

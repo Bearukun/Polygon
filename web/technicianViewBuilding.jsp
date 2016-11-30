@@ -36,8 +36,8 @@
             buildingRooms = (ArrayList<Room>) request.getSession().getAttribute("buildingRooms");
 
             ArrayList<Building> allBuildings = new ArrayList();
-            ArrayList<Healthcheck> allHealthchecks = new ArrayList();
-            allHealthchecks = (ArrayList<Healthcheck>) request.getSession().getAttribute("allHealthchecks");
+            ArrayList<Healthcheck> buildingHealthchecks = new ArrayList();
+            buildingHealthchecks = (ArrayList<Healthcheck>) request.getSession().getAttribute("buildingHealthchecks");
             ArrayList<Issue> healthcheckIssues = new ArrayList();
             healthcheckIssues = (ArrayList<Issue>) request.getSession().getAttribute("healthcheckIssues");
             int user_id = (Integer) request.getSession().getAttribute("user_id");
@@ -172,7 +172,7 @@
                         //Loop through entire buildings list
                         for (int i = 0; i < allBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
-                            if (allBuildings.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
+                            if (allBuildings.get(i).getbuildingId() == Integer.parseInt(request.getParameter("value"))) {
                                 //Save the building in the reference object build so its details can be shown on page
                                 build = allBuildings.get(i);
                                 request.getSession().setAttribute("buildingBeingEdited", build);
@@ -255,7 +255,7 @@
                     <%                        //Loop through entire buildings list
                         for (int i = 0; i < allBuildings.size(); i++) {
                             //If the currently selected building has the same building id as the one saved in the Session
-                            if (allBuildings.get(i).getBuilding_id() == Integer.parseInt(request.getParameter("value"))) {
+                            if (allBuildings.get(i).getbuildingId() == Integer.parseInt(request.getParameter("value"))) {
                                 //Save the building in the reference object build so its details can be shown on page
                                 build = allBuildings.get(i);
                                 request.getSession().setAttribute("buildingBeingEdited", build);
@@ -279,7 +279,7 @@
                                     Kvadratmeter: <%=build.getSqm()%>
                                 </td>
                                 <td>
-                                    <img src="./GetImage?type=building&id=<%=build.getBuilding_id()%>" class="img-fluid " height="250" alt="Responsive image">
+                                    <img src="./GetImage?type=building&id=<%=build.getbuildingId()%>" class="img-fluid " height="250" alt="Responsive image">
                                 </td>    
                                 <td>
                                     <form class="form-view-building" id="editBuilding" action="TechnicianServlet" method="POST">
@@ -356,10 +356,10 @@
                                     </td>
                                 </tr>
                                 <%
-                                //Loop through list of all healthchecks
-                                for (int j = 0; j < allHealthchecks.size(); j++) {
+                                //Loop through list of building healthchecks
+                                for (int j = 0; j < buildingHealthchecks.size(); j++) {
                                     //If healthcheck matches that saved in the Session (= the newest/currently open one)
-                                    if(allHealthchecks.get(j).getHealthcheck_id()== (Integer) request.getSession().getAttribute("healthcheckId")){
+                                    if(buildingHealthchecks.get(j).getHealthcheck_id()== (Integer) request.getSession().getAttribute("healthcheckId")){
                                         //For each issue pertaining this healthcheck
                                         for (int k = 0; k < healthcheckIssues.size(); k++) {
                                             //If the issue is for this area, print table row with issue details
@@ -368,11 +368,19 @@
                                                     <td colspan="2">
                                                         <%= healthcheckIssues.get(k).getDescription()%>
                                                     </td>
-                                                    <td colspan="2">
+                                                    <td>
                                                         <%= healthcheckIssues.get(k).getRecommendation()%>
                                                     </td>
-                                                    <td colspan="2">
+                                                    <td>
                                                         image
+                                                    </td>
+                                                    <td>
+                                                        <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                            <input type="hidden" name="origin" value="viewBuilding" />
+                                                            <input type="hidden" name="originSection" value="deleteIssueButton" />
+                                                            <input type="hidden" name="issueId" value="<%=healthcheckIssues.get(k).getIssue_id()%>" />
+                                                            <input class="btn btn-primary" type="submit" value="Slet problem" />
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             <%}
@@ -409,10 +417,11 @@
                                         </tr>
                                         
                                         <%
-                                //Loop through list of all healthchecks
-                                for (int m = 0; m < allHealthchecks.size(); m++) {
+                                //Loop through list of building healthchecks
+                                for (int m = 0; m < buildingHealthchecks.size(); m++) {
                                     //If healthcheck matches that saved in the Session (= the newest/currently open one)
-                                    if(allHealthchecks.get(m).getHealthcheck_id()== (Integer) request.getSession().getAttribute("healthcheckId")){
+                                    //if(buildingHealthchecks.get(m).getHealthcheck_id()== (Integer) request.getSession().getAttribute("healthcheckId")){
+                                    if(buildingHealthchecks.get(m).getHealthcheck_id()== (Integer) request.getSession().getAttribute("healthcheckId")){
                                         //For each issue pertaining this healthcheck
                                         for (int n = 0; n < healthcheckIssues.size(); n++) {
                                             //If the issue is for this room, print table row with issue details
@@ -421,11 +430,19 @@
                                                     <td colspan="2">
                                                         <%= healthcheckIssues.get(n).getDescription()%>
                                                     </td>
-                                                    <td colspan="2">
+                                                    <td>
                                                         <%= healthcheckIssues.get(n).getRecommendation()%>
                                                     </td>
-                                                    <td colspan="2">
+                                                    <td>
                                                         image
+                                                    </td>
+                                                    <td>
+                                                        <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                            <input type="hidden" name="origin" value="viewBuilding" />
+                                                            <input type="hidden" name="originSection" value="deleteIssueButton" />
+                                                            <input type="hidden" name="issueId" value="<%=healthcheckIssues.get(n).getIssue_id()%>" />
+                                                            <input class="btn btn-primary" type="submit" value="Slet problem" />
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             <%}

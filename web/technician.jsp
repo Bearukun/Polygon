@@ -84,14 +84,14 @@
                                         for(int x = 0; x < allBuildings.size(); x++){
                                             if(user_id ==  allBuildings.get(x).getAssigned_tech_id()){
                                 %><tr>
-                                    <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getbuildingId());%></td>  
                                     <% if(allBuildings.get(x).getHealthcheck_pending()==2){%>
                                         <td><%out.println(allBuildings.get(x).getName());%></td>
                                         <%} else{%>
                                         <td>
                                             <form class="submitLink" action="TechnicianServlet" method="POST">
                                                 <input type="submit" class="submitLink" value="<%=allBuildings.get(x).getName()%>" />
-                                                <input type="hidden" name="buildingID" value="<%=allBuildings.get(x).getBuilding_id()%>" />
+                                                <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getbuildingId()%>" />
                                                 <input type="hidden" name="origin" value="technicianOverview" />
                                             </form>
                                         </td>
@@ -108,7 +108,7 @@
                                     <td>
                                         <form action="TechnicianServlet" method="POST">
                                             <input type="hidden" name="origin" value="acceptHealthcheckButton" />
-                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getBuilding_id()%>" />
+                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getbuildingId()%>" />
                                             <input class="btn btn-primary" type="submit" value="Påbegynd" />
                                         </form>
                                     </td>

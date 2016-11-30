@@ -13,7 +13,7 @@ public class Healthcheck {
      */
     
     
-    private int healthcheck_id, tech_id, building_id;
+    private int healthcheck_id, tech_id, buildingId;
     private String building_responsible;
     private Timestamp date_created;
     
@@ -24,12 +24,12 @@ public class Healthcheck {
     public Healthcheck() {
     }
 
-    public Healthcheck(int healthcheck_id, Timestamp date_created, int tech_id, String building_responsible, int building_id) {
+    public Healthcheck(int healthcheck_id, Timestamp date_created, int tech_id, String building_responsible, int buildingId) {
         this.healthcheck_id = healthcheck_id;
         this.date_created = date_created;
         this.tech_id = tech_id;
         this.building_responsible = building_responsible;
-        this.building_id = building_id;
+        this.buildingId = buildingId;
     }
 
        /**
@@ -52,12 +52,12 @@ public class Healthcheck {
         this.tech_id = tech_id;
     }
 
-    public int getBuilding_id() {
-        return building_id;
+    public int getbuildingId() {
+        return buildingId;
     }
 
-    public void setBuilding_id(int building_id) {
-        this.building_id = building_id;
+    public void setbuildingId(int buildingId) {
+        this.buildingId = buildingId;
     }
 
     public String getBuilding_responsible() {

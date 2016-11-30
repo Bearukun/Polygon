@@ -8,7 +8,7 @@ public class Issue {
      * Variables corresponding to its database counterpart. 
      */
     
-    private int issue_id, building_id, area_id, room_id, healthcheck_id;
+    private int issue_id, buildingId, area_id, room_id, healthcheck_id;
     private String description, recommendation;
     
     
@@ -18,11 +18,11 @@ public class Issue {
     public Issue() {
     }
 
-    public Issue(int issue_id, String description, String recommendation, int building_id, int area_id, int room_id, int healthcheck_id) {
+    public Issue(int issue_id, String description, String recommendation, int buildingId, int area_id, int room_id, int healthcheck_id) {
         this.issue_id = issue_id;
         this.description = description;
         this.recommendation = recommendation;
-        this.building_id = building_id;
+        this.buildingId = buildingId;
         this.area_id = area_id;
         this.room_id = room_id;
         this.healthcheck_id = healthcheck_id;
@@ -41,12 +41,12 @@ public class Issue {
         this.issue_id = issue_id;
     }
 
-    public int getBuilding_id() {
-        return building_id;
+    public int getbuildingId() {
+        return buildingId;
     }
 
-    public void setBuilding_id(int building_id) {
-        this.building_id = building_id;
+    public void setbuildingId(int buildingId) {
+        this.buildingId = buildingId;
     }
 
     public int getArea_id() {

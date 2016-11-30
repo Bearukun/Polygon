@@ -677,7 +677,7 @@ public class BuildingMapper implements BuildingMapperInterface {
         try {
             //Get connection object.
             con = DBConnection.getConnection();
-            String sql = "UPDATE polygon.building SET healthcheck_pending=? WHERE building_id=?; INSERT INTO polygon.healthcheck (tech_id, building_id) VALUES (?, ?);";
+            String sql = "UPDATE polygon.building SET healthcheck_pending=? WHERE building_id=?; ALTER TABLE polygon.healthcheck AUTO_INCREMENT=1;INSERT INTO polygon.healthcheck (tech_id, building_id) VALUES (?, ?);";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, 3);
@@ -741,6 +741,41 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
                 //throw error if not successful. 
                  throw new Exception("SQL Error:@DBFacade.acceptHealthcheck."+ex.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * Method to delete an issue
+     * @param issueId int specifying which issue is to be deleted
+     * @throws Exception 
+     */
+    @Override
+    public void deleteIssue(int issueId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "DELETE FROM issue WHERE issue_id = ?;ALTER TABLE issue AUTO_INCREMENT=1;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, issueId);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.deleteIssue."+ex.getMessage());
             }
         }
     }

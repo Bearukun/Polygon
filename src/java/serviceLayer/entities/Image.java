@@ -4,17 +4,17 @@ import java.sql.Blob;
 
 public class Image {
     
-    private int image_id, issue_id, building_id;
+    private int image_id, issue_id, buildingId;
     private String img_name;
     private Blob img_file;
 
     public Image() {
     }
 
-    public Image(int image_id, int issue_id, int building_id, String img_name, Blob img_file) {
+    public Image(int image_id, int issue_id, int buildingId, String img_name, Blob img_file) {
         this.image_id = image_id;
         this.issue_id = issue_id;
-        this.building_id = building_id;
+        this.buildingId = buildingId;
         this.img_name = img_name;
         this.img_file = img_file;
     }
@@ -35,12 +35,12 @@ public class Image {
         this.issue_id = issue_id;
     }
 
-    public int getBuilding_id() {
-        return building_id;
+    public int getbuildingId() {
+        return buildingId;
     }
 
-    public void setBuilding_id(int building_id) {
-        this.building_id = building_id;
+    public void setbuildingId(int buildingId) {
+        this.buildingId = buildingId;
     }
 
     public String getImg_name() {

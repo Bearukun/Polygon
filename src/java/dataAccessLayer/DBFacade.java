@@ -59,8 +59,8 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void deleteBuilding(int building_id) throws Exception {
-        bmi.deleteBuilding(building_id);
+    public void deleteBuilding(int buildingId) throws Exception {
+        bmi.deleteBuilding(buildingId);
     }
 
     @Override
@@ -92,18 +92,18 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public ArrayList<Area> getAreas(int building_id) throws Exception {
-        return bmi.getAreas(building_id);
+    public ArrayList<Area> getAreas(int buildingId) throws Exception {
+        return bmi.getAreas(buildingId);
     }
 
     @Override
-    public ArrayList<Room> getRooms(int building_id) throws Exception {
-        return bmi.getRooms(building_id);
+    public ArrayList<Room> getRooms(int buildingId) throws Exception {
+        return bmi.getRooms(buildingId);
     }
 
     @Override
-    public void createArea(String name, String description, int sqm, int building_id) throws Exception {
-        bmi.createArea(name, description, sqm, building_id);
+    public void createArea(String name, String description, int sqm, int buildingId) throws Exception {
+        bmi.createArea(name, description, sqm, buildingId);
     }
 
     @Override
@@ -122,8 +122,8 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void toggleHealthcheck(int building_id, int healthcheck_pending) throws Exception {
-        bmi.toggleHealthcheck(building_id, healthcheck_pending);
+    public void toggleHealthcheck(int buildingId, int healthcheck_pending) throws Exception {
+        bmi.toggleHealthcheck(buildingId, healthcheck_pending);
     }
 
     @Override
@@ -138,8 +138,8 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public Image getBuildingImage(int building_id) throws Exception {
-        return dmi.getBuildingImage(building_id);
+    public Image getBuildingImage(int buildingId) throws Exception {
+        return dmi.getBuildingImage(buildingId);
     }
 
     @Override
@@ -148,8 +148,8 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public boolean hasImage(DataMapperInterface.ImageType imageType, int issue_id, int building_id) throws Exception {
-        return dmi.hasImage(imageType, issue_id, building_id);
+    public boolean hasImage(DataMapperInterface.ImageType imageType, int issue_id, int buildingId) throws Exception {
+        return dmi.hasImage(imageType, issue_id, buildingId);
     }
 
     @Override
@@ -158,13 +158,13 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
-        dmi.uploadBuildingImage(building_id, img_name, img_file);
+    public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws Exception {
+        dmi.uploadBuildingImage(buildingId, img_name, img_file);
     }
 
     @Override
-    public void updateImage(DataMapperInterface.ImageType imageType, int issue_id, int building_id, String img_name, InputStream img_file) throws Exception {
-        dmi.updateImage(imageType, issue_id, building_id, img_name, img_file);
+    public void updateImage(DataMapperInterface.ImageType imageType, int issue_id, int buildingId, String img_name, InputStream img_file) throws Exception {
+        dmi.updateImage(imageType, issue_id, buildingId, img_name, img_file);
     }
 
     @Override
@@ -182,6 +182,11 @@ public class DBFacade implements DBFacadeInterface {
         bmi.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
     }
 
+    @Override
+    public void deleteIssue(int issueId) throws Exception {
+        bmi.deleteIssue(issueId);
+    }
+    
     @Override
     public ArrayList<Healthcheck> getAllHealthchecks() throws Exception {
         return bmi.getAllHealthchecks();
