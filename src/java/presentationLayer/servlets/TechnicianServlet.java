@@ -276,9 +276,74 @@ public class TechnicianServlet extends HttpServlet {
                         getHealthcheckIssues(request, healthcheckId);
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
-                    
+                    //If a healthcheck PDF report needs deleting
+                    else if(request.getParameter("originSection").equals("createPDFButton")){
+                        
+                        
+                        
+                        
+                        String pdfName = "newpdfname";
+                        //String bName = build.getName();
+                        String bName = "aaa";
+                        String bAddress = "";
+                        String bPostCode = "2800";
+                        String bCity = "";
+                        String bConstructionYear = "1980";
+                        String bSQM = "200";
+                        String bPurpose = "";
+                        String bOwner = "";
+                        
+                        
+                        String folderPath = "C:\\Users\\Martin\\Documents\\NetBeansProjects\\Polygon\\web\\img";
+                        String filePath ="C:\\Users\\Martin\\Documents\\NetBeansProjects\\Polygon\\";
+                                
+                        String imgFolderPath = folderPath;
+                        String savePath = filePath;
+
+                        
+                        
+                        
+                        
+                        String systemDir = System.getProperty("user.dir");
+                        System.out.println(systemDir);
+
+                        String picturePath = "";
+                        /*
+                        //Filechooser for selecting an image for the generated PDF
+                        JFileChooser choose = new JFileChooser();
+                        FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
+                        choose.setFileFilter(filter);
+                        String picturePath = "";
+                        String folderPath = "";
+                        int returnVal = choose.showOpenDialog(choose);
+
+                        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+                            picturePath = choose.getSelectedFile().getAbsolutePath();
+                            folderPath = "" + choose.getCurrentDirectory();
+                            System.out.println(picturePath);
+                            System.out.println(folderPath + " Folder sti");
+
+                            System.out.println(picturePath);
+                        }*/
+
+                        pdfwt.createPDF(pdfName, bName, bAddress,
+                                Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
+                                Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
+
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    break;
+
+                        
+                        
+                        
+                        
+                    }
 
                     break;
+                    
+                    
+                    
 
                 case "editProfile":
 

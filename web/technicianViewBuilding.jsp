@@ -471,6 +471,11 @@
                     </table>
                     <br><br>    
 
+                    <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                        <input type="hidden" name="origin" value="viewBuilding" />
+                        <input type="hidden" name="originSection" value="createPDFButton" />
+                        <input class="btn btn-primary" type="submit" value="Generer PDF sundhedsrapport" />
+                    </form>
                     <br><br><br><br><br><br><br><br><br>  
 
                     <table text-align="left" class="table">
