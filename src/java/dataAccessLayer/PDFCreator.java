@@ -990,159 +990,22 @@ public class PDFCreator {
         singleTextLine(content, "Bemærkning", 10, 335, 610);
         singleTextLine(content, "Ingen Bemærkning", 10, 420, 610);
         singleTextLine(content, "Billede", 10, 540, 610);
-//        
-//        boolean wallNotes = false;
-//        boolean wallPicture = false;
 
-        boolean ceilingNotes = false;
-        boolean ceilingPicture = false;
-
-        boolean floorNotes = false;
-        boolean floorPicture = false;
-
-        boolean windowNotes = false;
-        boolean windowPicture = false;
-
-        boolean doorNotes = false;
-        boolean doorPicture = false;
-
-        boolean other1Notes = false;
-        boolean other1Picture = false;
-
-        boolean other2Notes = false;
-        boolean other2Picture = false;
 
         //Test of method
-        wallWalkthrough(content, imgFolderPath, true, true, "it works!",
+        wallWalkthrough(content, imgFolderPath, false, false, "it works!",
                 600, 596, 590, 600, 600, 0);
-        //Loft
-        singleTextLine(content, "Loft", 10, 50, 520);
-        //Underlinde-jpg
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 516, 20, 2);
-        //Bemærkning / Ingen Bemærkning
-        if (ceilingNotes == true) {
-            //set "Bermærkninger" true
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 510);
-
-            checkBoxImg(true, imgFolderPath, content, 360, 520, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 460, 520, 7, 7);
-
-        } else if (ceilingNotes != true || ceilingNotes == false) {
-            //set "Bermærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 360, 520, 7, 7);
-            //Set "ingen bemærkninger" true
-            checkBoxImg(true, imgFolderPath, content, 460, 520, 7, 7);
-        }
-
-        //Billede
-        if (ceilingPicture == true) {
-            //set "Picture" true
-            checkBoxImg(true, imgFolderPath, content, 553, 520, 7, 7);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-
-        } else if (ceilingPicture != true || ceilingPicture == false) {
-            // set "Picture" false
-            checkBoxImg(false, imgFolderPath, content, 553, 520, 7, 7);
-        }
-
-        //Gulv
-        singleTextLine(content, "Gulv", 10, 50, 440);
-        //Underlinde-jpg
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 436, 23, 2);
-        //Bemærkning / Ingen Bemærkning
-        if (floorNotes == true) {
-            //set "Bermærkninger" true
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 430);
-
-            checkBoxImg(true, imgFolderPath, content, 360, 440, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 460, 440, 7, 7);
-
-        } else if (floorNotes != true || floorNotes == false) {
-            //set "Bermærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 360, 440, 7, 7);
-            //Set "ingen bemærkninger" true
-            checkBoxImg(true, imgFolderPath, content, 460, 440, 7, 7);
-        }
-        //Billede
-        if (floorPicture == true) {
-            //set "Picture" true
-            checkBoxImg(true, imgFolderPath, content, 553, 440, 7, 7);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-        } else if (floorPicture != true || floorPicture == false) {
-            // set "Picture" false
-            checkBoxImg(false, imgFolderPath, content, 553, 440, 7, 7);
-        }
-
-        //Vinduer
-        singleTextLine(content, "Vinduer", 10, 50, 360);
-        //Underlinde-jpg
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 356, 45, 2);
-        if (windowNotes == true) {
-            //set "Bermærkninger" true
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
-
-            checkBoxImg(true, imgFolderPath, content, 360, 360, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 460, 360, 7, 7);
-
-        } else if (windowNotes != true || windowNotes == false) {
-            //set "Bermærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 360, 360, 7, 7);
-            //Set "ingen bemærkninger" true
-            checkBoxImg(true, imgFolderPath, content, 460, 360, 7, 7);
-        }
-        //Billede
-        if (windowPicture == true) {
-            //set "Picture" true
-            checkBoxImg(true, imgFolderPath, content, 553, 360, 7, 7);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-        } else if (windowPicture != true || windowPicture == false) {
-            // set "Picture" false
-            checkBoxImg(false, imgFolderPath, content, 553, 360, 7, 7);
-        }
-
-        //Døre
-        singleTextLine(content, "Døre", 10, 50, 280);
-        //Underlinde-jpg
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 276, 23, 2);
-        if (doorNotes == true) {
-            //set "Bermærkninger" true
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
-
-            checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 460, 280, 7, 7);
-
-        } else if (doorNotes != true || doorNotes == false) {
-            //set "Bermærkninger" false
-            checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
-            //Set "ingen bemærkninger" true
-            checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
-        }
-        //Billede
-        if (doorPicture == true) {
-            //set "Picture" true
-            checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-        } else if (doorPicture != true || doorPicture == false) {
-            // set "Picture" false
-            checkBoxImg(false, imgFolderPath, content, 553, 280, 7, 7);
-        }
-
-        //Andet 1
-        //Underlinde-jpg
-        //Bemærkning / Ingen Bemærkning
-        //Billede
-        //Andet 2
-        //Underlinde-jpg
-        //Bemærkning / Ingen Bemærkning
-        //Billede
+        ceilingWalkthrough(content, imgFolderPath, true, true, "it really works!",
+                520, 516, 510, 520, 520, 0);
+        floorWalkthrough(content, imgFolderPath, false, false, "Holy hell!",
+                440, 436, 430, 440, 440, 0);
+        windowsWalkthrough(content, imgFolderPath, true, false, "When the night...",
+                360, 356, 350, 360, 360, 0);
+        doorWalkthrough(content, imgFolderPath, true, true, "... has come", 
+                280, 276, 270, 280, 280, 0);
+        
+        otherWalkthrough(content, imgFolderPath, true, false, "Jambo jambo!",
+                200, 196, 190, 200, 200, 0);
     }
 
     //int wallTitelXCoordinate, int wallTitelYCoordinate
@@ -1196,6 +1059,239 @@ public class PDFCreator {
         } else if (wallPicture != true || wallPicture == false) {
             // set "Picture" false
             //checkBoxImg(false, imgFolderPath, content, 553, 600, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+        }
+    }
+    
+    public void ceilingWalkthrough(PDPageContentStream content, String imgFolderPath,
+            boolean ceilingNotes, boolean ceilingPicture, String ceilingNoteText,
+            int ceilingTitelYCoordinate, int underlineJPGYCoordinate,
+            int celingNoteTextYCoordinate, int ceilingNotesCheckBoxImgYCoordinate,
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+        //Loft
+        //singleTextLine(content, "Loft", 10, 50, 520);
+        singleTextLine(content, "Loft", 10, 50, ceilingTitelYCoordinate);
+        //Underlinde-jpg
+        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 516, 20, 2);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 20, 2);
+        //Bemærkning / Ingen Bemærkning
+        if (ceilingNotes == true) {
+            //set "Bermærkninger" true
+           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/"" + ceilingNoteText, 8, 50, 510);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/"" + ceilingNoteText, 8, 50, celingNoteTextYCoordinate);
+
+            //checkBoxImg(true, imgFolderPath, content, 360, 520, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 360,ceilingNotesCheckBoxImgYCoordinate, 7, 7);
+
+            //Set "ingen bemærkninger" false
+           // checkBoxImg(false, imgFolderPath, content, 460, 520, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 460, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
+
+        } else if (ceilingNotes != true || ceilingNotes == false) {
+            //set "Bermærkninger" false
+            //checkBoxImg(false, imgFolderPath, content, 360, 520, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 360, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
+            //Set "ingen bemærkninger" true
+            //checkBoxImg(true, imgFolderPath, content, 460, 520, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 460, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
+        }
+
+        //Billede
+        if (ceilingPicture == true) {
+            //set "Picture" true
+            //checkBoxImg(true, imgFolderPath, content, 553, 520, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
+
+        } else if (ceilingPicture != true || ceilingPicture == false) {
+            // set "Picture" false
+            //checkBoxImg(false, imgFolderPath, content, 553, 520, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+        }
+    }
+    
+    public void floorWalkthrough(PDPageContentStream content, String imgFolderPath,
+            boolean floorNotes, boolean floorPicture, String floorNoteText,
+            int floorTitelYCoordinate, int underlineJPGYCoordinate,
+            int floorNoteTextYCoordinate, int floorNotesCheckBoxImgYCoordinate,
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+        //Gulv
+        //singleTextLine(content, "Gulv", 10, 50, 440);
+        singleTextLine(content, "Gulv", 10, 50, floorTitelYCoordinate);
+        //Underlinde-jpg
+        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 436, 23, 2);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
+        //Bemærkning / Ingen Bemærkning
+        if (floorNotes == true) {
+            //set "Bermærkninger" true
+            //singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 430);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ ""+ floorNoteText, 8, 50, floorNoteTextYCoordinate);
+
+            //checkBoxImg(true, imgFolderPath, content, 360, 440, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 360, floorNotesCheckBoxImgYCoordinate, 7, 7);
+
+            //Set "ingen bemærkninger" false
+            //checkBoxImg(false, imgFolderPath, content, 460, 440, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 460, floorNotesCheckBoxImgYCoordinate, 7, 7);
+
+        } else if (floorNotes != true || floorNotes == false) {
+            //set "Bermærkninger" false
+            //checkBoxImg(false, imgFolderPath, content, 360, 440, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 360, floorNotesCheckBoxImgYCoordinate, 7, 7);
+            //Set "ingen bemærkninger" true
+            //checkBoxImg(true, imgFolderPath, content, 460, 440, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 460, floorNotesCheckBoxImgYCoordinate, 7, 7);
+        }
+        //Billede
+        if (floorPicture == true) {
+            //set "Picture" true
+            //checkBoxImg(true, imgFolderPath, content, 553, 440, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0,  pictureIMGYCoordinate, 0, 0);
+        } else if (floorPicture != true || floorPicture == false) {
+            // set "Picture" false
+            //checkBoxImg(false, imgFolderPath, content, 553, 440, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+        }
+        
+        
+    }
+    
+    public void windowsWalkthrough(PDPageContentStream content, String imgFolderPath,
+            boolean windowNotes, boolean windowPicture, String windowNoteText,
+            int windowTitelYCoordinate, int underlineJPGYCoordinate,
+            int windowNoteTextYCoordinate, int windowNotesCheckBoxImgYCoordinate,
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+        //Vinduer
+        //singleTextLine(content, "Vinduer", 10, 50, 360);
+        singleTextLine(content, "Vinduer", 10, 50, windowTitelYCoordinate);
+        //Underlinde-jpg
+        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 356, 45, 2);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 45, 2);
+        if (windowNotes == true) {
+            //set "Bermærkninger" true
+           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ ""+windowNoteText, 8, 50, windowNoteTextYCoordinate);
+
+            //checkBoxImg(true, imgFolderPath, content, 360, 360, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 360, windowNotesCheckBoxImgYCoordinate, 7, 7);
+
+            //Set "ingen bemærkninger" false
+           // checkBoxImg(false, imgFolderPath, content, 460, 360, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 460, windowNotesCheckBoxImgYCoordinate, 7, 7);
+
+        } else if (windowNotes != true || windowNotes == false) {
+            //set "Bermærkninger" false
+           // checkBoxImg(false, imgFolderPath, content, 360, 360, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 360, windowNotesCheckBoxImgYCoordinate, 7, 7);
+            //Set "ingen bemærkninger" true
+           // checkBoxImg(true, imgFolderPath, content, 460, 360, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 460, windowNotesCheckBoxImgYCoordinate, 7, 7);
+        }
+        //Billede
+        if (windowPicture == true) {
+            //set "Picture" true
+            //checkBoxImg(true, imgFolderPath, content, 553, 360, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
+        } else if (windowPicture != true || windowPicture == false) {
+            // set "Picture" false
+            //checkBoxImg(false, imgFolderPath, content, 553, 360, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+        }
+    }
+    
+    public void doorWalkthrough(PDPageContentStream content, String imgFolderPath,
+            boolean doorNotes, boolean doorPicture, String doorNoteText,
+            int doorTitelYCoordinate, int underlineJPGYCoordinate,
+            int doorNoteTextYCoordinate, int doorNotesCheckBoxImgYCoordinate,
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+        
+         //Døre
+        //singleTextLine(content, "Døre", 10, 50, 280);
+        singleTextLine(content, "Døre", 10, 50, doorTitelYCoordinate);
+        //Underlinde-jpg
+        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 276, 23, 2);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
+        if (doorNotes == true) {
+            //set "Bermærkninger" true
+           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + doorNoteText, 8, 50, doorNoteTextYCoordinate);
+
+           // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 360, doorNotesCheckBoxImgYCoordinate, 7, 7);
+
+            //Set "ingen bemærkninger" false
+            //checkBoxImg(false, imgFolderPath, content, 460, 280, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 460, doorNotesCheckBoxImgYCoordinate, 7, 7);
+
+        } else if (doorNotes != true || doorNotes == false) {
+            //set "Bermærkninger" false
+           // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 360, doorNotesCheckBoxImgYCoordinate, 7, 7);
+            //Set "ingen bemærkninger" true
+            //checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 460, doorNotesCheckBoxImgYCoordinate, 7, 7);
+        }
+        //Billede
+        if (doorPicture == true) {
+            //set "Picture" true
+           // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
+        } else if (doorPicture != true || doorPicture == false) {
+            // set "Picture" false
+            //checkBoxImg(false, imgFolderPath, content, 553, 280, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+        }
+    }
+    
+    public void otherWalkthrough(PDPageContentStream content, String imgFolderPath,
+            boolean otherNotes, boolean otherPicture, String otherNoteText,
+            int otherTitelYCoordinate, int underlineJPGYCoordinate,
+            int otherNoteTextYCoordinate, int otherNotesCheckBoxImgYCoordinate,
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+        
+         //Andet
+        //singleTextLine(content, "Andet", 10, 50, 280);
+        singleTextLine(content, "Andet", 10, 50, otherTitelYCoordinate);
+        //Underlinde-jpg
+        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 276, 23, 2);
+        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
+        if (otherNotes == true) {
+            //set "Bermærkninger" true
+           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + otherNoteText, 8, 50, otherNoteTextYCoordinate);
+
+           // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 360, otherNotesCheckBoxImgYCoordinate, 7, 7);
+
+            //Set "ingen bemærkninger" false
+            //checkBoxImg(false, imgFolderPath, content, 460, 280, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 460, otherNotesCheckBoxImgYCoordinate, 7, 7);
+
+        } else if (otherNotes != true || otherNotes == false) {
+            //set "Bermærkninger" false
+           // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
+            checkBoxImg(false, imgFolderPath, content, 360, otherNotesCheckBoxImgYCoordinate, 7, 7);
+            //Set "ingen bemærkninger" true
+            //checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 460, otherNotesCheckBoxImgYCoordinate, 7, 7);
+        }
+        //Billede
+        if (otherPicture == true) {
+            //set "Picture" true
+           // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
+        } else if (otherPicture != true || otherPicture == false) {
+            // set "Picture" false
+            //checkBoxImg(false, imgFolderPath, content, 553, 280, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
         }
     }
