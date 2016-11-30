@@ -72,30 +72,30 @@ public class PDFCreator {
     public void createPDF(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath) {
 
-        page1Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
+        frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
 
-        page2Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
+        buildingOuterWalkthrough(pdfName, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
 
-        page3Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
+        roomMoistReport(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
 
-        page4Setup(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
+        roomWalkthrough(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
 
-        page5Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
+        buildingConclusion(pdfName, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
 
-        page6Setup(pdfName, picturePath, imgFolderPath, savePath, doc);
+        lastPage(pdfName, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
 
@@ -128,7 +128,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 1
-    public void page1Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
+    public void frontPage(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
         //!REMOVE UPON COMPLETION OF PDFGENERATOR!
@@ -321,7 +321,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 2
-    public void page2Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+    public void buildingOuterWalkthrough(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -390,7 +390,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 3
-    public void page3Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
+    public void roomMoistReport(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
         //Creates a new page Object
@@ -431,7 +431,7 @@ public class PDFCreator {
 
     //Setup of Page 4
     //If "Ingen bemærkning" on Page 4, DOES THIS PAGE NEED TO BE GENERATED!?
-    public void page4Setup(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
+    public void roomWalkthrough(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
         //Creates a new page Object
@@ -462,7 +462,7 @@ public class PDFCreator {
     }
     //Setup of Page 5
 
-    public void page5Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+    public void buildingConclusion(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -492,7 +492,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 6
-    public void page6Setup(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+    public void lastPage(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
