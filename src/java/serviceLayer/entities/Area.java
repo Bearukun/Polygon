@@ -1,21 +1,44 @@
 package serviceLayer.entities;
 
+/**
+ * Class dealing with areas
+ */
 public class Area {
-    
-    private int area_id, sqm, building_id;   
+
+     /**
+     * Variables corresponding to its database counterpart. 
+     */
+    private int area_id, sqm, building_id;
     private String name, description;
 
+    /**
+     * Empty constructor. 
+     */
     public Area() {
     }
 
+    /**
+     * constructor to instantiate a specific area
+     * @param area_id int identifying the area from the database
+     * @param name String containing the areas name
+     * @param description String containing the areas description
+     * @param sqm int containing the areas size in square meters
+     * @param building_id int identifying the building that is linked to the area
+     */
+    
     public Area(int area_id, String name, String description, int sqm, int building_id) {
         this.area_id = area_id;
-        this.name = name;
+        this.name = name; 
         this.description = description;
         this.sqm = sqm;
         this.building_id = building_id;
     }
 
+    /**
+     * 
+     * @return getters & setters
+     */
+    
     public int getArea_id() {
         return area_id;
     }
@@ -55,5 +78,5 @@ public class Area {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
 }

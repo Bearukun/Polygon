@@ -3,7 +3,9 @@ package serviceLayer.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-
+/**
+ * Class dealing with buildings
+ */
 public class Building {
     
     /**
@@ -30,6 +32,22 @@ public class Building {
     public Building() {
     }
 
+    /**
+     * Constructor to instantiate a specific building, used when creating new buildings and so on
+     * @param building_id int identifying the building from the database
+     * @param name String containing the buildings name
+     * @param date_created timestamp containing the date the buildings was added to the database
+     * @param address String containing the buildings address
+     * @param postcode int containing the buildings postcode
+     * @param city String containing the buildings city
+     * @param condition type defining the buildings condition
+     * @param construction_year int containing the buildings construction year
+     * @param purpose String containing the buildings purpose
+     * @param sqm int containing the buildings size in square meters
+     * @param healthcheck_pending boolean saying if the building have a pending healthcheck or not
+     * @param assigned_tech_id int containing the id of the technician thats assigned to the buildings healthcheck
+     * @param user_id int identifying the user that is linked to the building
+     */
     public Building(int building_id, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, int healthcheck_pending, int assigned_tech_id, int user_id) {
         this.building_id = building_id;
         this.name = name;

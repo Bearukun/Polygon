@@ -1,25 +1,51 @@
 package serviceLayer.entities;
 
+/**
+ * Class dealing with users
+ */
 public class User {
 
+    /**
+     * Enum used to show a users different types.  
+     */
     public enum type {
 
         CUSTOMER, TECHNICIAN, ADMIN
 
     }
 
+     /**
+     * Variables corresponding to its database counterpart. 
+     */
     private int user_id, phone, postcode;
     private String email, password, name, company, address, city;
     private type type;
     
 
 
-
+    /**
+     * Constructor used when logging in (NEED TO BE REMOVED WHEN NEW LOGIN HAS BEEN MADE)
+     * @param user_id int identifying the user from the database
+     * @param email String containing the users email
+     */
     public User(int user_id, String email) {
         this.user_id = user_id;
         this.email = email;
     }
 
+    /**
+     * Constructor to instantiate a specific user, used when creating new users and so on
+     * @param user_id int identifying the user from the database
+     * @param email String containing the users email
+     * @param password String containing the users password
+     * @param type enum containing the type of the user
+     * @param name String containing the users name
+     * @param phone int containing the users phone number
+     * @param company String containing the users conpany name
+     * @param address String containing the companys address
+     * @param postcode int containing the companys postcode
+     * @param city String containing the companys city
+     */
     public User(int user_id, String email, String password, type type, String name, int phone, String company, String address, int postcode, String city) {
         this.user_id = user_id;
         this.email = email;
@@ -33,15 +59,28 @@ public class User {
         this.city = city;
     }
 
+    /**
+     * Empty constructor. 
+     */
     public User() {
     }
     
+    /**
+     * Constructor used in getTechnicians in the AdminServlet
+     * @param user_id int identifying the user from the database
+     * @param email String containing the users email
+     * @param name String containing the users name
+     */
     public User(int user_id, String email, String name) {
         this.user_id = user_id;
         this.email = email;
         this.name = name;
     }
 
+    /**
+     * 
+     * @return getters & setters
+     */
     public int getUser_id() {
         return user_id;
     }
