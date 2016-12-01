@@ -10,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Area;
@@ -280,57 +282,55 @@ public class TechnicianServlet extends HttpServlet {
                     else if(request.getParameter("originSection").equals("createPDFButton")){
                         
                         
-                        
-                        
-                        String pdfName = "newpdfname";
-                        //String bName = build.getName();
-                        String bName = "aaa";
-                        String bAddress = "";
-                        String bPostCode = "2800";
-                        String bCity = "";
-                        String bConstructionYear = "1980";
-                        String bSQM = "200";
-                        String bPurpose = "";
-                        String bOwner = "";
-                        
-                        
-                        String folderPath = "C:\\Users\\Martin\\Documents\\NetBeansProjects\\Polygon\\web\\img";
-                        String filePath ="C:\\Users\\Martin\\Documents\\NetBeansProjects\\Polygon\\";
-                                
-                        String imgFolderPath = folderPath;
-                        String savePath = filePath;
+                        System.out.println("" +build.getName());
+                    String pdfName = build.getName() +  "-" + build.getbuildingId();
+                    String bName = build.getName();
+                    String bAddress =build.getAddress();
+                    String bPostCode = "" + build.getPostcode();
+                    String bCity = build.getCity();
+                    String bConstructionYear = ""+build.getConstruction_year();
+                    String bSQM ="" + build.getSqm();
+                    String bPurpose =build.getPurpose();
+                    String bOwner = "23";
+                    String imgFolderPath ="E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\";
+                    String savePath ="E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\";
+;
+                         
+                    String picturePath = "";
+
+                    String systemDir = System.getProperty("user.dir");
+                    System.out.println(systemDir);
 
                         
                         
                         
                         
-                        String systemDir = System.getProperty("user.dir");
-                        System.out.println(systemDir);
+                       
 
-                        String picturePath = "";
-                        /*
-                        //Filechooser for selecting an image for the generated PDF
-                        JFileChooser choose = new JFileChooser();
-                        FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
-                        choose.setFileFilter(filter);
-                        String picturePath = "";
-                        String folderPath = "";
-                        int returnVal = choose.showOpenDialog(choose);
-
-                        if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-                            picturePath = choose.getSelectedFile().getAbsolutePath();
-                            folderPath = "" + choose.getCurrentDirectory();
-                            System.out.println(picturePath);
-                            System.out.println(folderPath + " Folder sti");
-
-                            System.out.println(picturePath);
-                        }*/
+                      
+                        
+//                        //Filechooser for selecting an image for the generated PDF
+//                        JFileChooser choose = new JFileChooser();
+//                        FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
+//                        choose.setFileFilter(filter);
+//                        String picturePath = "";
+//                        
+//                        int returnVal = choose.showOpenDialog(choose);
+//
+//                        if (returnVal == JFileChooser.APPROVE_OPTION) {
+//
+//                            picturePath = choose.getSelectedFile().getAbsolutePath();
+//                            folderPath = "" + choose.getCurrentDirectory();
+//                            System.out.println(picturePath);
+//                            System.out.println(folderPath + " Folder sti");
+//
+//                            System.out.println(picturePath);
+//                        }
 
                         pdfwt.createPDF(pdfName, bName, bAddress,
                                 Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
                                 Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
-
+                        
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     break;
 

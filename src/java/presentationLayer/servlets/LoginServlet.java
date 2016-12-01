@@ -247,7 +247,7 @@ public class LoginServlet extends HttpServlet {
 
                 case "pdfwithtext":
 
-                    String pdfName = request.getParameter("pdfname");
+                     String pdfName = request.getParameter("pdfname");
                     String bName = request.getParameter("buildingname");
                     String bAddress = request.getParameter("buildingadddress");
                     String bPostCode = request.getParameter("buildingpostcode"); //String that needs to parse into int!

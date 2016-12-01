@@ -56,14 +56,14 @@
             <p>Billeder folder</p>                      
             <p>Mac: /Users/Ceo/NetBeansProjects/Polygon/web/img/ </p>    
             <p>Windows: E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\ </p>
-            <input type="text" name="folderPath" value="/Users/Ceo/NetBeansProjects/Polygon/web/img/" />
+            <input type="text" name="folderPath" value="E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\" />
             <br><br>
 
             <!--Manually set the save folder-->
             <p>Save Folder</p>                      
             <p>Mac: /Users/Ceo/NetBeansProjects/Polygon/pdf/ </p>    
             <p>Windows: E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\ </p>
-            <input type="text" name="savePath" value="/Users/Ceo/NetBeansProjects/Polygon/pdf/" />
+            <input type="text" name="savePath" value="E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\" />
             <br><br>
 
             <input type="hidden" name="origin" value="pdfwithtext" />

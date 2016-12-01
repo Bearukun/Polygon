@@ -72,9 +72,11 @@ public class PDFCreator {
     public void createPDF(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath) {
 
+        System.out.println("HEY!");
         frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
+        System.out.println("MOVING!");
         pageNumber++;
 
         buildingOuterWalkthrough(pdfName, picturePath, imgFolderPath, savePath, doc);
