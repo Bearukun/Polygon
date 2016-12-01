@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Healthcheck;
+import serviceLayer.entities.Issue;
 import serviceLayer.entities.Room;
 /**
  * Class dealing with building data
@@ -18,6 +20,9 @@ public class BuildingMapper implements BuildingMapperInterface {
     //Declare and instantiate ArrayLists.
     private ArrayList<Building> userBuilding = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
+    private ArrayList<Healthcheck> buildingHealthchecks = new ArrayList();
+    private ArrayList<Healthcheck> allHealthchecks = new ArrayList();
+    private ArrayList<Issue> healthcheckIssues = new ArrayList();
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
 
@@ -672,7 +677,7 @@ public class BuildingMapper implements BuildingMapperInterface {
         try {
             //Get connection object.
             con = DBConnection.getConnection();
-            String sql = "UPDATE polygon.building SET healthcheck_pending=? WHERE building_id=?; INSERT INTO polygon.healthcheck (tech_id, building_id) VALUES (?, ?);";
+            String sql = "UPDATE polygon.building SET healthcheck_pending=? WHERE building_id=?; ALTER TABLE polygon.healthcheck AUTO_INCREMENT=1;INSERT INTO polygon.healthcheck (tech_id, building_id) VALUES (?, ?);";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, 3);
@@ -693,5 +698,234 @@ public class BuildingMapper implements BuildingMapperInterface {
                  throw new Exception("SQL Error:@DBFacade.acceptHealthcheck."+ex.getMessage());
             }
         }
+    }
+
+    @Override
+    public void createIssue(int building_id, int area_id, int room_id, String description, String recommendation, int healthcheck_id) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            String sql="";
+            if(room_id==0){
+                sql = "INSERT INTO polygon.issue (description, recommendation, building_id, area_id, room_id, healthcheck_id) VALUES (?, ?, ?, ?, NULL, ?)";
+            }
+            else if(room_id!=0){
+                sql = "INSERT INTO polygon.issue (description, recommendation, building_id, area_id, room_id, healthcheck_id) VALUES (?, ?, ?, ?, ?, ?)";
+            }
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, description);
+            stmt.setString(2, recommendation);
+            stmt.setInt(3, building_id);
+            stmt.setInt(4, area_id);
+            if(room_id!=0){
+                stmt.setInt(5, room_id);
+                stmt.setInt(6, healthcheck_id);
+            }
+            else if(room_id==0){
+                stmt.setInt(5, healthcheck_id);
+            }
+
+            //Execute update.
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.acceptHealthcheck."+ex.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * Method to delete an issue
+     * @param issueId int specifying which issue is to be deleted
+     * @throws Exception 
+     */
+    @Override
+    public void deleteIssue(int issueId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "DELETE FROM issue WHERE issue_id = ?;ALTER TABLE issue AUTO_INCREMENT=1;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, issueId);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.deleteIssue."+ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.healthcheck WHERE building_id = ?";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, buildingId);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Loop through the resultSet.
+            while (rs.next()) {
+                //Add current healthcheck from RS into the buildingHealthchecks-ArrayList.
+                buildingHealthchecks.add(new Healthcheck(rs.getInt(1), rs.getTimestamp(2), rs.getInt(3), rs.getString(4), rs.getInt(5)));
+            }
+            
+        } catch (Exception e) {
+            
+            throw new Exception("SQL Error: getBuildingHealthchecks Failed at DBFacade.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.getBuildingHealthchecks."+ex.getMessage());
+            
+            }
+            
+        }
+
+        return buildingHealthchecks;
+    }
+
+    @Override
+    public ArrayList<Healthcheck> getAllHealthchecks() throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.healthcheck";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Loop through the resultSet.
+            while (rs.next()) {
+                //Add current healthcheck from RS into the buildingHealthchecks-ArrayList.
+                allHealthchecks.add(new Healthcheck(rs.getInt(1), rs.getTimestamp(2), rs.getInt(3), rs.getString(4), rs.getInt(5)));
+            }
+            
+        } catch (Exception e) {
+            
+            throw new Exception("SQL Error: getAllHealthchecks Failed at DBFacade.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.getAllHealthchecks."+ex.getMessage());
+            
+            }
+            
+        }
+
+        return allHealthchecks;
+    }
+    
+    @Override
+    public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.issue WHERE healthcheck_id = ?";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, healthcheckId);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Loop through the resultSet.
+            while (rs.next()) {
+                //Add current healthcheck from RS into the allHealthchecks-ArrayList.
+                healthcheckIssues.add(new Issue(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getInt(7)));
+            }
+            
+        } catch (Exception e) {
+            
+            throw new Exception("SQL Error: getHealthcheckIssues Failed at DBFacade.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.getHealthcheckIssues."+ex.getMessage());
+            
+            }
+            
+        }
+
+        return healthcheckIssues;
     }
 }

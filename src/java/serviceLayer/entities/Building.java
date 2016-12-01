@@ -20,7 +20,7 @@ public class Building {
     /**
      * Variables corresponding to its database counterpart. 
      */
-    private int building_id, postcode, construction_year, sqm, healthcheck_pending, user_id, assigned_tech_id;   
+    private int buildingId, postcode, construction_year, sqm, healthcheck_pending, user_id, assigned_tech_id;   
     private String name, address, city, purpose;
     private Timestamp date_created;
     private condition condition;
@@ -34,7 +34,7 @@ public class Building {
 
     /**
      * Constructor to instantiate a specific building, used when creating new buildings and so on
-     * @param building_id int identifying the building from the database
+     * @param buildingId int identifying the building from the database
      * @param name String containing the buildings name
      * @param date_created timestamp containing the date the buildings was added to the database
      * @param address String containing the buildings address
@@ -48,8 +48,8 @@ public class Building {
      * @param assigned_tech_id int containing the id of the technician thats assigned to the buildings healthcheck
      * @param user_id int identifying the user that is linked to the building
      */
-    public Building(int building_id, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, int healthcheck_pending, int assigned_tech_id, int user_id) {
-        this.building_id = building_id;
+    public Building(int buildingId, String name, Timestamp date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm, int healthcheck_pending, int assigned_tech_id, int user_id) {
+        this.buildingId = buildingId;
         this.name = name;
         this.date_created = date_created;
         this.address = address;
@@ -69,12 +69,12 @@ public class Building {
      * Getters and setters (WE NEED TO CLEAN UP HERE BOYS) 
      */
     
-    public int getBuilding_id() {
-        return building_id;
+    public int getbuildingId() {
+        return buildingId;
     }
 
-    public void setBuilding_id(int building_id) {
-        this.building_id = building_id;
+    public void setbuildingId(int buildingId) {
+        this.buildingId = buildingId;
     }
 
     public int getPostcode() {

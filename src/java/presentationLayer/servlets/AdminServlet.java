@@ -93,44 +93,44 @@ public class AdminServlet extends HttpServlet {
                         }
                         
                         //Save values to database
-                        bldgCtrl.toggleHealthcheck(build.getBuilding_id(), healthcheckValueToWrite);
+                        bldgCtrl.toggleHealthcheck(build.getbuildingId(), healthcheckValueToWrite);
                         
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user_id);
                         
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     
                     //If 'Create area' button was clicked
                     if(request.getParameter("originSection").equals("createAreaButton")){
                         request.getSession().setAttribute("source", "createAreaButton");
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     //If an area needs deleting
                     else if(request.getParameter("originSection").equals("deleteAreaButton")){
                         request.getSession().setAttribute("source", "deleteAreaButton");
                         
                         //Retrieve form input values from viewBuilding
-                        int area_id = Integer.parseInt(request.getParameter("areaId"));
+                        int areaId = Integer.parseInt(request.getParameter("areaId"));
                         
                         //Save values to database
-                        bldgCtrl.deleteArea(area_id);
+                        bldgCtrl.deleteArea(areaId);
                         
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
                     
                         //Fetch areas and rooms for selected building
-                        refreshAreas(build.getBuilding_id());
-                        refreshRooms(build.getBuilding_id());
+                        refreshAreas(build.getbuildingId());
+                        refreshRooms(build.getbuildingId());
 
                         //Save areas and rooms in Session
                         request.getSession().setAttribute("buildingAreas", buildingAreas);
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
 
                     //If a new area needs creating
@@ -140,20 +140,20 @@ public class AdminServlet extends HttpServlet {
                         String areaName = request.getParameter("areaName");
                         String areaDesc = request.getParameter("areaDesc");
                         int areaSqm = Integer.parseInt(request.getParameter("areaSqm"));
-                        int building_id = build.getBuilding_id();
+                        int buildingId = build.getbuildingId();
                         //Save values to database
-                        bldgCtrl.createArea(areaName, areaDesc, areaSqm, building_id);
+                        bldgCtrl.createArea(areaName, areaDesc, areaSqm, buildingId);
                         
                         //Fetch areas and rooms for selected building
-                        refreshAreas(building_id);
-                        refreshRooms(building_id);
+                        refreshAreas(buildingId);
+                        refreshRooms(buildingId);
 
                         //Save areas and rooms in Session
                         request.getSession().setAttribute("buildingAreas", buildingAreas);
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
                         
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     
                     //If 'Create area' button was clicked
@@ -162,7 +162,7 @@ public class AdminServlet extends HttpServlet {
                         request.getSession().setAttribute("areaId",request.getParameter("areaId"));
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     
                     //If a new room needs creating
@@ -172,25 +172,25 @@ public class AdminServlet extends HttpServlet {
                         String roomName = request.getParameter("roomName");
                         String roomDesc = request.getParameter("roomDesc");
                         int roomSqm = Integer.parseInt(request.getParameter("roomSqm"));
-                        int area_id = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
+                        int areaId = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
                         
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
-                        int building_id = build.getBuilding_id();
+                        int buildingId = build.getbuildingId();
 
                         //Save values to database
-                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, area_id);
+                        bldgCtrl.createRoom(roomName, roomDesc, roomSqm, areaId);
                         
                         //Fetch areas and rooms for selected building
-                        refreshAreas(building_id);
-                        refreshRooms(building_id);
+                        refreshAreas(buildingId);
+                        refreshRooms(buildingId);
 
                         //Save areas and rooms in Session
                         request.getSession().setAttribute("buildingAreas", buildingAreas);
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
                         
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     
                     //If an area needs deleting
@@ -198,33 +198,33 @@ public class AdminServlet extends HttpServlet {
                         request.getSession().setAttribute("source", "deleteRoomButton");
                         
                         //Retrieve form input values from viewBuilding
-                        int room_id = Integer.parseInt(request.getParameter("roomId"));
-                        //int area_id = 6;
+                        int roomId = Integer.parseInt(request.getParameter("roomId"));
+                        //int areaId = 6;
                         
                         //Save values to database
-                        bldgCtrl.deleteRoom(room_id);
+                        bldgCtrl.deleteRoom(roomId);
                         
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
                     
                         //Fetch areas and rooms for selected building
-                        refreshAreas(build.getBuilding_id());
-                        refreshRooms(build.getBuilding_id());
-                        //refreshRooms(building_id);
+                        refreshAreas(build.getbuildingId());
+                        refreshRooms(build.getbuildingId());
+                        //refreshRooms(buildingId);
 
                         //Save areas and rooms in Session
                         request.getSession().setAttribute("buildingAreas", buildingAreas);
                         request.getSession().setAttribute("buildingRooms", buildingRooms);
 
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     
                     //If 'Edit building details' button was clicked
                     else if(request.getParameter("originSection").equals("editBuildingButton")){
                         request.getSession().setAttribute("source", "editBuildingButton");
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
                     
                     //If the building needs editing
@@ -244,7 +244,7 @@ public class AdminServlet extends HttpServlet {
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(user_id);
                         //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("viewBuilding.jsp?value=" + build.getBuilding_id() + "");
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } 
                     
                 break;
@@ -460,15 +460,15 @@ public class AdminServlet extends HttpServlet {
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int building_id) throws Exception {
+    public void refreshAreas(int buildingId) throws Exception {
         buildingAreas.clear();
-        buildingAreas = bldgCtrl.getAreas(building_id);
+        buildingAreas = bldgCtrl.getAreas(buildingId);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int building_id) throws Exception {
+    public void refreshRooms(int buildingId) throws Exception {
         buildingRooms.clear();
-        buildingRooms = bldgCtrl.getRooms(building_id);
+        buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
     public void refreshUsers(HttpServletRequest request) throws Exception {

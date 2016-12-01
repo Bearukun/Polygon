@@ -8,8 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.User;
@@ -260,27 +258,28 @@ public class LoginServlet extends HttpServlet {
                     String bOwner = request.getParameter("buildingsowner");
                     String imgFolderPath = request.getParameter("folderPath");
                     String savePath = request.getParameter("savePath");
+                    String picturePath = "";
 
                     String systemDir = System.getProperty("user.dir");
                     System.out.println(systemDir);
 
-                    //Filechooser for selecting an image for the generated PDF
-                    JFileChooser choose = new JFileChooser();
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
-                    choose.setFileFilter(filter);
-                    String picturePath = "";
-                    String folderPath = "";
-                    int returnVal = choose.showOpenDialog(choose);
-
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-                        picturePath = choose.getSelectedFile().getAbsolutePath();
-                        folderPath = "" + choose.getCurrentDirectory();
-                        System.out.println(picturePath);
-                        System.out.println(folderPath + " Folder sti");
-                       
-
-                    }
+//                    //Filechooser for selecting an image for the generated PDF
+//                    JFileChooser choose = new JFileChooser();
+//                    FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
+//                    choose.setFileFilter(filter);
+//                    String picturePath = "";
+//                    String folderPath = "";
+//                    int returnVal = choose.showOpenDialog(choose);
+//
+//                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+//
+//                        picturePath = choose.getSelectedFile().getAbsolutePath();
+//                        folderPath = "" + choose.getCurrentDirectory();
+//                        System.out.println(picturePath);
+//                        System.out.println(folderPath + " Folder sti");
+//                       
+//
+//                    }
 
                     System.out.println(picturePath);
 

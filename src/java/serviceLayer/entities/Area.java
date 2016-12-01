@@ -8,7 +8,7 @@ public class Area {
      /**
      * Variables corresponding to its database counterpart. 
      */
-    private int area_id, sqm, building_id;
+    private int areaId, sqm, buildingId;
     private String name, description;
 
     /**
@@ -19,19 +19,19 @@ public class Area {
 
     /**
      * constructor to instantiate a specific area
-     * @param area_id int identifying the area from the database
+     * @param areaId int identifying the area from the database
      * @param name String containing the areas name
      * @param description String containing the areas description
      * @param sqm int containing the areas size in square meters
-     * @param building_id int identifying the building that is linked to the area
+     * @param buildingId int identifying the building that is linked to the area
      */
     
-    public Area(int area_id, String name, String description, int sqm, int building_id) {
-        this.area_id = area_id;
+    public Area(int areaId, String name, String description, int sqm, int buildingId) {
+        this.areaId = areaId;
         this.name = name; 
         this.description = description;
         this.sqm = sqm;
-        this.building_id = building_id;
+        this.buildingId = buildingId;
     }
 
     /**
@@ -40,11 +40,11 @@ public class Area {
      */
     
     public int getArea_id() {
-        return area_id;
+        return areaId;
     }
 
-    public void setArea_id(int area_id) {
-        this.area_id = area_id;
+    public void setArea_id(int areaId) {
+        this.areaId = areaId;
     }
 
     public int getSqm() {
@@ -55,12 +55,12 @@ public class Area {
         this.sqm = sqm;
     }
 
-    public int getBuilding_id() {
-        return building_id;
+    public int getbuildingId() {
+        return buildingId;
     }
 
-    public void setBuilding_id(int building_id) {
-        this.building_id = building_id;
+    public void setbuildingId(int buildingId) {
+        this.buildingId = buildingId;
     }
 
     public String getName() {

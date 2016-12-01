@@ -81,7 +81,7 @@
                                         for (int x = 0; x < allBuildings.size(); x++) {
                                             if (userList.get(i).getUser_id() == allBuildings.get(x).getUser_id()) {
                                 %><tr>
-                                    <td><%out.println(allBuildings.get(x).getBuilding_id());%></td>  
+                                    <td><%out.println(allBuildings.get(x).getbuildingId());%></td>  
                                     <td><%out.println(allBuildings.get(x).getName());%></td>  
                                     <td><%out.println(allBuildings.get(x).getDate_created());%></td>  
                                     <td><%out.println(allBuildings.get(x).getAddress());%></td>  
