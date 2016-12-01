@@ -3,27 +3,36 @@ package serviceLayer.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-
+/**
+ *
+ * Class dealing with healthchecks
+ */
 public class Healthcheck {
-    
 
-    
     /**
-     * Variables corresponding to its database counterpart. 
+     * Variables corresponding to its database counterpart.
      */
-    
-    
     private int healthcheck_id, tech_id, buildingId;
     private String building_responsible;
     private Timestamp date_created;
-    
-    
+
     /**
-     * Empty constructor. 
+     * Empty constructor.
      */
     public Healthcheck() {
     }
 
+    /**
+     * Constructer to instantiate a specific healthcheck, used when making a new healthcheck and so on
+     * @param healthcheck_id int identifying the healthcheck from the database
+     * @param date_created timestamp containing the date the healthcheck was
+     * added to the database
+     * @param tech_id int identifying the technician that is linked to the
+     * healthcheck
+     * @param building_responsible
+     * @param buildingId int identifying the building that is linked to the
+     * healthcheck
+     */
     public Healthcheck(int healthcheck_id, Timestamp date_created, int tech_id, String building_responsible, int buildingId) {
         this.healthcheck_id = healthcheck_id;
         this.date_created = date_created;
@@ -32,10 +41,9 @@ public class Healthcheck {
         this.buildingId = buildingId;
     }
 
-       /**
-     * Getters and setters (WE NEED TO CLEAN UP HERE BOYS) 
+    /**
+     * Getters and setters (WE NEED TO CLEAN UP HERE BOYS)
      */
-    
     public int getHealthcheck_id() {
         return healthcheck_id;
     }

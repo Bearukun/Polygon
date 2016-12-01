@@ -2,15 +2,17 @@ package serviceLayer.entities;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * Class dealing with issues
+ */
 public class Issue {
     
     /**
      * Variables corresponding to its database counterpart. 
      */
-    
     private int issue_id, buildingId, area_id, room_id, healthcheck_id;
     private String description, recommendation;
-    
     
     /**
      * Empty constructor. 
@@ -18,6 +20,16 @@ public class Issue {
     public Issue() {
     }
 
+    /**
+     * Constructer to instantiate a specific issue, used when making a new issye and so on
+     * @param issue_id int identifying the issue from the database
+     * @param description String containing a description of the issue
+     * @param recommendation String containing a recommendation from the technician
+     * @param buildingId int identifying the building that is linked to the issue
+     * @param area_id int identifying the area that is linked to the issye
+     * @param room_id int identifying the room that is linked to the issue
+     * @param healthcheck_id int identifying the healthcheck that is linked to the issue
+     */
     public Issue(int issue_id, String description, String recommendation, int buildingId, int area_id, int room_id, int healthcheck_id) {
         this.issue_id = issue_id;
         this.description = description;
@@ -27,12 +39,10 @@ public class Issue {
         this.room_id = room_id;
         this.healthcheck_id = healthcheck_id;
     }
-
     
     /**
      * Getters and setters (WE NEED TO CLEAN UP HERE BOYS) 
      */
-    
     public int getIssue_id() {
         return issue_id;
     }

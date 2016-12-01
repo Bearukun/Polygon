@@ -1,13 +1,31 @@
 package serviceLayer.entities;
 
+/**
+ * Class dealing with rooms
+ */
 public class Room {
-    
-    private int roomId, sqm, moisture_scan, areaId;   
+
+    /**
+     * Variables corresponding to its database counterpart.
+     */
+    private int roomId, sqm, moisture_scan, areaId;
     private String name, description;
 
+    /**
+     * Empty constructor.
+     */
     public Room() {
     }
 
+    /**
+     * Constructor to instantiate a specific room
+     * @param roomId int identifying the room from the database
+     * @param name String containing the rooms name
+     * @param description String containing the rooms description
+     * @param sqm int containing the rooms size in square meters
+     * @param moisture_scan int that can only be 0 or 1, where 0 is "false"
+     * @param areaId int identifying the area that is linked to the room
+     */
     public Room(int roomId, String name, String description, int sqm, int moisture_scan, int areaId) {
         this.roomId = roomId;
         this.name = name;
@@ -17,6 +35,9 @@ public class Room {
         this.areaId = areaId;
     }
 
+    /**
+     * @return getters & setters
+     */
     public int getRoom_id() {
         return roomId;
     }
