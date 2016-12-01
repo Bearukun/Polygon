@@ -6,7 +6,7 @@ package serviceLayer.entities;
 public class User {
 
     /**
-     * Enum used to show a users different types.  
+     * Enum used to show a users different types.
      */
     public enum type {
 
@@ -14,14 +14,12 @@ public class User {
 
     }
 
-     /**
-     * Variables corresponding to its database counterpart. 
+    /**
+     * Variables corresponding to its database counterpart.
      */
     private int user_id, phone, postcode;
     private String email, password, name, company, address, city;
     private type type;
-    
-
 
     /**
      * Constructor used when logging in (NEED TO BE REMOVED WHEN NEW LOGIN HAS BEEN MADE)
@@ -60,11 +58,11 @@ public class User {
     }
 
     /**
-     * Empty constructor. 
+     * Empty constructor.
      */
     public User() {
     }
-    
+
     /**
      * Constructor used in getTechnicians in the AdminServlet
      * @param user_id int identifying the user from the database
@@ -78,7 +76,7 @@ public class User {
     }
 
     /**
-     * 
+     *
      * @return getters & setters
      */
     public int getUser_id() {
@@ -160,14 +158,10 @@ public class User {
     public void setType(type type) {
         this.type = type;
     }
-    
-    
 
     @Override
     public String toString() {
         return "User{" + "name=" + name + '}';
     }
-    
 
-    
 }
