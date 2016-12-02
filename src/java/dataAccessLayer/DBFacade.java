@@ -35,9 +35,9 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public User getUser(String email) throws Exception {
+    public User checkLogin(String email, String password) throws Exception {
 
-        return umi.getUser(email);
+        return umi.checkLogin(email, password);
 
     }
 

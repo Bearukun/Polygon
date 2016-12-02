@@ -47,9 +47,9 @@ public class LoginServlet extends HttpServlet {
 
                 case "loginAsUser":
                     //Retrieve user email from adminUsers.jsp
-                    String userEmail = request.getParameter("userEmail");
+                    int user_id = Integer.parseInt(request.getParameter("user_id"));
                     //Get user object with the above email
-                    user = usrCtrl.getUser(userEmail);
+                    user = usrCtrl.getUser(user_id);
                     //Save where (which page) we are coming from
                     request.getSession().setAttribute("sourcePage", "LoginServlet");
                     //Save user values to Session

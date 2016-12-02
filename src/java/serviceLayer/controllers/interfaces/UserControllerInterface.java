@@ -6,8 +6,6 @@ import serviceLayer.entities.User;
 public interface UserControllerInterface {
 
     User login(String email, String password) throws Exception;
-
-    User getUser(String email) throws Exception;
     
     User getUser(int user_id) throws Exception;
 

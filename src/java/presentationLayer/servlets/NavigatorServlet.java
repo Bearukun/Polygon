@@ -57,7 +57,7 @@ public class NavigatorServlet extends HttpServlet {
             user_id = (Integer) request.getSession().getAttribute("user_id");
             String email = request.getSession().getAttribute("email").toString();
             //Get user object with the above email
-            user = usrCtrl.getUser(email);
+            user = usrCtrl.getUser(user_id);
             build  = (Building) request.getSession().getAttribute("buildingBeingEdited");
         
             String errMsg = null;
@@ -117,7 +117,7 @@ public class NavigatorServlet extends HttpServlet {
                 break;
                 
                 case "editOtherProfileButton":
-                    User userToEdit = usrCtrl.getUser(request.getParameter("userEmail"));
+                    User userToEdit = usrCtrl.getUser(user_id);
                     populateEditUserPage(request, userToEdit);
                     //Toggle boolean
                     editingOtherUserProfile = true;
