@@ -85,9 +85,7 @@ public class LoginServlet extends HttpServlet {
                                 //Set user type and redirect
                                 userTypeRedirect(user, request, response);
                                 EmailController EC = new EmailController();
-                                //Testing Email
-//                                EC.send("ceo_titanic@msn.com", "Testing", "This works!!!!");
-//                                System.out.println("Mail sent!");
+                             
 
                             }
 
@@ -113,87 +111,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("index.jsp#");
 
                     break;
-                
-                case "editProfile":
 
-                    System.out.println("Entered edit profile");
-                    System.out.println("EMAIL!!! BEFORE " + user.getEmail());
-                    System.out.println("City!!!! BEFORE " + user.getCity());
-                    
-                    //Retrieve form input values from editProfile.jsp
-                    String uEmail = request.getParameter("email");
-                    
-                    System.out.println("EMAIL!!! AFTER " + uEmail);
-                    
-                    String uPassword = request.getParameter("password");
-                    String uName = request.getParameter("name");
-                    int uPhone = Integer.parseInt(request.getParameter("phonenumber"));
-                    String uCompany = request.getParameter("company");
-                    String uAddress = request.getParameter("address");
-                    int uPostcode = Integer.parseInt(request.getParameter("postcode"));
-                    String uCity = request.getParameter("city");
-                    System.out.println("City!!!! After " + user.getCity());
-                    int uSelectedUser = user.getUser_id();
-                    //int uSelectedUser = (Integer) request.getSession().getAttribute("user_id");
-
-                    //Displayes what data is being pulled down into the usrCtrl.editUser
-//                    System.out.println("DATA confirmed funneled down into editProfile case");
-//                    System.out.println(uEmail);
-//                    System.out.println(uPassword);
-//                    System.out.println(uName);
-//                    System.out.println(uPhone);
-//                    System.out.println(uCompany);
-//                    System.out.println(uAddress);
-//                    System.out.println(uPostcode);
-//                    System.out.println(uCity);
-//                    System.out.println(uSelectedUser);
-                    //Basic idea for checking user email ! Not working atm!
-//                    System.out.println(userList.size());                                       
-//                    System.out.println("user email: " + user.getEmail());
-//                    System.out.println("new user email:" + uEmail);
-//                    
-//                    
-//                    
-//                    for (int j = 0; j < userList.size(); j++) {
-//                        System.out.println("users: " + userList.get(j).getEmail());
-//                    }
-//                    for (int i = 0; i < userList.size(); i++) {
-//                        System.out.println("Second for-loop");
-//                        if (uEmail == userList.get(i).getEmail()) {
-//                            
-//                            System.out.println("EMAIL ALREADY EXIST!");
-//                            response.sendRedirect("user.jsp?success=EmailAlreadyExist");
-//                            
-//                        }
-//                    }
-                    //Save the users edited values to the user database
-                    usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
-
-                    //Resets/updates the userName, password and updates the displayed username
-                    request.getSession().setAttribute("email", uEmail);
-                    request.getSession().setAttribute("password", uPassword);
-
-                    //Updates the editUserTable with the new/updated user information
-                    request.getSession().setAttribute("uEmail", uEmail);
-                    request.getSession().setAttribute("uPassword", uPassword);
-                    request.getSession().setAttribute("uName", uName);
-                    request.getSession().setAttribute("uPhonenumber", uPhone);
-                    request.getSession().setAttribute("uCompany", uCompany);
-                    request.getSession().setAttribute("uAddress", uAddress);
-                    request.getSession().setAttribute("uPostcode", uPostcode);
-                    request.getSession().setAttribute("uCity", uCity);
-
-                    System.out.println("Response inc.");
-                    
-                    //Send Email regarding Profile changes 
-                    String emailEditProfileHead = "";
-                    String emailEditProfileMessage = "";
-                    
-                    //emailC.send(uCity, uCity, uCity);
-                    //redirect to user.jsp
-                    response.sendRedirect("user.jsp?success=UpdateSuccessful");
-
-                    break;
 
                 case "update":
 

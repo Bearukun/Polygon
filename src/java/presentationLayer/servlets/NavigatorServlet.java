@@ -135,7 +135,7 @@ public class NavigatorServlet extends HttpServlet {
                 break;
                     
                 case "editProfile":
-                    
+                    System.out.println("NAVI EDIT PROFILE");
                     //Check if editing another user's profile or one's own profile
                     if(editingOtherUserProfile){
                         editUser(request, (Integer) request.getSession().getAttribute("userToEdit"));
@@ -229,6 +229,7 @@ public class NavigatorServlet extends HttpServlet {
         
     //Edits the user's details
     public void editUser(HttpServletRequest request, int user_id) throws Exception {
+        System.out.println("EDITUSER!!!");
         //Retrieve form input values from editProfile.jsp
         uEmail = request.getParameter("email");
         uPassword = request.getParameter("password");

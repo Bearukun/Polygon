@@ -256,39 +256,7 @@ public class AdminServlet extends HttpServlet {
                     
                 break;
                 
-                        
-                case "editProfile":
-                    //Retrieve form input values from editProfile.jsp
-                    String uEmail = request.getParameter("email");
-                    String uPassword = request.getParameter("password");
-                    String uName = request.getParameter("name");
-                    int uPhone = Integer.parseInt(request.getParameter("phonenumber"));
-                    String uCompany = request.getParameter("company");
-                    String uAddress = request.getParameter("address");
-                    int uPostcode = Integer.parseInt(request.getParameter("postcode"));
-                    String uCity = request.getParameter("city");
-                    int uSelectedUser = user_id;
-                    
-                    //Save the user's edited values to the user database
-                    usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
 
-                    //Resets/updates the userName, password and updates the displayed username
-                    request.getSession().setAttribute("email", uEmail);
-                    request.getSession().setAttribute("password", uPassword);
-
-                    //Updates the editUserTable with the new/updated user information
-                    request.getSession().setAttribute("uEmail", uEmail);
-                    request.getSession().setAttribute("uPassword", uPassword);
-                    request.getSession().setAttribute("uName", uName);
-                    request.getSession().setAttribute("uPhonenumber", uPhone);
-                    request.getSession().setAttribute("uCompany", uCompany);
-                    request.getSession().setAttribute("uAddress", uAddress);
-                    request.getSession().setAttribute("uPostcode", uPostcode);
-                    request.getSession().setAttribute("uCity", uCity);
-
-                    //redirect to user.jsp
-                    response.sendRedirect("admin.jsp?success=UpdateSuccessful");
-                break;
                 case "healthcheckButton":
                     
                     //Save list of technicians in the Session
