@@ -13,7 +13,7 @@ import serviceLayer.entities.User;
 
 public interface DBFacadeInterface {
 
-    User getUser(String email) throws Exception;
+    User checkLogin(String email, String password) throws Exception;
     
     User getUser(int user_id) throws Exception;
 

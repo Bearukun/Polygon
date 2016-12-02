@@ -5,7 +5,7 @@ import serviceLayer.entities.User;
 
 public interface UserMapperInterface {
 
-    public User getUser(String email) throws Exception;
+    public User checkLogin(String email, String password) throws Exception;
     
     public User getUser(int user_id) throws Exception;
 

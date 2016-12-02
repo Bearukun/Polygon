@@ -18,13 +18,14 @@ public class UserMapper implements UserMapperInterface {
     private ArrayList<User> allUsers = new ArrayList();
 
     /**
-     * Method to retrieve a specific user
-     * @param email String specifying which user needs retrieving
+     * Method check the data from the login screen.
+     * @param email String specifying which email need to be looked up.
+     * @param password String specifying which password that needs to match the email.
      * @return An object of type User
      * @throws Exception 
      */
     @Override
-    public User getUser(String email) throws Exception {
+    public User checkLogin(String email, String password) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -36,12 +37,13 @@ public class UserMapper implements UserMapperInterface {
             //Get connection object.
             con = DBConnection.getConnection();
             //Creating string used for the prepare statement.
-            String sql = "SELECT * FROM user WHERE email = ?";
+            String sql = "SELECT * FROM user WHERE email = ? and password = ?;";
             //SET NAMES utf8mb4
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.
             stmt.setString(1, email);
+            stmt.setString(2, password);
             //Execute query, and save the resultset in rs.
             rs = stmt.executeQuery();
 

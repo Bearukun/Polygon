@@ -111,7 +111,7 @@
                                 <td>
                                     <form action="LoginServlet" method="POST">
                                         <input type="hidden" name="origin" value="loginAsUser" />
-                                        <input type="hidden" name="userEmail" value="<%=tempUL.get(i).getEmail()%>" />
+                                        <input type="hidden" name="user_id" value="<%=tempUL.get(i).getUser_id()%>" />
                                         <input class="btn btn-primary" type="submit" value="Login som" />
                                     </form>
                                 </td>
