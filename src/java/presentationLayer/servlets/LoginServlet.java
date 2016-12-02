@@ -69,7 +69,6 @@ public class LoginServlet extends HttpServlet {
 
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
-                        String sql = "SELECT user_id from user where binary email like ? and binary password like ?";
                         
                         try {
                             
