@@ -22,6 +22,8 @@ if yes - then redirect - else nothing. --%>
         
     </head>
     <body>
+        
+
         <!-- Register user div, as modal window -->
         <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true" style="display: none;">
             <div class="modal-dialog">

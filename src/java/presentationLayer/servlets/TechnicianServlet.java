@@ -292,10 +292,14 @@ public class TechnicianServlet extends HttpServlet {
                     String bSQM ="" + build.getSqm();
                     String bPurpose =build.getPurpose();
                     String bOwner = "23";
-                    String imgFolderPath ="E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\";
-                    String savePath ="E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\";
+                    String imgFolderPath ="/Users/Ceo/NetBeansProjects/Polygon/web/img/";
+                    String savePath ="/Users/Ceo/NetBeansProjects/Polygon/pdf/";
 ;
+                         ///Users/Ceo/NetBeansProjects/Polygon/web/img/
+                         //"E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\"
                          
+                         ///Users/Ceo/NetBeansProjects/Polygon/pdf/
+                         //"E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\"
                     String picturePath = "";
 
                     String systemDir = System.getProperty("user.dir");

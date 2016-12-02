@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.BuildingController;
+import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.User;
 
@@ -21,6 +22,7 @@ public class LoginServlet extends HttpServlet {
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
+    private EmailController emailC = new EmailController();
 
     PDFCreator pdfwt = new PDFCreator();
 
@@ -53,6 +55,8 @@ public class LoginServlet extends HttpServlet {
                     //Save where (which page) we are coming from
                     request.getSession().setAttribute("sourcePage", "LoginServlet");
                     //Save user values to Session
+                    
+                    
                     request.getSession().setAttribute("user_id", user.getUser_id());
                     request.getSession().setAttribute("email", user.getEmail());
                     //Set user type and redirect
@@ -65,9 +69,11 @@ public class LoginServlet extends HttpServlet {
 
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
-
+                        String sql = "SELECT user_id from user where binary email like ? and binary password like ?";
+                        
                         try {
-
+                            
+                            
                             user = usrCtrl.login(email, password);
                             request.getSession().setAttribute("user_id", user.getUser_id());
                             request.getSession().setAttribute("email", user.getEmail());
@@ -79,7 +85,11 @@ public class LoginServlet extends HttpServlet {
 
                                 //Set user type and redirect
                                 userTypeRedirect(user, request, response);
-                                
+                                EmailController EC = new EmailController();
+                                //Testing Email
+//                                EC.send("ceo_titanic@msn.com", "Testing", "This works!!!!");
+//                                System.out.println("Mail sent!");
+
                             }
 
                             //If something goes wrong, we need a way to show it.
@@ -108,9 +118,14 @@ public class LoginServlet extends HttpServlet {
                 case "editProfile":
 
                     System.out.println("Entered edit profile");
-
+                    System.out.println("EMAIL!!! BEFORE " + user.getEmail());
+                    System.out.println("City!!!! BEFORE " + user.getCity());
+                    
                     //Retrieve form input values from editProfile.jsp
                     String uEmail = request.getParameter("email");
+                    
+                    System.out.println("EMAIL!!! AFTER " + uEmail);
+                    
                     String uPassword = request.getParameter("password");
                     String uName = request.getParameter("name");
                     int uPhone = Integer.parseInt(request.getParameter("phonenumber"));
@@ -118,6 +133,7 @@ public class LoginServlet extends HttpServlet {
                     String uAddress = request.getParameter("address");
                     int uPostcode = Integer.parseInt(request.getParameter("postcode"));
                     String uCity = request.getParameter("city");
+                    System.out.println("City!!!! After " + user.getCity());
                     int uSelectedUser = user.getUser_id();
                     //int uSelectedUser = (Integer) request.getSession().getAttribute("user_id");
 
@@ -169,6 +185,12 @@ public class LoginServlet extends HttpServlet {
                     request.getSession().setAttribute("uCity", uCity);
 
                     System.out.println("Response inc.");
+                    
+                    //Send Email regarding Profile changes 
+                    String emailEditProfileHead = "";
+                    String emailEditProfileMessage = "";
+                    
+                    //emailC.send(uCity, uCity, uCity);
                     //redirect to user.jsp
                     response.sendRedirect("user.jsp?success=UpdateSuccessful");
 
@@ -220,6 +242,43 @@ public class LoginServlet extends HttpServlet {
                           usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
                             //If successful, redirect
                             System.out.println("Index redirect");
+                            
+                            //Send confirmation email to new Customer:
+                            String emailNewCustomerHeader = "Hej " + name + " (" + company+ " )"+" og velkommen til Polygons's Sundebygninger!";
+                            String emailNewCustomerMessage = "Hej " + name + "!"+
+                                    "\n\nVi er glade for at de har registeret "
+                                    + "deres virksomhed hos os"
+                                    + "og vi ser frem til at arbejde sammen med "
+                                    + "dem i den nærmeste fremtid!"
+                                    + "\n\n\n"
+                                    
+                                    
+                                    +"Her er hvad vi har registeret: "
+                                    + "\n\n"
+                                    + "Navn: " + name +"\n"
+                                    + "Email: " + email +"\n"
+                                    
+                                    + "Telefon: " + phone +"\n"
+                                    + "Firma: " + company + "\n"
+                                    + "Adresse: " + address +"\n"
+                                    + "Postnummer: " + postcode + "\n " 
+                                    + "By: "+ city 
+                                    +"\n\n\n"
+                                    + "Skulle de glemme deres kodeord til deres "
+                                    + "bruger eller har andre spørgsmål, "
+                                    + "så tøv ikke med at kontakte os!"
+                                   
+                                    + "\n\n\n"
+                                    +" Med Venlig Hilsen"
+                                    + "\n\n"
+                                    +"Polygon"
+                                    +"\n\n"
+                                    +"Rypevang 5\n"
+                                    +"3450 Allerød\n"
+                                    +"Tlf. 4814 0055\n"
+                                    + "sundebygninger@polygon.dk" ;
+                   
+                            emailC.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
                             response.sendRedirect("index.jsp?success");
 
                         } catch (Exception e) {

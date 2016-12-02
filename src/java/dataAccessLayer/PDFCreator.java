@@ -83,12 +83,14 @@ public class PDFCreator {
 
         pageNumber++;
 
-        roomMoistReport(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
+      
+
+        roomWalkthrough(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
-
-        roomWalkthrough(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
+        
+        roomMoistReport(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
