@@ -372,7 +372,7 @@
                                                         <%= healthcheckIssues.get(k).getRecommendation()%>
                                                     </td>
                                                     <td>
-                                                        image
+                                                        <img src="./GetImage?type=issue&id=<%=healthcheckIssues.get(k).getIssue_id()%>" class="img-fluid " width="300" alt="Responsive image">
                                                     </td>
                                                     <td>
                                                         <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
