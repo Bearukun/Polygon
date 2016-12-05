@@ -11,9 +11,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.DamageRepair;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Image;
 import serviceLayer.entities.Issue;
+import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -200,5 +202,30 @@ public class DBFacade implements DBFacadeInterface {
     @Override
     public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception {
         return bmi.getHealthcheckIssues(healthcheckId);
+    }
+
+    @Override
+    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws Exception {
+        bmi.registerMoistureMeasurement(roomId, measurePoint, measureValue);
+    }
+
+    @Override
+    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws Exception {
+        return bmi.getAllMoistureMeasurements();
+    }
+
+    @Override
+    public void deleteMoistureMeasurement(int moistId) throws Exception {
+        bmi.deleteMoistureMeasurement(moistId);
+    }
+
+    @Override
+    public ArrayList<DamageRepair> getAllDamageRepairs() throws Exception {
+        return bmi.getAllDamageRepairs();
+    }
+
+    @Override
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, DamageRepair.type type) throws Exception{
+        bmi.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
     }
 }

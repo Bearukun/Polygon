@@ -1,3 +1,5 @@
+<%@page import="serviceLayer.entities.DamageRepair"%>
+<%@page import="serviceLayer.entities.MoistureInfo"%>
 <%@page import="serviceLayer.entities.Issue"%>
 <%@page import="serviceLayer.entities.Healthcheck"%>
 <%@page import="serviceLayer.entities.Room"%>
@@ -38,6 +40,13 @@
             ArrayList<Building> allBuildings = new ArrayList();
             ArrayList<Healthcheck> buildingHealthchecks = new ArrayList();
             buildingHealthchecks = (ArrayList<Healthcheck>) request.getSession().getAttribute("buildingHealthchecks");
+            
+            ArrayList<MoistureInfo> allMoistureMeasurements = new ArrayList();
+            allMoistureMeasurements = (ArrayList<MoistureInfo>) request.getSession().getAttribute("allMoistureMeasurements");
+            
+            ArrayList<DamageRepair> allDamageRepairs = new ArrayList();
+            allDamageRepairs = (ArrayList<DamageRepair>) request.getSession().getAttribute("allDamageRepairs");
+            
             ArrayList<Issue> healthcheckIssues = new ArrayList();
             healthcheckIssues = (ArrayList<Issue>) request.getSession().getAttribute("healthcheckIssues");
             int user_id = (Integer) request.getSession().getAttribute("user_id");
@@ -114,6 +123,72 @@
                     </div>
                     <%
                             break;
+                            
+                        case "registerDamageRepairButton":
+                %>
+                <div class="col-sm-10">
+                    <div id="container" class="container-fluid">    
+                        <h1>Registrer tidligere skade</h1>
+
+                        <div class="container-fluid">
+                            <form action="TechnicianServlet" enctype="multipart/form-data" method="POST"> 
+                                <div class="col-sm-4">
+                                    <p>Hvornår skete skaden?</p>                      
+                                    <input type="text" name="damageTime" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <p>Sted skade skete</p>                      
+                                    <input type="text" name="damageLocation" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <p>Detaljer</p>                      
+                                    <input type="text" name="damageDetails" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <p>Arbejde udført</p>                      
+                                    <input type="text" name="workDone" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    
+                                    <p>Skadestype</p>
+                                        <select name="type">
+                                            <option value="DAMP" selected="DAMP">Damp</option>
+                                            <option value="ROTFUNGUS" selected="ROTFUNGUS">Råd/Svamp</option>
+                                            <option value="MOULD" selected="MOULD">Mug</option>
+                                            <option value="FIRE" selected="FIRE">Brand</option>
+                                            <option value="OTHER" selected="OTHER">Andet</option>
+                                        </select>
+                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                    <input type="hidden" name="originSection" value="registerDamagerepair" />
+                                    <input class="btn btn-primary" type="submit" value="Registrer" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <%
+                            break;
+                            
+                        case "registerMoistButton":
+                %>
+                <div class="col-sm-10">
+                    <div id="container" class="container-fluid">    
+                        <h1>Registrer fugtmåling</h1>
+
+                        <div class="container-fluid">
+                            <form action="TechnicianServlet" enctype="multipart/form-data" method="POST"> 
+                                <div class="col-sm-4">
+                                    <p>Målepunkt</p>                      
+                                    <input type="text" name="measurePoint" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <p>Målt værdi</p>                      
+                                    <input type="text" name="measureValue" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                    <input type="hidden" name="originSection" value="registerMoist" />
+                                    <input class="btn btn-primary" type="submit" value="Registrer" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <%
+                            break;
+                            
                         case "createAreaButton":
                     %>
                     <div class="col-sm-10">
@@ -254,17 +329,15 @@
                         default:
 
                     %>    
-                    <div class="col-sm-10">
-                        <%                        //Loop through entire buildings list
-                            for (int i = 0; i < allBuildings.size(); i++) {
-                                //If the currently selected building has the same building id as the one saved in the Session
-                                if (allBuildings.get(i).getbuildingId() == Integer.parseInt(request.getParameter("value"))) {
-                                    //Save the building in the reference object build so its details can be shown on page
-                                    build = allBuildings.get(i);
-                                    request.getSession().setAttribute("buildingBeingEdited", build);
-                                }
+                    <div class="col-sm-10">//Loop through entire buildings list
+                        <% for (int i = 0; i < allBuildings.size(); i++) {//Loop through entire buildings list                       
+                            //If the currently selected building has the same building id as the one saved in the Session
+                            if (allBuildings.get(i).getbuildingId() == Integer.parseInt(request.getParameter("value"))) {
+                                //Save the building in the reference object build so its details can be shown on page
+                                build = allBuildings.get(i);
+                                request.getSession().setAttribute("buildingBeingEdited", build);
                             }
-                        %>
+                        }%>
                         <h1>Vis bygning</h1>
 
                         <table text-align="left" class="table">
@@ -298,12 +371,12 @@
                         <br><br>
 
                         <% if (build.getHealthcheck_pending() > 1) {%>
-                        <form class="form-view-building" action="TechnicianServlet" method="POST">
-                            <input type="hidden" name="origin" value="viewBuilding" />
-                            <input type="hidden" name="originSection" value="healthcheckButton" />
-                            <input type="hidden" name="originValue" value="cancel" />
-                            <input class="btn btn-primary" type="submit" value="Aflys sundhedscheck" />
-                        </form>
+                            <form class="form-view-building" action="TechnicianServlet" method="POST">
+                                <input type="hidden" name="origin" value="viewBuilding" />
+                                <input type="hidden" name="originSection" value="healthcheckButton" />
+                                <input type="hidden" name="originValue" value="cancel" />
+                                <input class="btn btn-primary" type="submit" value="Aflys sundhedscheck" />
+                            </form>
                         <%}%>
                         <br><br>
 
@@ -324,150 +397,186 @@
                                     </th>
                                 </tr>
                                 <% if (buildingAreas.size() == 0) {%>
-                                <tr>
-                                    <td colspan="5">Ingen områder oprettet</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="5">Ingen områder oprettet</td>
+                                    </tr>
                                 <%}%> 
                                 <% for (int i = 0; i < buildingAreas.size(); i++) {%>
-                                <tr>
-                                    <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getName()%></b></td>
-                                    <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getDescription()%></b></td>
-                                    <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getSqm()%></b></td>
-                                    <td colspan="1" style="border-top: 1px solid #000000">
-                                        <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="viewBuilding" />
-                                            <input type="hidden" name="originSection" value="deleteAreaButton" />
-                                            <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                            <input class="btn btn-primary" type="submit" value="Slet område" />
-                                        </form>
-                                    </td>
-                                    <td colspan="1" style="border-top: 1px solid #000000">
-                                        <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="viewBuilding" />
-                                            <input type="hidden" name="originSection" value="createRoomButton" />
-                                            <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                            <input class="btn btn-primary" type="submit" value="Nyt lokale" />
-                                        </form>
-                                        <form class="form-view-building" id="createIssue" action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="viewBuilding" />
-                                            <input type="hidden" name="originSection" value="addIssueButton" />
-                                            <input type="hidden" name="originType" value="area" />
-                                            <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                            <input type="hidden" name="roomId" value="0" />
-                                            <input class="btn btn-primary" type="submit" value="Registrer problem" />
-                                        </form>
-                                    </td>
-                                </tr>
-                                <%
-                                    //Loop through list of building healthchecks
-                                    for (int j = 0; j < buildingHealthchecks.size(); j++) {
+                                    <tr>
+                                        <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getName()%></b></td>
+                                        <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getDescription()%></b></td>
+                                        <td colspan="1" style="border-top: 1px solid #000000"><b><%=buildingAreas.get(i).getSqm()%></b></td>
+                                        <td colspan="1" style="border-top: 1px solid #000000">
+                                            <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                <input type="hidden" name="originSection" value="deleteAreaButton" />
+                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                <input class="btn btn-primary" type="submit" value="Slet område" />
+                                            </form>
+                                        </td>
+                                        <td colspan="1" style="border-top: 1px solid #000000">
+                                            <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                <input type="hidden" name="originSection" value="createRoomButton" />
+                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                <input class="btn btn-primary" type="submit" value="Nyt lokale" />
+                                            </form>
+                                            <form class="form-view-building" id="createIssue" action="TechnicianServlet" method="POST">
+                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                <input type="hidden" name="originSection" value="addIssueButton" />
+                                                <input type="hidden" name="originType" value="area" />
+                                                <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                <input type="hidden" name="roomId" value="0" />
+                                                <input class="btn btn-primary" type="submit" value="Registrer problem" />
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% for (int j = 0; j < buildingHealthchecks.size(); j++) {//Loop through list of building healthchecks
                                         //If healthcheck matches that saved in the Session (= the newest/currently open one)
                                         if (buildingHealthchecks.get(j).getHealthcheck_id() == (Integer) request.getSession().getAttribute("healthcheckId")) {
                                             //For each issue pertaining this healthcheck
                                             for (int k = 0; k < healthcheckIssues.size(); k++) {
                                                 //If the issue is for this area, print table row with issue details
                                                 if ((healthcheckIssues.get(k).getArea_id() == buildingAreas.get(i).getArea_id()) && (healthcheckIssues.get(k).getRoom_id() == 0)) {%>
-                                <tr>
-                                    <td colspan="2">
-                                        <%= healthcheckIssues.get(k).getDescription()%>
-                                    </td>
-                                    <td>
-                                        <%= healthcheckIssues.get(k).getRecommendation()%>
-                                    </td>
-                                    <td>
-                                        <img src="./GetImage?type=issue&id=<%=healthcheckIssues.get(k).getIssue_id()%>" class="img-fluid " width="300" alt="Responsive image">
-                                    </td>
-                                    <td>
-                                        <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="viewBuilding" />
-                                            <input type="hidden" name="originSection" value="deleteIssueButton" />
-                                            <input type="hidden" name="issueId" value="<%=healthcheckIssues.get(k).getIssue_id()%>" />
-                                            <input class="btn btn-primary" type="submit" value="Slet problem" />
-                                        </form>
-                                    </td>
-                                </tr>
-                                <%}
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <%= healthcheckIssues.get(k).getDescription()%>
+                                                        </td>
+                                                        <td>
+                                                            <%= healthcheckIssues.get(k).getRecommendation()%>
+                                                        </td>
+                                                        <td>
+                                                            <img src="./GetImage?type=issue&id=<%=healthcheckIssues.get(k).getIssue_id()%>" class="img-fluid " width="300" alt="Responsive image">
+                                                        </td>
+                                                        <td>
+                                                            <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                                <input type="hidden" name="originSection" value="deleteIssueButton" />
+                                                                <input type="hidden" name="issueId" value="<%=healthcheckIssues.get(k).getIssue_id()%>" />
+                                                                <input class="btn btn-primary" type="submit" value="Slet problem" />
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                <%}
                                             }
 
                                         }
                                     }%>
 
-                                <% for (int l = 0; l < buildingRooms.size(); l++) {
+                                    <% for (int l = 0; l < buildingRooms.size(); l++) {
                                         if (buildingAreas.get(i).getArea_id() == buildingRooms.get(l).getArea_id()) {%>
-                                <tr>
-                                    <td>&nbsp;<%=buildingRooms.get(l).getName()%></td>
-                                    <td><%=buildingRooms.get(l).getDescription()%></td>
-                                    <td><%=buildingRooms.get(l).getSqm()%></td>
-                                    <td>
-                                        <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="viewBuilding" />
-                                            <input type="hidden" name="originSection" value="deleteRoomButton" />
-                                            <input type="hidden" name="roomId" value="<%=buildingRooms.get(l).getRoom_id()%>" />
-                                            <input class="btn btn-primary" type="submit" value="Slet lokale" />
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form class="form-view-building" id="createIssue" action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="viewBuilding" />
-                                            <input type="hidden" name="originSection" value="addIssueButton" />
-                                            <input type="hidden" name="originType" value="room" />
-                                            <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                            <input type="hidden" name="roomId" value="<%=buildingRooms.get(l).getRoom_id()%>" />
-                                            <input class="btn btn-primary" type="submit" value="Registrer problem" />
-                                        </form>
-                                    </td>
-                                </tr>
+                                            <tr>
+                                                <td>&nbsp;<%=buildingRooms.get(l).getName()%></td>
+                                                <td><%=buildingRooms.get(l).getDescription()%></td>
+                                                <td><%=buildingRooms.get(l).getSqm()%></td>
+                                                <td>
+                                                    <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                                        <input type="hidden" name="originSection" value="deleteRoomButton" />
+                                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(l).getRoom_id()%>" />
+                                                        <input class="btn btn-primary" type="submit" value="Slet lokale" />
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form class="form-view-building" action="TechnicianServlet" method="POST">
+                                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                                        <input type="hidden" name="originSection" value="addIssueButton" />
+                                                        <input type="hidden" name="originType" value="room" />
+                                                        <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
+                                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(l).getRoom_id()%>" />
+                                                        <input class="btn btn-primary" type="submit" value="Registrer problem" />
+                                                    </form>
+                                                    <form action="TechnicianServlet" method="POST">
+                                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                                        <input type="hidden" name="originSection" value="registerMoistButton" />
+                                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(l).getRoom_id()%>" />
+                                                        <input class="btn btn-primary" type="submit" value="Registrer fugtmåling" />
+                                                    </form>
+                                                    <form action="TechnicianServlet" method="POST">
+                                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                                        <input type="hidden" name="originSection" value="registerDamageRepairButton" />
+                                                        <input type="hidden" name="roomId" value="<%=buildingRooms.get(l).getRoom_id()%>" />
+                                                        <input class="btn btn-primary" type="submit" value="Registrer tidl. skade" />
+                                                    </form>
+                                                </td>
+                                            </tr>
 
-                                <%
-                                    //Loop through list of building healthchecks
-                                    for (int m = 0; m < buildingHealthchecks.size(); m++) {
-                                        //If healthcheck matches that saved in the Session (= the newest/currently open one)
-                                        //if(buildingHealthchecks.get(m).getHealthcheck_id()== (Integer) request.getSession().getAttribute("healthcheckId")){
-                                        if (buildingHealthchecks.get(m).getHealthcheck_id() == (Integer) request.getSession().getAttribute("healthcheckId")) {
-                                            //For each issue pertaining this healthcheck
-                                            for (int n = 0; n < healthcheckIssues.size(); n++) {
-                                                //If the issue is for this room, print table row with issue details
-                                                if (healthcheckIssues.get(n).getRoom_id() == buildingRooms.get(l).getRoom_id()) {%>
-                                <tr>
-                                    <td colspan="2">
-                                        <%= healthcheckIssues.get(n).getDescription()%>
-                                    </td>
-                                    <td>
-                                        <%= healthcheckIssues.get(n).getRecommendation()%>
-                                    </td>
-                                    <td>
-                                        <img src="./GetImage?type=issue&id=<%=healthcheckIssues.get(n).getIssue_id()%>" class="img-fluid " width="300" alt="Responsive image">
-                                    </td>
-                                    <td>
-                                        <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="viewBuilding" />
-                                            <input type="hidden" name="originSection" value="deleteIssueButton" />
-                                            <input type="hidden" name="issueId" value="<%=healthcheckIssues.get(n).getIssue_id()%>" />
-                                            <input class="btn btn-primary" type="submit" value="Slet problem" />
-                                        </form>
-                                    </td>
-                                </tr>
-                                <%}
+                                            <% for (int m = 0; m < buildingHealthchecks.size(); m++) {//Loop through list of building healthchecks
+                                                //If healthcheck matches that saved in the Session (= the newest/currently open one)
+                                                if (buildingHealthchecks.get(m).getHealthcheck_id() == (Integer) request.getSession().getAttribute("healthcheckId")) {
+                                                    //For each issue pertaining this healthcheck
+                                                    for (int n = 0; n < healthcheckIssues.size(); n++) {
+                                                        //If the issue is for this room, print table row with issue details
+                                                        if (healthcheckIssues.get(n).getRoom_id() == buildingRooms.get(l).getRoom_id()) {%>
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <%= healthcheckIssues.get(n).getDescription()%>
+                                                                </td>
+                                                                <td>
+                                                                    <%= healthcheckIssues.get(n).getRecommendation()%>
+                                                                </td>
+                                                                <td>
+                                                                    <img src="./GetImage?type=issue&id=<%=healthcheckIssues.get(n).getIssue_id()%>" class="img-fluid " width="300" alt="Responsive image">
+                                                                </td>
+                                                                <td>
+                                                                    <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                                                        <input type="hidden" name="originSection" value="deleteIssueButton" />
+                                                                        <input type="hidden" name="issueId" value="<%=healthcheckIssues.get(n).getIssue_id()%>" />
+                                                                        <input class="btn btn-primary" type="submit" value="Slet problem" />
+                                                                    </form>
+                                                                </td>
+                                                            </tr>
+                                                        <%}
+                                                    }
+                                                }
+                                            }
+                                            
+                                            for (int o = 0; o < allMoistureMeasurements.size(); o++) {
+                                                if(allMoistureMeasurements.get(o).getRoomId()==buildingRooms.get(l).getRoom_id()){%>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <%= allMoistureMeasurements.get(o).getMeasurePoint()%>
+                                                        </td>
+                                                        <td>
+                                                            <%= allMoistureMeasurements.get(o).getMoistureValue()%>
+                                                        </td>
+                                                        <td>
+                                                            <form id="viewBuilding" action="TechnicianServlet" method="POST">
+                                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                                <input type="hidden" name="originSection" value="deleteMoist" />
+                                                                <input type="hidden" name="moistId" value="<%=allMoistureMeasurements.get(o).getMoisture_info_id()%>" />
+                                                                <input class="btn btn-primary" type="submit" value="Slet fugtmåling" />
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                <%}
                                             }
 
+                                            for (int p = 0; p < allDamageRepairs.size(); p++) {
+                                                if(allDamageRepairs.get(p).getRoomId()==buildingRooms.get(l).getRoom_id()){%>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <%= allDamageRepairs.get(p).getDate_occurred()%>
+                                                        </td>
+                                                        <td>
+                                                            <%= allDamageRepairs.get(p).getLocation()%>
+                                                        </td>
+                                                        <td>
+                                                            <%= allDamageRepairs.get(p).getDetails()%>
+                                                        </td>
+                                                        <td>
+                                                            <%= allDamageRepairs.get(p).getWork_done()%>
+                                                        </td>
+                                                        <td>
+                                                            <%= allDamageRepairs.get(p).getType()%>
+                                                        </td>
+                                                    </tr>
+                                                <%}
+                                            }
                                         }
-                                    }%>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                <%}
-                                    }%>
-                                <%}%>
+                                    }
+                                }%>
                             </tbody>
                         </table>
                         <br><br>    

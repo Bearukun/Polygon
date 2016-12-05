@@ -10,8 +10,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.DamageRepair;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
+import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 /**
  * Class dealing with building data
@@ -22,6 +24,8 @@ public class BuildingMapper implements BuildingMapperInterface {
     private ArrayList<Building> userBuilding = new ArrayList();
     private ArrayList<Building> allBuildings = new ArrayList();
     private ArrayList<Healthcheck> buildingHealthchecks = new ArrayList();
+    private ArrayList<MoistureInfo> allMoistureMeasurements = new ArrayList();
+    private ArrayList<DamageRepair> allDamageRepairs = new ArrayList();
     private ArrayList<Healthcheck> allHealthchecks = new ArrayList();
     private ArrayList<Issue> healthcheckIssues = new ArrayList();
     private ArrayList<Area> buildingAreas = new ArrayList();
@@ -946,5 +950,228 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
 
         return healthcheckIssues;
+    }
+
+    @Override
+    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "INSERT INTO polygon.moisture_info (measure_point, moisture_value, room_id) VALUES (?, ?, ?)";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, measurePoint);
+            stmt.setInt(2, measureValue);
+            stmt.setInt(3, roomId);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.registerMoistureMeasurement."+ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.moisture_info";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Loop through the resultSet.
+            while (rs.next()) {
+                //Add current moisture measurement from RS into the buildingHealthchecks-ArrayList.
+                allMoistureMeasurements.add(new MoistureInfo(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4)));
+            }
+            
+        } catch (Exception e) {
+            
+            throw new Exception("SQL Error: getAllMoistureMeasurements Failed at DBFacade.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.getAllMoistureMeasurements."+ex.getMessage());
+            
+            }
+            
+        }
+
+        return allMoistureMeasurements;
+    }
+
+    @Override
+    public void deleteMoistureMeasurement(int moistId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "DELETE FROM moisture_info WHERE moisture_info_id = ?;ALTER TABLE moisture_info AUTO_INCREMENT=1;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, moistId);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.deleteMoistureMeasurement."+ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<DamageRepair> getAllDamageRepairs() throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.damage_repair";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+            
+            //Declare and instantiate type.
+            DamageRepair.type type;
+            
+            //Loop through the resultSet.
+            while (rs.next()) {
+                
+                //If-condition, checking the condition of the damage_repair.
+                //The local varible gets assigned the ENUM from the rs.
+                if (rs.getString(7).equals(DamageRepair.type.DAMP.toString())) {
+
+                    type = DamageRepair.type.DAMP;
+
+                } else if (rs.getString(7).equals(DamageRepair.type.ROTFUNGUS.toString())) {
+                    
+                    type = DamageRepair.type.ROTFUNGUS;
+
+                } else if (rs.getString(7).equals(DamageRepair.type.MOULD.toString())) {
+                    
+                    type = DamageRepair.type.MOULD;
+                
+                } else if (rs.getString(7).equals(DamageRepair.type.FIRE.toString())) {
+                    
+                    type = DamageRepair.type.FIRE;
+                } else {
+                    
+                    type = DamageRepair.type.OTHER;
+                
+                }
+                
+                //Add current moisture measurement from RS into the buildingHealthchecks-ArrayList.
+                allDamageRepairs.add(new DamageRepair(rs.getInt(1), rs.getBoolean(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5), rs.getString(6), type, rs.getInt(8)));
+            }
+            
+        } catch (Exception e) {
+            
+            throw new Exception("SQL Error: getAllDamageRepairs Failed at DBFacade.");
+            
+        }finally{
+        
+            //Try releasing objects. 
+            try {
+                
+                con.close();
+                stmt.close();
+                rs.close();
+                
+            } catch (SQLException ex) {
+                
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.getAllDamageRepairs."+ex.getMessage());
+            
+            }
+            
+        }
+
+        return allDamageRepairs;
+    }
+
+    @Override
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, DamageRepair.type type) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "INSERT INTO polygon.damage_repair (previous_damage, date_occurred, location, details, work_done, type, room_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 1);
+            stmt.setString(2, damageTime);
+            stmt.setString(3, damageLocation);
+            stmt.setString(4, damageDetails);
+            stmt.setString(5, workDone);
+            stmt.setString(6, type.toString());
+            stmt.setInt(7, roomId);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.registerDamageRepair."+ex.getMessage());
+            }
+        }
     }
 }

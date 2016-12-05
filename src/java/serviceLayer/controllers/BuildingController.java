@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import serviceLayer.controllers.interfaces.BuildingControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.DamageRepair;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
+import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 
 public class BuildingController implements BuildingControllerInterface{
@@ -108,6 +110,31 @@ public class BuildingController implements BuildingControllerInterface{
     @Override
     public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception {
         return dbfacade.getHealthcheckIssues(healthcheckId);
+    }
+
+    @Override
+    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws Exception {
+        dbfacade.registerMoistureMeasurement(roomId, measurePoint, measureValue);
+    }
+
+    @Override
+    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws Exception {
+        return dbfacade.getAllMoistureMeasurements();
+    }
+
+    @Override
+    public void deleteMoistureMeasurement(int moistId) throws Exception {
+        dbfacade.deleteMoistureMeasurement(moistId);
+    }
+
+    @Override
+    public ArrayList<DamageRepair> getAllDamageRepairs() throws Exception {
+        return dbfacade.getAllDamageRepairs();
+    }
+
+    @Override
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, DamageRepair.type type) throws Exception {
+        dbfacade.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
     }
 
 }

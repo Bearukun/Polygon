@@ -22,8 +22,10 @@ import serviceLayer.controllers.interfaces.DataControllerInterface;
 import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.DamageRepair;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
+import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -35,6 +37,8 @@ public class TechnicianServlet extends HttpServlet {
     private ArrayList<Building> allBuildings = new ArrayList();
     private ArrayList<Healthcheck> allHealthchecks = new ArrayList();
     private ArrayList<Healthcheck> buildingHealthchecks = new ArrayList();
+    private ArrayList<MoistureInfo> allMoistureMeasurements = new ArrayList();
+    private ArrayList<DamageRepair> allDamageRepairs = new ArrayList();
     private ArrayList<Issue> healthcheckIssues = new ArrayList();
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
@@ -98,6 +102,12 @@ public class TechnicianServlet extends HttpServlet {
                     int healthcheckId = getBuildingHealthcheck(request, buildingId);
                     getHealthcheckIssues(request, healthcheckId);
 
+                    //Refresh all moisture measurements 
+                    refreshAllMoistureMeasurements(request);
+                    
+                    //Refresh all damage repairs 
+                    refreshAllDamageRepairs(request);
+                    
                     //redirect to viewBuilding into the specific building being edited
                     response.sendRedirect("technicianViewBuilding.jsp?value=" + buildingId + "");
 
@@ -293,6 +303,60 @@ public class TechnicianServlet extends HttpServlet {
                         getHealthcheckIssues(request, healthcheckId);
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
+                    //If 'Register moisture scan' button was clicked
+                    else if(request.getParameter("originSection").equals("registerMoistButton")){
+                        request.getSession().setAttribute("source", "registerMoistButton");
+                        request.getSession().setAttribute("roomId", request.getParameter("roomId"));
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If a moisture level needs registering
+                    else if(request.getParameter("originSection").equals("registerMoist")){
+                        request.getSession().setAttribute("source", "");
+                        
+                        int roomId = Integer.parseInt(request.getSession().getAttribute("roomId").toString());
+                        String measurePoint = request.getParameter("measurePoint");
+                        int measureValue = Integer.parseInt(request.getParameter("measureValue")); 
+                        bldgCtrl.registerMoistureMeasurement(roomId, measurePoint, measureValue);
+                        //Refresh all moisture measurements 
+                        refreshAllMoistureMeasurements(request);
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If a moisture level needs deleting
+                    else if(request.getParameter("originSection").equals("deleteMoist")){
+                        request.getSession().setAttribute("source", "");
+                        int moistId = Integer.parseInt(request.getParameter("moistId"));
+                        bldgCtrl.deleteMoistureMeasurement(moistId);
+                        //Refresh all moisture measurements 
+                        refreshAllMoistureMeasurements(request);
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If 'Register damage repair' button was clicked
+                    else if(request.getParameter("originSection").equals("registerDamageRepairButton")){
+                        request.getSession().setAttribute("source", "registerDamageRepairButton");
+                        request.getSession().setAttribute("roomId", request.getParameter("roomId"));
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If a damage repair needs registering
+                    else if(request.getParameter("originSection").equals("registerDamageRepair")){
+                        request.getSession().setAttribute("source", "");
+                        
+                        int roomId = Integer.parseInt(request.getSession().getAttribute("roomId").toString());
+                        String damageTime = request.getParameter("damageTime");
+                        String damageLocation = request.getParameter("damageLocation");
+                        String damageDetails = request.getParameter("damageDetails");
+                        String workDone = request.getParameter("workDone");
+                        //DamageRepair.type type = request.getParameter("type");
+                        
+                        //bldgCtrl.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
+                        
+                        //Refresh all damage repairs 
+                        refreshAllDamageRepairs(request);
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    
+                    
+                    
+                    
                     //If a healthcheck PDF report needs deleting
                     else if(request.getParameter("originSection").equals("createPDFButton")){
                         
@@ -379,6 +443,28 @@ public class TechnicianServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+    }
+    
+    //Refreshes the damage repairs list
+    public void refreshAllDamageRepairs(HttpServletRequest request){
+        allDamageRepairs.clear();
+        try {
+            allDamageRepairs = bldgCtrl.getAllDamageRepairs();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        request.getSession().setAttribute("allDamageRepairs", allDamageRepairs);
+    }
+    
+    //Refreshes the moisture measurements list
+    public void refreshAllMoistureMeasurements(HttpServletRequest request){
+        allMoistureMeasurements.clear();
+        try {
+            allMoistureMeasurements = bldgCtrl.getAllMoistureMeasurements();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        request.getSession().setAttribute("allMoistureMeasurements", allMoistureMeasurements);
     }
     
     //Fetches the issues for the current healthcheck

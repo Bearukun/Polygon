@@ -92,7 +92,6 @@ public class NavigatorServlet extends HttpServlet {
                             //Sends email to the customer about their new building
                             emailNewBuilding(name, address, postcode, city, construction_year, purpose, sqm);
                            
-                            response.sendRedirect("index.jsp?success");
                             redirectUser(request, response);
                         } catch (Exception e) {
 

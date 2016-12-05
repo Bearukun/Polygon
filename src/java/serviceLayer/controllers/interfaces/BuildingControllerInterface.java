@@ -3,8 +3,10 @@ package serviceLayer.controllers.interfaces;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.DamageRepair;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
+import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 
 
@@ -47,5 +49,14 @@ public interface BuildingControllerInterface {
     public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception;
     
     public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception;
+
+    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws Exception;
     
+    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws Exception;
+    
+    public void deleteMoistureMeasurement(int moistId) throws Exception;
+    
+    public ArrayList<DamageRepair> getAllDamageRepairs() throws Exception;
+
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, DamageRepair.type type) throws Exception;
 }
