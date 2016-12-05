@@ -55,6 +55,7 @@
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
                         <h1>Overblik:</h1>
+                         <a href="adminEmail.jsp"> Opret test Mail </a>
                        
                         <% ArrayList<User> userList = new ArrayList();
                             ArrayList<Building> allBuildings = new ArrayList();

@@ -4,12 +4,15 @@ import dataAccessLayer.PDFCreator;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.BuildingController;
+import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -17,7 +20,7 @@ import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
 /**
- * Servlet that handles the customer. 
+ * Servlet that handles the customer.
  */
 @WebServlet(name = "NavigatorServlet", urlPatterns = {"/NavigatorServlet"})
 public class NavigatorServlet extends HttpServlet {
@@ -35,8 +38,10 @@ public class NavigatorServlet extends HttpServlet {
     private int user_id, uPhone, uPostcode, uUser_id;
     private boolean editingOtherUserProfile = false;
     private Building build;
+    private EmailController emailCtrl = new EmailController();
     PDFCreator pdfwt = new PDFCreator();
-    
+    Date date = new Date();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,7 +55,7 @@ public class NavigatorServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        
+
         try {
 
             //Save the logged in user's id
@@ -58,17 +63,17 @@ public class NavigatorServlet extends HttpServlet {
             String email = request.getSession().getAttribute("email").toString();
             //Get user object with the above email
             user = usrCtrl.getUser(user_id);
-            build  = (Building) request.getSession().getAttribute("buildingBeingEdited");
-        
+            build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+
             String errMsg = null;
             String origin = request.getParameter("origin");
-            
+
             switch (origin) {
-        
+
                 case "createBuilding":
 
                     //If no user is logged in. (user == 0)
-                    if (user_id>0) {
+                    if (user_id > 0) {
 
                         String name = request.getParameter("name");
                         String address = request.getParameter("address");
@@ -83,6 +88,11 @@ public class NavigatorServlet extends HttpServlet {
                             //Refresh the user's buildings
                             refreshBuilding(user_id);
                             request.getSession().setAttribute("userBuildings", userBuildings);
+                            
+                            //Sends email to the customer about their new building
+                            emailNewBuilding(name, address, postcode, city, construction_year, purpose, sqm);
+                           
+                            response.sendRedirect("index.jsp?success");
                             redirectUser(request, response);
                         } catch (Exception e) {
 
@@ -97,10 +107,10 @@ public class NavigatorServlet extends HttpServlet {
                         response.sendRedirect("index.jsp?=notLoggedIn");
 
                     }
-                break;
-                
+                    break;
+
                 case "deleteBuildingButton":
-                
+
                     try {
                         int buildingId = build.getbuildingId();
                         bldgCtrl.deleteBuilding(buildingId);
@@ -114,8 +124,8 @@ public class NavigatorServlet extends HttpServlet {
                         response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
 
                     }
-                break;
-                
+                    break;
+
                 case "editOtherProfileButton":
                     User userToEdit = usrCtrl.getUser(user_id);
                     populateEditUserPage(request, userToEdit);
@@ -125,36 +135,34 @@ public class NavigatorServlet extends HttpServlet {
                     //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
                     request.getSession().setAttribute("source", request.getParameter("source"));
                     response.sendRedirect("editProfile.jsp");
-                break;
-                
+                    break;
+
                 case "editProfileButton":
                     populateEditUserPage(request, user);
                     //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
                     request.getSession().setAttribute("source", request.getParameter("source"));
                     response.sendRedirect("editProfile.jsp");
-                break;
-                    
+                    break;
+
                 case "editProfile":
                     System.out.println("NAVI EDIT PROFILE");
                     //Check if editing another user's profile or one's own profile
-                    if(editingOtherUserProfile){
+                    if (editingOtherUserProfile) {
                         editUser(request, (Integer) request.getSession().getAttribute("userToEdit"));
-                        editingOtherUserProfile=false;
-                    }
-                    else if(!editingOtherUserProfile){
+                        editingOtherUserProfile = false;
+                    } else if (!editingOtherUserProfile) {
                         editUser(request, user_id);
                     }
-                    
+
                     //Fetch user from the user's id
-                    user = usrCtrl.getUser(user_id); 
-                    
+                    user = usrCtrl.getUser(user_id);
+
                     //Resets/updates the userName, password and updates the displayed username
                     request.getSession().setAttribute("email", user.getEmail());
                     request.getSession().setAttribute("password", user.getPassword());
-                    
+
                     refreshUsers(request);
-                    
-            
+
                     /*
                     //Updates the editUserTable with the new/updated user information
                     request.getSession().setAttribute("uEmail", uEmail);
@@ -165,17 +173,17 @@ public class NavigatorServlet extends HttpServlet {
                     request.getSession().setAttribute("uAddress", uAddress);
                     request.getSession().setAttribute("uPostcode", uPostcode);
                     request.getSession().setAttribute("uCity", uCity);
-                    */
+                     */
                     redirectUser(request, response);
 
-                break;
-                    
+                    break;
+
                 case "deleteUser":
                     int userIdToDelete = Integer.parseInt(request.getParameter("userIdToDelete"));
                     usrCtrl.deleteUser(userIdToDelete);
                     refreshUsers(request);
                     redirectUser(request, response);
-                break;
+                    break;
             }
 
         } catch (Exception e) {
@@ -183,27 +191,25 @@ public class NavigatorServlet extends HttpServlet {
         }
 
     }
-    
+
     //Redirects the user to the appropriate page
     public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
-            if(request.getParameter("originSection").equals("Kunde")){
+            if (request.getParameter("originSection").equals("Kunde")) {
                 response.sendRedirect("user.jsp?success");
-            }
-            else if(request.getParameter("originSection").equals("Tekniker")){
+            } else if (request.getParameter("originSection").equals("Tekniker")) {
                 response.sendRedirect("technician.jsp?success");
-            }
-            else if(request.getParameter("originSection").equals("Administration")){
+            } else if (request.getParameter("originSection").equals("Administration")) {
                 response.sendRedirect("admin.jsp?success");
             }
         } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            ex.printStackTrace();
+        }
     }
-    
-    
+
     //Populates the editUser.jsp fields
     public void populateEditUserPage(HttpServletRequest request, User user) throws Exception {
+
         //Retrieve the user's data
         uEmail = user.getEmail();
         uPassword = user.getPassword();
@@ -226,10 +232,11 @@ public class NavigatorServlet extends HttpServlet {
         request.getSession().setAttribute("uCity", uCity);
         request.getSession().setAttribute("uUser_id", uUser_id);
     }
-        
+
     //Edits the user's details
     public void editUser(HttpServletRequest request, int user_id) throws Exception {
         System.out.println("EDITUSER!!!");
+
         //Retrieve form input values from editProfile.jsp
         uEmail = request.getParameter("email");
         uPassword = request.getParameter("password");
@@ -240,10 +247,27 @@ public class NavigatorServlet extends HttpServlet {
         uPostcode = Integer.parseInt(request.getParameter("postcode"));
         uCity = request.getParameter("city");
         int uSelectedUser = user_id;
-        //Save the user's edited values to the user database
+
+        //Email to be sent to the customer, if the email-adress has changed.
+        if (!user.getEmail().equalsIgnoreCase(uEmail)) {
+           
+            editProfileEmailAddressEmail();
+
+        } else if (!user.getPassword().equalsIgnoreCase(uPassword)) {
+         
+            editProfilePasswordEmail();
+            
+        } else {
+
+            editProfileEmail();
+
+
+           
+        }
+        //Save the user's edited values to the user database        
         usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
     }
-    
+
     //Refreshes the list of buildings
     public void refreshBuilding(int user_id) throws Exception {
 
@@ -251,7 +275,7 @@ public class NavigatorServlet extends HttpServlet {
         userBuildings = bldgCtrl.getBuildings(user_id);
 
     }
-    
+
     //Refreshes the list of buildings
     public void refreshAllBuildings(HttpServletRequest request) throws Exception {
         allBuildings.clear();
@@ -276,6 +300,125 @@ public class NavigatorServlet extends HttpServlet {
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
+    }
+    
+    public void emailNewBuilding(String bName, String bAddress, String bPostcode, String bCity, String bConstructionYear, String bPurpose, String bSqm){
+         //Send confirmation email to the customer, regarding the creation of a new building:
+                            String emailNewCustomerHeader = "Polygon: Ny bygning tilføjet til deres profil";
+                            String emailNewCustomerMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                                    + "\n\nVi har den " + date + " registeret, at de har tilføjet en ny bygning til deres profil. "
+                                    + "Vi har registeret følgende data om bygningen:"
+                                    + "\n\n\n"
+                                    + "\n\n"
+                                    + "Bygningens Navn: " + bName + "\n"
+                                    + "Adresse: " + bAddress + "\n"
+                                    + "Postnummer: " + bPostcode + "\n "
+                                    + "By: " + bCity + "\n"
+                                    + "Opførelses år: " + bConstructionYear + "\n"
+                                    + "Bygningens formål: " + bPurpose + "\n"
+                                    + "Samlede kvadratmeter: " + bSqm + "\n"
+                                    //+ "Bygningen ID#: " + selectedBuilding + "\n"
+                                    + "\n\n\n"
+                                    + "Har de nogen spørgsmål, "
+                                    + "så tøv ikke med at kontakte os!"
+                                    + "\n\n\n"
+                                    + " Med Venlig Hilsen"
+                                    + "\n\n"
+                                    + "Polygon"
+                                    + "\n\n"
+                                    + "Rypevang 5\n"
+                                    + "3450 Allerød\n"
+                                    + "Tlf. 4814 0055\n"
+                                    + "sundebygninger@polygon.dk";
+
+                            emailCtrl.send(user.getEmail(), emailNewCustomerHeader, emailNewCustomerMessage);
+    }
+    
+    public void editProfileEmail(){
+        
+             
+            String emailEditProfileHeader = "Polygon: Ændringer i deres profil";
+            String emailEditProfileMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                    + "\n\nVi har den " + date + " registeret, at der er sket ændringer i oplysningerne om deres profil. "
+                    + "Deres profils informationer ser således ud:"
+                    + "Deres profil ser således ud nu: "
+                    + "\n\n"
+                    + "Navn: " + uName + "\n"
+                    + "Email: " + uEmail + "\n"
+                    + "Telefon: " + uPhone + "\n"
+                    + "Firma: " + uCompany + "\n"
+                    + "Adresse: " + uAddress + "\n"
+                    + "Postnummer: " + uPostcode + "\n "
+                    + "By: " + uCity
+                    + "\n\n\n"
+                    + "Skulle de glemme deres kodeord til deres "
+                    + "bruger eller har andre spørgsmål, "
+                    + "så tøv ikke med at kontakte os!"
+                    + "\n\n\n"
+                    + " Med Venlig Hilsen"
+                    + "\n\n"
+                    + "Polygon"
+                    + "\n\n"
+                    + "Rypevang 5\n"
+                    + "3450 Allerød\n"
+                    + "Tlf. 4814 0055\n"
+                    + "sundebygninger@polygon.dk";
+            
+             emailCtrl.send(user.getEmail(), emailEditProfileHeader, emailEditProfileMessage);
+    }
+    
+    public void editProfilePasswordEmail(){
+           //Email to be send if the user changes their password
+            String emailEditProfilePasswordHeader = "Polygon: Ændret kodeord";
+            String emailEditProfilePasswordMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                    + "\n\nVi har den " + date + " registeret, at de har ændret deres kodeord til deres login hos Polygon. "
+                    + "Deres profils informationer ser således ud:"
+                    + "Deres profil ser således ud nu: "
+                    + "\n\n"
+                    + "Ny kode: " + uPassword + "\n"
+                    + "\n\n\n"
+                    + "Har de nogen spørgsmål, "
+                    + "så tøv ikke med at kontakte os!"
+                    + "\n\n\n"
+                    + " Med Venlig Hilsen"
+                    + "\n\n"
+                    + "Polygon"
+                    + "\n\n"
+                    + "Rypevang 5\n"
+                    + "3450 Allerød\n"
+                    + "Tlf. 4814 0055\n"
+                    + "sundebygninger@polygon.dk";
+            
+           
+            emailCtrl.send(user.getEmail(), emailEditProfilePasswordHeader, emailEditProfilePasswordMessage);
+    }
+    
+    public void editProfileEmailAddressEmail(){
+        
+         String emailEditProfileEmailHeader = "Polygon: Ændringer i deres profil";
+            String emailEditProfileEmailMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                    + "\n\nVi har den " + date + " registeret, at deres email til deres login er blevet ændret. "
+                    + "Deres profils informationer ser således ud:"
+                    + "\n\n\n"
+                    + "Tidligere Email: " + user.getEmail() + "\n"
+                    + "Ny Email: " + uEmail + "\n"
+                    + "Har de nogen spørgsmål, "
+                    + "så tøv ikke med at kontakte os!"
+                    + "\n\n\n"
+                    + " Med Venlig Hilsen"
+                    + "\n\n"
+                    + "Polygon"
+                    + "\n\n"
+                    + "Rypevang 5\n"
+                    + "3450 Allerød\n"
+                    + "Tlf. 4814 0055\n"
+                    + "sundebygninger@polygon.dk";
+
+            //Sends the email to both the old and new email
+            emailCtrl.send(uEmail, emailEditProfileEmailHeader, emailEditProfileEmailMessage);
+            emailCtrl.send(user.getEmail(), emailEditProfileEmailHeader, emailEditProfileEmailMessage);
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

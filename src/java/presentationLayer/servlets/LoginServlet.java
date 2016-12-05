@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
-    private EmailController emailC = new EmailController();
+    private EmailController emailCtrl = new EmailController();
 
     PDFCreator pdfwt = new PDFCreator();
 
@@ -160,42 +160,8 @@ public class LoginServlet extends HttpServlet {
                             //If successful, redirect
                             System.out.println("Index redirect");
                             
-                            //Send confirmation email to new Customer:
-                            String emailNewCustomerHeader = "Hej " + name + " (" + company+ " )"+" og velkommen til Polygons's Sundebygninger!";
-                            String emailNewCustomerMessage = "Hej " + name + "!"+
-                                    "\n\nVi er glade for at de har registeret "
-                                    + "deres virksomhed hos os"
-                                    + "og vi ser frem til at arbejde sammen med "
-                                    + "dem i den nærmeste fremtid!"
-                                    + "\n\n\n"
-                                    
-                                    
-                                    +"Her er hvad vi har registeret: "
-                                    + "\n\n"
-                                    + "Navn: " + name +"\n"
-                                    + "Email: " + email +"\n"
-                                    
-                                    + "Telefon: " + phone +"\n"
-                                    + "Firma: " + company + "\n"
-                                    + "Adresse: " + address +"\n"
-                                    + "Postnummer: " + postcode + "\n " 
-                                    + "By: "+ city 
-                                    +"\n\n\n"
-                                    + "Skulle de glemme deres kodeord til deres "
-                                    + "bruger eller har andre spørgsmål, "
-                                    + "så tøv ikke med at kontakte os!"
-                                   
-                                    + "\n\n\n"
-                                    +" Med Venlig Hilsen"
-                                    + "\n\n"
-                                    +"Polygon"
-                                    +"\n\n"
-                                    +"Rypevang 5\n"
-                                    +"3450 Allerød\n"
-                                    +"Tlf. 4814 0055\n"
-                                    + "sundebygninger@polygon.dk" ;
-                   
-                            emailC.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
+                             emailNewCustomer(name, email, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
+                           
                             response.sendRedirect("index.jsp?success");
 
                         } catch (Exception e) {
@@ -290,6 +256,45 @@ public class LoginServlet extends HttpServlet {
             }
         } catch (Exception e) {
         }
+    }
+    
+    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city){
+         //Send confirmation email to new Customer:
+                            String emailNewCustomerHeader = "Hej " + name + " (" + company+ " )"+" og velkommen til Polygons's Sundebygninger!";
+                            String emailNewCustomerMessage = "Hej " + name + "!"+
+                                    "\n\nVi er glade for at de har registeret "
+                                    + "deres virksomhed hos os"
+                                    + "og vi ser frem til at arbejde sammen med "
+                                    + "dem i den nærmeste fremtid!"
+                                    + "\n\n\n"
+                                    
+                                    
+                                    +"Her er hvad vi har registeret: "
+                                    + "\n\n"
+                                    + "Navn: " + name +"\n"
+                                    + "Email: " + email +"\n"
+                                    
+                                    + "Telefon: " + phone +"\n"
+                                    + "Firma: " + company + "\n"
+                                    + "Adresse: " + address +"\n"
+                                    + "Postnummer: " + postcode + "\n " 
+                                    + "By: "+ city 
+                                    +"\n\n\n"
+                                    + "Skulle de glemme deres kodeord til deres "
+                                    + "bruger eller har andre spørgsmål, "
+                                    + "så tøv ikke med at kontakte os!"
+                                   
+                                    + "\n\n\n"
+                                    +" Med Venlig Hilsen"
+                                    + "\n\n"
+                                    +"Polygon"
+                                    +"\n\n"
+                                    +"Rypevang 5\n"
+                                    +"3450 Allerød\n"
+                                    +"Tlf. 4814 0055\n"
+                                    + "sundebygninger@polygon.dk" ;
+                   
+                            emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
