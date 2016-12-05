@@ -178,8 +178,8 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception {
-        bmi.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
+    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception {
+        return bmi.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
     }
 
     @Override

@@ -38,7 +38,7 @@ public interface BuildingControllerInterface {
     
     public void acceptHealthcheck(int buildingId, int technicianId) throws Exception;
     
-    public void createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception;
+    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception;
     
     public void deleteIssue(int issueId) throws Exception;
     

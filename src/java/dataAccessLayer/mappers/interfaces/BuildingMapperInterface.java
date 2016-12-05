@@ -37,7 +37,7 @@ public interface BuildingMapperInterface {
     
     public void acceptHealthcheck(int buildingId, int technicianId) throws Exception;
     
-    public void createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception;
+    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception;
     
     public void deleteIssue(int issueId) throws Exception;
     
@@ -46,4 +46,6 @@ public interface BuildingMapperInterface {
     public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception;
     
     public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception;
+    
+    
 }

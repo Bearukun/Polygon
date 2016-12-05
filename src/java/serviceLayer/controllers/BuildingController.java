@@ -86,8 +86,8 @@ public class BuildingController implements BuildingControllerInterface{
     }
 
     @Override
-    public void createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception {
-        dbfacade.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
+    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception {
+        return dbfacade.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
     }
 
     @Override

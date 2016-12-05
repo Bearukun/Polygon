@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -701,10 +702,12 @@ public class BuildingMapper implements BuildingMapperInterface {
     }
 
     @Override
-    public void createIssue(int building_id, int area_id, int room_id, String description, String recommendation, int healthcheck_id) throws Exception {
+    public int createIssue(int building_id, int area_id, int room_id, String description, String recommendation, int healthcheck_id) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
+                
         try {
             //Get connection object.
             con = DBConnection.getConnection();
@@ -716,7 +719,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 sql = "INSERT INTO polygon.issue (description, recommendation, building_id, area_id, room_id, healthcheck_id) VALUES (?, ?, ?, ?, ?, ?)";
             }
             //Creating prepare statement.
-            stmt = con.prepareStatement(sql);
+            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, description);
             stmt.setString(2, recommendation);
             stmt.setInt(3, building_id);
@@ -728,16 +731,32 @@ public class BuildingMapper implements BuildingMapperInterface {
             else if(room_id==0){
                 stmt.setInt(5, healthcheck_id);
             }
-
-            //Execute update.
+            
             stmt.executeUpdate();
+
+            rs = stmt.getGeneratedKeys();
+            
+            if(rs.next()){
+                
+                return rs.getInt(1);
+                
+            }else{
+                
+                //NEEDS TO BE FIXED!
+                return 99;
+                
+            }
+            
+            
+            
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new Exception("SQL Error: Connection problem."+ e.getMessage());
         }finally{
             //Try releasing objects. 
             try {
                 con.close();
                 stmt.close();
+                rs.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
                  throw new Exception("SQL Error:@DBFacade.acceptHealthcheck."+ex.getMessage());

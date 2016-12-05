@@ -198,14 +198,14 @@
                         <input type="hidden" name="originSection" value="editBuilding" />
                         <input class="btn btn-primary" type="submit" value="Gem ændringer" />
                     </form>
-                    <br><br>
+                    <br>
                     <form method="post" action="UserServlet" enctype="multipart/form-data">
                         <input type="hidden" name="selectedBuilding" value="<%=request.getParameter("value")%>" />
                         <div class="panel panel-default">
                             <div class="panel-heading">Upload et billede</div>
                             <div class="panel-body">Upload et billede af din bygning så vi har et overblik over hvordan den ser ud.</div>
+                            <input class="panel-body" type="file" name="img" size="50" accept=".jpg, .jpeg" />
                         </div>
-                        <input class="panel-body" type="file" name="img" size="50" accept=".jpg, .jpeg" />
                         <input type="hidden" name="originSection" value="editBuildingImage" />
                         <input class="btn btn-primary" type="submit" value="Upload billed" />
                     </form>

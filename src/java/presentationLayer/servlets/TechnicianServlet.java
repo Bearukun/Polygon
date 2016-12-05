@@ -2,6 +2,7 @@ package presentationLayer.servlets;
 
 import dataAccessLayer.PDFCreator;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -10,10 +11,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
+import serviceLayer.controllers.DataController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.controllers.interfaces.BuildingControllerInterface;
+import serviceLayer.controllers.interfaces.DataControllerInterface;
+import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Healthcheck;
@@ -33,8 +39,9 @@ public class TechnicianServlet extends HttpServlet {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
 
-    private UserController usrCtrl = new UserController();
-    private BuildingController bldgCtrl = new BuildingController();
+    private UserControllerInterface usrCtrl = new UserController();
+    private BuildingControllerInterface bldgCtrl = new BuildingController();
+    private DataControllerInterface datCtrl = new DataController();
     private User user = null;
     private int user_id, buildingId = 0;
     private String origin = "";
@@ -260,7 +267,15 @@ public class TechnicianServlet extends HttpServlet {
                         int areaId = Integer.parseInt(request.getSession().getAttribute("areaId").toString());
                         int roomId = Integer.parseInt(request.getSession().getAttribute("roomId").toString());
                         //create new issue
-                        bldgCtrl.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
+                        int issue_index = bldgCtrl.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
+                        
+                        
+                        ///IMG HERE - SOMETHING IS WRONG
+                        
+                        Part filePart = request.getPart("img");
+                        InputStream inputStream = filePart.getInputStream();
+                        //Save values to database
+                        datCtrl.uploadIssueImage(issue_index, "issue_img", inputStream);
                         
                         //Fetch the current healthcheck and its issues for the chosen building 
                         healthcheckId = getBuildingHealthcheck(request, buildingId);
