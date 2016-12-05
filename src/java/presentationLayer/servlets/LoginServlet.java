@@ -294,7 +294,11 @@ public class LoginServlet extends HttpServlet {
                                     +"Tlf. 4814 0055\n"
                                     + "sundebygninger@polygon.dk" ;
                    
+                            try{
                             emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
+                            }  catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

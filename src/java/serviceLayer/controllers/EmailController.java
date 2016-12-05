@@ -9,7 +9,7 @@ import javax.mail.internet.*;
 import javax.activation.*;
 
 public class EmailController implements EmailControllerInterface{
-    public void send(String to, String title, String body) {
+    public void send(String to, String title, String body) throws Exception {
 
         try {
 
@@ -36,7 +36,7 @@ public class EmailController implements EmailControllerInterface{
             Message msg = new MimeMessage(mailSession);
 
             //--[ Set the FROM, TO, DATE and SUBJECT fields
-            msg.setFrom(new InternetAddress("radeonxray@gmail.com"));
+            msg.setFrom(new InternetAddress("polygonmailtest4@gmail.com"));
 //        msg.setFrom( new InternetAddress( "fromusername@yahoo.com" ) );
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             msg.setSentDate(new Date());
@@ -49,7 +49,7 @@ public class EmailController implements EmailControllerInterface{
             Transport.send(msg);
 
         } catch (Exception E) {
-            System.out.println("Oops something has gone pearshaped!");
+            System.out.println("Error: something went wrong when trying to send the Email");
             System.out.println(E);
         }
     }
