@@ -108,7 +108,7 @@ public class UserServlet extends HttpServlet {
                     //If 'Request healthcheck' button was clicked
                     if (request.getParameter("originSection").equals("healthcheckButton")) {
 
-                        emailHealthcheckRequest(build);
+                        emailHealthcheckRequest(build, user_id);
 
                         request.getSession().setAttribute("source", "healthcheckButton");
 
@@ -288,14 +288,28 @@ public class UserServlet extends HttpServlet {
 
                 case "sendEmailToPolygon":
 
-                    String polygonEmail = ""; //INSERT POLYGONS EMAIL ADDRESSE HERE!
-                    String emailHeader = request.getParameter("emailHead");
-                    String emailMessage = request.getParameter("emailMessage");
-
                     
+                    
+                    String polygonEmail = "polygonmailtest4@gmail.com";
+                    String emailHeader = "Bruger#" + usrCtrl.getUser(user_id).getUser_id() + " (" + usrCtrl.getUser(user_id).getCompany() + "): "+ request.getParameter("emailHead")  ;
+
+                    String userInfo = 
+                            "\n\n---------------------------------------------------------------------\n"
+                            
+                            +"Kunde information\n" 
+                            +"---------------------------------------------------------------------\n"
+                            +"Kunde Email: " + usrCtrl.getUser(user_id).getEmail() + "\n"
+                            +"Kunde id: " + usrCtrl.getUser(user_id).getUser_id() +"\n"
+                            +"Kunde Navn: " + usrCtrl.getUser(user_id).getName() + "\n"
+                            +"Kunde Firma: " + usrCtrl.getUser(user_id).getCompany() + "\n"
+                            +"Kunde Tlf: " + usrCtrl.getUser(user_id).getPhone() + "\n"
+                            +"---------------------------------------------------------------------\n\n";
+                    
+                    
+                    String emailMessage = request.getParameter("emailMessage") + userInfo ;
                     
                         emailCtrl.send(polygonEmail, emailHeader, emailMessage);
-                    
+                    response.sendRedirect("user.jsp?mailSuccess");
                     break;
             }
 
@@ -369,17 +383,22 @@ public class UserServlet extends HttpServlet {
                 + "3450 Allerød\n"
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
-
+try{
         emailCtrl.send(user.getEmail(), emailEditBuildingHeader, emailEditBuildingMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void emailHealthcheckRequest(Building build) {
-        //Email the customer about the requested healthcheck       
+    public void emailHealthcheckRequest(Building build, int id) throws Exception {
+        //Email the customer about the requested healthcheck 
+        
+        String polygonMail = "polygonmailtest4@gmail.com";
         String emailHealthcheckRequestHeader = "Polygon: Anmodning om Sunhedscheck indsendt af \"" + build.getName() + "\". ";
-        String emailHealthcheckRequestMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+        String emailHealthcheckRequestMessage = "Hej " + usrCtrl.getUser(id).getName() + " (" + usrCtrl.getUser(id).getCompany() + " )"
                 + "\n\nVi har den " + date + " registeret, at de har anmodet om et sundhedscheck af deres bygning: \"" + build.getName() + "\". "
                 + ""
-                + ""
+                + "\n"
                 + "Har de nogen spørgsmål, "
                 + "så tøv ikke med at kontakte os!"
                 + "\n\n\n"
@@ -392,12 +411,15 @@ public class UserServlet extends HttpServlet {
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
 
-        //Sends email to botht he customer and Polygon
-        //Customer
-        emailCtrl.send(user.getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+        try{
+//        Sends email to both he customer and Polygon
+//        Customer
+        emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
         //Polygon
-        //emailCtrl.send(/*POLYGON EMAIL HER!*/user.getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
-
+        emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+} catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
