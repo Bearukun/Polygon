@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.BuildingController;
+import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -28,7 +29,8 @@ public class AdminServlet extends HttpServlet {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
     private ArrayList<String> buildingPurposes = new ArrayList(Arrays.asList("Landbrug","Erhverv","Bolig","Uddannelse","Offentlig","Industriel","Militær","Religiøs","Transport","Andet"));
-
+    
+    private EmailController emailCtrl = new EmailController();
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private User user = null;
@@ -287,6 +289,17 @@ public class AdminServlet extends HttpServlet {
                      
                     usrCtrl.createUser(newUserEmail, newUserPassword, newUserName, newUserPhone, newUserCompany, newUserAddress, newUserPostcode, newUserCity, User.type.valueOf(newUserType));
                    
+                    
+                    if(newUserType.equalsIgnoreCase("ADMIN")){
+                        
+                        emailNewAdmin(newUserName, newUserEmail, newUserPhone, newUserAddress, newUserPostcode, newUserCity);
+                        
+                    } else if (newUserType.equalsIgnoreCase("TECHNICIAN")){
+                        emailNewTechnician(newUserName, newUserEmail, newUserPhone, newUserAddress, newUserPostcode, newUserCity);
+                        
+                    } else {
+                        emailNewCustomer(newUserName, newUserEmail, newUserPhone, newUserCompany, newUserAddress, newUserPostcode, newUserCity);
+                    }
                     refreshUsers(request);
                    
                     response.sendRedirect("adminUsers.jsp");
@@ -299,6 +312,22 @@ public class AdminServlet extends HttpServlet {
                     request.getSession().setAttribute("source", "admin");
                     response.sendRedirect("adminCreateUser.jsp");
                 break;
+                
+                case "sendEmailToAllUsers":
+                    
+                    
+                    String emailHeader = request.getParameter("emailHead");
+                    String emailMessage = request.getParameter("emailMessage");
+                    
+                    //Loops through all registered users
+                    for (int i = 0; i < userList.size(); i++) {
+                         emailCtrl.send(usrCtrl.getUser(i).getEmail(), emailHeader, emailMessage);
+                    }
+                   
+                    
+                    
+                    
+                    break;
             }
 
         } catch (Exception e) {
@@ -445,6 +474,115 @@ public class AdminServlet extends HttpServlet {
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
     }
+    
+    public void emailNewTechnician(String name, String email, Integer phone, String address, Integer postcode, String city){
+           //Send confirmation email to new Admin
+                            String emailNewCustomerHeader = "Hej " + name +" og velkommen til Polygons som Admin!";
+                            String emailNewCustomerMessage = "Hej " + name + "!"
+                                                                    
+                                    +"\n\nAdmin\n\n"
+                                  
+                                    + "Navn: " + name +"\n"
+                                    + "Email: " + email +"\n"
+                                    
+                                    + "Telefon: " + phone +"\n"
+                                    
+                                    + "Adresse: " + address +"\n"
+                                    + "Postnummer: " + postcode + "\n " 
+                                    + "By: "+ city 
+                                    
+                                    +"\n\n\n"
+                                    + "Skulle de glemme deres kodeord til deres "
+                                    + "bruger eller har andre spørgsmål, "
+                                    + "så tøv ikke med at kontakte os!"
+                                   
+                                    + "\n\n\n"
+                                    +" Med Venlig Hilsen"
+                                    + "\n\n"
+                                    +"Polygon"
+                                    +"\n\n"
+                                    +"Rypevang 5\n"
+                                    +"3450 Allerød\n"
+                                    +"Tlf. 4814 0055\n"
+                                    + "sundebygninger@polygon.dk" ;
+                   
+                            emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
+    }
+    
+    public void emailNewAdmin(String name, String email, Integer phone, String address, Integer postcode, String city){
+          //Send confirmation email to new Admin
+                            String emailNewCustomerHeader = "Hej " + name +" og velkommen til Polygons som Tekniker!";
+                            String emailNewCustomerMessage = "Hej " + name + "!"
+                                                                    
+                                    +"\n\nTekniker\n\n"
+                                  
+                                    + "Navn: " + name +"\n"
+                                    + "Email: " + email +"\n"
+                                    
+                                    + "Telefon: " + phone +"\n"
+                                    
+                                    + "Adresse: " + address +"\n"
+                                    + "Postnummer: " + postcode + "\n " 
+                                    + "By: "+ city 
+                                    
+                                    +"\n\n\n"
+                                    + "Skulle de glemme deres kodeord til deres "
+                                    + "bruger eller har andre spørgsmål, "
+                                    + "så tøv ikke med at kontakte os!"
+                                   
+                                    + "\n\n\n"
+                                    +" Med Venlig Hilsen"
+                                    + "\n\n"
+                                    +"Polygon"
+                                    +"\n\n"
+                                    +"Rypevang 5\n"
+                                    +"3450 Allerød\n"
+                                    +"Tlf. 4814 0055\n"
+                                    + "sundebygninger@polygon.dk" ;
+                   
+                            emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
+    }
+    
+    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city){
+         //Send confirmation email to new Customer:
+                            String emailNewCustomerHeader = "Hej " + name + " (" + company+ " )"+" og velkommen til Polygons's Sundebygninger!";
+                            String emailNewCustomerMessage = "Hej " + name + "!"+
+                                    "\n\nVi er glade for at de har registeret "
+                                    + "deres virksomhed hos os"
+                                    + "og vi ser frem til at arbejde sammen med "
+                                    + "dem i den nærmeste fremtid!"
+                                    + "\n\n\n"
+                                    
+                                    
+                                    +"Her er hvad vi har registeret: "
+                                    + "\n\n"
+                                    + "Navn: " + name +"\n"
+                                    + "Email: " + email +"\n"
+                                    
+                                    + "Telefon: " + phone +"\n"
+                                    + "Firma: " + company + "\n"
+                                    + "Adresse: " + address +"\n"
+                                    + "Postnummer: " + postcode + "\n " 
+                                    + "By: "+ city 
+                                    +"\n\n\n"
+                                    + "Skulle de glemme deres kodeord til deres "
+                                    + "bruger eller har andre spørgsmål, "
+                                    + "så tøv ikke med at kontakte os!"
+                                   
+                                    + "\n\n\n"
+                                    +" Med Venlig Hilsen"
+                                    + "\n\n"
+                                    +"Polygon"
+                                    +"\n\n"
+                                    +"Rypevang 5\n"
+                                    +"3450 Allerød\n"
+                                    +"Tlf. 4814 0055\n"
+                                    + "sundebygninger@polygon.dk" ;
+                   
+                            emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
+    }
+    
+  
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

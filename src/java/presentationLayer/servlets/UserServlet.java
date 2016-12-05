@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.DataController;
+import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
 import serviceLayer.entities.Area;
@@ -33,9 +35,11 @@ public class UserServlet extends HttpServlet {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
 
+    private Date date = new Date();
     private UserController usrCtrl = new UserController();
     private BuildingController bldgCtrl = new BuildingController();
     private DataControllerInterface dat = new DataController();
+    private EmailController emailCtrl = new EmailController();
     private User user = null;
     private int user_id;
     private String origin = "";
@@ -103,6 +107,9 @@ public class UserServlet extends HttpServlet {
 
                     //If 'Request healthcheck' button was clicked
                     if (request.getParameter("originSection").equals("healthcheckButton")) {
+
+                        emailHealthcheckRequest(build);
+
                         request.getSession().setAttribute("source", "healthcheckButton");
 
                         int healthcheckValueToWrite;
@@ -248,15 +255,17 @@ public class UserServlet extends HttpServlet {
                         String purpos = request.getParameter("purpose");
                         int sq = Integer.parseInt(request.getParameter("sqm"));
                         int selectedBuilding = Integer.parseInt(request.getParameter("selectedBuilding"));
-                        
+
+                        emailEditBuilding(buildingName, address, postcod, cit, constructionYear, purpos, sq, selectedBuilding);
+
                         //Save values to database
                         bldgCtrl.editBuilding(selectedBuilding, buildingName, address, postcod, cit, constructionYear, purpos, sq);
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                    }else if (request.getParameter("originSection").equals("editBuildingImage")) {
-                        
+                    } else if (request.getParameter("originSection").equals("editBuildingImage")) {
+
                         request.getSession().setAttribute("source", "editBuilding");
                         Part filePart = request.getPart("img");
                         InputStream inputStream = filePart.getInputStream();
@@ -266,7 +275,7 @@ public class UserServlet extends HttpServlet {
                         refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     }
 
                     break;
@@ -275,6 +284,18 @@ public class UserServlet extends HttpServlet {
                     //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
                     request.getSession().setAttribute("source", "user");
                     response.sendRedirect("addBuilding.jsp");
+                    break;
+
+                case "sendEmailToPolygon":
+
+                    String polygonEmail = ""; //INSERT POLYGONS EMAIL ADDRESSE HERE!
+                    String emailHeader = request.getParameter("emailHead");
+                    String emailMessage = request.getParameter("emailMessage");
+
+                    
+                    
+                        emailCtrl.send(polygonEmail, emailHeader, emailMessage);
+                    
                     break;
             }
 
@@ -292,7 +313,7 @@ public class UserServlet extends HttpServlet {
         userBuildings = bldgCtrl.getBuildings(user_id);
         request.getSession().setAttribute("userBuildings", userBuildings);
     }
-    
+
     //Refreshes the list of buildings
     public void refreshAllBuildings(HttpServletRequest request) throws Exception {
         allBuildings.clear();
@@ -317,6 +338,66 @@ public class UserServlet extends HttpServlet {
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
+    }
+
+    public void emailEditBuilding(String buildingName, String address, int postcod, String cit, int constructionYear, String purpos, int sqm, int selectedBuilding) {
+        //Email the customer about the changes to the building           
+        String emailEditBuildingHeader = "Polygon: Ændringer i deres bygning\"" + buildingName + "\". ";
+        String emailEditBuildingMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                + "\n\nVi har den " + date + " registeret, at der er sket ændringer i oplysningerne om deres bygning \"" + buildingName + "\". "
+                + "Vi har nu derfor følgende generelle information om bygningen:"
+                + "Deres profil ser således ud nu: "
+                + "\n\n"
+                + "\n\n"
+                + "Bygningens Navn: " + buildingName + "\n"
+                + "Adresse: " + address + "\n"
+                + "Postnummer: " + postcod + "\n "
+                + "By: " + cit + "\n"
+                + "Opførelses år: " + constructionYear + "\n"
+                + "Bygningens formål: " + purpos + "\n"
+                + "Samlede kvadratmeter: " + sqm + "\n"
+                + "Bygningen ID#: " + selectedBuilding + "\n"
+                + "\n\n\n"
+                + "Har de nogen spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        emailCtrl.send(user.getEmail(), emailEditBuildingHeader, emailEditBuildingMessage);
+    }
+
+    public void emailHealthcheckRequest(Building build) {
+        //Email the customer about the requested healthcheck       
+        String emailHealthcheckRequestHeader = "Polygon: Anmodning om Sunhedscheck indsendt af \"" + build.getName() + "\". ";
+        String emailHealthcheckRequestMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                + "\n\nVi har den " + date + " registeret, at de har anmodet om et sundhedscheck af deres bygning: \"" + build.getName() + "\". "
+                + ""
+                + ""
+                + "Har de nogen spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        //Sends email to botht he customer and Polygon
+        //Customer
+        emailCtrl.send(user.getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+        //Polygon
+        //emailCtrl.send(/*POLYGON EMAIL HER!*/user.getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
