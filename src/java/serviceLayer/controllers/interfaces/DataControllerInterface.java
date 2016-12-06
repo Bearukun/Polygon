@@ -1,6 +1,8 @@
 package serviceLayer.controllers.interfaces;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Image;
 
 public interface DataControllerInterface {
@@ -16,5 +18,13 @@ public interface DataControllerInterface {
     public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws Exception;
     
     Image checkIfImageExists(Image img)throws Exception;
+    
+    public ArrayList<Document> getDocuments(int buildingId) throws Exception;
+    
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception;
+    
+    public void deleteDocument(int documentId) throws Exception;
+    
+    public Document getDocument(int documentId) throws Exception;
 
 }

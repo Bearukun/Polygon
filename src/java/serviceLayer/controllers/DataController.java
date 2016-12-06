@@ -4,7 +4,9 @@ import dataAccessLayer.DBFacade;
 import dataAccessLayer.interfaces.DBFacadeInterface;
 import dataAccessLayer.mappers.interfaces.DataMapperInterface;
 import java.io.InputStream;
+import java.util.ArrayList;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Image;
 
 public class DataController implements DataControllerInterface {
@@ -84,6 +86,28 @@ public class DataController implements DataControllerInterface {
 
         }
 
+    }
+
+    @Override
+    public ArrayList<Document> getDocuments(int buildingId) throws Exception {
+        
+        return dbfacade.getDocuments(buildingId);
+        
+    }
+
+    @Override
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception {
+        dbfacade.uploadDocument(buildingId, documentName, documentType, document_file);
+    }
+
+    @Override
+    public void deleteDocument(int documentId) throws Exception {
+        dbfacade.deleteDocument(documentId);
+    }
+
+    @Override
+    public Document getDocument(int documentId) throws Exception {
+        return dbfacade.getDocument(documentId);
     }
 
 }

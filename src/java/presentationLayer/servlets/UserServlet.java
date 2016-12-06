@@ -20,6 +20,7 @@ import serviceLayer.controllers.UserController;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -34,6 +35,7 @@ public class UserServlet extends HttpServlet {
     private ArrayList<Building> allBuildings = new ArrayList();
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
+    private ArrayList<Document> buildingDocuments = new ArrayList();
 
     private Date date = new Date();
     private UserController usrCtrl = new UserController();
@@ -90,10 +92,12 @@ public class UserServlet extends HttpServlet {
                     //Fetch areas and rooms for selected building
                     refreshAreas(buildingId);
                     refreshRooms(buildingId);
+                    refreshDocuments(buildingId);
 
                     //Save areas and rooms in Session
                     request.getSession().setAttribute("buildingAreas", buildingAreas);
                     request.getSession().setAttribute("buildingRooms", buildingRooms);
+                    request.getSession().setAttribute("buildingDocuments", buildingDocuments);
 
                     //redirect to viewBuilding into the specific building being edited
                     response.sendRedirect("viewBuilding.jsp?value=" + buildingId + "");
@@ -213,6 +217,57 @@ public class UserServlet extends HttpServlet {
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    } else if (request.getParameter("originSection").equals("addDocumentButton")) {
+                        request.getSession().setAttribute("source", "addDocumentButton");
+                        request.getSession().setAttribute("buildingId", request.getParameter("buildingId"));
+
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    } //If a new document needs uploaded
+                    else if (request.getParameter("originSection").equals("addDocument")) {
+                        request.getSession().setAttribute("source", "addDocument");
+                        
+                        //Retrieve the building being edited (saved in the Session) and save it in the reference object build
+                        build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+                        buildingId = build.getbuildingId();
+
+                        Part filePart = request.getPart("document");
+                        String[] header = (filePart.getHeader("content-disposition").split(" "));
+                        String[] headerExt = header[2].split("\"");
+                        String[] fileNameExt = headerExt[1].split("\\.");
+                        InputStream inputStream = filePart.getInputStream();
+
+                        //Save values to database
+                        dat.uploadDocument(buildingId, fileNameExt[0].toString(), fileNameExt[1].toString(), inputStream);
+
+                        //Refresh documents
+                        refreshDocuments(buildingId);
+                        
+                        //Save documents in Session
+                        request.getSession().setAttribute("buildingDocuments", buildingDocuments);
+
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    } //If an area needs deleting
+                    else if (request.getParameter("originSection").equals("deleteDocumentButton")) {
+                        request.getSession().setAttribute("source", "deleteDocumentButton");
+                        
+                        //Retrieve the building being edited (saved in the Session) and save it in the reference object build
+                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+                        buildingId = build.getbuildingId();
+                        int documentId = Integer.parseInt(request.getParameter("documentId"));
+                        
+                        //Remove document from database
+                        dat.deleteDocument(documentId);
+
+                        //Refresh documents
+                        refreshDocuments(buildingId);
+                        
+                        //Save documents in Session
+                        request.getSession().setAttribute("buildingDocuments", buildingDocuments);
+
+                        //redirect to viewBuilding into the specific building being edited
+                        response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If an area needs deleting
                     else if (request.getParameter("originSection").equals("deleteRoomButton")) {
                         request.getSession().setAttribute("source", "deleteRoomButton");
@@ -290,27 +345,23 @@ public class UserServlet extends HttpServlet {
 
                 case "sendEmailToPolygon":
 
-                    
-                    
                     String polygonEmail = "polygonmailtest4@gmail.com";
-                    String emailHeader = "Bruger#" + usrCtrl.getUser(user_id).getUser_id() + " (" + usrCtrl.getUser(user_id).getCompany() + "): "+ request.getParameter("emailHead")  ;
+                    String emailHeader = "Bruger#" + usrCtrl.getUser(user_id).getUser_id() + " (" + usrCtrl.getUser(user_id).getCompany() + "): " + request.getParameter("emailHead");
 
-                    String userInfo = 
-                            "\n\n---------------------------------------------------------------------\n"
-                            
-                            +"Kunde information\n" 
-                            +"---------------------------------------------------------------------\n"
-                            +"Kunde Email: " + usrCtrl.getUser(user_id).getEmail() + "\n"
-                            +"Kunde id: " + usrCtrl.getUser(user_id).getUser_id() +"\n"
-                            +"Kunde Navn: " + usrCtrl.getUser(user_id).getName() + "\n"
-                            +"Kunde Firma: " + usrCtrl.getUser(user_id).getCompany() + "\n"
-                            +"Kunde Tlf: " + usrCtrl.getUser(user_id).getPhone() + "\n"
-                            +"---------------------------------------------------------------------\n\n";
-                    
-                    
-                    String emailMessage = request.getParameter("emailMessage") + userInfo ;
-                    
-                        emailCtrl.send(polygonEmail, emailHeader, emailMessage);
+                    String userInfo
+                            = "\n\n---------------------------------------------------------------------\n"
+                            + "Kunde information\n"
+                            + "---------------------------------------------------------------------\n"
+                            + "Kunde Email: " + usrCtrl.getUser(user_id).getEmail() + "\n"
+                            + "Kunde id: " + usrCtrl.getUser(user_id).getUser_id() + "\n"
+                            + "Kunde Navn: " + usrCtrl.getUser(user_id).getName() + "\n"
+                            + "Kunde Firma: " + usrCtrl.getUser(user_id).getCompany() + "\n"
+                            + "Kunde Tlf: " + usrCtrl.getUser(user_id).getPhone() + "\n"
+                            + "---------------------------------------------------------------------\n\n";
+
+                    String emailMessage = request.getParameter("emailMessage") + userInfo;
+
+                    emailCtrl.send(polygonEmail, emailHeader, emailMessage);
                     response.sendRedirect("user.jsp?mailSuccess");
                     break;
             }
@@ -349,6 +400,14 @@ public class UserServlet extends HttpServlet {
         buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
+    //Refreshes documents of a select building.
+    public void refreshDocuments(int buildingId) throws Exception {
+
+        buildingDocuments.clear();
+        buildingDocuments = dat.getDocuments(buildingId);
+
+    }
+
     public void refreshUsers(HttpServletRequest request) throws Exception {
 
         userList.clear();
@@ -385,8 +444,8 @@ public class UserServlet extends HttpServlet {
                 + "3450 Allerød\n"
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
-try{
-        emailCtrl.send(user.getEmail(), emailEditBuildingHeader, emailEditBuildingMessage);
+        try {
+            emailCtrl.send(user.getEmail(), emailEditBuildingHeader, emailEditBuildingMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -394,7 +453,7 @@ try{
 
     public void emailHealthcheckRequest(Building build, int id) throws Exception {
         //Email the customer about the requested healthcheck 
-        
+
         String polygonMail = "polygonmailtest4@gmail.com";
         String emailHealthcheckRequestHeader = "Polygon: Anmodning om Sunhedscheck indsendt af \"" + build.getName() + "\". ";
         String emailHealthcheckRequestMessage = "Hej " + usrCtrl.getUser(id).getName() + " (" + usrCtrl.getUser(id).getCompany() + " )"
@@ -413,13 +472,13 @@ try{
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
 
-        try{
+        try {
 //        Sends email to both he customer and Polygon
 //        Customer
-        emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
-        //Polygon
-        emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
-} catch (Exception e) {
+            emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+            //Polygon
+            emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

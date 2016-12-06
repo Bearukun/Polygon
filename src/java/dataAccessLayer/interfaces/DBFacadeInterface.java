@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.DamageRepair;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Image;
 import serviceLayer.entities.Issue;
@@ -93,4 +94,13 @@ public interface DBFacadeInterface {
     public void deleteDamageRepair(int roomId) throws Exception;
     
     public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception;
+    
+    public ArrayList<Document> getDocuments(int buildingId) throws Exception;
+    
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception;
+    
+    public void deleteDocument(int documentId) throws Exception;
+    
+    public Document getDocument(int documentId) throws Exception;
+    
 }

@@ -1,6 +1,8 @@
 package dataAccessLayer.mappers.interfaces;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Image;
 
 public interface DataMapperInterface {
@@ -27,5 +29,12 @@ public interface DataMapperInterface {
     public void updateImage(ImageType imageType, int issue_id, int buildingId, String img_name, InputStream img_file) throws Exception;
 
     public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws Exception;
+    
+    public ArrayList<Document> getDocuments(int buildingId) throws Exception;
+    
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception;
+    
+    public void deleteDocument(int documentId) throws Exception;
 
+    public Document getDocument(int documentId) throws Exception;
 }

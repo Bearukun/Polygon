@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.DamageRepair;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Image;
 import serviceLayer.entities.Issue;
@@ -237,5 +238,25 @@ public class DBFacade implements DBFacadeInterface {
     @Override
     public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception {
         bmi.completeHealthcheck(condition, buildingResponsible, healthcheckId, buildingId);
+    }
+
+    @Override
+    public ArrayList<Document> getDocuments(int buildingId) throws Exception {
+        return dmi.getDocuments(buildingId);
+    }
+
+    @Override
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception {
+        dmi.uploadDocument(buildingId, documentName, documentType, document_file);
+    }
+
+    @Override
+    public void deleteDocument(int documentId) throws Exception {
+        dmi.deleteDocument(documentId);
+    }
+
+    @Override
+    public Document getDocument(int documentId) throws Exception {
+        return dmi.getDocument(documentId);
     }
 }

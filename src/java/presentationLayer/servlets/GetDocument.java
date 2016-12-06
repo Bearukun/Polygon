@@ -2,6 +2,7 @@ package presentationLayer.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Blob;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -11,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.DataController;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
-import serviceLayer.entities.Image;
+import serviceLayer.entities.Document;
 
-@WebServlet(name = "GetImage", urlPatterns = {"/GetImage"})
-public class GetImage extends HttpServlet {
+@WebServlet(name = "GetDocument", urlPatterns = {"/GetDocument"})
+public class GetDocument extends HttpServlet {
 
     private DataControllerInterface dat = new DataController();
-    private Image img;
+    private Document document;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,32 +27,17 @@ public class GetImage extends HttpServlet {
         ServletOutputStream out = response.getOutputStream();
         try {
 
-            String type = request.getParameter("type");
+            document = dat.getDocument(Integer.parseInt(request.getParameter("id")));
 
-            switch (type) {
-                case "image":
-                    img = dat.getImage(Integer.parseInt(request.getParameter("id")));
-                    break;
-                case "building":
-                    img = dat.getBuildingImage(Integer.parseInt(request.getParameter("id")));
-                    break;
-                case "issue":
-                    img = dat.getIssueImage(Integer.parseInt(request.getParameter("id")));
-                    break;
+            Blob doc = document.getDocument_file();
 
-                default:
+            if (document != null) {
 
-                    img = dat.getImage(1);
-
-            }
-
-            Blob photo = img.getImg_file();
-
-            if (photo != null) {
-
-                response.addHeader("Content-Disposition", "attachment; filename=" + img.getImg_name()+".jpg");
-                InputStream in = photo.getBinaryStream();
-                int length = (int) photo.length();
+                
+                InputStream in = doc.getBinaryStream();
+                int length = (int) doc.length();
+                
+		response.addHeader("Content-Disposition", "attachment; filename=" + document.getDocument_name()+"."+document.getDocument_type());
 
                 int bufferSize = 1024;
                 byte[] buffer = new byte[bufferSize];

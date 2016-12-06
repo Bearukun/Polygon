@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Image;
 
 /**
@@ -471,6 +473,209 @@ public class DataMapper implements DataMapperInterface {
 
         }
 
+    }
+
+    @Override
+    public ArrayList<Document> getDocuments(int buildingId) throws Exception {
+
+        ArrayList<Document> documents = new ArrayList();
+
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.document WHERE building_id = ?;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, buildingId);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                documents.add(new Document(rs.getInt(1), rs.getTimestamp(2), rs.getString(3), null, rs.getString(5), rs.getInt(6)));
+
+            }
+
+        } catch (Exception e) {
+
+            throw new Exception("SQL Error:@DataMapper.getDocuments." + e.getMessage());
+
+        } finally {
+
+            //Try releasing objects. 
+            try {
+
+                con.close();
+                stmt.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+
+                //throw error if not successful. 
+                throw new Exception("SQL Error:@DataMapper.getDocuments." + ex.getMessage());
+
+            }
+
+        }
+
+        //Return image.
+        return documents;
+    }
+
+    @Override
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception {
+
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        try {
+
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "INSERT INTO `polygon`.`document` (`document_name`, `document_file`, `document_type`, `building_id`) VALUES (?, ?, ?, ?);";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert data from parameter if into prepareStatement.
+            stmt.setString(1, documentName);
+            stmt.setBlob(2, document_file);
+            stmt.setString(3, documentType);
+            stmt.setInt(4, buildingId);
+            //Execute query.
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+
+            throw new Exception("SQL Error:@DataMapper.addDocument." + e.getMessage());
+
+        } finally {
+
+            //Try releasing objects. 
+            try {
+
+                con.close();
+                stmt.close();
+
+            } catch (SQLException ex) {
+
+                //throw error if not successful. 
+                throw new Exception("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
+
+            }
+
+        }
+
+    }
+
+    @Override
+    public void deleteDocument(int documentId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        try {
+
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "DELETE FROM `polygon`.`document` WHERE `document_id`= ?;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert data from parameter if into prepareStatement.
+            stmt.setInt(1, documentId);
+
+            //Execute query.
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+
+            throw new Exception("SQL Error:@DataMapper.deleteDocument." + e.getMessage());
+
+        } finally {
+
+            //Try releasing objects. 
+            try {
+
+                con.close();
+                stmt.close();
+
+            } catch (SQLException ex) {
+
+                //throw error if not successful. 
+                throw new Exception("SQL Error:@DataMapper.deleteDocument." + ex.getMessage());
+
+            }
+
+        }
+
+    }
+
+    @Override
+    public Document getDocument(int documentId) throws Exception {
+        Document document = new Document();
+
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM polygon.document WHERE document_id = ?;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, documentId);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                document.setDocument_id(rs.getInt(1));
+                document.setDate_created(rs.getTimestamp(2));
+                document.setDocument_name(rs.getString(3));
+                document.setDocument_file(rs.getBlob(4));
+                document.setDocument_type(rs.getString(5));
+                document.setBuilding_id(rs.getInt(6));
+
+            }
+
+        } catch (Exception e) {
+
+            throw new Exception("SQL Error:@DataMapper.getDocument." + e.getMessage());
+
+        } finally {
+
+            //Try releasing objects. 
+            try {
+
+                con.close();
+                stmt.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+
+                //throw error if not successful. 
+                throw new Exception("SQL Error:@DataMapper.getDocument." + ex.getMessage());
+
+            }
+
+        }
+
+        //Return image.
+        return document;
     }
 
 }

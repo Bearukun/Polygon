@@ -1,3 +1,4 @@
+<%@page import="serviceLayer.entities.Document"%>
 <%@page import="serviceLayer.entities.Room"%>
 <%@page import="serviceLayer.entities.Area"%>
 <%@page import="serviceLayer.entities.User"%>
@@ -28,15 +29,19 @@
 
         <% ArrayList<Area> buildingAreas = new ArrayList();
             buildingAreas = (ArrayList<Area>) request.getSession().getAttribute("buildingAreas");
-        %>
-        <% ArrayList<Room> buildingRooms = new ArrayList();
-            //buildingRooms.add(new Room(8, "name", "description", 100, 1, 1));
+
+            ArrayList<Room> buildingRooms = new ArrayList();
             buildingRooms = (ArrayList<Room>) request.getSession().getAttribute("buildingRooms");
+
+            ArrayList<Document> buildingDocuments = new ArrayList();
+            buildingDocuments = (ArrayList<Document>) request.getSession().getAttribute("buildingDocuments");
 
             ArrayList<Building> userBuildings = new ArrayList();
             int user_id = (Integer) request.getSession().getAttribute("user_id");
             userBuildings = (ArrayList<Building>) request.getSession().getAttribute("userBuildings");
             Building build = new Building();
+
+
         %>
         <!--request.getSession().getAttribute("buildingBeingEdited");-->
         <div class="container-fluid">
@@ -126,6 +131,25 @@
                             <input type="hidden" name="origin" value="viewBuilding" />
                             <input type="hidden" name="originSection" value="createRoom" />
                             <input class="btn btn-primary" type="submit" value="Opret lokale" />
+                        </form>
+                    </div>
+                </div>
+                <%
+                        break;
+
+                    case "addDocumentButton":
+                %>
+                <div class="col-sm-10">
+                    <div id="container" class="container-fluid">
+                        <h1>Tilføj dokument:</h1>
+                        <form class="form-view-building" id="newDocument" action="UserServlet" enctype="multipart/form-data" method="POST">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Upload et dokument</div>
+                                <div class="panel-body">Upload et tilhørende din bygning. Dette giver et bedre overblik for os, som resultere i hurtigere behandling og gennemgang for os.</div>
+                                <input class="panel-body" type="file" name="document" size="5000" accept="media_type" />
+                            </div>
+                            <input type="hidden" name="originSection" value="addDocument" />
+                            <input class="btn btn-primary" type="submit" value="Upload dokument" />
                         </form>
                     </div>
                 </div>
@@ -230,11 +254,11 @@
                             }
                         }
                     %>
-                    <h1>Vis bygning</h1>
+                    <h2>Bygningsoversigt:</h2>
 
                     <table text-align="left" class="table">
                         <tbody>
-                            <tr bgcolor='cyan'>
+                            <tr bgcolor='#c0dee8'>
                                 <th colspan="4"><b>Staminformationer</b></th>
                             </tr>
                             <tr>
@@ -250,44 +274,54 @@
                                     <img src="./GetImage?type=building&id=<%=build.getbuildingId()%>" class="img-fluid " height="250" alt="Responsive image">
                                 </td>    
                                 <td>
-                                    <form class="form-view-building" id="editBuilding" action="UserServlet" method="POST">
-                                        <input type="hidden" name="origin" value="viewBuilding" />
-                                        <input type="hidden" name="originSection" value="editBuildingButton" />
-                                        <input class="btn btn-primary" type="submit" value="Rediger" />
-                                    </form>
-                                    <br>
-                                    <form class="form-view-building" id="deleteBuilding" action="NavigatorServlet" method="POST">
-                                        <input type="hidden" name="origin" value="deleteBuildingButton" />
-                                        <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
-                                        <input class="btn btn-danger" type="submit" value="Slet bygning" />
-                                    </form>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <center>
+                                                <form class="form-view-building" id="editBuilding" action="UserServlet" method="POST">
+                                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                                    <input type="hidden" name="originSection" value="editBuildingButton" />
+                                                    <input class="btn btn-primary" type="submit" value="Rediger" />
+                                                </form>
+                                                <br>
+                                                <form class="form-view-building" id="addDocument" action="UserServlet" method="POST">
+                                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                                    <input type="hidden" name="originSection" value="addDocumentButton" />
+                                                    <input class="btn btn-success" type="submit" value="Tilføj dokument" />
+                                                </form>
+                                                <br>
+                                                <form class="form-view-building" id="deleteBuilding" action="NavigatorServlet" method="POST">
+                                                    <input type="hidden" name="origin" value="deleteBuildingButton" />
+                                                    <input type="hidden" name="originSection" value="<%= session.getAttribute("type")%>" />
+                                                    <input class="btn btn-danger" type="submit" value="Slet bygning" />
+                                                </form>
+                                                <br>
+                                                <% if (build.getHealthcheck_pending() > 1) {%>
+                                                <form class="form-view-building" action="UserServlet" method="POST">
+                                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                                    <input type="hidden" name="originSection" value="healthcheckButton" />
+                                                    <input type="hidden" name="originValue" value="cancel" />
+                                                    <input class="btn btn-warning" type="submit" value="Aflys sundhedscheck" />
+                                                </form>
+                                                <%} else if (build.getHealthcheck_pending() == 0) {%>
+                                                <form class="form-view-building" action="UserServlet" method="POST">
+                                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                                    <input type="hidden" name="originSection" value="healthcheckButton" />
+                                                    <input type="hidden" name="originValue" value="order" />
+                                                    <input class="btn btn-success" type="submit" value="Bestil sundhedscheck" />
+                                                </form>
+                                                <%}%>
+                                            </center>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>  
-                    <br><br>
-
-                    <% if (build.getHealthcheck_pending() > 1) {%>
-                    <form class="form-view-building" action="UserServlet" method="POST">
-                        <input type="hidden" name="origin" value="viewBuilding" />
-                        <input type="hidden" name="originSection" value="healthcheckButton" />
-                        <input type="hidden" name="originValue" value="cancel" />
-                        <input class="btn btn-primary" type="submit" value="Aflys sundhedscheck" />
-                    </form>
-                    <%} else if (build.getHealthcheck_pending() == 0) {%>
-                    <form class="form-view-building" action="UserServlet" method="POST">
-                        <input type="hidden" name="origin" value="viewBuilding" />
-                        <input type="hidden" name="originSection" value="healthcheckButton" />
-                        <input type="hidden" name="originValue" value="order" />
-                        <input class="btn btn-primary" type="submit" value="Rekvirer sundhedscheck" />
-                    </form>
-                    <%}%>
-                    <br><br>
 
                     <!--Table of building areas and rooms -->
                     <table text-align="left" class="table">
                         <tbody>
-                            <tr bgcolor='cyan'>
+                            <tr bgcolor='#c0dee8'>
                                 <th>Navn</th>
                                 <th>Beskrivelse</th>
                                 <th>Kvadratmeter</th>
@@ -296,7 +330,7 @@
                                     <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
                                         <input type="hidden" name="origin" value="viewBuilding" />
                                         <input type="hidden" name="originSection" value="createAreaButton" />
-                                        <input class="btn btn-primary" type="submit" value="Nyt område" />
+                                        <input class="btn btn-success" type="submit" value="Nyt område" />
                                     </form>
                                 </th>
                             </tr>
@@ -316,7 +350,7 @@
                                         <input type="hidden" name="origin" value="viewBuilding" />
                                         <input type="hidden" name="originSection" value="deleteAreaButton" />
                                         <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                        <input class="btn btn-primary" type="submit" value="Slet område" />
+                                        <input class="btn btn-danger" type="submit" value="Slet område" />
                                     </form>
                                 </td>
                                 <td colspan="1" style="border-top: 1px solid #000000">
@@ -324,7 +358,7 @@
                                         <input type="hidden" name="origin" value="viewBuilding" />
                                         <input type="hidden" name="originSection" value="createRoomButton" />
                                         <input type="hidden" name="areaId" value="<%=buildingAreas.get(i).getArea_id()%>" />
-                                        <input class="btn btn-primary" type="submit" value="Nyt lokale" />
+                                        <input class="btn btn-success" type="submit" value="Nyt lokale" />
                                     </form>
                                 </td>
                             </tr>
@@ -340,59 +374,50 @@
                                         <input type="hidden" name="origin" value="viewBuilding" />
                                         <input type="hidden" name="originSection" value="deleteRoomButton" />
                                         <input type="hidden" name="roomId" value="<%=buildingRooms.get(j).getRoom_id()%>" />
-                                        <input class="btn btn-primary" type="submit" value="Slet lokale" />
+                                        <input class="btn btn-danger" type="submit" value="Slet lokale" />
                                     </form>
                                 </td>
                             </tr>
                             <%}
-                                        }%>
+                                }%>
                             <%}%>
                         </tbody>
                     </table>
-                    <br><br>    
-
-                    <br><br><br><br><br><br><br><br><br>  
-
+                    <h4>Dokumenter</h4>
+                    <p>Tilføj relevante dokumenter til din bygning så Polygon har et bedre overblik, dette kunne være en planoversigt.</p>
                     <table text-align="left" class="table">
                         <tbody>
-                            <tr bgcolor='cyan'>
+                            <tr bgcolor='#c0dee8'>
                                 <th colspan="1"><b>Dokumentnavn</b></th>
                                 <th colspan="1"><b>Filtype</b></th>
                                 <th colspan="1"><b>Oprettet den</b></th>
-                                <th colspan="3"><b>Filstørrelse</b></th>
+                                <th colspan="3"><b>Muligheder</b></th>
                             </tr>
                             <tr>
-                                <td>Dokument 1</td>
-                                <td>PDF</td>
-                                <td>31-10-2016</td>
-                                <td>2MB</td>
-                                <td>
-                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
-                                        <input class="btn btn-primary" type="submit" value="Vis" />
-                                    </form>
-                                </td>
-                                <td>
-                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
-                                        <input class="btn btn-primary" type="submit" value="Download" />
-                                    </form>
-                                </td>
-                            </tr>
+                                <% if (buildingDocuments.size() == 0) {%>
                             <tr>
-                                <td>Dokument 2</td>
-                                <td>DOC</td>
-                                <td>03-11-2016</td>
-                                <td>0.5MB</td>
-                                <td>
-                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
-                                        <input class="btn btn-primary" type="submit" value="Vis" />
-                                    </form>
-                                </td>
-                                <td>
-                                    <form class="form-view-building" id="viewBuilding" action="#" method="POST">
-                                        <input class="btn btn-primary" type="submit" value="Download" />
+                                <td colspan="5">Ingen dokumenter uploaded.</td>
+                            </tr>
+                            <%}%> 
+                            <% for (int i = 0; i < buildingDocuments.size(); i++) {
+
+                            %>
+                            <tr>
+                                <td colspan="1" style="border-top: 1px solid #000000"><%=buildingDocuments.get(i).getDocument_name()%></td>
+                                <td colspan="1" style="border-top: 1px solid #000000"><%=buildingDocuments.get(i).getDocument_type()%></td>
+                                <td colspan="1" style="border-top: 1px solid #000000"><%=buildingDocuments.get(i).getDate_created()%></td>
+                                <td colspan="1" style="border-top: 1px solid #000000">
+                                    <a href="./GetDocument?&id=<%=buildingDocuments.get(i).getDocument_id()%>" class="btn btn-default">Download</a>
+                                    <br>
+                                    <form class="form-view-building" id="viewBuilding" action="UserServlet" method="POST">
+                                        <input type="hidden" name="origin" value="viewBuilding" />
+                                        <input type="hidden" name="originSection" value="deleteDocumentButton" />
+                                        <input type="hidden" name="documentId" value="<%=buildingDocuments.get(i).getDocument_id()%>" />
+                                        <input class="btn btn-danger" type="submit" value="Slet dokument" />
                                     </form>
                                 </td>
                             </tr>
+                            <%}%>
                         </tbody>
                     </table>  
                 </div>
