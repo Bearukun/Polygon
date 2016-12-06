@@ -673,7 +673,12 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
         }
     }
-
+/**
+ * Method to accept a healthcheck assigned to a technician
+ * @param buildingId int specifying which building is accepted by the technician
+ * @param technicianId int detailing which technician is accepting the healthcheck 
+ * @throws Exception 
+ */
     @Override
     public void acceptHealthcheck(int buildingId, int technicianId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
@@ -704,7 +709,17 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
         }
     }
-
+/**
+ * Method to create an issue
+ * @param building_id int specifying which building the issue is created in
+ * @param area_id int specifying which area the issue is created in
+ * @param room_id int specifying which room the issue is created in
+ * @param description String containing the description of the issue
+ * @param recommendation String containing a recommendation from the technician on how to fix issue
+ * @param healthcheck_id Int specifying the healthcheck that is linked to the issue
+ * @return statement returning a specific issue
+ * @throws Exception 
+ */
     @Override
     public int createIssue(int building_id, int area_id, int room_id, String description, String recommendation, int healthcheck_id) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
@@ -802,7 +817,12 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
         }
     }
-
+/**
+ * 
+ * @param buildingId Int specifying the building 
+ * @return An ArrayList of type Healthcheck
+ * @throws Exception 
+ */
     @Override
     public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
