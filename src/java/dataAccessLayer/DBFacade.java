@@ -225,7 +225,17 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
-    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, DamageRepair.type type) throws Exception{
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws Exception{
         bmi.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
+    }
+
+    @Override
+    public void deleteDamageRepair(int roomId) throws Exception {
+        bmi.deleteDamageRepair(roomId);
+    }
+
+    @Override
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception {
+        bmi.completeHealthcheck(condition, buildingResponsible, healthcheckId, buildingId);
     }
 }

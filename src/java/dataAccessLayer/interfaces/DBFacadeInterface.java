@@ -88,5 +88,9 @@ public interface DBFacadeInterface {
     
     public ArrayList<DamageRepair> getAllDamageRepairs() throws Exception;
     
-    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, DamageRepair.type type) throws Exception;
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws Exception;
+    
+    public void deleteDamageRepair(int roomId) throws Exception;
+    
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception;
 }

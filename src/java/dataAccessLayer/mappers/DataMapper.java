@@ -82,12 +82,12 @@ public class DataMapper implements DataMapperInterface {
     /**
      * Method to retrieve a building image
      *
-     * @param building_id int specifying which building's image to retrieve
+     * @param buildingId int specifying which building's image to retrieve
      * @return An object of type Image
      * @throws Exception
      */
     @Override
-    public Image getBuildingImage(int building_id) throws Exception {
+    public Image getBuildingImage(int buildingId) throws Exception {
 
         Image img = new Image();
 
@@ -105,7 +105,7 @@ public class DataMapper implements DataMapperInterface {
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.
-            stmt.setInt(1, building_id);
+            stmt.setInt(1, buildingId);
             //Execute query, and save the resultset in rs.
             rs = stmt.executeQuery();
 
@@ -267,12 +267,12 @@ public class DataMapper implements DataMapperInterface {
     /**
      * Method to check whether a building already has an image
      *
-     * @param building_id int containing the building to be checked
+     * @param buildingId int containing the building to be checked
      * @return true, if it has - false, if it does not.
      * @throws Exception
      */
     @Override
-    public boolean hasImage(ImageType imageType, int issue_id, int building_id) throws Exception {
+    public boolean hasImage(ImageType imageType, int issue_id, int buildingId) throws Exception {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -290,7 +290,7 @@ public class DataMapper implements DataMapperInterface {
                 //Creating prepare statement.
                 stmt = con.prepareStatement(sql);
                 //Insert user if into prepareStatement.
-                stmt.setInt(1, building_id);
+                stmt.setInt(1, buildingId);
                 //Execute query, and save the resultset in rs.
                 rs = stmt.executeQuery();
 
@@ -346,13 +346,13 @@ public class DataMapper implements DataMapperInterface {
     /**
      * Method to upload a building image
      *
-     * @param building_id int specifying which building the image is pertaining
+     * @param buildingId int specifying which building the image is pertaining
      * @param img_name String detailing the image name
      * @param img_file InputStream containing the image data
      * @throws Exception
      */
     @Override
-    public void uploadBuildingImage(int building_id, String img_name, InputStream img_file) throws Exception {
+    public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws Exception {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -369,7 +369,7 @@ public class DataMapper implements DataMapperInterface {
             //Insert data from parameter if into prepareStatement.
             stmt.setString(1, img_name);
             stmt.setBlob(2, img_file);
-            stmt.setInt(3, building_id);
+            stmt.setInt(3, buildingId);
             //Execute query.
             stmt.executeUpdate();
 
@@ -397,7 +397,7 @@ public class DataMapper implements DataMapperInterface {
     }
 
     @Override
-    public void updateImage(ImageType imageType, int issue_id, int building_id, String img_name, InputStream img_file) throws Exception {
+    public void updateImage(ImageType imageType, int issue_id, int buildingId, String img_name, InputStream img_file) throws Exception {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -417,7 +417,7 @@ public class DataMapper implements DataMapperInterface {
                 //Insert data from parameter if into prepareStatement.
                 stmt.setString(1, img_name);
                 stmt.setBlob(2, img_file);
-                stmt.setInt(3, building_id);
+                stmt.setInt(3, buildingId);
                 //Execute query.
                 stmt.executeUpdate();
 

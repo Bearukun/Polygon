@@ -332,22 +332,43 @@ public class TechnicianServlet extends HttpServlet {
                     } //If a damage repair needs registering
                     else if (request.getParameter("originSection").equals("registerDamageRepair")) {
                         request.getSession().setAttribute("source", "");
-
                         int roomId = Integer.parseInt(request.getSession().getAttribute("roomId").toString());
                         String damageTime = request.getParameter("damageTime");
                         String damageLocation = request.getParameter("damageLocation");
                         String damageDetails = request.getParameter("damageDetails");
                         String workDone = request.getParameter("workDone");
-                        //DamageRepair.type type = request.getParameter("type");
-
-                        //bldgCtrl.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
+                        String type = request.getParameter("type");
+                        bldgCtrl.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
                         //Refresh all damage repairs 
                         refreshAllDamageRepairs(request);
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
-                    } //If a healthcheck PDF report needs deleting
-                    else if (request.getParameter("originSection").equals("createPDFButton")) {
-
-                        System.out.println("" + build.getName());
+                    }
+                    //If a damage repair needs deleting
+                    else if(request.getParameter("originSection").equals("deleteDamageRepairButton")){
+                        request.getSession().setAttribute("source", "");
+                        int roomId = Integer.parseInt(request.getParameter("roomId"));
+                        bldgCtrl.deleteDamageRepair(roomId);
+                        //Refresh all damage repairs 
+                        refreshAllDamageRepairs(request);
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    } 
+                    //If 'complete healthcheck' button was clicked
+                    else if (request.getParameter("originSection").equals("completeHealthcheckButton")) {
+                        request.getSession().setAttribute("source", "completeHealthcheckButton");
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If a healthcheck needs completing
+                    else if (request.getParameter("originSection").equals("completeHealthcheck")) {
+                        request.getSession().setAttribute("source", "");
+                        String condition = request.getParameter("condition");
+                        String buildingResponsible = request.getParameter("buildingResponsible");
+                        healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
+                        bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
+                        
+                        //set healthcheck_pending =0 og assigned_tech=NULL
+                        
+                        
+                        /*
                         String pdfName = build.getName() + "-" + build.getbuildingId();
                         String bName = build.getName();
                         String bAddress = build.getAddress();
@@ -359,16 +380,16 @@ public class TechnicianServlet extends HttpServlet {
                         String bOwner = "23";
                         String imgFolderPath = "/Users/Ceo/NetBeansProjects/Polygon/web/img/";
                         String savePath = "/Users/Ceo/NetBeansProjects/Polygon/pdf/";
-                        ;
+                        */
                         ///Users/Ceo/NetBeansProjects/Polygon/web/img/
                         //"E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\"
 
                         ///Users/Ceo/NetBeansProjects/Polygon/pdf/
                         //"E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\"
-                        String picturePath = "";
+                        //String picturePath = "";
 
-                        String systemDir = System.getProperty("user.dir");
-                        System.out.println(systemDir);
+                        //String systemDir = System.getProperty("user.dir");
+                        //System.out.println(systemDir);
 
 //                        //Filechooser for selecting an image for the generated PDF
 //                        JFileChooser choose = new JFileChooser();
@@ -387,11 +408,12 @@ public class TechnicianServlet extends HttpServlet {
 //
 //                            System.out.println(picturePath);
 //                        }
-                        pdfwt.createPDF(pdfName, bName, bAddress,
+                        /**pdfwt.createPDF(pdfName, bName, bAddress,
                                 Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
                                 Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
-
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                        */
+                        response.sendRedirect("technician.jsp");
+                        
                         break;
 
                     }
