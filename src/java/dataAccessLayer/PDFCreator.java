@@ -350,9 +350,6 @@ public class PDFCreator {
             //Underline for "Tag"
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 620, 23, 2);
 
-            //Some test Text !TO BE REMOVED!
-            singleTextLine(pageContentStreamNumber, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
-
             //Writes and places the text line "Bemærkning" for "Tag"
             singleTextLine(pageContentStreamNumber, "Bemærkning", 8, 325, 625);
 
@@ -603,8 +600,33 @@ public class PDFCreator {
             //MAC CEO 
             //doc.save("/Users/Ceo/NetBeansProjects/Polygon/" + pdfName + ".pdf");
             //Saves the document at the path "savePath" and with the pdfName
-            doc.save(savePath + pdfName + ".pdf");
+            //doc.save(savePath + pdfName + ".pdf");
 
+            //Analyze and determines the users OS
+        String userSystemOS = System.getProperties().getProperty("os.name");
+        
+        //Analyze and determines the users default home-path
+        String userHomePath = System.getProperty("user.home");
+        
+        if (userSystemOS.equalsIgnoreCase("Mac OS X")) {
+            System.out.println("THIS ACTUALLY WORKS!");
+            System.out.println("YOU ARE ON A MAC!");
+            //Saves the document as a .pdf on the users desktop-page
+            doc.save(userHomePath +"/Desktop/"+ pdfName +".pdf");
+            
+        } else if (userSystemOS.equalsIgnoreCase("Windows 10")){
+            
+            System.out.println("YOU ARE ON A WINDOWS 10 MACHINE!");
+            //Saves the document as a .pdf on the users desktop-page
+             doc.save(userHomePath +"\\Desktop\\"+ pdfName +".pdf");
+            
+        } else if (userSystemOS.equalsIgnoreCase("Windows 8")){
+            System.out.println("YOU ARE ON A WINDOWS 8 MACHINE!");
+            //Saves the document as a .pdf on the users desktop-page
+             doc.save(userHomePath +"\\Desktop\\"+ pdfName +".pdf");
+        }
+
+        
             //Closes the creation the entire document
             doc.close();
         } catch (Exception e) {
@@ -897,6 +919,10 @@ public class PDFCreator {
         //Ydervægge
         //Bemærkning
         checkBoxImg(roofNotes, imgFolderPath, content, 375, 624, 7, 7);
+        if(roofNotes == true){
+             //Some test Text !TO BE REMOVED!
+            singleTextLine(content, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
+        }
 
         //  Ingen Bemærkning
         checkBoxImg(noRoofNotes, imgFolderPath, content, 475, 624, 7, 7);
@@ -907,6 +933,10 @@ public class PDFCreator {
         //Ydervægge
         //Bemærkning
         checkBoxImg(wallNotes, imgFolderPath, content, 375, 310, 7, 7);
+        if(wallNotes == true){
+             //Some test Text !TO BE REMOVED!
+            singleTextLine(content, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
+        }
         //  Ingen Bemærkning
         checkBoxImg(noWallNotes, imgFolderPath, content, 475, 310, 7, 7);
 

@@ -250,6 +250,9 @@ public class AdminServlet extends HttpServlet {
                     int buildingId = Integer.parseInt(request.getParameter("buildingId"));
                     int technicianId = Integer.parseInt(request.getParameter("selectedTechnician").split("\\|")[0]);
                     bldgCtrl.assignHealthcheck(buildingId, technicianId);
+                    
+                    
+                    
                     refreshAllBuildings(request);
                     response.sendRedirect("adminPendingBuildings.jsp");
                     break;
@@ -525,6 +528,9 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+   
+    
+    
     public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city) {
         //Send confirmation email to new Customer:
         String emailNewCustomerHeader = "Hej " + name + " (" + company + " )" + " og velkommen til Polygons's Sundebygninger!";

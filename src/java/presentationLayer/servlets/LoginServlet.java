@@ -42,7 +42,9 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String errMsg = null;
         String origin = request.getParameter("origin");
-
+        //System.getProperties().list(System.out);
+        
+      
         try {
 
             switch (origin) {

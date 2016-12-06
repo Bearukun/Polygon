@@ -30,7 +30,7 @@ public class Healthcheck implements Serializable {
      * @param tech_id int identifying the technician that is linked to the
      * healthcheck
      * @param building_responsible
-     * @param buildingId int identifying the building that is linked to the
+     * @param buildingId int identifying the building that is linked to the 
      * healthcheck
      */
     public Healthcheck(int healthcheck_id, Timestamp date_created, int tech_id, String building_responsible, int buildingId) {
