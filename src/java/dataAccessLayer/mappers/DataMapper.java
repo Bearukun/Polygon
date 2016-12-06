@@ -267,6 +267,8 @@ public class DataMapper implements DataMapperInterface {
     /**
      * Method to check whether a building already has an image
      *
+     * @param imageType type specifying the type of the image
+     * @param issue_id int containing the issue to be checked
      * @param buildingId int containing the building to be checked
      * @return true, if it has - false, if it does not.
      * @throws Exception
@@ -396,6 +398,16 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method to update an existing image
+     *
+     * @param imageType type specifying the type of the image
+     * @param issue_id Int specifying the image
+     * @param buildingId Int specifying the building
+     * @param img_name String specifying the name of the image
+     * @param img_file InputStream specifying the image file
+     * @throws Exception
+     */
     @Override
     public void updateImage(ImageType imageType, int issue_id, int buildingId, String img_name, InputStream img_file) throws Exception {
 
