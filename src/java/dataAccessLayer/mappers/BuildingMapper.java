@@ -1212,7 +1212,8 @@ public class BuildingMapper implements BuildingMapperInterface {
         try {
             //Get connection object.
             con = DBConnection.getConnection();
-            String sql = "UPDATE polygon.building SET condition = ? WHERE building_id = ?";
+            String sql = "UPDATE `polygon`.`building` SET `condition`= ?, `healthcheck_pending`='0' WHERE `building_id`= ?;";
+            
             //; UPDATE polygon.healthcheck SET building_responsible=? WHERE healthcheck_id=?;
 //Creating prepare statement.
             stmt = con.prepareStatement(sql);
