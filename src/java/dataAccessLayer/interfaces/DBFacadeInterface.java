@@ -91,4 +91,6 @@ public interface DBFacadeInterface {
     public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws Exception;
     
     public void deleteDamageRepair(int roomId) throws Exception;
+    
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception;
 }

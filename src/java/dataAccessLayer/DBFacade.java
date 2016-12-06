@@ -233,4 +233,9 @@ public class DBFacade implements DBFacadeInterface {
     public void deleteDamageRepair(int roomId) throws Exception {
         bmi.deleteDamageRepair(roomId);
     }
+
+    @Override
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception {
+        bmi.completeHealthcheck(condition, buildingResponsible, healthcheckId, buildingId);
+    }
 }

@@ -94,6 +94,34 @@
                     }
                     switch (source) {
 
+                        case "completeHealthcheckButton":
+                %>
+                <div class="col-sm-10">
+                    <div id="container" class="container-fluid">    
+                        <h1>Færdiggør sundhedscheck</h1>
+
+                        <div class="container-fluid">
+                            <form class="form-edit-profile" action="TechnicianServlet" enctype="multipart/form-data" method="POST"> 
+                                <div class="col-sm-4">
+                                    <p>Bygningsansvarlig</p>                      
+                                    <input type="text" name="buildingResponsible" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
+                                    <br><br>
+                                    <p>Tilstandsgrad</p>
+                                        <select name="condition">
+                                            <option value="GOOD" selected="GOOD">God</option>
+                                            <option value="MEDIUM" selected="MEDIUM">Middel</option>
+                                            <option value="POOR" selected="POOR">Dårlig</option>
+                                        </select>
+                                    <input type="hidden" name="origin" value="viewBuilding" />
+                                    <input type="hidden" name="originSection" value="completeHealthcheck" />
+                                    <input class="btn btn-primary" type="submit" value="Færdiggør" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <%
+                            break;
+                            
                         case "addIssueButton":
                 %>
                 <div class="col-sm-10">
@@ -590,8 +618,8 @@
 
                         <form class="form-view-building" id="viewBuilding" action="TechnicianServlet" method="POST">
                             <input type="hidden" name="origin" value="viewBuilding" />
-                            <input type="hidden" name="originSection" value="createPDFButton" />
-                            <input class="btn btn-primary" type="submit" value="Generer PDF sundhedsrapport" />
+                            <input type="hidden" name="originSection" value="completeHealthcheckButton" />
+                            <input class="btn btn-primary" type="submit" value="Afslut sundhedsrapport" />
                         </form>
                         <br><br><br><br><br><br><br><br><br>  
 

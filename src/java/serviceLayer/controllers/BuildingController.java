@@ -142,4 +142,9 @@ public class BuildingController implements BuildingControllerInterface{
         dbfacade.deleteDamageRepair(roomId);
     }
 
+    @Override
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception {
+        dbfacade.completeHealthcheck(condition, buildingResponsible, healthcheckId, buildingId);
+    }
+
 }
