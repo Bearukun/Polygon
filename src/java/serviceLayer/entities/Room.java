@@ -1,9 +1,9 @@
 package serviceLayer.entities;
-
+import java.io.Serializable;
 /**
  * Class dealing with rooms
  */
-public class Room {
+public class Room implements Serializable {
 
     /**
      * Variables corresponding to its database counterpart.

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 
  * Class dealing with moisture scans
  */
-public class MoistureInfo {
+public class MoistureInfo implements Serializable {
     
     /**
      * Variables corresponding to its database counterpart. 

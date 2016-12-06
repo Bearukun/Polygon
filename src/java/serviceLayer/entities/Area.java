@@ -1,9 +1,10 @@
 package serviceLayer.entities;
+import java.io.Serializable;
 
 /**
  * Class dealing with areas
  */
-public class Area {
+public class Area implements Serializable {
 
      /**
      * Variables corresponding to its database counterpart. 

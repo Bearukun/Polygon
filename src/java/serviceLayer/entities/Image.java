@@ -1,4 +1,5 @@
 package serviceLayer.entities;
+import java.io.Serializable;
 
 import java.sql.Blob;
 
@@ -7,7 +8,7 @@ import java.sql.Blob;
  * Class dealing with images
  */
 
-public class Image {
+public class Image implements Serializable {
     
     /**
      * Variables corresponding to its database counterpart. 

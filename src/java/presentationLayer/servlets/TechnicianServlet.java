@@ -364,11 +364,26 @@ public class TechnicianServlet extends HttpServlet {
                         String buildingResponsible = request.getParameter("buildingResponsible");
                         healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
                         bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
-                        
-                        //set healthcheck_pending =0 og assigned_tech=NULL
-                        
-                        
-                        /*
+                        refreshAllBuildings(request);
+                        response.sendRedirect("technician.jsp");
+                    }
+
+                    break;
+
+                case "acceptHealthcheckButton":
+                    //Save parameters from technician.jsp: buildingId and technicianID
+                    int technicianId = (Integer) request.getSession().getAttribute("user_id");
+                    //int technicianId = 12;
+                    buildingId = Integer.parseInt(request.getParameter("buildingId"));
+                    //Call method to modify database
+                    bldgCtrl.acceptHealthcheck(buildingId, technicianId);
+                    refreshAllBuildings(request);
+                    //redirect to user.jsp
+                    response.sendRedirect("technician.jsp?success=UpdateSuccessful");
+                    break;
+            }
+
+            /*
                         String pdfName = build.getName() + "-" + build.getbuildingId();
                         String bName = build.getName();
                         String bAddress = build.getAddress();
@@ -412,27 +427,7 @@ public class TechnicianServlet extends HttpServlet {
                                 Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
                                 Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
                         */
-                        response.sendRedirect("technician.jsp");
-                        
-                        break;
-
-                    }
-
-                    break;
-
-                case "acceptHealthcheckButton":
-                    //Save parameters from technician.jsp: buildingId and technicianID
-                    int technicianId = (Integer) request.getSession().getAttribute("user_id");
-                    //int technicianId = 12;
-                    buildingId = Integer.parseInt(request.getParameter("buildingId"));
-                    //Call method to modify database
-                    bldgCtrl.acceptHealthcheck(buildingId, technicianId);
-                    refreshAllBuildings(request);
-                    //redirect to user.jsp
-                    response.sendRedirect("technician.jsp?success=UpdateSuccessful");
-                    break;
-            }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

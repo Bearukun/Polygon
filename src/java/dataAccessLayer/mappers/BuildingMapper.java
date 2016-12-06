@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -1212,18 +1213,16 @@ public class BuildingMapper implements BuildingMapperInterface {
         try {
             //Get connection object.
             con = DBConnection.getConnection();
-            String sql = "UPDATE `polygon`.`building` SET `condition`= ?, `healthcheck_pending`='0' WHERE `building_id`= ?;";
+            String sql = "UPDATE `polygon`.`building` SET `condition`= ?, `healthcheck_pending`='0', `assigned_tech_id` = ? WHERE `building_id`= ?;UPDATE polygon.healthcheck SET building_responsible=? WHERE healthcheck_id=?;";
             
-            //; UPDATE polygon.healthcheck SET building_responsible=? WHERE healthcheck_id=?;
+            //; 
 //Creating prepare statement.
             stmt = con.prepareStatement(sql);
-            //stmt.setInt(1, 0);
-            //String a = "GOOD";
-            stmt.setString(1, Building.condition.NONE.name());
-            
-            stmt.setInt(2, buildingId);
-            //stmt.setString(4, buildingResponsible);
-            //stmt.setInt(5, healthcheckId);
+            stmt.setString(1, condition);
+            stmt.setNull(2, Types.INTEGER);
+            stmt.setInt(3, buildingId);
+            stmt.setString(4, buildingResponsible);
+            stmt.setInt(5, healthcheckId);
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {

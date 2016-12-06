@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * 
  * Class dealing with moisture scans
  */
-public class DamageRepair {
+public class DamageRepair implements Serializable {
     
     /**
      * Enum used to show a buildings different conditions.  
