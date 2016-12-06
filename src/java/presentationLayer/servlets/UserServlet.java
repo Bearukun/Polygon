@@ -268,9 +268,11 @@ public class UserServlet extends HttpServlet {
 
                         request.getSession().setAttribute("source", "editBuilding");
                         Part filePart = request.getPart("img");
+                        String[] header = (filePart.getHeader("content-disposition").split(" "));
+                        String[] fileName = header[2].split("\"");
                         InputStream inputStream = filePart.getInputStream();
                         //Save values to database
-                        dat.uploadBuildingImage(Integer.parseInt(request.getParameter("selectedBuilding")), "img", inputStream);
+                        dat.uploadBuildingImage(Integer.parseInt(request.getParameter("selectedBuilding")), fileName[1], inputStream);
                         //Refresh the logged in user's buildings overview
                         refreshBuilding(request, user_id);
                         //redirect to viewBuilding into the specific building being edited
