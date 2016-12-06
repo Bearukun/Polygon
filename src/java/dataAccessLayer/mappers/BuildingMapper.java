@@ -85,7 +85,6 @@ public class BuildingMapper implements BuildingMapperInterface {
                 
                 }
           
-                //int building_id, String name, String date_created, String address, int postcode, String city, condition condition, int construction_year, String purpose, int sqm) {
                 userBuilding.add(new Building(rs.getInt(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getInt(5), rs.getString(6), condition, rs.getInt(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getInt(12), rs.getInt(13)));
             }
             
@@ -182,11 +181,11 @@ public class BuildingMapper implements BuildingMapperInterface {
     }
     /**
      * Method to delete a specific building
-     * @param building_id int informing which building is to be deleted
+     * @param buildingId int informing which building is to be deleted
      * @throws Exception 
      */
     @Override
-    public void deleteBuilding(int building_id) throws Exception {
+    public void deleteBuilding(int buildingId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -198,7 +197,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             String sql = "DELETE FROM building WHERE building_id = ?;ALTER TABLE building AUTO_INCREMENT=1;";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
-            stmt.setInt(1, building_id);
+            stmt.setInt(1, buildingId);
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -297,12 +296,12 @@ public class BuildingMapper implements BuildingMapperInterface {
 
     /**
      * Method to retrieve all areas pertaining a specific building
-     * @param building_id int specifying which building's areas are to be retrieved
+     * @param buildingId int specifying which building's areas are to be retrieved
      * @return An ArrayList of type Area
      * @throws Exception 
      */
     @Override
-    public ArrayList<Area> getAreas(int building_id) throws Exception {
+    public ArrayList<Area> getAreas(int buildingId) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -317,7 +316,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.
-            stmt.setInt(1, building_id);
+            stmt.setInt(1, buildingId);
             //Execute query, and save the resultset in rs.
             rs = stmt.executeQuery();
             
@@ -406,12 +405,12 @@ public class BuildingMapper implements BuildingMapperInterface {
     
     /**
      * Method to retrieve all rooms pertaining a specific building
-     * @param building_id int specifying which building's rooms are to be retrieved
+     * @param buildingId int specifying which building's rooms are to be retrieved
      * @return An ArrayList of type Room
      * @throws Exception 
      */
     @Override
-    public ArrayList<Room> getRooms(int building_id) throws Exception {
+    public ArrayList<Room> getRooms(int buildingId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -426,7 +425,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             //Insert user if into prepareStatement.
-            stmt.setInt(1, building_id);
+            stmt.setInt(1, buildingId);
             //Execute query, and save the resultset in rs.
             rs = stmt.executeQuery();
             
@@ -456,11 +455,11 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param name String detailing the name for the new area
      * @param description String detailing the description for the new area
      * @param sqm int detailing the number of square metres for the new area
-     * @param building_id String specifying the building for which the new area needs creating
+     * @param buildingId String specifying the building for which the new area needs creating
      * @throws Exception 
      */
     @Override
-    public void createArea(String name, String description, int sqm, int building_id) throws Exception {
+    public void createArea(String name, String description, int sqm, int buildingId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -475,7 +474,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             stmt.setString(1, name);
             stmt.setString(2, description);
             stmt.setInt(3, sqm);
-            stmt.setInt(4, building_id);
+            stmt.setInt(4, buildingId);
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -494,11 +493,11 @@ public class BuildingMapper implements BuildingMapperInterface {
 
     /**
      * Method to delete an area
-     * @param area_id int specifying which area is to be deleted
+     * @param areaId int specifying which area is to be deleted
      * @throws Exception 
      */
     @Override
-    public void deleteArea(int area_id) throws Exception {
+    public void deleteArea(int areaId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -510,7 +509,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             String sql = "DELETE FROM area WHERE area_id = ?;ALTER TABLE area AUTO_INCREMENT=1;";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
-            stmt.setInt(1, area_id);
+            stmt.setInt(1, areaId);
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -532,11 +531,11 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param name String detailing the name for the new room
      * @param description String detailing the description for the new room
      * @param sqm int detailing the number of square metres for the new room
-     * @param area_id String specifying the area for which a new room needs creating
+     * @param areaId String specifying the area for which a new room needs creating
      * @throws Exception 
      */
     @Override
-    public void createRoom(String name, String description, int sqm, int area_id) throws Exception {
+    public void createRoom(String name, String description, int sqm, int areaId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -551,7 +550,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             stmt.setString(1, name);
             stmt.setString(2, description);
             stmt.setInt(3, sqm);
-            stmt.setInt(4, area_id);
+            stmt.setInt(4, areaId);
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -570,11 +569,11 @@ public class BuildingMapper implements BuildingMapperInterface {
 
     /**
      * Method to delete a room
-     * @param room_id int specifying which room is to be deleted
+     * @param roomId int specifying which room is to be deleted
      * @throws Exception 
      */
     @Override
-    public void deleteRoom(int room_id) throws Exception {
+    public void deleteRoom(int roomId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -586,7 +585,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             String sql = "DELETE FROM room WHERE room_id = ?;ALTER TABLE room AUTO_INCREMENT=1;";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
-            stmt.setInt(1, room_id);
+            stmt.setInt(1, roomId);
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -605,12 +604,12 @@ public class BuildingMapper implements BuildingMapperInterface {
 
     /**
      * Method to change status for a healthcheck, either 'order' or 'cancel' 
-     * @param building_id int specifying which building for which the healthcheck option needs toggling
+     * @param buildingId int specifying which building for which the healthcheck option needs toggling
      * @param healthcheck_pending int detailing the new status for the healthcheck
      * @throws Exception 
      */
     @Override
-    public void toggleHealthcheck(int building_id, int healthcheck_pending) throws Exception {
+    public void toggleHealthcheck(int buildingId, int healthcheck_pending) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -621,7 +620,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, healthcheck_pending);
-            stmt.setInt(2, building_id);
+            stmt.setInt(2, buildingId);
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -706,7 +705,7 @@ public class BuildingMapper implements BuildingMapperInterface {
     }
 
     @Override
-    public int createIssue(int building_id, int area_id, int room_id, String description, String recommendation, int healthcheck_id) throws Exception {
+    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -716,23 +715,23 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Get connection object.
             con = DBConnection.getConnection();
             String sql="";
-            if(room_id==0){
+            if(roomId==0){
                 sql = "INSERT INTO polygon.issue (description, recommendation, building_id, area_id, room_id, healthcheck_id) VALUES (?, ?, ?, ?, NULL, ?)";
             }
-            else if(room_id!=0){
+            else if(roomId!=0){
                 sql = "INSERT INTO polygon.issue (description, recommendation, building_id, area_id, room_id, healthcheck_id) VALUES (?, ?, ?, ?, ?, ?)";
             }
             //Creating prepare statement.
             stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, description);
             stmt.setString(2, recommendation);
-            stmt.setInt(3, building_id);
-            stmt.setInt(4, area_id);
-            if(room_id!=0){
-                stmt.setInt(5, room_id);
+            stmt.setInt(3, buildingId);
+            stmt.setInt(4, areaId);
+            if(roomId!=0){
+                stmt.setInt(5, roomId);
                 stmt.setInt(6, healthcheck_id);
             }
-            else if(room_id==0){
+            else if(roomId==0){
                 stmt.setInt(5, healthcheck_id);
             }
             
@@ -1201,6 +1200,41 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
                 //throw error if not successful. 
                  throw new Exception("SQL Error:@DBFacade.deleteDamageRepair."+ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception {
+         //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            String sql = "UPDATE polygon.building SET condition = ? WHERE building_id = ?";
+            //; UPDATE polygon.healthcheck SET building_responsible=? WHERE healthcheck_id=?;
+//Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //stmt.setInt(1, 0);
+            //String a = "GOOD";
+            stmt.setString(1, Building.condition.NONE.name());
+            
+            stmt.setInt(2, buildingId);
+            //stmt.setString(4, buildingResponsible);
+            //stmt.setInt(5, healthcheckId);
+            //Execute update.
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem."+e.getMessage());
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.completeHealthcheck."+ex.getMessage());
             }
         }
     }
