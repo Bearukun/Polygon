@@ -131,7 +131,7 @@
                         <h1>Registrer tidligere skade</h1>
 
                         <div class="container-fluid">
-                            <form action="TechnicianServlet" enctype="multipart/form-data" method="POST"> 
+                            <form action="TechnicianServlet" method="POST"> 
                                 <div class="col-sm-4">
                                     <p>Hvornår skete skaden?</p>                      
                                     <input type="text" name="damageTime" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
@@ -145,7 +145,6 @@
                                     <p>Arbejde udført</p>                      
                                     <input type="text" name="workDone" value="" style="height: auto; width: auto; margin-bottom: 1px;" />
                                     <br><br>
-                                    
                                     <p>Skadestype</p>
                                         <select name="type">
                                             <option value="DAMP" selected="DAMP">Damp</option>
@@ -155,7 +154,7 @@
                                             <option value="OTHER" selected="OTHER">Andet</option>
                                         </select>
                                     <input type="hidden" name="origin" value="viewBuilding" />
-                                    <input type="hidden" name="originSection" value="registerDamagerepair" />
+                                    <input type="hidden" name="originSection" value="registerDamageRepair" />
                                     <input class="btn btn-primary" type="submit" value="Registrer" />
                                 </div>
                             </form>
@@ -329,7 +328,7 @@
                         default:
 
                     %>    
-                    <div class="col-sm-10">//Loop through entire buildings list
+                    <div class="col-sm-10">
                         <% for (int i = 0; i < allBuildings.size(); i++) {//Loop through entire buildings list                       
                             //If the currently selected building has the same building id as the one saved in the Session
                             if (allBuildings.get(i).getbuildingId() == Integer.parseInt(request.getParameter("value"))) {
@@ -570,6 +569,14 @@
                                                         </td>
                                                         <td>
                                                             <%= allDamageRepairs.get(p).getType()%>
+                                                        </td>
+                                                        <td>
+                                                            <form action="TechnicianServlet" method="POST">
+                                                                <input type="hidden" name="origin" value="viewBuilding" />
+                                                                <input type="hidden" name="originSection" value="deleteDamageRepairButton" />
+                                                                <input type="hidden" name="roomId" value="<%=buildingRooms.get(l).getRoom_id()%>" />
+                                                                <input class="btn btn-primary" type="submit" value="Slet tidl. skade" />
+                                                            </form>
                                                         </td>
                                                     </tr>
                                                 <%}

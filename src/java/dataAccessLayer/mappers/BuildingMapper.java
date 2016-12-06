@@ -1140,7 +1140,7 @@ public class BuildingMapper implements BuildingMapperInterface {
     }
 
     @Override
-    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, DamageRepair.type type) throws Exception {
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1157,7 +1157,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             stmt.setString(3, damageLocation);
             stmt.setString(4, damageDetails);
             stmt.setString(5, workDone);
-            stmt.setString(6, type.toString());
+            stmt.setString(6, type);
             stmt.setInt(7, roomId);
             //Execute update
             stmt.executeUpdate();
@@ -1171,6 +1171,36 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
                 //throw error if not successful. 
                  throw new Exception("SQL Error:@DBFacade.registerDamageRepair."+ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void deleteDamageRepair(int roomId) throws Exception {
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+             
+        try {
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //String sql = "UPDATE polygon.building SET postcode=? WHERE building_id=?";
+            String sql = "DELETE FROM damage_repair WHERE room_id = ?;ALTER TABLE damage_repair AUTO_INCREMENT=1;";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, roomId);
+            //Execute update
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception("SQL Error: Connection problem.");
+        }finally{
+            //Try releasing objects. 
+            try {
+                con.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                //throw error if not successful. 
+                 throw new Exception("SQL Error:@DBFacade.deleteDamageRepair."+ex.getMessage());
             }
         }
     }

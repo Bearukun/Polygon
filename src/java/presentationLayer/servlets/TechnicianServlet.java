@@ -339,16 +339,22 @@ public class TechnicianServlet extends HttpServlet {
                     //If a damage repair needs registering
                     else if(request.getParameter("originSection").equals("registerDamageRepair")){
                         request.getSession().setAttribute("source", "");
-                        
                         int roomId = Integer.parseInt(request.getSession().getAttribute("roomId").toString());
                         String damageTime = request.getParameter("damageTime");
                         String damageLocation = request.getParameter("damageLocation");
                         String damageDetails = request.getParameter("damageDetails");
                         String workDone = request.getParameter("workDone");
-                        //DamageRepair.type type = request.getParameter("type");
-                        
-                        //bldgCtrl.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
-                        
+                        String type = request.getParameter("type");
+                        bldgCtrl.registerDamageRepair(roomId, damageTime, damageLocation, damageDetails, workDone, type);
+                        //Refresh all damage repairs 
+                        refreshAllDamageRepairs(request);
+                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
+                    }
+                    //If a damage repair needs deleting
+                    else if(request.getParameter("originSection").equals("deleteDamageRepairButton")){
+                        request.getSession().setAttribute("source", "");
+                        int roomId = Integer.parseInt(request.getParameter("roomId"));
+                        bldgCtrl.deleteDamageRepair(roomId);
                         //Refresh all damage repairs 
                         refreshAllDamageRepairs(request);
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
