@@ -183,9 +183,14 @@ public class LoginServlet extends HttpServlet {
                     break;
 
                 case "blankTestPDF":
+                    
+                    System.out.println("HELLOO WORLD!");
 
                     String testPDF = request.getParameter("pdfname");
+                    System.out.println(testPDF);
                     pdfwt.testBlank(testPDF);
+                    //pdfwt.newBlankFire();
+                    response.sendRedirect("index.jsp?success=PDFCreated");
 
                     break;
 

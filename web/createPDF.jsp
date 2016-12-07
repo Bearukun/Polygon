@@ -10,7 +10,7 @@
         <h1>Generate PDF - Technician</h1>
 
         <h3>Generate blank PDF</h3>
-        <form class="form-edit-profile" action="UserServlet" method="POST"> 
+        <form class="form-edit-profile" action="LoginServlet" method="POST"> 
             <p>PDFName</p>                      
             <input type="text" name="pdfname" value="" />
             <br><br>

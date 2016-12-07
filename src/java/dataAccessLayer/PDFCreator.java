@@ -674,6 +674,7 @@ public class PDFCreator {
             //Sets the font and text size
             content.setFont(fontHel, 10);
             //Set Coordinates for the Rapport Number Text
+            
             content.moveTextPositionByAmount(50, 680);
             //Write the "Rapport nr:." text
             content.drawString("Rapport nr.: ");
@@ -1334,7 +1335,8 @@ public class PDFCreator {
     //TO BE REMOVED UPON PROGRAM COMPLETION!
     public void testBlank(String pdfName) throws Exception {
 
-        String pdfname2 = "test2312";
+        
+        String pdfame = "test2312";
 
         //initiates a new PDDocument
         PDDocument doc = new PDDocument();
@@ -1348,57 +1350,57 @@ public class PDFCreator {
             // Adobe Acrobat uses Helvetica as a default font and 
             // stores that under the name '/Helv' in the resources dictionary
             PDFont font = PDType1Font.HELVETICA;
-            PDResources resources = new PDResources();
-            resources.put(COSName.getPDFName("Helv"), font);
-
-            // Add a new AcroForm and add that to the document
-            PDAcroForm acroForm = new PDAcroForm(doc);
-            doc.getDocumentCatalog().setAcroForm(acroForm);
-
-            // Add and set the resources and default appearance at the form level
-            acroForm.setDefaultResources(resources);
-
-            // Acrobat sets the font size on the form level to be
-            // auto sized as default. This is done by setting the font size to '0'
-            String defaultAppearanceString = "/Helv 0 Tf 0 g";
-            acroForm.setDefaultAppearance(defaultAppearanceString);
-
-            // Add a form field to the form.
-            PDTextField textBox = new PDTextField(acroForm);
-            textBox.setPartialName("SampleField");
-            // Acrobat sets the font size to 12 as default
-            // This is done by setting the font size to '12' on the
-            // field level. 
-            // The text color is set to blue in this example.
-            // To use black, replace "0 0 1 rg" with "0 0 0 rg" or "0 g".
-            defaultAppearanceString = "/Helv 12 Tf 0 0 1 rg";
-            textBox.setDefaultAppearance(defaultAppearanceString);
-
-            // add the field to the acroform
-            acroForm.getFields().add(textBox);
-
-            // Specify the annotation associated with the field
-            PDAnnotationWidget widget = textBox.getWidgets().get(0);
-            PDRectangle rect = new PDRectangle(50, 300, 200, 50);
-            widget.setRectangle(rect);
-            widget.setPage(page);
-
-            // set green border and yellow background
-            // if you prefer defaults, just delete this code block
-            PDAppearanceCharacteristicsDictionary fieldAppearance
-                    = new PDAppearanceCharacteristicsDictionary(new COSDictionary());
-            fieldAppearance.setBorderColour(new PDColor(new float[]{255, 0, 0}, PDDeviceRGB.INSTANCE));
-            fieldAppearance.setBackground(new PDColor(new float[]{1, 1, 100}, PDDeviceRGB.INSTANCE));
-            widget.setAppearanceCharacteristics(fieldAppearance);
-
-            // make sure the annotation is visible on screen and paper
-            widget.setPrinted(true);
-
-            // Add the annotation to the page
-            page.getAnnotations().add(widget);
-
-            // set the field value
-            textBox.setValue("Sample field");
+//            PDResources resources = new PDResources();
+//            resources.put(COSName.getPDFName("Helv"), font);
+//
+//            // Add a new AcroForm and add that to the document
+//            PDAcroForm acroForm = new PDAcroForm(doc);
+//            doc.getDocumentCatalog().setAcroForm(acroForm);
+//
+//            // Add and set the resources and default appearance at the form level
+//            acroForm.setDefaultResources(resources);
+//
+//            // Acrobat sets the font size on the form level to be
+//            // auto sized as default. This is done by setting the font size to '0'
+//            String defaultAppearanceString = "/Helv 0 Tf 0 g";
+//            acroForm.setDefaultAppearance(defaultAppearanceString);
+//
+//            // Add a form field to the form.
+//            PDTextField textBox = new PDTextField(acroForm);
+//            textBox.setPartialName("SampleField");
+//            // Acrobat sets the font size to 12 as default
+//            // This is done by setting the font size to '12' on the
+//            // field level. 
+//            // The text color is set to blue in this example.
+//            // To use black, replace "0 0 1 rg" with "0 0 0 rg" or "0 g".
+//            defaultAppearanceString = "/Helv 12 Tf 0 0 1 rg";
+//            textBox.setDefaultAppearance(defaultAppearanceString);
+//
+//            // add the field to the acroform
+//            acroForm.getFields().add(textBox);
+//
+//            // Specify the annotation associated with the field
+//            PDAnnotationWidget widget = textBox.getWidgets().get(0);
+//            PDRectangle rect = new PDRectangle(50, 300, 200, 50);
+//            widget.setRectangle(rect);
+//            widget.setPage(page);
+//
+//            // set green border and yellow background
+//            // if you prefer defaults, just delete this code block
+//            PDAppearanceCharacteristicsDictionary fieldAppearance
+//                    = new PDAppearanceCharacteristicsDictionary(new COSDictionary());
+//            fieldAppearance.setBorderColour(new PDColor(new float[]{255, 0, 0}, PDDeviceRGB.INSTANCE));
+//            fieldAppearance.setBackground(new PDColor(new float[]{1, 1, 100}, PDDeviceRGB.INSTANCE));
+//            widget.setAppearanceCharacteristics(fieldAppearance);
+//
+//            // make sure the annotation is visible on screen and paper
+//            widget.setPrinted(true);
+//
+//            // Add the annotation to the page
+//            page.getAnnotations().add(widget);
+//
+//            // set the field value
+//            textBox.setValue("Sample field");
 
             conten.beginText();
             conten.setFont(font, 12);
@@ -1412,16 +1414,59 @@ public class PDFCreator {
             //doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
             //MAC CEO 
             //"/Users/Ceo/NetBeansProjects/Polygon/" +
-            doc.save("/Users/Ceo/NetBeansProjects/Polygon/pdf/" + pdfName + ".pdf");
-//            //Closes the PDF creation
-            doc.close();
+            savePDF(pdfName, pdfName, doc);
+
 
         } catch (Exception e) {
             System.out.println(e);
         }
 
     }
-}
+    
+    public void newBlankFire(){
+        
+        try {
+            
+            // Create a document and add a page to it
+PDDocument document = new PDDocument();
+PDPage page = new PDPage();
+document.addPage( page );
+
+// Create a new font object selecting one of the PDF base fonts
+PDFont font = PDType1Font.HELVETICA_BOLD;
+
+// Start a new content stream which will "hold" the to be created content
+PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
+contentStream.beginText();
+contentStream.setFont( font, 12 );
+contentStream.moveTextPositionByAmount( 100, 700 );
+contentStream.drawString( "Hello World" );
+contentStream.endText();
+
+// Make sure that the content stream is closed:
+contentStream.close();
+
+String userSystemOS = System.getProperties().getProperty("os.name");
+        
+        //Analyze and determines the users default home-path
+        String userHomePath = System.getProperty("user.home");
+
+// Save the results and ensure that the document is properly closed:
+document.save(userHomePath +"/Desktop/"+ "testfire" +".pdf");
+
+} catch (Exception e) {
+            System.out.println(e);
+        }
+
+        }
+        
+        
+    }
+    
+    
+
 
 //Image to PDF
 // PDDocument doc = null;
