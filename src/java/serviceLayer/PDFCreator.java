@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,14 +18,21 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import serviceLayer.controllers.DataController;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
+import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Healthcheck;
+import serviceLayer.entities.Room;
 
 public class PDFCreator {
 
     DataControllerInterface datCtrl = new DataController();
     BuildingMapperInterface buildCtrl = new BuildingMapper();
 
+    Building building = new Building();
+    Healthcheck healthcheck = new Healthcheck();
+    ArrayList<Room> roomList = new ArrayList();
+    //Etage = Area
+    ArrayList<Area> areaList = new ArrayList();
     //sourceFolder sf = new sourceFolder();
     PDDocument doc = new PDDocument();
 
@@ -41,9 +49,8 @@ public class PDFCreator {
     public void createPDF(int healthcheckId, int buildingId, String imgFolderPath) {
 
         try {
-            Building building = new Building();
-            Healthcheck healthcheck = new Healthcheck();
 
+            roomList = buildCtrl.getRooms(buildingId);
             building = buildCtrl.getBuilding(buildingId);
 
             //TODO Add pdf-id here through parameter.
