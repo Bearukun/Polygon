@@ -1,10 +1,14 @@
 package serviceLayer;
 
+import dataAccessLayer.mappers.BuildingMapper;
+import dataAccessLayer.mappers.interfaces.BuildingMapperInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -13,45 +17,13 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import serviceLayer.controllers.DataController;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
+import serviceLayer.entities.Building;
+import serviceLayer.entities.Healthcheck;
 
-/**
- *
- * @author Ceo
- *
- * COMMENTS!!!!
- *
- * Clean up: split op i metoder! fjern overskyddende/dubblet billede!
- * Comments!!!!!!! Need to figure out to make a method for "PDFont"!
- *
- *
- * Slå polygonLogo sammen med insertJPGImage
- *
- * noNotesCheckBoxImg , gotNotesCheckBoxImg perhaps shouldn't be merged with
- * insertJPGImage, due to them having a specialized function in the code, the
- * fact that they are used alot and multiple times throughout the code, and that
- * having their own method and method name, makes it way easier and quick to
- * understand what is happening.
- *
- * SPLIT THEM INTO 1 Method with a Boolean!
- *
- * Also, use a boolean for: // Ingen Bemærkning if(gotNoTagNotes == 0 ){
- * noNotesCheckBoxImg(imgFolderPath, content, 475, 624, 7, 7); } else if
- * (gotNoTagNotes == 1 ) { gotNotesCheckBoxImg(imgFolderPath, content, 475, 624,
- * 7, 7); }
- *
- * Rough idea for creating a new method that can quicly setup noNotesCheckBoxImg
- * & gotNotesCheckBoxImg, along with their switchCaseName and
- * switchCaseParameters
- *
- * //Reminder of how to move. //content.moveTextPositionByAmount(tx, ty); //tx
- * = Width; (Max 450-500!) //ty = Height (max 800!) //Opens ContentStream for
- * writting to the PDF document
- *
- */
 public class PDFCreator {
 
     DataControllerInterface datCtrl = new DataController();
-    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    BuildingMapperInterface buildCtrl = new BuildingMapper();
 
     //sourceFolder sf = new sourceFolder();
     PDDocument doc = new PDDocument();
@@ -66,45 +38,55 @@ public class PDFCreator {
 
     //Method that creates the PDF pages.
     //Way too much input
-    public void createPDF(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath) {
+    public void createPDF(int healthcheckId, int buildingId, String imgFolderPath) {
 
-        System.out.println("HEY!");
-        frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
-                buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
+        try {
+            Building building = new Building();
+            Healthcheck healthcheck = new Healthcheck();
 
-        System.out.println("MOVING!");
-        pageNumber++;
+            building = buildCtrl.getBuilding(buildingId);
 
-        buildingOuterWalkthrough(pdfName, picturePath, imgFolderPath, savePath, doc);
+            //TODO Add pdf-id here through parameter.
+            String pdfName = building.getName() + "ID#" + building.getbuildingId();
+            String buildingName = building.getName();
+            String buildingAddress = building.getAddress();
+            int buildingPostcode = building.getPostcode();
+            String buildingCity = building.getCity();
+            int buildingConstructionYear = building.getConstruction_year();
+            int buildingSQM = building.getSqm();
+            String buildingPurpose = building.getPurpose();
 
-        pageNumber++;
+            frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, doc, imgFolderPath);
 
-        roomWalkthrough(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
-                buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
-
-        pageNumber++;
-
-        roomMoistReport(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
-                buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
-
-        pageNumber++;
-
-        buildingConclusion(pdfName, picturePath, imgFolderPath, savePath, doc);
-
-        pageNumber++;
-
-        lastPage(pdfName, picturePath, imgFolderPath, savePath, doc);
-
-        pageNumber++;
-
-        for (int i = 0; i < 10; i++) {
-            pageGeneration(doc, pdfName, imgFolderPath);
             pageNumber++;
-            System.out.println(pageNumber);
 
+            buildingOuterWalkthrough(pdfName, imgFolderPath, doc);
+            pageNumber++;
+
+            roomWalkthrough(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
+            pageNumber++;
+
+            roomMoistReport(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
+            pageNumber++;
+
+            buildingConclusion(pdfName, imgFolderPath, doc);
+            pageNumber++;
+
+            lastPage(pdfName, imgFolderPath, doc);
+            pageNumber++;
+
+            for (int i = 0; i < 10; i++) {
+                pageGeneration(doc, pdfName, imgFolderPath);
+                pageNumber++;
+                System.out.println(pageNumber);
+
+            }
+
+            savePDF(pdfName, doc);
+
+        } catch (Exception ex) {
+            Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        savePDF(savePath, pdfName, doc);
 
     }
 
@@ -128,7 +110,7 @@ public class PDFCreator {
 
     //Setup of Page 1
     public void frontPage(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+            Integer buildingSQM, String buildingPurpose, PDDocument doc, String imgFolderPath) {
 
         //!REMOVE UPON COMPLETION OF PDFGENERATOR!
         System.out.println("Entered TestMethod");
@@ -282,8 +264,7 @@ public class PDFCreator {
 
             //Creates a image from a file and places it.
             //Places the Default or user selected picture of the building in the PDF document.                  
-            userPicture(picturePath, imgFolderPath, pageContentStreamNumber, 125, 225, 375, 215);
-
+            //userPicture(picturePath, imgFolderPath, pageContentStreamNumber, 125, 225, 375, 215);
             //Writes and places the text line "Generel information om bygning"           
             singleTextLine(pageContentStreamNumber, "Generel information om bygningen:", 12, 50, 200);
 
@@ -320,7 +301,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 2
-    public void buildingOuterWalkthrough(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+    public void buildingOuterWalkthrough(String pdfName, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -387,7 +368,7 @@ public class PDFCreator {
 
     //Setup of Page 3
     public void roomMoistReport(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+            Integer buildingSQM, String buildingPurpose, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -428,7 +409,7 @@ public class PDFCreator {
     //Setup of Page 4
     //If "Ingen bemærkning" on Page 4, DOES THIS PAGE NEED TO BE GENERATED!?
     public void roomWalkthrough(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, String buildingOwner, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+            Integer buildingSQM, String buildingPurpose, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -458,7 +439,7 @@ public class PDFCreator {
     }
     //Setup of Page 5
 
-    public void buildingConclusion(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+    public void buildingConclusion(String pdfName, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -488,7 +469,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 6
-    public void lastPage(String pdfName, String picturePath, String imgFolderPath, String savePath, PDDocument doc) {
+    public void lastPage(String pdfName, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -587,7 +568,7 @@ public class PDFCreator {
     }
 
     //Method to save the PDF document 
-    public void savePDF(String savePath, String pdfName, PDDocument doc) {
+    public void savePDF(String pdfName, PDDocument doc) {
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -599,7 +580,7 @@ public class PDFCreator {
             //byte[] -> InputStream
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
-            datCtrl.uploadDocument(1, "healthCheck", "pdf", inStream);
+            datCtrl.uploadDocument(1, pdfName, "pdf", inStream);
 
         } catch (Exception e) {
             System.out.println(e);
@@ -685,33 +666,6 @@ public class PDFCreator {
 
             //Stop writting
             content.endText();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    //Method for handling a user selected/uploaded picture.
-    public void userPicture(String picturePath, String imgFolderPath, PDPageContentStream content, int xCoordinate, int yCoordinate, int imgWidth, int imgHeight) {
-
-        try {
-
-            //Creates the picture object for later use.
-            PDImageXObject userBygning = null;
-
-            //If no picture has been uploaded by the user, the PDF will take and use a specified default picture
-            if (picturePath.equals("")) {
-
-                //Default picture
-                userBygning = PDImageXObject.createFromFile(imgFolderPath + "whouse.jpg", doc);
-
-//If the user has decided to uploade a picure
-            } else {
-                //User picture
-                userBygning = PDImageXObject.createFromFile("" + picturePath, doc);
-            }
-            //Takes 
-            content.drawXObject(userBygning, xCoordinate, yCoordinate, imgWidth, imgHeight);
 
         } catch (Exception e) {
             System.out.println(e);
@@ -1301,243 +1255,4 @@ public class PDFCreator {
         }
     }
 
-    //ONLY FOR TESTING THE SAVE MECHANIC AND TEXT BOX!!! 
-    //TO BE REMOVED UPON PROGRAM COMPLETION!
-    public void testBlank(String pdfName) throws Exception {
-
-        String pdfame = "test2312";
-
-        //initiates a new PDDocument
-        PDDocument doc = new PDDocument();
-
-        try {
-            PDPage page = new PDPage();
-            doc.addPage(page);
-
-            PDPageContentStream conten = new PDPageContentStream(doc, page);
-
-            // Adobe Acrobat uses Helvetica as a default font and 
-            // stores that under the name '/Helv' in the resources dictionary
-            PDFont font = PDType1Font.HELVETICA;
-//            PDResources resources = new PDResources();
-//            resources.put(COSName.getPDFName("Helv"), font);
-//
-//            // Add a new AcroForm and add that to the document
-//            PDAcroForm acroForm = new PDAcroForm(doc);
-//            doc.getDocumentCatalog().setAcroForm(acroForm);
-//
-//            // Add and set the resources and default appearance at the form level
-//            acroForm.setDefaultResources(resources);
-//
-//            // Acrobat sets the font size on the form level to be
-//            // auto sized as default. This is done by setting the font size to '0'
-//            String defaultAppearanceString = "/Helv 0 Tf 0 g";
-//            acroForm.setDefaultAppearance(defaultAppearanceString);
-//
-//            // Add a form field to the form.
-//            PDTextField textBox = new PDTextField(acroForm);
-//            textBox.setPartialName("SampleField");
-//            // Acrobat sets the font size to 12 as default
-//            // This is done by setting the font size to '12' on the
-//            // field level. 
-//            // The text color is set to blue in this example.
-//            // To use black, replace "0 0 1 rg" with "0 0 0 rg" or "0 g".
-//            defaultAppearanceString = "/Helv 12 Tf 0 0 1 rg";
-//            textBox.setDefaultAppearance(defaultAppearanceString);
-//
-//            // add the field to the acroform
-//            acroForm.getFields().add(textBox);
-//
-//            // Specify the annotation associated with the field
-//            PDAnnotationWidget widget = textBox.getWidgets().get(0);
-//            PDRectangle rect = new PDRectangle(50, 300, 200, 50);
-//            widget.setRectangle(rect);
-//            widget.setPage(page);
-//
-//            // set green border and yellow background
-//            // if you prefer defaults, just delete this code block
-//            PDAppearanceCharacteristicsDictionary fieldAppearance
-//                    = new PDAppearanceCharacteristicsDictionary(new COSDictionary());
-//            fieldAppearance.setBorderColour(new PDColor(new float[]{255, 0, 0}, PDDeviceRGB.INSTANCE));
-//            fieldAppearance.setBackground(new PDColor(new float[]{1, 1, 100}, PDDeviceRGB.INSTANCE));
-//            widget.setAppearanceCharacteristics(fieldAppearance);
-//
-//            // make sure the annotation is visible on screen and paper
-//            widget.setPrinted(true);
-//
-//            // Add the annotation to the page
-//            page.getAnnotations().add(widget);
-//
-//            // set the field value
-//            textBox.setValue("Sample field");
-
-            conten.beginText();
-            conten.setFont(font, 12);
-            conten.moveTextPositionByAmount(100, 700);
-            conten.drawString("test!");
-            conten.endText();
-
-            conten.close();
-
-            //WINDOWS CEO: 
-            //doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
-            //MAC CEO 
-            //"/Users/Ceo/NetBeansProjects/Polygon/" +
-            savePDF(pdfName, pdfName, doc);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-    }
-
-    public void newBlankFire() {
-
-        try {
-
-            // Create a document and add a page to it
-            PDDocument document = new PDDocument();
-            PDPage page = new PDPage();
-            document.addPage(page);
-
-// Create a new font object selecting one of the PDF base fonts
-            PDFont font = PDType1Font.HELVETICA_BOLD;
-
-// Start a new content stream which will "hold" the to be created content
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-            contentStream.beginText();
-            contentStream.setFont(font, 12);
-            contentStream.moveTextPositionByAmount(100, 700);
-            contentStream.drawString("Hello World");
-            contentStream.endText();
-
-// Make sure that the content stream is closed:
-            contentStream.close();
-
-            String userSystemOS = System.getProperties().getProperty("os.name");
-
-            //Analyze and determines the users default home-path
-            String userHomePath = System.getProperty("user.home");
-
-// Save the results and ensure that the document is properly closed:
-            document.save(userHomePath + "/Desktop/" + "testfire" + ".pdf");
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-    }
-
 }
-
-//Image to PDF
-// PDDocument doc = null;
-//        try{
-//          /* Step 1: Prepare the document.
-//           */
-//          //test
-//         doc = new PDDocument();
-//         PDPage page = new PDPage();
-//         doc.addPage(page);
-//         
-//         //Text test
-//         
-//         PDFont font = PDType1Font.HELVETICA_BOLD;
-//         
-//         /* Step 2: Prepare the image
-//          * PDJpeg is the class you use when dealing with jpg images.
-//          * You will need to mention the jpg file and the document to which it is to be added
-//          * Note that if you complete these steps after the creating the content stream the PDF
-//          * file created will show "Out of memory" error.
-//          */
-//         
-//         PDImageXObject image = null;
-//         image = PDImageXObject.createFromFile("tesla.jpg", doc);
-//         
-//         /* Create a content stream mentioning the document, the page in the dcoument where the content stream is to be added.
-//          * Note that this step has to be completed after the above two steps are complete.
-//          */
-//         PDPageContentStream content = new PDPageContentStream(doc, page);
-// 
-//       /* Step 3:
-//        * Add (draw) the image to the content stream mentioning the position where it should be drawn
-//        * and leaving the size of the image as it is
-//        */
-//       
-//       content.beginText();
-//       content.setFont( font, 12 );
-//       content.moveTextPositionByAmount( 100, 700 );
-//           content.drawString("Please work, please work, please work..." + "/t" );
-//           content.endText();
-//         content.drawImage(image,20,20);
-//         content.close();
-//       
-//         /* Step 4:
-//          * Save the document as a pdf file mentioning the name of the file
-//          */
-//        
-//        doc.save("ImageNowPdf.pdf");
-//       
-//        } catch (Exception e){
-//             System.out.println("Exception");
-//        }
-//       Boxes/Windows with PDAcroform            
-//             //Adobe Acrobat uses Helvetica as a default font and 
-//        // stores that under the name '/Helv' in the resources dictionary
-//       PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-//        PDFont font = PDType1Font.HELVETICA;
-//        PDResources resources = new PDResources();
-//        resources.put(COSName.getPDFName("Helv"), font);
-//        
-//        // Add a new AcroForm and add that to the document
-//        PDAcroForm acroForm = new PDAcroForm(doc);
-//        doc.getDocumentCatalog().setAcroForm(acroForm);
-//        
-//        // Add and set the resources and default appearance at the form level
-//        acroForm.setDefaultResources(resources);
-//        
-//        // Acrobat sets the font size on the form level to be
-//        // auto sized as default. This is done by setting the font size to '0'
-//        String defaultAppearanceString = "/Helv 0 Tf 0 g";
-//        acroForm.setDefaultAppearance(defaultAppearanceString);
-//        
-//        // Add a form field to the form.
-//        PDTextField textBox = new PDTextField(acroForm);
-//        textBox.setPartialName("SampleField");
-//        // Acrobat sets the font size to 12 as default
-//        // This is done by setting the font size to '12' on the
-//        // field level. 
-//        // The text color is set to blue in this example.
-//        // To use black, replace "0 0 1 rg" with "0 0 0 rg" or "0 g".
-//        defaultAppearanceString = "/Helv 12 Tf 255 0 0 rg";
-//        textBox.setDefaultAppearance(defaultAppearanceString);
-//        
-//        // add the field to the acroform
-//        acroForm.getFields().add(textBox);
-//        
-//        // Specify the annotation associated with the field
-//        PDAnnotationWidget widget = textBox.getWidgets().get(0);
-//        PDRectangle rect = new PDRectangle(50, 350, 200, 50);
-//        widget.setRectangle(rect);
-//        widget.setPage(page3);
-//
-//        // set green border and yellow background
-//        // if you prefer defaults, just delete this code block
-//        PDAppearanceCharacteristicsDictionary fieldAppearance
-//                = new PDAppearanceCharacteristicsDictionary(new COSDictionary());
-//        fieldAppearance.setBorderColour(new PDColor(new float[]{0,255,0}, PDDeviceRGB.INSTANCE));
-//        fieldAppearance.setBackground(new PDColor(new float[]{255,0,0}, PDDeviceRGB.INSTANCE));
-//        widget.setAppearanceCharacteristics(fieldAppearance);
-//
-//        // make sure the annotation is visible on screen and paper
-//        widget.setPrinted(true);
-//        
-//        // Add the annotation to the page
-//        page3.getAnnotations().add(widget);
-//        
-//        // set the field value
-//        textBox.setValue("Sample field");
-//        //textBox.drawLine(10, 10, 10, 10);
-

@@ -3,8 +3,6 @@ package presentationLayer.servlets;
 import serviceLayer.PDFCreator;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.DataController;
 import serviceLayer.controllers.UserController;
@@ -52,7 +48,7 @@ public class TechnicianServlet extends HttpServlet {
     private User user = null;
     private int user_id, buildingId = 0;
     private String origin = "";
-    PDFCreator pdfwt = new PDFCreator();
+    PDFCreator pdf = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -125,29 +121,7 @@ public class TechnicianServlet extends HttpServlet {
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                     Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
 
-                    //If 'Request healthcheck' button was clicked
-                    if (request.getParameter("originSection").equals("healthcheckButton")) {
-                        request.getSession().setAttribute("source", "healthcheckButton");
-
-                        int healthcheckValueToWrite;
-                        //If the building's healthcheck pending status needs setting to false
-                        if (request.getParameter("originValue").equals("cancel")) {
-                            healthcheckValueToWrite = 0;
-                        } //If the building's healthcheck pending status needs setting to true
-                        else {
-                            healthcheckValueToWrite = 1;
-                        }
-
-                        //Save values to database
-                        bldgCtrl.toggleHealthcheck(build.getbuildingId(), healthcheckValueToWrite);
-
-                        //Refresh the logged in user's buildings overview
-                        refreshBuilding(request, user_id);
-
-                        //redirect to viewBuilding into the specific building being edited
-                        response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
-                    }
-
+                    
                     //If 'Create area' button was clicked
                     if (request.getParameter("originSection").equals("createAreaButton")) {
                         request.getSession().setAttribute("source", "createAreaButton");
@@ -367,10 +341,22 @@ public class TechnicianServlet extends HttpServlet {
                     //If a healthcheck needs completing
                     else if (request.getParameter("originSection").equals("completeHealthcheck")) {
                         request.getSession().setAttribute("source", "");
+                        
                         String condition = request.getParameter("condition");
                         String buildingResponsible = request.getParameter("buildingResponsible");
+                        
                         healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
-                        bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
+                        
+                        
+                        //CreatePDF
+                        pdf.createPDF(healthcheckId, build.getbuildingId(), request.getServletContext().getRealPath("/img/"));
+                        
+                        
+                        //bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
+                        
+                        
+                        
+                        
                         refreshAllBuildings(request);
                         response.sendRedirect("technician.jsp");
                     }
@@ -389,51 +375,6 @@ public class TechnicianServlet extends HttpServlet {
                     response.sendRedirect("technician.jsp?success=UpdateSuccessful");
                     break;
             }
-
-            /*
-                        String pdfName = build.getName() + "-" + build.getbuildingId();
-                        String bName = build.getName();
-                        String bAddress = build.getAddress();
-                        String bPostCode = "" + build.getPostcode();
-                        String bCity = build.getCity();
-                        String bConstructionYear = "" + build.getConstruction_year();
-                        String bSQM = "" + build.getSqm();
-                        String bPurpose = build.getPurpose();
-                        String bOwner = "23";
-                        String imgFolderPath = "/Users/Ceo/NetBeansProjects/Polygon/web/img/";
-                        String savePath = "/Users/Ceo/NetBeansProjects/Polygon/pdf/";
-                        */
-                        ///Users/Ceo/NetBeansProjects/Polygon/web/img/
-                        //"E:\\Dokumenter\\NetBeansProjects\\Polygon\\web\\img\\"
-
-                        ///Users/Ceo/NetBeansProjects/Polygon/pdf/
-                        //"E:\\Dokumenter\\NetBeansProjects\\Polygon\\pdf\\"
-                        //String picturePath = "";
-
-                        //String systemDir = System.getProperty("user.dir");
-                        //System.out.println(systemDir);
-
-//                        //Filechooser for selecting an image for the generated PDF
-//                        JFileChooser choose = new JFileChooser();
-//                        FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
-//                        choose.setFileFilter(filter);
-//                        String picturePath = "";
-//                        
-//                        int returnVal = choose.showOpenDialog(choose);
-//
-//                        if (returnVal == JFileChooser.APPROVE_OPTION) {
-//
-//                            picturePath = choose.getSelectedFile().getAbsolutePath();
-//                            folderPath = "" + choose.getCurrentDirectory();
-//                            System.out.println(picturePath);
-//                            System.out.println(folderPath + " Folder sti");
-//
-//                            System.out.println(picturePath);
-//                        }
-                        /**pdfwt.createPDF(pdfName, bName, bAddress,
-                                Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
-                                Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
-                        */
             
         } catch (Exception e) {
             e.printStackTrace();

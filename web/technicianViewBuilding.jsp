@@ -401,16 +401,6 @@
                                     </table>  
                                     <br><br>
 
-                                    <% if (build.getHealthcheck_pending() > 1) {%>
-                                    <form class="form-view-building" action="TechnicianServlet" method="POST">
-                                        <input type="hidden" name="origin" value="viewBuilding" />
-                                        <input type="hidden" name="originSection" value="healthcheckButton" />
-                                        <input type="hidden" name="originValue" value="cancel" />
-                                        <input class="btn btn-primary" type="submit" value="Aflys sundhedscheck" />
-                                    </form>
-                                    <%}%>
-                                    <br><br>
-
                                     <!--Table of building areas and rooms -->
                                     <table text-align="left" class="table">
                                         <tbody>

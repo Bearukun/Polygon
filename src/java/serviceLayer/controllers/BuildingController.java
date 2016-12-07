@@ -31,6 +31,11 @@ public class BuildingController implements BuildingControllerInterface{
     public ArrayList<Building> getBuildings(int user_id) throws Exception {
         return dbfacade.getBuildings(user_id);
     }
+ 
+    @Override
+    public Building getBuilding(int buildingId) throws Exception {
+        return dbfacade.getBuilding(buildingId);
+    }
 
     @Override
     public ArrayList<Building> getAllBuildings() throws Exception {

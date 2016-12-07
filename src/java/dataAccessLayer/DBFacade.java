@@ -38,6 +38,13 @@ public class DBFacade implements DBFacadeInterface {
     }
 
     @Override
+    public Building getBuilding(int buildingId) throws Exception {
+
+        return bmi.getBuilding(buildingId);
+
+    }
+
+    @Override
     public User checkLogin(String email, String password) throws Exception {
 
         return umi.checkLogin(email, password);

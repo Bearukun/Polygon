@@ -131,29 +131,6 @@ public class LoginServlet extends HttpServlet {
                         String address = request.getParameter("address");
                         String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!*/
                         String city = request.getParameter("city");
-
-//                        Check that the parameters are being read
-//                        System.out.println(email + " em");
-//              
-                        System.out.println(password + " pass");
-                        System.out.println(confirmPassword + " con pass");
-//                        System.out.println(name + " nam");
-//                        System.out.println(phone+ " ph");
-//                        System.out.println(company+ " com");
-//                        System.out.println(address+ " add");
-//                        System.out.println(postcode+ " post");
-//                        System.out.println(city + " city");
-
-                        //Redundant method: Being handled by JS in the index.jsp
-                        //test password match
-//                        if(!password.equalsIgnoreCase(confirmPassword)){
-//                            System.out.println("PASSWORD NOT MATCHING!");
-//                            
-//                            response.sendRedirect("index.jsp?error=" + "PasswordNotMatching");
-//                            
-//                        }
-                        
-                        
                     
                          try {
                             System.out.println("creating user");
@@ -182,62 +159,6 @@ public class LoginServlet extends HttpServlet {
 
                     break;
 
-                case "blankTestPDF":
-                    
-                    System.out.println("HELLOO WORLD!");
-
-                    String testPDF = request.getParameter("pdfname");
-                    System.out.println(testPDF);
-                    pdfwt.testBlank(testPDF);
-                    //pdfwt.newBlankFire();
-                    response.sendRedirect("index.jsp?success=PDFCreated");
-
-                    break;
-
-                case "pdfwithtext":
-
-                     String pdfName = request.getParameter("pdfname");
-                    String bName = request.getParameter("buildingname");
-                    String bAddress = request.getParameter("buildingadddress");
-                    String bPostCode = request.getParameter("buildingpostcode"); //String that needs to parse into int!
-                    String bCity = request.getParameter("buildingcity");
-                    String bConstructionYear = request.getParameter("constructionyear");  //String that needs to parse into int!
-                    String bSQM = request.getParameter("buildingsqm");  //String that needs to parse into int!
-                    String bPurpose = request.getParameter("buildingpurpose");
-                    String bOwner = request.getParameter("buildingsowner");
-                    String imgFolderPath = request.getParameter("folderPath");
-                    String savePath = request.getParameter("savePath");
-                    String picturePath = "";
-
-                    String systemDir = System.getProperty("user.dir");
-                    System.out.println(systemDir);
-
-//                    //Filechooser for selecting an image for the generated PDF
-//                    JFileChooser choose = new JFileChooser();
-//                    FileNameExtensionFilter filter = new FileNameExtensionFilter(".jpg files", "jpg");
-//                    choose.setFileFilter(filter);
-//                    String picturePath = "";
-//                    String folderPath = "";
-//                    int returnVal = choose.showOpenDialog(choose);
-//
-//                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-//
-//                        picturePath = choose.getSelectedFile().getAbsolutePath();
-//                        folderPath = "" + choose.getCurrentDirectory();
-//                        System.out.println(picturePath);
-//                        System.out.println(folderPath + " Folder sti");
-//                       
-//
-//                    }
-
-                    System.out.println(picturePath);
-
-                    pdfwt.createPDF(pdfName, bName, bAddress,
-                            Integer.parseInt(bPostCode), bCity, Integer.parseInt(bConstructionYear),
-                            Integer.parseInt(bSQM), bPurpose, bOwner, picturePath, imgFolderPath, savePath);
-
-                    response.sendRedirect("index.jsp?success=PDFCreated");
-                    break;
 
             }
 

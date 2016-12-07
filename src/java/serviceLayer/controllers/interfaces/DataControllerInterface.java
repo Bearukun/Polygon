@@ -26,5 +26,6 @@ public interface DataControllerInterface {
     public void deleteDocument(int documentId) throws Exception;
     
     public Document getDocument(int documentId) throws Exception;
+    
 
 }

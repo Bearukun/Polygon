@@ -12,6 +12,8 @@ import serviceLayer.entities.Room;
 public interface BuildingMapperInterface {
 
     public ArrayList<Building> getBuildings(int user_id) throws Exception;
+    
+    public Building getBuilding(int buildingId) throws Exception;
 
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws Exception;
 
@@ -62,4 +64,5 @@ public interface BuildingMapperInterface {
     public void deleteDamageRepair(int roomId) throws Exception;
     
     public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception;
+
 }

@@ -23,6 +23,8 @@ public interface DBFacadeInterface {
     void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception;
 
     ArrayList<Building> getBuildings(int user_id) throws Exception;
+    
+    public Building getBuilding(int buildingId) throws Exception; 
 
     ArrayList<Building> getAllBuildings() throws Exception;
 

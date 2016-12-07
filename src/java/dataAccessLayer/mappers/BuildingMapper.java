@@ -1369,4 +1369,94 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
         }
     }
+
+    @Override
+    public Building getBuilding(int buildingId) throws Exception {
+        
+        Building building = new Building();
+        
+        //Declare new Building.condation object, with the name condition.
+        Building.condition condition;
+
+        //Declare new objects of the Connection and PrepareStatement.
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            //Get connection object.
+            con = DBConnection.getConnection();
+            //Creating string used for the prepare statement.
+            String sql = "SELECT * FROM building WHERE building_id = ?";
+            //Creating prepare statement.
+            stmt = con.prepareStatement(sql);
+            //Insert user if into prepareStatement.
+            stmt.setInt(1, buildingId);
+            //Execute query, and save the resultset in rs.
+            rs = stmt.executeQuery();
+
+            //Loop through the resultSet.
+            if (rs.next()) {
+
+                //If-condition, checking the condition of the building.
+                //The local varible gets assigned the ENUM from the rs.
+                if (rs.getString(7).equals(Building.condition.GOOD.toString())) {
+
+                    building.setCondition(Building.condition.GOOD);
+
+                } else if (rs.getString(7).equals(Building.condition.MEDIUM.toString())) {
+
+                    building.setCondition(Building.condition.MEDIUM);
+
+                } else if (rs.getString(7).equals(Building.condition.POOR.toString())) {
+
+                    building.setCondition(Building.condition.POOR);
+
+                } else {
+
+                    building.setCondition(Building.condition.NONE);
+
+                }
+                
+                building.setbuildingId(rs.getInt(1));
+                building.setName(rs.getString(2));
+                building.setDate_created(rs.getTimestamp(3));
+                building.setAddress(rs.getString(4));
+                building.setPostcode(rs.getInt(5));
+                building.setCity(rs.getString(6));
+                building.setConstruction_year(rs.getInt(8));
+                building.setPurpose(rs.getString(9));
+                building.setSqm(rs.getInt(10));
+                building.setHealthcheck_pending(rs.getInt(11));
+                building.setUser_id(rs.getInt(12));
+
+            }
+
+        } catch (Exception e) {
+
+            throw new Exception("SQL Error:@DBFacade.getBuilding." + e.getMessage());
+
+        } finally {
+
+            //Try releasing objects. 
+            try {
+
+                con.close();
+                stmt.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+
+                //throw error if not successful. 
+                throw new Exception("SQL Error:@DBFacade.getBuilding." + ex.getMessage());
+
+            }
+
+        }
+
+        //Return ArrayList of Building(s).
+        return building;
+        
+    }
 }

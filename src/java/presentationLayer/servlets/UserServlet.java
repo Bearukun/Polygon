@@ -1,10 +1,8 @@
 package presentationLayer.servlets;
 
 import serviceLayer.PDFCreator;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.ServletException;
@@ -45,7 +43,6 @@ public class UserServlet extends HttpServlet {
     private User user = null;
     private int user_id;
     private String origin = "";
-    PDFCreator pdfwt = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

@@ -1,4 +1,4 @@
-package serviceLayer.controllers.interfaces;
+    package serviceLayer.controllers.interfaces;
 
 import java.util.ArrayList;
 import serviceLayer.entities.Area;
@@ -19,6 +19,8 @@ public interface BuildingControllerInterface {
     void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws Exception;
     
     ArrayList<Building> getBuildings (int user_id)throws Exception;
+    
+    public Building getBuilding(int buildingId) throws Exception; 
     
     ArrayList<Building> getAllBuildings() throws Exception;
     
