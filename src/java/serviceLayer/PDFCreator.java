@@ -1,24 +1,18 @@
-package dataAccessLayer;
+package serviceLayer;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.PDResources;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
-import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceCharacteristicsDictionary;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
+import serviceLayer.controllers.DataController;
+import serviceLayer.controllers.interfaces.DataControllerInterface;
 
 /**
  *
@@ -56,8 +50,11 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
  */
 public class PDFCreator {
 
+    DataControllerInterface datCtrl = new DataController();
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+
     //sourceFolder sf = new sourceFolder();
-    PDDocument doc = doc = new PDDocument();
+    PDDocument doc = new PDDocument();
 
     //Creates various text font objects
     PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
@@ -83,13 +80,11 @@ public class PDFCreator {
 
         pageNumber++;
 
-      
-
         roomWalkthrough(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
         pageNumber++;
-        
+
         roomMoistReport(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingContructionYear,
                 buildingSQM, buildingPurpose, buildingOwner, picturePath, imgFolderPath, savePath, doc);
 
@@ -593,42 +588,19 @@ public class PDFCreator {
 
     //Method to save the PDF document 
     public void savePDF(String savePath, String pdfName, PDDocument doc) {
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
         try {
 
-            //WINDOWS CEO: 
-            //doc.save("E:\\Dokumenter\\NetBeansProjects\\Polygon\\" + pdfName + ".pdf");
-            //MAC CEO 
-            //doc.save("/Users/Ceo/NetBeansProjects/Polygon/" + pdfName + ".pdf");
-            //Saves the document at the path "savePath" and with the pdfName
-            //doc.save(savePath + pdfName + ".pdf");
-
-            //Analyze and determines the users OS
-        String userSystemOS = System.getProperties().getProperty("os.name");
-        
-        //Analyze and determines the users default home-path
-        String userHomePath = System.getProperty("user.home");
-        
-        if (userSystemOS.equalsIgnoreCase("Mac OS X")) {
-            System.out.println("THIS ACTUALLY WORKS!");
-            System.out.println("YOU ARE ON A MAC!");
-            //Saves the document as a .pdf on the users desktop-page
-            doc.save(userHomePath +"/Desktop/"+ pdfName +".pdf");
-            
-        } else if (userSystemOS.equalsIgnoreCase("Windows 10")){
-            
-            System.out.println("YOU ARE ON A WINDOWS 10 MACHINE!");
-            //Saves the document as a .pdf on the users desktop-page
-             doc.save(userHomePath +"\\Desktop\\"+ pdfName +".pdf");
-            
-        } else if (userSystemOS.equalsIgnoreCase("Windows 8")){
-            System.out.println("YOU ARE ON A WINDOWS 8 MACHINE!");
-            //Saves the document as a .pdf on the users desktop-page
-             doc.save(userHomePath +"\\Desktop\\"+ pdfName +".pdf");
-        }
-
-        
-            //Closes the creation the entire document
+            doc.save(output);
             doc.close();
+
+            //byte[] -> InputStream
+            ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            datCtrl.uploadDocument(1, "healthCheck", "pdf", inStream);
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -674,7 +646,7 @@ public class PDFCreator {
             //Sets the font and text size
             content.setFont(fontHel, 10);
             //Set Coordinates for the Rapport Number Text
-            
+
             content.moveTextPositionByAmount(50, 680);
             //Write the "Rapport nr:." text
             content.drawString("Rapport nr.: ");
@@ -920,8 +892,8 @@ public class PDFCreator {
         //Ydervægge
         //Bemærkning
         checkBoxImg(roofNotes, imgFolderPath, content, 375, 624, 7, 7);
-        if(roofNotes == true){
-             //Some test Text !TO BE REMOVED!
+        if (roofNotes == true) {
+            //Some test Text !TO BE REMOVED!
             singleTextLine(content, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
         }
 
@@ -934,8 +906,8 @@ public class PDFCreator {
         //Ydervægge
         //Bemærkning
         checkBoxImg(wallNotes, imgFolderPath, content, 375, 310, 7, 7);
-        if(wallNotes == true){
-             //Some test Text !TO BE REMOVED!
+        if (wallNotes == true) {
+            //Some test Text !TO BE REMOVED!
             singleTextLine(content, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
         }
         //  Ingen Bemærkning
@@ -1026,7 +998,6 @@ public class PDFCreator {
         singleTextLine(content, "Ingen Bemærkning", 10, 420, 610);
         singleTextLine(content, "Billede", 10, 540, 610);
 
-
         //Test of method
         wallWalkthrough(content, imgFolderPath, false, false, "it works!",
                 600, 596, 590, 600, 600, 0);
@@ -1036,9 +1007,9 @@ public class PDFCreator {
                 440, 436, 430, 440, 440, 0);
         windowsWalkthrough(content, imgFolderPath, true, false, "When the night...",
                 360, 356, 350, 360, 360, 0);
-        doorWalkthrough(content, imgFolderPath, true, true, "... has come", 
+        doorWalkthrough(content, imgFolderPath, true, true, "... has come",
                 280, 276, 270, 280, 280, 0);
-        
+
         otherWalkthrough(content, imgFolderPath, true, false, "Jambo jambo!",
                 200, 196, 190, 200, 200, 0);
     }
@@ -1097,12 +1068,12 @@ public class PDFCreator {
             checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
         }
     }
-    
+
     public void ceilingWalkthrough(PDPageContentStream content, String imgFolderPath,
             boolean ceilingNotes, boolean ceilingPicture, String ceilingNoteText,
             int ceilingTitelYCoordinate, int underlineJPGYCoordinate,
             int celingNoteTextYCoordinate, int ceilingNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
         //Loft
         //singleTextLine(content, "Loft", 10, 50, 520);
         singleTextLine(content, "Loft", 10, 50, ceilingTitelYCoordinate);
@@ -1112,14 +1083,14 @@ public class PDFCreator {
         //Bemærkning / Ingen Bemærkning
         if (ceilingNotes == true) {
             //set "Bermærkninger" true
-           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/"" + ceilingNoteText, 8, 50, 510);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/"" + ceilingNoteText, 8, 50, celingNoteTextYCoordinate);
+            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/"" + ceilingNoteText, 8, 50, 510);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + ceilingNoteText, 8, 50, celingNoteTextYCoordinate);
 
             //checkBoxImg(true, imgFolderPath, content, 360, 520, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 360,ceilingNotesCheckBoxImgYCoordinate, 7, 7);
+            checkBoxImg(true, imgFolderPath, content, 360, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
 
             //Set "ingen bemærkninger" false
-           // checkBoxImg(false, imgFolderPath, content, 460, 520, 7, 7);
+            // checkBoxImg(false, imgFolderPath, content, 460, 520, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 460, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
 
         } else if (ceilingNotes != true || ceilingNotes == false) {
@@ -1145,12 +1116,12 @@ public class PDFCreator {
             checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
         }
     }
-    
+
     public void floorWalkthrough(PDPageContentStream content, String imgFolderPath,
             boolean floorNotes, boolean floorPicture, String floorNoteText,
             int floorTitelYCoordinate, int underlineJPGYCoordinate,
             int floorNoteTextYCoordinate, int floorNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
         //Gulv
         //singleTextLine(content, "Gulv", 10, 50, 440);
         singleTextLine(content, "Gulv", 10, 50, floorTitelYCoordinate);
@@ -1161,7 +1132,7 @@ public class PDFCreator {
         if (floorNotes == true) {
             //set "Bermærkninger" true
             //singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 430);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ ""+ floorNoteText, 8, 50, floorNoteTextYCoordinate);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + floorNoteText, 8, 50, floorNoteTextYCoordinate);
 
             //checkBoxImg(true, imgFolderPath, content, 360, 440, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 360, floorNotesCheckBoxImgYCoordinate, 7, 7);
@@ -1184,21 +1155,20 @@ public class PDFCreator {
             //checkBoxImg(true, imgFolderPath, content, 553, 440, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
             //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0,  pictureIMGYCoordinate, 0, 0);
+            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
         } else if (floorPicture != true || floorPicture == false) {
             // set "Picture" false
             //checkBoxImg(false, imgFolderPath, content, 553, 440, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
         }
-        
-        
+
     }
-    
+
     public void windowsWalkthrough(PDPageContentStream content, String imgFolderPath,
             boolean windowNotes, boolean windowPicture, String windowNoteText,
             int windowTitelYCoordinate, int underlineJPGYCoordinate,
             int windowNoteTextYCoordinate, int windowNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
         //Vinduer
         //singleTextLine(content, "Vinduer", 10, 50, 360);
         singleTextLine(content, "Vinduer", 10, 50, windowTitelYCoordinate);
@@ -1207,22 +1177,22 @@ public class PDFCreator {
         insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 45, 2);
         if (windowNotes == true) {
             //set "Bermærkninger" true
-           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ ""+windowNoteText, 8, 50, windowNoteTextYCoordinate);
+            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
+            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + windowNoteText, 8, 50, windowNoteTextYCoordinate);
 
             //checkBoxImg(true, imgFolderPath, content, 360, 360, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 360, windowNotesCheckBoxImgYCoordinate, 7, 7);
 
             //Set "ingen bemærkninger" false
-           // checkBoxImg(false, imgFolderPath, content, 460, 360, 7, 7);
+            // checkBoxImg(false, imgFolderPath, content, 460, 360, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 460, windowNotesCheckBoxImgYCoordinate, 7, 7);
 
         } else if (windowNotes != true || windowNotes == false) {
             //set "Bermærkninger" false
-           // checkBoxImg(false, imgFolderPath, content, 360, 360, 7, 7);
+            // checkBoxImg(false, imgFolderPath, content, 360, 360, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 360, windowNotesCheckBoxImgYCoordinate, 7, 7);
             //Set "ingen bemærkninger" true
-           // checkBoxImg(true, imgFolderPath, content, 460, 360, 7, 7);
+            // checkBoxImg(true, imgFolderPath, content, 460, 360, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 460, windowNotesCheckBoxImgYCoordinate, 7, 7);
         }
         //Billede
@@ -1238,14 +1208,14 @@ public class PDFCreator {
             checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
         }
     }
-    
+
     public void doorWalkthrough(PDPageContentStream content, String imgFolderPath,
             boolean doorNotes, boolean doorPicture, String doorNoteText,
             int doorTitelYCoordinate, int underlineJPGYCoordinate,
             int doorNoteTextYCoordinate, int doorNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
-        
-         //Døre
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
+
+        //Døre
         //singleTextLine(content, "Døre", 10, 50, 280);
         singleTextLine(content, "Døre", 10, 50, doorTitelYCoordinate);
         //Underlinde-jpg
@@ -1253,10 +1223,10 @@ public class PDFCreator {
         insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
         if (doorNotes == true) {
             //set "Bermærkninger" true
-           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
+            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
             singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + doorNoteText, 8, 50, doorNoteTextYCoordinate);
 
-           // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
+            // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 360, doorNotesCheckBoxImgYCoordinate, 7, 7);
 
             //Set "ingen bemærkninger" false
@@ -1265,7 +1235,7 @@ public class PDFCreator {
 
         } else if (doorNotes != true || doorNotes == false) {
             //set "Bermærkninger" false
-           // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
+            // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 360, doorNotesCheckBoxImgYCoordinate, 7, 7);
             //Set "ingen bemærkninger" true
             //checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
@@ -1274,7 +1244,7 @@ public class PDFCreator {
         //Billede
         if (doorPicture == true) {
             //set "Picture" true
-           // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
+            // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
             //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
             insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
@@ -1284,14 +1254,14 @@ public class PDFCreator {
             checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
         }
     }
-    
+
     public void otherWalkthrough(PDPageContentStream content, String imgFolderPath,
             boolean otherNotes, boolean otherPicture, String otherNoteText,
             int otherTitelYCoordinate, int underlineJPGYCoordinate,
             int otherNoteTextYCoordinate, int otherNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate){
-        
-         //Andet
+            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
+
+        //Andet
         //singleTextLine(content, "Andet", 10, 50, 280);
         singleTextLine(content, "Andet", 10, 50, otherTitelYCoordinate);
         //Underlinde-jpg
@@ -1299,10 +1269,10 @@ public class PDFCreator {
         insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
         if (otherNotes == true) {
             //set "Bermærkninger" true
-           // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
+            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
             singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + otherNoteText, 8, 50, otherNoteTextYCoordinate);
 
-           // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
+            // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 360, otherNotesCheckBoxImgYCoordinate, 7, 7);
 
             //Set "ingen bemærkninger" false
@@ -1311,7 +1281,7 @@ public class PDFCreator {
 
         } else if (otherNotes != true || otherNotes == false) {
             //set "Bermærkninger" false
-           // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
+            // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
             checkBoxImg(false, imgFolderPath, content, 360, otherNotesCheckBoxImgYCoordinate, 7, 7);
             //Set "ingen bemærkninger" true
             //checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
@@ -1320,7 +1290,7 @@ public class PDFCreator {
         //Billede
         if (otherPicture == true) {
             //set "Picture" true
-           // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
+            // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
             checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
             //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
             insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
@@ -1335,7 +1305,6 @@ public class PDFCreator {
     //TO BE REMOVED UPON PROGRAM COMPLETION!
     public void testBlank(String pdfName) throws Exception {
 
-        
         String pdfame = "test2312";
 
         //initiates a new PDDocument
@@ -1416,57 +1385,52 @@ public class PDFCreator {
             //"/Users/Ceo/NetBeansProjects/Polygon/" +
             savePDF(pdfName, pdfName, doc);
 
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public void newBlankFire() {
+
+        try {
+
+            // Create a document and add a page to it
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+// Create a new font object selecting one of the PDF base fonts
+            PDFont font = PDType1Font.HELVETICA_BOLD;
+
+// Start a new content stream which will "hold" the to be created content
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.moveTextPositionByAmount(100, 700);
+            contentStream.drawString("Hello World");
+            contentStream.endText();
+
+// Make sure that the content stream is closed:
+            contentStream.close();
+
+            String userSystemOS = System.getProperties().getProperty("os.name");
+
+            //Analyze and determines the users default home-path
+            String userHomePath = System.getProperty("user.home");
+
+// Save the results and ensure that the document is properly closed:
+            document.save(userHomePath + "/Desktop/" + "testfire" + ".pdf");
 
         } catch (Exception e) {
             System.out.println(e);
         }
 
     }
-    
-    public void newBlankFire(){
-        
-        try {
-            
-            // Create a document and add a page to it
-PDDocument document = new PDDocument();
-PDPage page = new PDPage();
-document.addPage( page );
 
-// Create a new font object selecting one of the PDF base fonts
-PDFont font = PDType1Font.HELVETICA_BOLD;
-
-// Start a new content stream which will "hold" the to be created content
-PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-contentStream.beginText();
-contentStream.setFont( font, 12 );
-contentStream.moveTextPositionByAmount( 100, 700 );
-contentStream.drawString( "Hello World" );
-contentStream.endText();
-
-// Make sure that the content stream is closed:
-contentStream.close();
-
-String userSystemOS = System.getProperties().getProperty("os.name");
-        
-        //Analyze and determines the users default home-path
-        String userHomePath = System.getProperty("user.home");
-
-// Save the results and ensure that the document is properly closed:
-document.save(userHomePath +"/Desktop/"+ "testfire" +".pdf");
-
-} catch (Exception e) {
-            System.out.println(e);
-        }
-
-        }
-        
-        
-    }
-    
-    
-
+}
 
 //Image to PDF
 // PDDocument doc = null;

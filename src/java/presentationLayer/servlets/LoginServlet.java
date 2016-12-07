@@ -1,6 +1,6 @@
 package presentationLayer.servlets;
 
-import dataAccessLayer.PDFCreator;
+import serviceLayer.PDFCreator;
 import java.io.IOException;
 import java.net.URLEncoder;
 import javax.servlet.ServletException;
