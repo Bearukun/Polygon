@@ -23,6 +23,7 @@ import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.DamageRepair;
+import serviceLayer.entities.Document;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
 import serviceLayer.entities.MoistureInfo;
@@ -42,7 +43,9 @@ public class TechnicianServlet extends HttpServlet {
     private ArrayList<Issue> healthcheckIssues = new ArrayList();
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
+    private ArrayList<Document> buildingDocuments = new ArrayList();
 
+    
     private UserControllerInterface usrCtrl = new UserController();
     private BuildingControllerInterface bldgCtrl = new BuildingController();
     private DataControllerInterface datCtrl = new DataController();
@@ -107,6 +110,10 @@ public class TechnicianServlet extends HttpServlet {
 
                     //Refresh all damage repairs 
                     refreshAllDamageRepairs(request);
+                    
+                    //Refresh all documents to given building
+                    refreshDocuments(buildingId);
+                    request.getSession().setAttribute("buildingDocuments", buildingDocuments);
 
                     //redirect to viewBuilding into the specific building being edited
                     response.sendRedirect("technicianViewBuilding.jsp?value=" + buildingId + "");
@@ -526,6 +533,13 @@ public class TechnicianServlet extends HttpServlet {
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
+    }
+        //Refreshes documents of a select building.
+    public void refreshDocuments(int buildingId) throws Exception {
+
+        buildingDocuments.clear();
+        buildingDocuments = datCtrl.getDocuments(buildingId);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
