@@ -23,6 +23,7 @@ import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Healthcheck;
+import serviceLayer.entities.Issue;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -31,6 +32,8 @@ public class PDFCreator {
     DataControllerInterface datCtrl = new DataController();
     BuildingMapperInterface buildCtrl = new BuildingMapper();
     UserControllerInterface usrCtrl = new UserController();
+    
+    
 
     Building building = new Building();
     Healthcheck healthcheck = new Healthcheck();
@@ -38,6 +41,7 @@ public class PDFCreator {
     ArrayList<Room> roomList = new ArrayList();
     //Etage = Area
     ArrayList<Area> areaList = new ArrayList();
+    ArrayList<Issue> issueList = new ArrayList();
     //sourceFolder sf = new sourceFolder();
     PDDocument doc = new PDDocument();
 
@@ -56,13 +60,16 @@ public class PDFCreator {
 //    buildingowner name
     public void createPDF(int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) {
 
+        
         try {
 
             areaList = buildCtrl.getAreas(buildingId);
             roomList = buildCtrl.getRooms(buildingId);
             building = buildCtrl.getBuilding(buildingId);
+            issueList = buildCtrl.getHealthcheckIssues(healthcheckId);
             user = usrCtrl.getUsers();
 
+            
             //TODO Add pdf-id here through parameter.
             String pdfName = building.getName() + "ID#" + building.getbuildingId();
             String buildingName = building.getName();
@@ -72,23 +79,43 @@ public class PDFCreator {
             int buildingConstructionYear = building.getConstruction_year();
             int buildingSQM = building.getSqm();
             String buildingPurpose = building.getPurpose();
-            System.out.println(condition);
+            buildCtrl.getRooms(buildingId);
+           
+            
+            
+           
+            
+           
+            
+            for (int i = 0; i < roomList.size(); i++) {
+                System.out.println("Room" + roomList.get(i).getName() + " " + roomList.get(i).getDescription() );
+                
+            }
+            
+            for (int i = 0; i < issueList.size(); i++) {
+                
+                System.out.println("Issue " + i + " : " + issueList.get(i).getRecommendation());
+            }
 
-            //Needs:
-            //String buildingOwner
-            //String techName
-            frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, doc, imgFolderPath);
+            
+            frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM(), buildingPurpose, doc, imgFolderPath);
 
             pageNumber++;
 
             buildingOuterWalkthrough(pdfName, imgFolderPath, doc);
             pageNumber++;
+            
+            for (int i = 0; i < roomList.size(); i++) {
+            roomWalkthrough(pdfName, buildingName, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
+            pageNumber++;  
+            }
+           
 
-            roomWalkthrough(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
+            for (int i = 0; i < roomList.size(); i++) {
+            roomMoistReport(pdfName, buildingName, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
             pageNumber++;
-
-            roomMoistReport(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
-            pageNumber++;
+            }
+          
 
             buildingConclusion(pdfName, imgFolderPath, doc);
             pageNumber++;
@@ -96,12 +123,12 @@ public class PDFCreator {
             lastPage(pdfName, buildingResponsible, condition, imgFolderPath, doc);
             pageNumber++;
 
-            for (int i = 0; i < 10; i++) {
-                pageGeneration(doc, pdfName, imgFolderPath);
-                pageNumber++;
-                System.out.println(pageNumber);
-
-            }
+//            for (int i = 0; i < 10; i++) {
+//                pageGeneration(doc, pdfName, imgFolderPath);
+//                pageNumber++;
+//                System.out.println(pageNumber);
+//
+//            }
 
             savePDF(pdfName, doc);
 
@@ -388,7 +415,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 3
-    public void roomMoistReport(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
+    public void roomMoistReport(String pdfName, String buildingName, String roomName, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
@@ -406,7 +433,7 @@ public class PDFCreator {
             defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //NEEDS DYNAMIC USER INPUT!!! "Ceo's Kontor = Room Name
-            singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", "Ceo's Kontor", 10, 50, 665);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", roomName, 10, 50, 665);
 
             //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!! 
             // checkIfPage3NeedsPopulation(false, true, false, content3, imgFolderPath);
@@ -429,7 +456,7 @@ public class PDFCreator {
 
     //Setup of Page 4
     //If "Ingen bemærkning" on Page 4, DOES THIS PAGE NEED TO BE GENERATED!?
-    public void roomWalkthrough(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
+    public void roomWalkthrough(String pdfName, String buildingName, String roomName, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
@@ -447,7 +474,7 @@ public class PDFCreator {
             defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //NEEDS USER INPUT!
-            singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", "Ceo's Kontor", 10, 50, 665);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", roomName, 10, 50, 665);
 
             checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
 
@@ -477,9 +504,33 @@ public class PDFCreator {
             defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             singleTextLine(pageContentStreamNumber, "Konklusion", 14, 50, 650);
+            //Creates a image from a file and places it.
+            //Underline for "Konklusion"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 646, 80, 2);
 
             singleTextLine(pageContentStreamNumber, "Lokale", 10, 50, 600);
+            //Creates a image from a file and places it.
+            //Underline for "Lokale"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 596, 40, 2);
+            
             singleTextLine(pageContentStreamNumber, "Anbefalinger", 10, 200, 600);
+            //Creates a image from a file and places it.
+            //Underline for "Anbefalinger"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 65, 2);
+            
+            //Populate with rooms name/description
+            int roomNameYCoordinate = 580;
+            for (int i = 0; i < roomList.size(); i++) {
+                singleTextLine(pageContentStreamNumber, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), 10, 50, roomNameYCoordinate);
+                roomNameYCoordinate = roomNameYCoordinate - 20;
+            }
+            
+            //Populate list with issues
+            int roomIssueYCoordinate = 580;
+            for (int i = 0; i < roomList.size(); i++) {
+                singleTextLine(pageContentStreamNumber, "test", 10, 200, roomIssueYCoordinate);
+                roomIssueYCoordinate = roomIssueYCoordinate -20;
+            }
 
             //Closes the content creation for Page 5
             pageContentStreamNumber.close();
@@ -1301,5 +1352,17 @@ public class PDFCreator {
             checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
         }
     }
-
+    
+    public int buildingSQM(){
+        
+         //Get buildings final squarementer
+            int bSqm = 0;
+            for (int i = 0; i < roomList.size(); i++) {
+                bSqm += roomList.get(i).getSqm();
+            }
+        
+        return bSqm;
+    }
+    
+   
 }

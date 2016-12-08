@@ -41,7 +41,6 @@ public class TechnicianServlet extends HttpServlet {
     private ArrayList<Room> buildingRooms = new ArrayList();
     private ArrayList<Document> buildingDocuments = new ArrayList();
 
-    
     private UserControllerInterface usrCtrl = new UserController();
     private BuildingControllerInterface bldgCtrl = new BuildingController();
     private DataControllerInterface datCtrl = new DataController();
@@ -106,7 +105,7 @@ public class TechnicianServlet extends HttpServlet {
 
                     //Refresh all damage repairs 
                     refreshAllDamageRepairs(request);
-                    
+
                     //Refresh all documents to given building
                     refreshDocuments(buildingId);
                     request.getSession().setAttribute("buildingDocuments", buildingDocuments);
@@ -121,7 +120,6 @@ public class TechnicianServlet extends HttpServlet {
                     //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                     Building build = (Building) request.getSession().getAttribute("buildingBeingEdited");
 
-                    
                     //If 'Create area' button was clicked
                     if (request.getParameter("originSection").equals("createAreaButton")) {
                         request.getSession().setAttribute("source", "createAreaButton");
@@ -323,52 +321,48 @@ public class TechnicianServlet extends HttpServlet {
                         //Refresh all damage repairs 
                         refreshAllDamageRepairs(request);
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
-                    }
-                    //If a damage repair needs deleting
-                    else if(request.getParameter("originSection").equals("deleteDamageRepairButton")){
+                    } //If a damage repair needs deleting
+                    else if (request.getParameter("originSection").equals("deleteDamageRepairButton")) {
                         request.getSession().setAttribute("source", "");
                         int roomId = Integer.parseInt(request.getParameter("roomId"));
                         bldgCtrl.deleteDamageRepair(roomId);
                         //Refresh all damage repairs 
                         refreshAllDamageRepairs(request);
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
-                    } 
-                    //If 'complete healthcheck' button was clicked
+                    } //If 'complete healthcheck' button was clicked
                     else if (request.getParameter("originSection").equals("completeHealthcheckButton")) {
                         request.getSession().setAttribute("source", "completeHealthcheckButton");
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
-                    }
-                    //If a healthcheck needs completing
+                    } //If a healthcheck needs completing
                     else if (request.getParameter("originSection").equals("completeHealthcheck")) {
                         request.getSession().setAttribute("source", "");
-                        
+
                         String condition = request.getParameter("condition");
                         String buildingResponsible = request.getParameter("buildingResponsible");
-                        
+
                         healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
-                        
-                        
+
                         //Needs to be a permanent addition!
-                        if(condition.equalsIgnoreCase("GOOD")){
-                           build.setCondition(Building.condition.GOOD); 
-                        } else if (condition.equalsIgnoreCase("MEDIUM")){
+                        if (condition.equalsIgnoreCase("GOOD")) {
+                            build.setCondition(Building.condition.GOOD);
+                        } else if (condition.equalsIgnoreCase("MEDIUM")) {
                             build.setCondition(Building.condition.MEDIUM);
-                        } else if (condition.equalsIgnoreCase("POOR")){
+                        } else if (condition.equalsIgnoreCase("POOR")) {
                             build.setCondition(Building.condition.POOR);
                         }
-                        
-                        
-                        
-                        
+
+//                        //NEEDS TO UPDATE BUILDINGSQM!
+//                        int bSqm = 0;
+//                        for (int i = 0; i < roomList.size(); i++) {
+//                            bSqm += roomList.get(i).getSqm();
+//                        }
+//
+//                        System.out.println("BSQM : " + bSqm);
+
                         //CreatePDF
-                        pdf.createPDF(healthcheckId, build.getbuildingId(), buildingResponsible,condition, request.getServletContext().getRealPath("/img/"));
-                        
-                        
+                        pdf.createPDF(healthcheckId, build.getbuildingId(), buildingResponsible, condition, request.getServletContext().getRealPath("/img/"));
+
                         //bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
-                        
-                        
-                        
-                        
                         refreshAllBuildings(request);
                         response.sendRedirect("technician.jsp");
                     }
@@ -387,7 +381,7 @@ public class TechnicianServlet extends HttpServlet {
                     response.sendRedirect("technician.jsp?success=UpdateSuccessful");
                     break;
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -487,7 +481,8 @@ public class TechnicianServlet extends HttpServlet {
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
     }
-        //Refreshes documents of a select building.
+    //Refreshes documents of a select building.
+
     public void refreshDocuments(int buildingId) throws Exception {
 
         buildingDocuments.clear();
