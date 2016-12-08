@@ -348,6 +348,18 @@ public class TechnicianServlet extends HttpServlet {
                         healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
                         
                         
+                        //Needs to be a permanent addition!
+                        if(condition.equalsIgnoreCase("GOOD")){
+                           build.setCondition(Building.condition.GOOD); 
+                        } else if (condition.equalsIgnoreCase("MEDIUM")){
+                            build.setCondition(Building.condition.MEDIUM);
+                        } else if (condition.equalsIgnoreCase("POOR")){
+                            build.setCondition(Building.condition.POOR);
+                        }
+                        
+                        
+                        
+                        
                         //CreatePDF
                         pdf.createPDF(healthcheckId, build.getbuildingId(), buildingResponsible,condition, request.getServletContext().getRealPath("/img/"));
                         
