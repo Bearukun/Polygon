@@ -1,10 +1,7 @@
 package presentationLayer.servlets;
 
 import serviceLayer.PDFCreator;
-import java.awt.AWTEventMulticaster;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.servlet.ServletException;
@@ -19,6 +16,7 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 @WebServlet(name = "AdminServlet", urlPatterns = {"/AdminServlet"})
 public class AdminServlet extends HttpServlet {
@@ -419,7 +417,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     //Deducts a list of technicians from the user list
-    public ArrayList<User> getTechnicians() throws Exception {
+    public ArrayList<User> getTechnicians() throws PolygonException {
         ArrayList<User> techniciansList = new ArrayList();
         for (User thisUser : userList) {
             if (thisUser.getType().toString().equals("TECHNICIAN")) {
@@ -430,7 +428,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws Exception {
+    public void refreshBuilding(int user_id) throws PolygonException {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -438,25 +436,25 @@ public class AdminServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int buildingId) throws Exception {
+    public void refreshAreas(int buildingId) throws PolygonException {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int buildingId) throws Exception {
+    public void refreshRooms(int buildingId) throws PolygonException {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
-    public void refreshUsers(HttpServletRequest request) throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws PolygonException {
 
         userList.clear();
         userList = usrCtrl.getUsers();

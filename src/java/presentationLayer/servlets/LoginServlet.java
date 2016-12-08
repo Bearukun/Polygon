@@ -12,6 +12,7 @@ import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  * Servlet used to check what type of user is logging in.
@@ -170,7 +171,7 @@ public class LoginServlet extends HttpServlet {
         
     }
     
-    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws PolygonException{
         try{
             if (user.getType().toString().equals("CUSTOMER")) {
                 request.getSession().setAttribute("type", "Kunde");
