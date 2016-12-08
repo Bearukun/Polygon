@@ -1,6 +1,6 @@
 package presentationLayer.servlets;
 
-import dataAccessLayer.PDFCreator;
+import serviceLayer.PDFCreator;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  * Servlet that handles the customer.
@@ -88,11 +89,10 @@ public class NavigatorServlet extends HttpServlet {
                             //Refresh the user's buildings
                             refreshBuilding(user_id);
                             request.getSession().setAttribute("userBuildings", userBuildings);
-                            
+
                             //Sends email to the customer about their new building
                             emailNewBuilding(name, address, postcode, city, construction_year, purpose, sqm);
                            
-                            response.sendRedirect("index.jsp?success");
                             redirectUser(request, response);
                         } catch (Exception e) {
 
@@ -193,7 +193,7 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Redirects the user to the appropriate page
-    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws PolygonException {
         try {
             if (request.getParameter("originSection").equals("Kunde")) {
                 response.sendRedirect("user.jsp?success");
@@ -208,7 +208,7 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Populates the editUser.jsp fields
-    public void populateEditUserPage(HttpServletRequest request, User user) throws Exception {
+    public void populateEditUserPage(HttpServletRequest request, User user) throws PolygonException {
 
         //Retrieve the user's data
         uEmail = user.getEmail();
@@ -234,7 +234,7 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Edits the user's details
-    public void editUser(HttpServletRequest request, int user_id) throws Exception {
+    public void editUser(HttpServletRequest request, int user_id) throws PolygonException {
         System.out.println("EDITUSER!!!");
 
         //Retrieve form input values from editProfile.jsp
@@ -250,26 +250,24 @@ public class NavigatorServlet extends HttpServlet {
 
         //Email to be sent to the customer, if the email-adress has changed.
         if (!user.getEmail().equalsIgnoreCase(uEmail)) {
-           
+
             editProfileEmailAddressEmail();
 
         } else if (!user.getPassword().equalsIgnoreCase(uPassword)) {
-         
+
             editProfilePasswordEmail();
-            
+
         } else {
 
             editProfileEmail();
 
-
-           
         }
         //Save the user's edited values to the user database        
         usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws Exception {
+    public void refreshBuilding(int user_id) throws PolygonException {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -277,148 +275,159 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int buildingId) throws Exception {
+    public void refreshAreas(int buildingId) throws PolygonException {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int buildingId) throws Exception {
+    public void refreshRooms(int buildingId) throws PolygonException {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
-    public void refreshUsers(HttpServletRequest request) throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws PolygonException {
 
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
     }
-    
-    public void emailNewBuilding(String bName, String bAddress, String bPostcode, String bCity, String bConstructionYear, String bPurpose, String bSqm){
-         //Send confirmation email to the customer, regarding the creation of a new building:
-                            String emailNewCustomerHeader = "Polygon: Ny bygning tilføjet til deres profil";
-                            String emailNewCustomerMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
-                                    + "\n\nVi har den " + date + " registeret, at de har tilføjet en ny bygning til deres profil. "
-                                    + "Vi har registeret følgende data om bygningen:"
-                                    + "\n\n\n"
-                                    + "\n\n"
-                                    + "Bygningens Navn: " + bName + "\n"
-                                    + "Adresse: " + bAddress + "\n"
-                                    + "Postnummer: " + bPostcode + "\n "
-                                    + "By: " + bCity + "\n"
-                                    + "Opførelses år: " + bConstructionYear + "\n"
-                                    + "Bygningens formål: " + bPurpose + "\n"
-                                    + "Samlede kvadratmeter: " + bSqm + "\n"
-                                    //+ "Bygningen ID#: " + selectedBuilding + "\n"
-                                    + "\n\n\n"
-                                    + "Har de nogen spørgsmål, "
-                                    + "så tøv ikke med at kontakte os!"
-                                    + "\n\n\n"
-                                    + " Med Venlig Hilsen"
-                                    + "\n\n"
-                                    + "Polygon"
-                                    + "\n\n"
-                                    + "Rypevang 5\n"
-                                    + "3450 Allerød\n"
-                                    + "Tlf. 4814 0055\n"
-                                    + "sundebygninger@polygon.dk";
 
-                            emailCtrl.send(user.getEmail(), emailNewCustomerHeader, emailNewCustomerMessage);
+    public void emailNewBuilding(String bName, String bAddress, String bPostcode, String bCity, String bConstructionYear, String bPurpose, String bSqm) {
+        //Send confirmation email to the customer, regarding the creation of a new building:
+        String emailNewCustomerHeader = "Polygon: Ny bygning tilføjet til deres profil";
+        String emailNewCustomerMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                + "\n\nVi har den " + date + " registeret, at de har tilføjet en ny bygning til deres profil. "
+                + "Vi har registeret følgende data om bygningen:"
+                + "\n\n\n"
+                + "\n\n"
+                + "Bygningens Navn: " + bName + "\n"
+                + "Adresse: " + bAddress + "\n"
+                + "Postnummer: " + bPostcode + "\n "
+                + "By: " + bCity + "\n"
+                + "Opførelses år: " + bConstructionYear + "\n"
+                + "Bygningens formål: " + bPurpose + "\n"
+                + "Samlede kvadratmeter: " + bSqm + "\n"
+                //+ "Bygningen ID#: " + selectedBuilding + "\n"
+                + "\n\n\n"
+                + "Har de nogen spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        try {
+            emailCtrl.send(user.getEmail(), emailNewCustomerHeader, emailNewCustomerMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    
-    public void editProfileEmail(){
-        
-             
-            String emailEditProfileHeader = "Polygon: Ændringer i deres profil";
-            String emailEditProfileMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
-                    + "\n\nVi har den " + date + " registeret, at der er sket ændringer i oplysningerne om deres profil. "
-                    + "Deres profils informationer ser således ud:"
-                    + "Deres profil ser således ud nu: "
-                    + "\n\n"
-                    + "Navn: " + uName + "\n"
-                    + "Email: " + uEmail + "\n"
-                    + "Telefon: " + uPhone + "\n"
-                    + "Firma: " + uCompany + "\n"
-                    + "Adresse: " + uAddress + "\n"
-                    + "Postnummer: " + uPostcode + "\n "
-                    + "By: " + uCity
-                    + "\n\n\n"
-                    + "Skulle de glemme deres kodeord til deres "
-                    + "bruger eller har andre spørgsmål, "
-                    + "så tøv ikke med at kontakte os!"
-                    + "\n\n\n"
-                    + " Med Venlig Hilsen"
-                    + "\n\n"
-                    + "Polygon"
-                    + "\n\n"
-                    + "Rypevang 5\n"
-                    + "3450 Allerød\n"
-                    + "Tlf. 4814 0055\n"
-                    + "sundebygninger@polygon.dk";
-            
-             emailCtrl.send(user.getEmail(), emailEditProfileHeader, emailEditProfileMessage);
+
+    public void editProfileEmail() {
+
+        String emailEditProfileHeader = "Polygon: Ændringer i deres profil";
+        String emailEditProfileMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                + "\n\nVi har den " + date + " registeret, at der er sket ændringer i oplysningerne om deres profil. "
+                + "Deres profil ser således ud nu: "
+                + "\n\n"
+                + "Navn: " + uName + "\n"
+                + "Email: " + uEmail + "\n"
+                + "Telefon: " + uPhone + "\n"
+                + "Firma: " + uCompany + "\n"
+                + "Adresse: " + uAddress + "\n"
+                + "Postnummer: " + uPostcode + "\n "
+                + "By: " + uCity
+                + "\n\n\n"
+                + "Skulle de glemme deres kodeord til deres "
+                + "bruger eller har andre spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        try {
+            emailCtrl.send(user.getEmail(), emailEditProfileHeader, emailEditProfileMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    
-    public void editProfilePasswordEmail(){
-           //Email to be send if the user changes their password
-            String emailEditProfilePasswordHeader = "Polygon: Ændret kodeord";
-            String emailEditProfilePasswordMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
-                    + "\n\nVi har den " + date + " registeret, at de har ændret deres kodeord til deres login hos Polygon. "
-                    + "Deres profils informationer ser således ud:"
-                    + "Deres profil ser således ud nu: "
-                    + "\n\n"
-                    + "Ny kode: " + uPassword + "\n"
-                    + "\n\n\n"
-                    + "Har de nogen spørgsmål, "
-                    + "så tøv ikke med at kontakte os!"
-                    + "\n\n\n"
-                    + " Med Venlig Hilsen"
-                    + "\n\n"
-                    + "Polygon"
-                    + "\n\n"
-                    + "Rypevang 5\n"
-                    + "3450 Allerød\n"
-                    + "Tlf. 4814 0055\n"
-                    + "sundebygninger@polygon.dk";
-            
-           
+
+    public void editProfilePasswordEmail() {
+        //Email to be send if the user changes their password
+        String emailEditProfilePasswordHeader = "Polygon: Ændret kodeord";
+        String emailEditProfilePasswordMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                + "\n\nVi har den " + date + " registeret, at de har ændret deres kodeord til deres login hos Polygon. "
+                + "Deres profil ser således ud nu: "
+                + "\n\n"
+                + "Ny kode: " + uPassword + "\n"
+                + "\n\n\n"
+                + "Har de nogen spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        try {
             emailCtrl.send(user.getEmail(), emailEditProfilePasswordHeader, emailEditProfilePasswordMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    
-    public void editProfileEmailAddressEmail(){
-        
-         String emailEditProfileEmailHeader = "Polygon: Ændringer i deres profil";
-            String emailEditProfileEmailMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
-                    + "\n\nVi har den " + date + " registeret, at deres email til deres login er blevet ændret. "
-                    + "Deres profils informationer ser således ud:"
-                    + "\n\n\n"
-                    + "Tidligere Email: " + user.getEmail() + "\n"
-                    + "Ny Email: " + uEmail + "\n"
-                    + "Har de nogen spørgsmål, "
-                    + "så tøv ikke med at kontakte os!"
-                    + "\n\n\n"
-                    + " Med Venlig Hilsen"
-                    + "\n\n"
-                    + "Polygon"
-                    + "\n\n"
-                    + "Rypevang 5\n"
-                    + "3450 Allerød\n"
-                    + "Tlf. 4814 0055\n"
-                    + "sundebygninger@polygon.dk";
 
-            //Sends the email to both the old and new email
+    public void editProfileEmailAddressEmail() {
+
+        String emailEditProfileEmailHeader = "Polygon: Ændringer i deres profil";
+        String emailEditProfileEmailMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
+                + "\n\nVi har den " + date + " registeret, at deres email til deres login er blevet ændret. "
+                + "Deres profils informationer ser således ud:"
+                + "\n\n\n"
+                + "Tidligere Email: " + user.getEmail() + "\n"
+                + "Ny Email: " + uEmail + "\n"
+                + "Har de nogen spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        //Sends the email to both the old and new email
+        try {
             emailCtrl.send(uEmail, emailEditProfileEmailHeader, emailEditProfileEmailMessage);
             emailCtrl.send(user.getEmail(), emailEditProfileEmailHeader, emailEditProfileEmailMessage);
-        
-        
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

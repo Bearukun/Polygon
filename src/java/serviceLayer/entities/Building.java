@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 /**
  * Class dealing with buildings
  */
-public class Building {
+public class Building implements Serializable {
     
     /**
      * Enum used to show a buildings different conditions.  

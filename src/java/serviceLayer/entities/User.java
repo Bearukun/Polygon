@@ -1,9 +1,10 @@
 package serviceLayer.entities;
 
+import java.io.Serializable;
 /**
  * Class dealing with users
  */
-public class User {
+public class User implements Serializable {
 
     /**
      * Enum used to show a users different types.

@@ -17,6 +17,7 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  *
@@ -39,7 +40,7 @@ public class ProjectTest {
 //    }
     
     @Test
-    public void testGetUserBuildings() throws Exception {
+    public void testGetUserBuildings() throws PolygonException {
         System.out.println("getUserBuildings");
         ArrayList<Building> result = bm.getBuildings(1);
         assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
@@ -49,28 +50,28 @@ public class ProjectTest {
     }
     
     @Test
-    public void testGetAllBuildings() throws Exception {
+    public void testGetAllBuildings() throws PolygonException {
         System.out.println("getAllBuildings");
         ArrayList<Building> result = bm.getAllBuildings();
         assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
     }
     
     @Test
-    public void testGetBuildingAreas() throws Exception {
+    public void testGetBuildingAreas() throws PolygonException {
         System.out.println("getBuildingAreas");
         ArrayList<Area> result = bm.getAreas(1);
         assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
     }
     
     @Test
-    public void testGetAreaRooms() throws Exception {
+    public void testGetAreaRooms() throws PolygonException {
         System.out.println("getAreaRooms");
         ArrayList<Room> result = bm.getRooms(1);
         assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
     }
     
     @Test
-    public void testGetAllUsers() throws Exception {
+    public void testGetAllUsers() throws PolygonException {
         System.out.println("getAllUsers");
         ArrayList<User> result = um.getUsers();
         assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
@@ -78,7 +79,7 @@ public class ProjectTest {
     
     //Uncommented, doesn't work with new login system.
 //    @Test
-//    public void testGetUser() throws Exception {
+//    public void testGetUser() throws PolygonException {
 //        System.out.println("getUser");
 //        ArrayList<User> userList = um.getUsers();
 //        User result = um.getUser(userList.get(0).getEmail());

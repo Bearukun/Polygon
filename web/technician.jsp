@@ -77,44 +77,55 @@
                                     <td><b>Formål</b></td>
                                     <td><b>Kvadratmeter</b></td>
                                     <td><b>Bruger(ID)</b></td>
-                                    <td></td>
+                                    <% int buildingsThatNeedActivationButton = 0;
+                                    for(int i = 0; i < allBuildings.size(); i++){
+                                        if(user_id ==  allBuildings.get(i).getAssigned_tech_id()){
+                                            if(allBuildings.get(i).getHealthcheck_pending()==2){
+                                                buildingsThatNeedActivationButton++;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(buildingsThatNeedActivationButton>0){%>
+                                        <td><b>Muligheder</b></td>
+                                    <%}%>
                                 </tr>
-                                <%
-                                    
-                                        for(int x = 0; x < allBuildings.size(); x++){
-                                            if(user_id ==  allBuildings.get(x).getAssigned_tech_id()){
-                                %><tr>
-                                    <td><%out.println(allBuildings.get(x).getbuildingId());%></td>  
-                                    <% if(allBuildings.get(x).getHealthcheck_pending()==2){%>
-                                        <td><%out.println(allBuildings.get(x).getName());%></td>
-                                        <%} else{%>
-                                        <td>
-                                            <form class="submitLink" action="TechnicianServlet" method="POST">
-                                                <input type="submit" class="submitLink" value="<%=allBuildings.get(x).getName()%>" />
-                                                <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getbuildingId()%>" />
-                                                <input type="hidden" name="origin" value="technicianOverview" />
-                                            </form>
-                                        </td>
-                                        <%}%>
-                                    <td><%out.println(allBuildings.get(x).getDate_created());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getAddress());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getPostcode());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getCity());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getCondition());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getConstruction_year());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getPurpose());%></td>  
-                                    <td><%out.println(allBuildings.get(x).getSqm());%></td>  
-                                    <td><%out.println(email);%></td>
-                                    <td>
-                                        <form action="TechnicianServlet" method="POST">
-                                            <input type="hidden" name="origin" value="acceptHealthcheckButton" />
-                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getbuildingId()%>" />
-                                            <input class="btn btn-primary" type="submit" value="Påbegynd" />
-                                        </form>
-                                    </td>
-                                </tr>
-                                <%}}
-                                %>
+                                <% for(int x = 0; x < allBuildings.size(); x++){
+                                    if(user_id ==  allBuildings.get(x).getAssigned_tech_id()){%>
+                                        <tr>
+                                            <td><%= allBuildings.get(x).getbuildingId()%></td>  
+                                                <% if(allBuildings.get(x).getHealthcheck_pending()==2){%>
+                                                    <td><%= allBuildings.get(x).getName()%></td>
+                                                <%} else{%>
+                                                    <td>
+                                                        <form action="TechnicianServlet" method="POST">
+                                                            <input type="submit" class="submitLink" value="<%=allBuildings.get(x).getName()%>" />
+                                                            <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getbuildingId()%>" />
+                                                            <input type="hidden" name="origin" value="technicianOverview" />
+                                                        </form>
+                                                    </td>
+                                                <%}%>
+                                            <td><%= allBuildings.get(x).getDate_created()%></td>  
+                                            <td><%= allBuildings.get(x).getAddress()%></td>  
+                                            <td><%= allBuildings.get(x).getPostcode()%></td>  
+                                            <td><%= allBuildings.get(x).getCity()%></td>  
+                                            <td><%= allBuildings.get(x).getCondition()%></td>  
+                                            <td><%= allBuildings.get(x).getConstruction_year()%></td>  
+                                            <td><%= allBuildings.get(x).getPurpose()%></td>  
+                                            <td><%= allBuildings.get(x).getSqm()%></td>  
+                                            <td><%= email%></td>
+                                            <% if(allBuildings.get(x).getHealthcheck_pending()==2){%>
+                                                <td>
+                                                    <form action="TechnicianServlet" method="POST">
+                                                        <input type="hidden" name="origin" value="acceptHealthcheckButton" />
+                                                        <input type="hidden" name="buildingId" value="<%=allBuildings.get(x).getbuildingId()%>" />
+                                                        <input class="btn btn-primary" type="submit" value="Påbegynd" />
+                                                    </form>
+                                                </td>
+                                            <%}%>
+                                        </tr>
+                                    <%}%>
+                                <%}%>
                             </tbody>
                         </table>
                     </div>

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 
  * Class dealing with issues
  */
-public class Issue {
+public class Issue implements Serializable {
     
     /**
      * Variables corresponding to its database counterpart. 
