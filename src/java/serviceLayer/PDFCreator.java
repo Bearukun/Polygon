@@ -17,19 +17,24 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import serviceLayer.controllers.DataController;
+import serviceLayer.controllers.UserController;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
+import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Room;
+import serviceLayer.entities.User;
 
 public class PDFCreator {
 
     DataControllerInterface datCtrl = new DataController();
     BuildingMapperInterface buildCtrl = new BuildingMapper();
+    UserControllerInterface usrCtrl = new UserController();
 
     Building building = new Building();
     Healthcheck healthcheck = new Healthcheck();
+    ArrayList<User> user = new ArrayList();
     ArrayList<Room> roomList = new ArrayList();
     //Etage = Area
     ArrayList<Area> areaList = new ArrayList();
@@ -46,12 +51,17 @@ public class PDFCreator {
 
     //Method that creates the PDF pages.
     //Way too much input
-    public void createPDF(int healthcheckId, int buildingId, String imgFolderPath) {
+//    Check up on:
+//    tech ID Name
+//    buildingowner name
+    public void createPDF(int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) {
 
         try {
 
+            areaList = buildCtrl.getAreas(buildingId);
             roomList = buildCtrl.getRooms(buildingId);
             building = buildCtrl.getBuilding(buildingId);
+            user = usrCtrl.getUsers();
 
             //TODO Add pdf-id here through parameter.
             String pdfName = building.getName() + "ID#" + building.getbuildingId();
@@ -62,7 +72,11 @@ public class PDFCreator {
             int buildingConstructionYear = building.getConstruction_year();
             int buildingSQM = building.getSqm();
             String buildingPurpose = building.getPurpose();
+            System.out.println(condition);
 
+            //Needs:
+            //String buildingOwner
+            //String techName
             frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, doc, imgFolderPath);
 
             pageNumber++;
@@ -79,7 +93,7 @@ public class PDFCreator {
             buildingConclusion(pdfName, imgFolderPath, doc);
             pageNumber++;
 
-            lastPage(pdfName, imgFolderPath, doc);
+            lastPage(pdfName, buildingResponsible, condition, imgFolderPath, doc);
             pageNumber++;
 
             for (int i = 0; i < 10; i++) {
@@ -476,7 +490,7 @@ public class PDFCreator {
     }
 
     //Setup of Page 6
-    public void lastPage(String pdfName, String imgFolderPath, PDDocument doc) {
+    public void lastPage(String pdfName, String buildingResponsible, String condition, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -493,10 +507,10 @@ public class PDFCreator {
             defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //Needs real user input
-            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningsgennemgang er fortaget af", /*INPUT HER*/ "The Ceo" + " , Polygon", 10, 50, 650);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningsgennemgang er fortaget af", user.get(building.getAssigned_tech_id()).getName() + " , Polygon (Teknikker)", 10, 50, 650);
 
             //Needs real user input
-            singleTextLineWithUserInput(pageContentStreamNumber, "i samarbejde med ", /*INPUT HER*/ "The other Ceo" + " (bygningsansvarlig).", 10, 50, 630);
+            singleTextLineWithUserInput(pageContentStreamNumber, "i samarbejde med ", buildingResponsible + " (bygningsansvarlig).", 10, 50, 630);
 
             //Writes and places the text-line "Bygningen er katagoriseret som"
             singleTextLine(pageContentStreamNumber, "Bygningen er katagoriseret som", 14, 50, 600);
@@ -504,7 +518,7 @@ public class PDFCreator {
             //Writes and places the text-line ""Tilstand"
             singleTextLine(pageContentStreamNumber, "Tilstand", 12, 50, 580);
 
-            //Writes and places the text-line ""Tilstandsgrad 1"
+//Writes and places the text-line ""Tilstandsgrad 1"
             singleTextLine(pageContentStreamNumber, "Tilstandsgrad 1", 10, 50, 560);
             //Places the "underline.jpg"-image, as an underline for the "Tilstandsgrad 1"
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 555, 70, 2);
@@ -524,7 +538,41 @@ public class PDFCreator {
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 475, 70, 2);
             //Writes and places the text-line ""Dårlig Tilstand"
             singleTextLine(pageContentStreamNumber, "Dårlig Tilstand", 10, 50, 465);
+          
+            if (condition.equalsIgnoreCase("GOOD")) {
 
+                //Sets the checkbox for "God Tilstand"
+                checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 560, 7, 7);
+                
+                //Sets the empty checkbox for "Medium Tilstand"
+                checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 520, 7, 7);
+                
+                //Sets the empty checkbox for "Dårlig Tilstand"
+                 checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
+            } else if (condition.equalsIgnoreCase("MEDIUM")) {
+
+                //Sets the Checkbox for "Middel Tilstand"
+                checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 520, 7, 7);
+                
+                //Sets the empty checkbox for "God Tilstand"
+                checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 560, 7, 7);
+                
+                //Sets the empty checkbox for "Dårlig Tilstand"
+                 checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
+                
+            } else if (condition.equalsIgnoreCase("POOR")) {
+
+                //Sets the checkbox for "Dårlig Tilstand"
+                checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
+                
+                //Sets the empty checkbox for "God Tilstand"
+                 checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 560, 7, 7);
+                
+                //Sets the empty checkbox for "Medium Tilstand"
+                checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 520, 7, 7);
+            }
+
+            //Skal bruges en boolean at styre sig efter
             //Writes and places the text-line "Beskrivelse af bygningen"
             singleTextLine(pageContentStreamNumber, "Beskrivelse af bygningen", 10, 200, 580);
 
@@ -542,14 +590,6 @@ public class PDFCreator {
             singleTextLine(pageContentStreamNumber, "Bygningens funktion er nedsat, eller bygningen er næsten eller helt ubrulig.", 8, 140, 460);
 
             singleTextLine(pageContentStreamNumber, "Tilstandsgrad", 12, 515, 580);
-
-            //Skal bruges en boolean at styre sig efter
-            //Sets the checkbox for "God Tilstand"
-            checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 560, 7, 7);
-            //Sets the Checkbox for "Middel Tilstand"
-            checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 520, 7, 7);
-            //Sets the checkbox for "Dårlig Tilstand"
-            checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
 
             //Writes the Terms of Use (?)
             singleTextLine(pageContentStreamNumber, "Denne rapport og bygningsgennemgang er lavet for at klarlægge umiddelbare visuelle problemstillinger.", 8, 50, 400);

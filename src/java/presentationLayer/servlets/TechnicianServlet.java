@@ -349,7 +349,7 @@ public class TechnicianServlet extends HttpServlet {
                         
                         
                         //CreatePDF
-                        pdf.createPDF(healthcheckId, build.getbuildingId(), request.getServletContext().getRealPath("/img/"));
+                        pdf.createPDF(healthcheckId, build.getbuildingId(), buildingResponsible,condition, request.getServletContext().getRealPath("/img/"));
                         
                         
                         //bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
