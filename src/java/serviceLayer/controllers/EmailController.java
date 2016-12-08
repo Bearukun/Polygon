@@ -9,6 +9,15 @@ import javax.mail.internet.*;
 import javax.activation.*;
 
 public class EmailController implements EmailControllerInterface{
+    
+    /**
+     * Method used to send emails
+     * 
+     * @param to String containing the email of the recieving person
+     * @param title String contining the title of the email
+     * @param body String containing the content of the email
+     * @throws Exception 
+     */
     public void send(String to, String title, String body) throws Exception {
 
         try {

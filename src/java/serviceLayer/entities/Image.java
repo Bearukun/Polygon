@@ -24,7 +24,7 @@ public class Image implements Serializable {
     }
 
     /**
-     * Constructor
+     * Constructor to instantiate a specific image
      * @param image_id int identifying the image from the database
      * @param issue_id int identifying the issue that is linked to the image
      * @param buildingId int identifying the building that is linked to the image

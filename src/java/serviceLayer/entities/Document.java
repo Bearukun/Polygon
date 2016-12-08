@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.Timestamp;
 
+/**
+ * Class dealing with documents
+ */
+
 public class Document implements Serializable {
 
     private int document_id, building_id;
@@ -11,9 +15,21 @@ public class Document implements Serializable {
     private Blob document_file;
     private Timestamp date_created;
 
+    /**
+     * Empty cnonstructor
+     */
     public Document() {
     }
 
+    /**
+     * Constructor to instantiate a specific document
+     * @param document_id int identifying the document from the database
+     * @param date_created Timestamp containing the date the 
+     * @param document_name String contining the documents name
+     * @param document_file Blob containing the document file
+     * @param document_type String containing the documents filetype
+     * @param building_id int identifying the building that is linked to the document
+     */
     public Document(int document_id, Timestamp date_created, String document_name, Blob document_file, String document_type, int building_id) {
         this.document_id = document_id;
         this.date_created = date_created;
@@ -23,6 +39,10 @@ public class Document implements Serializable {
         this.document_file = document_file;
     }
 
+    
+    /**
+     * getters & setters 
+     */
     public int getDocument_id() {
         return document_id;
     }

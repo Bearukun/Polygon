@@ -475,6 +475,13 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method to get decuments
+     * 
+     * @param buildingId int identifying the building the document is linked to
+     * @return an Arraylist of documents
+     * @throws Exception 
+     */
     @Override
     public ArrayList<Document> getDocuments(int buildingId) throws Exception {
 
@@ -530,6 +537,14 @@ public class DataMapper implements DataMapperInterface {
         return documents;
     }
 
+    /**
+     * Method to upload a document on a building
+     * @param buildingId int identifying the building from the database
+     * @param documentName String containing the documents name
+     * @param documentType String containing the documents filetype
+     * @param document_file InputStream containing the document file
+     * @throws Exception 
+     */
     @Override
     public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception {
 
@@ -576,6 +591,11 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method used to delete a document
+     * @param documentId int identifying the document from the database
+     * @throws Exception 
+     */
     @Override
     public void deleteDocument(int documentId) throws Exception {
         //Declare new objects of the Connection and PrepareStatement.
@@ -619,6 +639,12 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method used to get a specific document
+     * @param documentId int identifying the document from the database
+     * @return a specific document
+     * @throws Exception 
+     */
     @Override
     public Document getDocument(int documentId) throws Exception {
         Document document = new Document();
@@ -674,7 +700,7 @@ public class DataMapper implements DataMapperInterface {
 
         }
 
-        //Return image.
+        //Return document.
         return document;
     }
 

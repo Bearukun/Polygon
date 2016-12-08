@@ -1370,6 +1370,12 @@ public class BuildingMapper implements BuildingMapperInterface {
         }
     }
 
+    /**
+     * Method used to get a specific building
+     * @param buildingId int specifying the building from the database
+     * @return one specific building
+     * @throws Exception 
+     */
     @Override
     public Building getBuilding(int buildingId) throws Exception {
         
@@ -1455,7 +1461,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         }
 
-        //Return ArrayList of Building(s).
+        //Return building).
         return building;
         
     }
