@@ -16,6 +16,7 @@ import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
 import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  * Class dealing with building data
@@ -39,10 +40,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param user_id int identifying the user whose buildings are to be
      * retrieved
      * @return An ArrayList of type Building
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<Building> getBuildings(int user_id) throws Exception {
+    public ArrayList<Building> getBuildings(int user_id) throws PolygonException {
 
         //Declare new Building.condation object, with the name condition.
         Building.condition condition;
@@ -93,7 +94,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DBFacade.getBuildings." + e.getMessage());
+            throw new PolygonException("SQL Error:@DBFacade.getBuildings." + e.getMessage());
 
         } finally {
 
@@ -107,7 +108,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
 
             }
 
@@ -131,10 +132,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param sqm int detailing the building's size in square metres
      * @param user_id int identifying the user who needs to be linked to the new
      * building
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws Exception {
+    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -166,7 +167,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
 
         } finally {
 
@@ -179,7 +180,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
 
             }
 
@@ -191,10 +192,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to delete a specific building
      *
      * @param buildingId int informing which building is to be deleted
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void deleteBuilding(int buildingId) throws Exception {
+    public void deleteBuilding(int buildingId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -210,7 +211,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -218,7 +219,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.deleteBuilding." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.deleteBuilding." + ex.getMessage());
             }
         }
     }
@@ -227,10 +228,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to retrieve all buildings
      *
      * @return An ArrayList of type Building
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<Building> getAllBuildings() throws Exception {
+    public ArrayList<Building> getAllBuildings() throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -281,7 +282,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: getAllBuildingsFailed at DBFacade.");
+            throw new PolygonException("SQL Error: getAllBuildingsFailed at DBFacade.");
 
         } finally {
 
@@ -295,7 +296,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
 
             }
 
@@ -311,10 +312,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param buildingId int specifying which building's areas are to be
      * retrieved
      * @return An ArrayList of type Area
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<Area> getAreas(int buildingId) throws Exception {
+    public ArrayList<Area> getAreas(int buildingId) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -338,7 +339,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 buildingAreas.add(new Area(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5)));
             }
         } catch (Exception e) {
-            throw new Exception("SQL Error:@DBFacade.getAreas." + e.getMessage());
+            throw new PolygonException("SQL Error:@DBFacade.getAreas." + e.getMessage());
         } finally {
             //Try releasing objects. 
             try {
@@ -347,7 +348,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 rs.close();
             } catch (SQLException ex) {
                 //Throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getAreas." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getAreas." + ex.getMessage());
             }
         }
         //Return ArrayList of Area(s).
@@ -366,10 +367,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param constructionYear int detailing the building's year of construction
      * @param purpose String detailing the building's designated purpose
      * @param sqm int detailing the building's size in square metres
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws Exception {
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -396,7 +397,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
 
         } finally {
 
@@ -409,7 +410,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getBuildings." + ex.getMessage());
 
             }
 
@@ -423,10 +424,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param buildingId int specifying which building's rooms are to be
      * retrieved
      * @return An ArrayList of type Room
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<Room> getRooms(int buildingId) throws Exception {
+    public ArrayList<Room> getRooms(int buildingId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -450,7 +451,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 buildingRooms.add(new Room(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6)));
             }
         } catch (Exception e) {
-            throw new Exception("SQL Error:@DBFacade.getRooms." + e.getMessage());
+            throw new PolygonException("SQL Error:@DBFacade.getRooms." + e.getMessage());
         } finally {
             //Try releasing objects. 
             try {
@@ -459,7 +460,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 rs.close();
             } catch (SQLException ex) {
                 //Throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getRooms." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getRooms." + ex.getMessage());
             }
         }
         //Return ArrayList of Room(s).
@@ -474,10 +475,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param sqm int detailing the number of square metres for the new area
      * @param buildingId String specifying the building for which the new area
      * needs creating
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void createArea(String name, String description, int sqm, int buildingId) throws Exception {
+    public void createArea(String name, String description, int sqm, int buildingId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -496,7 +497,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -504,7 +505,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.createArea." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.createArea." + ex.getMessage());
             }
         }
     }
@@ -513,10 +514,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to delete an area
      *
      * @param areaId int specifying which area is to be deleted
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void deleteArea(int areaId) throws Exception {
+    public void deleteArea(int areaId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -532,7 +533,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -540,7 +541,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.deleteArea." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.deleteArea." + ex.getMessage());
             }
         }
     }
@@ -553,10 +554,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param sqm int detailing the number of square metres for the new room
      * @param areaId String specifying the area for which a new room needs
      * creating
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void createRoom(String name, String description, int sqm, int areaId) throws Exception {
+    public void createRoom(String name, String description, int sqm, int areaId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -575,7 +576,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -583,7 +584,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.createRoom." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.createRoom." + ex.getMessage());
             }
         }
     }
@@ -592,10 +593,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to delete a room
      *
      * @param roomId int specifying which room is to be deleted
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void deleteRoom(int roomId) throws Exception {
+    public void deleteRoom(int roomId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -611,7 +612,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -619,7 +620,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.deleteRoom." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.deleteRoom." + ex.getMessage());
             }
         }
     }
@@ -631,10 +632,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * option needs toggling
      * @param healthcheck_pending int detailing the new status for the
      * healthcheck
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void toggleHealthcheck(int buildingId, int healthcheck_pending) throws Exception {
+    public void toggleHealthcheck(int buildingId, int healthcheck_pending) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -649,7 +650,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -657,7 +658,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.toggleHealthcheck." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.toggleHealthcheck." + ex.getMessage());
             }
         }
     }
@@ -669,10 +670,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * needs reassigning
      * @param technicianId int detailing which technician should be assigned the
      * healthcheck
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void assignHealthcheck(int buildingId, int technicianId) throws Exception {
+    public void assignHealthcheck(int buildingId, int technicianId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -688,7 +689,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -696,7 +697,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.assignHealthcheck." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.assignHealthcheck." + ex.getMessage());
             }
         }
     }
@@ -708,10 +709,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * technician
      * @param technicianId int detailing which technician is accepting the
      * healthcheck
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void acceptHealthcheck(int buildingId, int technicianId) throws Exception {
+    public void acceptHealthcheck(int buildingId, int technicianId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -728,7 +729,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -736,7 +737,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.acceptHealthcheck." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.acceptHealthcheck." + ex.getMessage());
             }
         }
     }
@@ -753,10 +754,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param healthcheck_id Int specifying the healthcheck that is linked to
      * the issue
      * @return statement returning a specific issue
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception {
+    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -800,7 +801,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             }
 
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem." + e.getMessage());
+            throw new PolygonException("SQL Error: Connection problem." + e.getMessage());
         } finally {
             //Try releasing objects. 
             try {
@@ -809,7 +810,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 rs.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.acceptHealthcheck." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.acceptHealthcheck." + ex.getMessage());
             }
         }
     }
@@ -818,10 +819,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to delete an issue
      *
      * @param issueId int specifying which issue is to be deleted
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void deleteIssue(int issueId) throws Exception {
+    public void deleteIssue(int issueId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -837,7 +838,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -845,7 +846,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.deleteIssue." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.deleteIssue." + ex.getMessage());
             }
         }
     }
@@ -855,10 +856,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      *
      * @param buildingId Int specifying the building
      * @return An ArrayList of type Healthcheck
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception {
+    public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -884,7 +885,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: getBuildingHealthchecks Failed at DBFacade.");
+            throw new PolygonException("SQL Error: getBuildingHealthchecks Failed at DBFacade.");
 
         } finally {
 
@@ -898,7 +899,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getBuildingHealthchecks." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getBuildingHealthchecks." + ex.getMessage());
 
             }
 
@@ -911,10 +912,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to get all healthchecks
      *
      * @return an arraylist of type healthcheck
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<Healthcheck> getAllHealthchecks() throws Exception {
+    public ArrayList<Healthcheck> getAllHealthchecks() throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -939,7 +940,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: getAllHealthchecks Failed at DBFacade.");
+            throw new PolygonException("SQL Error: getAllHealthchecks Failed at DBFacade.");
 
         } finally {
 
@@ -953,7 +954,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getAllHealthchecks." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getAllHealthchecks." + ex.getMessage());
 
             }
 
@@ -967,10 +968,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      *
      * @param healthcheckId Int specifying the healthcheck
      * @return an Arraylist of the type issue
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception {
+    public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -996,7 +997,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: getHealthcheckIssues Failed at DBFacade.");
+            throw new PolygonException("SQL Error: getHealthcheckIssues Failed at DBFacade.");
 
         } finally {
 
@@ -1010,7 +1011,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getHealthcheckIssues." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getHealthcheckIssues." + ex.getMessage());
 
             }
 
@@ -1026,10 +1027,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param measurePoint String specifying where in the room it was measured
      * @param measureValue int specifying the value of the measurement for
      * polygon to evaluate
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws Exception {
+    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1047,7 +1048,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -1055,7 +1056,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.registerMoistureMeasurement." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.registerMoistureMeasurement." + ex.getMessage());
             }
         }
     }
@@ -1064,10 +1065,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to get all moisture measurements
      *
      * @return an Arraylist of the type moisture measurements
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws Exception {
+    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1092,7 +1093,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: getAllMoistureMeasurements Failed at DBFacade.");
+            throw new PolygonException("SQL Error: getAllMoistureMeasurements Failed at DBFacade.");
 
         } finally {
 
@@ -1106,7 +1107,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getAllMoistureMeasurements." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getAllMoistureMeasurements." + ex.getMessage());
 
             }
 
@@ -1119,10 +1120,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to delete a moisture measurement
      *
      * @param moistId Int specifying the measurement
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void deleteMoistureMeasurement(int moistId) throws Exception {
+    public void deleteMoistureMeasurement(int moistId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1138,7 +1139,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -1146,7 +1147,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.deleteMoistureMeasurement." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.deleteMoistureMeasurement." + ex.getMessage());
             }
         }
     }
@@ -1155,10 +1156,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to get all damage repairs
      *
      * @return an Ararylist of the type damage repairs
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public ArrayList<DamageRepair> getAllDamageRepairs() throws Exception {
+    public ArrayList<DamageRepair> getAllDamageRepairs() throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1210,7 +1211,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error: getAllDamageRepairs Failed at DBFacade.");
+            throw new PolygonException("SQL Error: getAllDamageRepairs Failed at DBFacade.");
 
         } finally {
 
@@ -1224,7 +1225,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getAllDamageRepairs." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getAllDamageRepairs." + ex.getMessage());
 
             }
 
@@ -1242,10 +1243,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param damageDetails String specifying the details of the damage
      * @param workDone String specifying what have been repaired
      * @param type String specifying the kind of damage
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws Exception {
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1267,7 +1268,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -1275,7 +1276,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.registerDamageRepair." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.registerDamageRepair." + ex.getMessage());
             }
         }
     }
@@ -1284,10 +1285,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * Method to delete a damage repair report
      *
      * @param roomId Int specifying the room
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void deleteDamageRepair(int roomId) throws Exception {
+    public void deleteDamageRepair(int roomId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1303,7 +1304,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem.");
         } finally {
             //Try releasing objects. 
             try {
@@ -1311,7 +1312,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.deleteDamageRepair." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.deleteDamageRepair." + ex.getMessage());
             }
         }
     }
@@ -1324,10 +1325,10 @@ public class BuildingMapper implements BuildingMapperInterface {
      * the healthcheck
      * @param healthcheckId Int specifying the healthcheck
      * @param buildingId Int specifying the building
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception {
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1357,7 +1358,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update.
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new Exception("SQL Error: Connection problem." + e.getMessage());
+            throw new PolygonException("SQL Error: Connection problem." + e.getMessage());
         } finally {
             //Try releasing objects. 
             try {
@@ -1365,13 +1366,13 @@ public class BuildingMapper implements BuildingMapperInterface {
                 stmt.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.completeHealthcheck." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.completeHealthcheck." + ex.getMessage());
             }
         }
     }
 
     @Override
-    public Building getBuilding(int buildingId) throws Exception {
+    public Building getBuilding(int buildingId) throws PolygonException {
         
         Building building = new Building();
         
@@ -1435,7 +1436,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DBFacade.getBuilding." + e.getMessage());
+            throw new PolygonException("SQL Error:@DBFacade.getBuilding." + e.getMessage());
 
         } finally {
 
@@ -1449,7 +1450,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DBFacade.getBuilding." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DBFacade.getBuilding." + ex.getMessage());
 
             }
 
