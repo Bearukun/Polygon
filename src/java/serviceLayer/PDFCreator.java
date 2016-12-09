@@ -24,6 +24,7 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
+import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
@@ -42,6 +43,8 @@ public class PDFCreator {
     //Etage = Area
     ArrayList<Area> areaList = new ArrayList();
     ArrayList<Issue> issueList = new ArrayList();
+    
+    
     //sourceFolder sf = new sourceFolder();
     PDDocument doc = new PDDocument();
 
@@ -68,7 +71,15 @@ public class PDFCreator {
             building = buildCtrl.getBuilding(buildingId);
             issueList = buildCtrl.getHealthcheckIssues(healthcheckId);
             user = usrCtrl.getUsers();
+            
+            
+            
+            //MOISTLIST
+            
+            
+            
 
+            
             
             //TODO Add pdf-id here through parameter.
             String pdfName = building.getName() + "ID#" + building.getbuildingId();
@@ -79,8 +90,9 @@ public class PDFCreator {
             int buildingConstructionYear = building.getConstruction_year();
             int buildingSQM = building.getSqm();
             String buildingPurpose = building.getPurpose();
-            buildCtrl.getRooms(buildingId);
+            
            
+            System.out.println("NUMBER OF ROOMS!" + roomList.size());
             
             
            
@@ -88,37 +100,61 @@ public class PDFCreator {
            
             
             for (int i = 0; i < roomList.size(); i++) {
-                System.out.println("Room" + roomList.get(i).getName() + " " + roomList.get(i).getDescription() );
+                System.out.println("Room " + i + " " + roomList.get(i).getName() + " " + roomList.get(i).getDescription() );
                 
             }
             
             for (int i = 0; i < issueList.size(); i++) {
                 
                 System.out.println("Issue " + i + " : " + issueList.get(i).getRecommendation());
+                
             }
 
+            for (int i = 0; i < areaList.size(); i++) {
+                System.out.println("Area " + i + " : " + areaList.get(i).getName());
+            }
             
             frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM(), buildingPurpose, doc, imgFolderPath);
 
             pageNumber++;
 
-            buildingOuterWalkthrough(pdfName, imgFolderPath, doc);
-            pageNumber++;
+//            buildingOuterWalkthrough(pdfName, imgFolderPath, doc);
+//            pageNumber++;
             
-            for (int i = 0; i < roomList.size(); i++) {
-            roomWalkthrough(pdfName, buildingName, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
+           for (int i = 0; i < areaList.size(); i++) {
+                for (int j = 0; j < roomList.size(); j++) {
+                    if (areaList.get(i).getArea_id() == roomList.get(j).getArea_id()) {
+                   roomWalkthrough(pdfName, buildingName, roomList.get(j).getName() + " " + roomList.get(j).getDescription(), buildingPostcode, areaList.get(i).getName(), i, buildingSQM, j, imgFolderPath, doc);
             pageNumber++;  
+                    }
+             
             }
+                 }
            
+            for (int i = 0; i < areaList.size(); i++) {
+                for (int j = 0; j < roomList.size(); j++) {
+                    if (areaList.get(i).getArea_id() == roomList.get(j).getArea_id()) {
+                        damageReport(pdfName, roomList.get(j).getName() + " " + roomList.get(j).getDescription(), buildingPostcode, areaList.get(i).getName(), imgFolderPath, doc, condition, true, true, true, true, true, true, pdfName, pdfName, pdfName, pdfName);
+            
+           pageNumber++;
+                    }
+                }
+            }
 
-            for (int i = 0; i < roomList.size(); i++) {
-            roomMoistReport(pdfName, buildingName, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
-            pageNumber++;
+            for (int i = 0; i < areaList.size(); i++) {
+                for (int j = 0; j < roomList.size(); j++) {
+                    if (areaList.get(i).getArea_id() == roomList.get(j).getArea_id()) {
+                      roomMoistReport(pdfName, buildingName, roomList.get(j).getName() + " " + roomList.get(j).getDescription(), buildingPostcode,  areaList.get(i).getName(), buildingConstructionYear, buildingSQM, buildingPurpose, imgFolderPath, doc);
+                        pageNumber++;  
+                    }
+                     
+                }
+           
             }
           
 
-            buildingConclusion(pdfName, imgFolderPath, doc);
-            pageNumber++;
+//            buildingConclusion(pdfName, imgFolderPath, doc, 0);
+//            pageNumber++;
 
             lastPage(pdfName, buildingResponsible, condition, imgFolderPath, doc);
             pageNumber++;
@@ -415,7 +451,132 @@ public class PDFCreator {
     }
 
     //Setup of Page 3
-    public void roomMoistReport(String pdfName, String buildingName, String roomName, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
+    public void damageReport(String pdfName, String roomName, Integer buildingPostcode, String areaName,
+            String imgFolderPath, PDDocument doc, String damageCondition,
+            boolean roomDamage, boolean moist, boolean rotAndMushroom, 
+            boolean mold, boolean fire, boolean otherDamage,
+            String damageWhen, String damageWhere, String damagedWhat,
+            String damageRepaired) {
+
+        //Creates a new page Object
+        PDPage pageNumberTitel = new PDPage();
+
+        //Adds the new page to the .doc
+        doc.addPage(pageNumberTitel);
+        try {
+
+            //Creates a new PDPageContentStream object,
+            //which consist of a PDDocument object and PDPAge object
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
+
+            //Method that writes and places the default information that is required for each page of the PDF document.
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
+
+            //NEEDS DYNAMIC USER INPUT!!! "Ceo's Kontor = Room Name
+            singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", roomName, 10, 50, 665);
+
+             //NEEDS DYNAMIC USER INPUT!!! "Ceo's Kontor = Room Name
+            singleTextLineWithUserInput(pageContentStreamNumber, "Område", areaName, 10, 50, 645);
+            
+            
+            
+            
+            //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!!
+            //checkIfPage3NeedsPopulation(true, false, true, pageContentStreamNumber, imgFolderPath);
+            //if localNotes is true, set noLocalNotes to false
+
+            singleTextLine(pageContentStreamNumber, "Skade og Reparation", 12, 50, 622);
+
+            singleTextLine(pageContentStreamNumber, "Har der været skade i lokalet?", 10, 50, 605);
+
+            
+        //Text to always be displayed
+//        singleTextLine(pageContentStreamNumber, "Ja", 10, 200, 625);
+//        singleTextLine(pageContentStreamNumber, "Nej", 10, 228, 625);
+
+        //If "Nej"
+        if (roomDamage == false) {
+            checkBoxImg(roomDamage, imgFolderPath, pageContentStreamNumber, 215, 625, 7, 7);
+
+            checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 250, 625, 7, 7);
+            //If "Ja"
+        } else {
+
+            checkBoxImg(roomDamage, imgFolderPath, pageContentStreamNumber, 215, 625, 7, 7);
+            checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 250, 625, 7, 7);
+
+            //Input from user 
+            singleTextLineWithUserInput(pageContentStreamNumber, "Hvornår? ", damageWhen, 10, 50, 590);
+
+            //Input from user
+            singleTextLineWithUserInput(pageContentStreamNumber, "Hvor? ", damageWhere, 10, 50, 575);
+
+            //Input from user
+            singleTextLineWithUserInput(pageContentStreamNumber, "Hvad er der sket?", damagedWhat, 10, 50, 560);
+
+            //Input from user
+            singleTextLineWithUserInput(pageContentStreamNumber, "Hvad er der repareret", damageRepaired, 10, 50, 540);
+
+            //Input from user
+            singleTextLine(pageContentStreamNumber, "Skade TYPE: ", 10, 50, 520);
+            singleTextLine(pageContentStreamNumber, "SKADE CONDITION!", 10, 125, 520);
+
+//            singleTextLine(pageContentStreamNumber, "Fugt", 10, 60, 505);
+//            singleTextLine(pageContentStreamNumber, "Råd og svamp", 10, 140, 505);
+//            singleTextLine(pageContentStreamNumber, "Skimmel", 10, 260, 505);
+//            singleTextLine(pageContentStreamNumber, "Brand", 10, 60, 490);
+//            singleTextLine(pageContentStreamNumber, "Andet", 10, 60, 475);
+
+            //Sets the checkBoxImage
+            //BRUG CONDITION!
+            
+            
+//            if (moist == true) {
+//                checkBoxImg(moist, imgFolderPath, pageContentStreamNumber, 50, 505, 7, 7);
+//            } else {
+//                checkBoxImg(moist, imgFolderPath, pageContentStreamNumber, 50, 505, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (rotAndMushroom == true) {
+//                checkBoxImg(rotAndMushroom, imgFolderPath, pageContentStreamNumber, 130, 505, 7, 7);
+//            } else {
+//                checkBoxImg(rotAndMushroom, imgFolderPath, pageContentStreamNumber, 130, 505, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (mold == true) {
+//                checkBoxImg(mold, imgFolderPath, pageContentStreamNumber, 250, 505, 7, 7);
+//            } else {
+//                checkBoxImg(mold, imgFolderPath, pageContentStreamNumber, 250, 505, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (fire == true) {
+//                checkBoxImg(fire, imgFolderPath, pageContentStreamNumber, 50, 490, 7, 7);
+//            } else {
+//                checkBoxImg(fire, imgFolderPath, pageContentStreamNumber, 50, 490, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (otherDamage == true) {
+//                checkBoxImg(otherDamage, imgFolderPath, pageContentStreamNumber, 50, 475, 7, 7);
+//                //needs user input
+////                singleTextLineWithUserInput(pageContentStreamNumber, "", /*NEEDS USERINPUT*/ "The kat is on freaking fire", 10, 130, 475);
+////                insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 128, 472, 120, 2);
+//            } else {
+//                checkBoxImg(otherDamage, imgFolderPath, pageContentStreamNumber, 50, 475, 7, 7);
+//            }
+
+        }
+            
+           // moistPageData(true, pageContentStreamNumber, imgFolderPath, false, false, false, false, false);
+
+            //Closes the content creation for Page 3
+            pageContentStreamNumber.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    public void roomMoistReport(String pdfName, String buildingName, String roomName, Integer buildingPostcode, String areaName, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
@@ -435,16 +596,15 @@ public class PDFCreator {
             //NEEDS DYNAMIC USER INPUT!!! "Ceo's Kontor = Room Name
             singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", roomName, 10, 50, 665);
 
-            //NEEDS A F*CKING NEW NAME!.... AND DYNAMIC USER INPUT!!! 
-            // checkIfPage3NeedsPopulation(false, true, false, content3, imgFolderPath);
-            checkIfPage3NeedsPopulation(true, false, true, pageContentStreamNumber, imgFolderPath);
-            //if localNotes is true, set noLocalNotes to false
-
-            singleTextLine(pageContentStreamNumber, "Skade og Reparation", 12, 50, 642);
-
-            singleTextLine(pageContentStreamNumber, "Har der været skade i lokalet?", 10, 50, 625);
-
-            page3DamageAndRepair(true, pageContentStreamNumber, imgFolderPath, false, false, false, false, false);
+             //NEEDS DYNAMIC USER INPUT!!! "Ceo's Kontor = Room Name
+            singleTextLineWithUserInput(pageContentStreamNumber, "Område", areaName, 10, 50, 645);
+            
+            singleTextLine(pageContentStreamNumber, "FugtScanning", 12, 50, 600);
+            
+            
+            
+            
+            moistScanData(true, pageContentStreamNumber, roomName, buildingPurpose, imgFolderPath);
 
             //Closes the content creation for Page 3
             pageContentStreamNumber.close();
@@ -456,8 +616,8 @@ public class PDFCreator {
 
     //Setup of Page 4
     //If "Ingen bemærkning" on Page 4, DOES THIS PAGE NEED TO BE GENERATED!?
-    public void roomWalkthrough(String pdfName, String buildingName, String roomName, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, String imgFolderPath, PDDocument doc) {
+    public void roomWalkthrough(String pdfName, String buildingName, String roomName, Integer buildingPostcode, String areaName, Integer buildingID,
+            Integer buildingSQM, int roomNumber, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -475,8 +635,26 @@ public class PDFCreator {
 
             //NEEDS USER INPUT!
             singleTextLineWithUserInput(pageContentStreamNumber, "Lokale", roomName, 10, 50, 665);
-
-            checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
+            
+            //
+           
+            singleTextLineWithUserInput(pageContentStreamNumber, "Område", areaName, 10, 50, 645);
+            
+           
+            
+            singleTextLine(pageContentStreamNumber, "Problem Beskrivelse", 10, 50, 600);
+            //Creates a image from a file and places it.
+            //Underline for "Lokale"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 596, 100, 2);
+            
+            singleTextLine(pageContentStreamNumber, "Anbefalet behandling", 10, 200, 600);
+            //Creates a image from a file and places it.
+            //Underline for "Anbefalinger"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 100, 2);
+          
+            
+            
+            //checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
 
             //Closes the content creation for Page 4
             pageContentStreamNumber.close();
@@ -485,62 +663,118 @@ public class PDFCreator {
             System.out.println(e);
         }
     }
-    //Setup of Page 5
+//    //Setup of Page 5
+//
+//    public void buildingConclusion(String pdfName, String imgFolderPath, PDDocument doc, int listSize) {
+//
+//        //Creates a new page Object
+//        PDPage pageNumberTitel = new PDPage();
+//
+//        //Adds the new page to the .doc
+//        doc.addPage(pageNumberTitel);
+//        try {
+//
+//            //Creates a new PDPageContentStream object,
+//            //which consist of a PDDocument object and PDPAge object
+//            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
+//
+//            //Method that writes and places the default information that is required for each page of the PDF document.
+//            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
+//
+//            singleTextLine(pageContentStreamNumber, "Konklusion", 14, 50, 650);
+//            //Creates a image from a file and places it.
+//            //Underline for "Konklusion"
+//            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 646, 80, 2);
+//
+//            singleTextLine(pageContentStreamNumber, "Lokale", 10, 50, 600);
+//            //Creates a image from a file and places it.
+//            //Underline for "Lokale"
+//            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 596, 40, 2);
+//            
+//            singleTextLine(pageContentStreamNumber, "Anbefalinger", 10, 200, 600);
+//            //Creates a image from a file and places it.
+//            //Underline for "Anbefalinger"
+//            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 65, 2);
+//            
+//           
+//            int roomNameYCoordinate = 580;
+//            for (int i = listSize; i < roomList.size(); i++) {
+//                singleTextLine(pageContentStreamNumber, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), 10, 50, roomNameYCoordinate);
+//                roomNameYCoordinate = roomNameYCoordinate - 20;
+//            }
+//            
+//            
+//            int roomIssueYCoordinate = 580;
+//            for (int i = 0; i < roomList.size(); i++) {
+//                singleTextLine(pageContentStreamNumber, "test", 10, 200, roomIssueYCoordinate);
+//                roomIssueYCoordinate = roomIssueYCoordinate -20;
+//                System.out.println(roomList.get(i).getName());
+//            }
+//            
+//            //Populate list with issues
+//            
+////            for (int i = 0; i < issueList.size(); i++) {
+////                
+////            
+////            for (int j = listSize; j < roomList.size(); j++) {
+////                if(issueList.get(i).getRoom_id() == roomList.get(i).getRoom_id()){
+////                singleTextLine(pageContentStreamNumber, "test", 10, 200, roomIssueYCoordinate);
+////                roomIssueYCoordinate = roomIssueYCoordinate -20;
+////                } else {
+////                    singleTextLine(pageContentStreamNumber, "IT WIRKSSSSSS!!!!!", 10, 200, roomIssueYCoordinate);
+////                roomIssueYCoordinate = roomIssueYCoordinate -20;
+////                    
+////                }
+////                
+////            }
+////            }
+//            
+////            if(roomList.size() <= 20){
+////            //Populate with rooms name/description
+////            int roomNameYCoordinate = 580;
+////            for (int i = listSize; i < roomList.size(); i++) {
+////                singleTextLine(pageContentStreamNumber, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), 10, 50, roomNameYCoordinate);
+////                roomNameYCoordinate = roomNameYCoordinate - 20;
+////            }
+////            
+////            //Populate list with issues
+////            int roomIssueYCoordinate = 580;
+////            for (int i = listSize; i < roomList.size(); i++) {
+////                singleTextLine(pageContentStreamNumber, "test", 10, 200, roomIssueYCoordinate);
+////                roomIssueYCoordinate = roomIssueYCoordinate -20;
+////            }
+////            } 
+////            
+////            else if (roomList.size() > 21 && roomList.size() < 40){
+////                int roomNameYCoordinate = 580;
+////            for (int i = listSize; i < roomList.size(); i++) {
+////                singleTextLine(pageContentStreamNumber, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), 10, 50, roomNameYCoordinate);
+////                roomNameYCoordinate = roomNameYCoordinate - 20;
+////            }
+////            
+////            //Populate list with issues
+////            int roomIssueYCoordinate = 580;
+////            for (int i = listSize; i < roomList.size(); i++) {
+////                singleTextLine(pageContentStreamNumber, "test", 10, 200, roomIssueYCoordinate);
+////                roomIssueYCoordinate = roomIssueYCoordinate -20;
+////            }
+////            
+////                buildingConclusion(pdfName, imgFolderPath, doc , 21);
+////                pageNumber++;
+////            }
+//                
+//            
+//            
+//
+//            //Closes the content creation for Page 5
+//            pageContentStreamNumber.close();
+//
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//    }
 
-    public void buildingConclusion(String pdfName, String imgFolderPath, PDDocument doc) {
-
-        //Creates a new page Object
-        PDPage pageNumberTitel = new PDPage();
-
-        //Adds the new page to the .doc
-        doc.addPage(pageNumberTitel);
-        try {
-
-            //Creates a new PDPageContentStream object,
-            //which consist of a PDDocument object and PDPAge object
-            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
-
-            //Method that writes and places the default information that is required for each page of the PDF document.
-            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
-
-            singleTextLine(pageContentStreamNumber, "Konklusion", 14, 50, 650);
-            //Creates a image from a file and places it.
-            //Underline for "Konklusion"
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 646, 80, 2);
-
-            singleTextLine(pageContentStreamNumber, "Lokale", 10, 50, 600);
-            //Creates a image from a file and places it.
-            //Underline for "Lokale"
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 596, 40, 2);
-            
-            singleTextLine(pageContentStreamNumber, "Anbefalinger", 10, 200, 600);
-            //Creates a image from a file and places it.
-            //Underline for "Anbefalinger"
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 65, 2);
-            
-            //Populate with rooms name/description
-            int roomNameYCoordinate = 580;
-            for (int i = 0; i < roomList.size(); i++) {
-                singleTextLine(pageContentStreamNumber, roomList.get(i).getName() + " " + roomList.get(i).getDescription(), 10, 50, roomNameYCoordinate);
-                roomNameYCoordinate = roomNameYCoordinate - 20;
-            }
-            
-            //Populate list with issues
-            int roomIssueYCoordinate = 580;
-            for (int i = 0; i < roomList.size(); i++) {
-                singleTextLine(pageContentStreamNumber, "test", 10, 200, roomIssueYCoordinate);
-                roomIssueYCoordinate = roomIssueYCoordinate -20;
-            }
-
-            //Closes the content creation for Page 5
-            pageContentStreamNumber.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    //Setup of Page 6
+    //Setup of the last and final Page
     public void lastPage(String pdfName, String buildingResponsible, String condition, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
@@ -812,81 +1046,81 @@ public class PDFCreator {
 
     //Method specifically for the Page3
     //Should only (!?) be displayed, if there are any "bemærkninger" or damage happened to the room
-    public void page3DamageAndRepair(boolean roomDamage, PDPageContentStream content, String imgFolderPath,
-            boolean moist, boolean rotAndMushroom, boolean mold, boolean fire, boolean otherDamage) {
-
-        //Text to always be displayed
-        singleTextLine(content, "Ja", 10, 200, 625);
-        singleTextLine(content, "Nej", 10, 228, 625);
-
-        //If "Nej"
-        if (roomDamage == false) {
-            checkBoxImg(roomDamage, imgFolderPath, content, 215, 625, 7, 7);
-
-            checkBoxImg(true, imgFolderPath, content, 250, 625, 7, 7);
-            //If "Ja"
-        } else {
-
-            checkBoxImg(roomDamage, imgFolderPath, content, 215, 625, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 250, 625, 7, 7);
-
-            //Input from user 
-            singleTextLineWithUserInput(content, "Hvornår? ", /*INPUT HER*/ "Test31", 10, 50, 590);
-
-            //Input from user
-            singleTextLineWithUserInput(content, "Hvor? ", /*INPUT HER*/ "Test det er sket her", 10, 200, 590);
-
-            //Input from user
-            singleTextLineWithUserInput(content, "Hvad er der sket?", /*INPUT HER*/ "Katten legede med sin kugle under border og den trillede væk...", 10, 50, 560);
-
-            //Input from user
-            singleTextLineWithUserInput(content, "Hvad er der repareret", /*INPUT HER*/ "Katten fik en ny bold og en lillebror", 10, 50, 540);
-
-            //Input from user
-            singleTextLine(content, "Skade", 10, 50, 520);
-
-            singleTextLine(content, "Fugt", 10, 60, 505);
-            singleTextLine(content, "Råd og svamp", 10, 140, 505);
-            singleTextLine(content, "Skimmel", 10, 260, 505);
-            singleTextLine(content, "Brand", 10, 60, 490);
-            singleTextLine(content, "Andet", 10, 60, 475);
-
-            //Sets the checkBoxImage
-            if (moist == true) {
-                checkBoxImg(moist, imgFolderPath, content, 50, 505, 7, 7);
-            } else {
-                checkBoxImg(moist, imgFolderPath, content, 50, 505, 7, 7);
-            }
-            //Sets the checkBoxImage
-            if (rotAndMushroom == true) {
-                checkBoxImg(rotAndMushroom, imgFolderPath, content, 130, 505, 7, 7);
-            } else {
-                checkBoxImg(rotAndMushroom, imgFolderPath, content, 130, 505, 7, 7);
-            }
-            //Sets the checkBoxImage
-            if (mold == true) {
-                checkBoxImg(mold, imgFolderPath, content, 250, 505, 7, 7);
-            } else {
-                checkBoxImg(mold, imgFolderPath, content, 250, 505, 7, 7);
-            }
-            //Sets the checkBoxImage
-            if (fire == true) {
-                checkBoxImg(fire, imgFolderPath, content, 50, 490, 7, 7);
-            } else {
-                checkBoxImg(fire, imgFolderPath, content, 50, 490, 7, 7);
-            }
-            //Sets the checkBoxImage
-            if (otherDamage == true) {
-                checkBoxImg(otherDamage, imgFolderPath, content, 50, 475, 7, 7);
-                //needs user input
-                singleTextLineWithUserInput(content, "", /*NEEDS USERINPUT*/ "The kat is on freaking fire", 10, 130, 475);
-                insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 128, 472, 120, 2);
-            } else {
-                checkBoxImg(otherDamage, imgFolderPath, content, 50, 475, 7, 7);
-            }
-
-        }
-    }
+//    public void damageAndRepairPageData(boolean roomDamage, PDPageContentStream content, String imgFolderPath,
+//            boolean moist, boolean rotAndMushroom, boolean mold, boolean fire, boolean otherDamage) {
+//
+//        //Text to always be displayed
+//        singleTextLine(content, "Ja", 10, 200, 625);
+//        singleTextLine(content, "Nej", 10, 228, 625);
+//
+//        //If "Nej"
+//        if (roomDamage == false) {
+//            checkBoxImg(roomDamage, imgFolderPath, content, 215, 625, 7, 7);
+//
+//            checkBoxImg(true, imgFolderPath, content, 250, 625, 7, 7);
+//            //If "Ja"
+//        } else {
+//
+//            checkBoxImg(roomDamage, imgFolderPath, content, 215, 625, 7, 7);
+//            checkBoxImg(false, imgFolderPath, content, 250, 625, 7, 7);
+//
+//            //Input from user 
+//            singleTextLineWithUserInput(content, "Hvornår? ", /*INPUT HER*/ "Test31", 10, 50, 590);
+//
+//            //Input from user
+//            singleTextLineWithUserInput(content, "Hvor? ", /*INPUT HER*/ "Test det er sket her", 10, 200, 590);
+//
+//            //Input from user
+//            singleTextLineWithUserInput(content, "Hvad er der sket?", /*INPUT HER*/ "Katten legede med sin kugle under border og den trillede væk...", 10, 50, 560);
+//
+//            //Input from user
+//            singleTextLineWithUserInput(content, "Hvad er der repareret", /*INPUT HER*/ "Katten fik en ny bold og en lillebror", 10, 50, 540);
+//
+//            //Input from user
+//            singleTextLine(content, "Skade", 10, 50, 520);
+//
+//            singleTextLine(content, "Fugt", 10, 60, 505);
+//            singleTextLine(content, "Råd og svamp", 10, 140, 505);
+//            singleTextLine(content, "Skimmel", 10, 260, 505);
+//            singleTextLine(content, "Brand", 10, 60, 490);
+//            singleTextLine(content, "Andet", 10, 60, 475);
+//
+//            //Sets the checkBoxImage
+//            if (moist == true) {
+//                checkBoxImg(moist, imgFolderPath, content, 50, 505, 7, 7);
+//            } else {
+//                checkBoxImg(moist, imgFolderPath, content, 50, 505, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (rotAndMushroom == true) {
+//                checkBoxImg(rotAndMushroom, imgFolderPath, content, 130, 505, 7, 7);
+//            } else {
+//                checkBoxImg(rotAndMushroom, imgFolderPath, content, 130, 505, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (mold == true) {
+//                checkBoxImg(mold, imgFolderPath, content, 250, 505, 7, 7);
+//            } else {
+//                checkBoxImg(mold, imgFolderPath, content, 250, 505, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (fire == true) {
+//                checkBoxImg(fire, imgFolderPath, content, 50, 490, 7, 7);
+//            } else {
+//                checkBoxImg(fire, imgFolderPath, content, 50, 490, 7, 7);
+//            }
+//            //Sets the checkBoxImage
+//            if (otherDamage == true) {
+//                checkBoxImg(otherDamage, imgFolderPath, content, 50, 475, 7, 7);
+//                //needs user input
+//                singleTextLineWithUserInput(content, "", /*NEEDS USERINPUT*/ "The kat is on freaking fire", 10, 130, 475);
+//                insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 128, 472, 120, 2);
+//            } else {
+//                checkBoxImg(otherDamage, imgFolderPath, content, 50, 475, 7, 7);
+//            }
+//
+//        }
+//    }
 
     //Add a 'PDFont' parameter at a later point!
     //Method to simplify the creation of text-lines       
@@ -985,7 +1219,7 @@ public class PDFCreator {
             singleTextLine(content, "Ingen bemærkninger", 10, 430, 670);
             checkBoxImg(noLocalNotes, imgFolderPath, content, 531, 670, 7, 7);
 
-            checkBoxesPage3MoistScan(moistScan, content, "31/12-2016", "Ceo Office", imgFolderPath);
+            moistScanData(moistScan, content, "31/12-2016", "Ceo Office", imgFolderPath);
         } else {
 
             singleTextLine(content, "Bemærkninger", 10, 340, 670);
@@ -1006,31 +1240,31 @@ public class PDFCreator {
 
     //Method specifically for Page 3
     //Setups various checkboxes in Page 3, based on wether or not there has been performed a MoistScan
-    public void checkBoxesPage3MoistScan(boolean moistScan, PDPageContentStream content, String moistScanned, String moistMeasurePoint, String imgFolderPath) {
+    public void moistScanData(boolean moistScan, PDPageContentStream content, String moistScanned, String moistMeasurePoint, String imgFolderPath) {
 
         //Has a Moistscan been performed?
         //Hvad er målepunkt?
         //Hvad er fugtscanning?
         //Bemærkning?
-        singleTextLine(content, "Er der fortaget fugtscanning?", 10, 50, 400);
+        //singleTextLine(content, "Er der fortaget fugtscanning?", 10, 50, 400);
 
         //To be displayed if NO moistScan has been performed
-        if (moistScan == false) {
-            singleTextLine(content, "Ja", 10, 250, 400);
-            checkBoxImg(moistScan, imgFolderPath, content, 240, 400, 7, 7);
-            singleTextLine(content, "Nej", 10, 280, 400);
-            checkBoxImg(true, imgFolderPath, content, 270, 400, 7, 7);
-
-            //To be displayed if moistScan has been performed
-        } else if (moistScan == true) {
-            singleTextLine(content, "Ja", 10, 250, 400);
-            checkBoxImg(moistScan, imgFolderPath, content, 240, 400, 7, 7);
-            singleTextLine(content, "Nej", 10, 280, 400);
-            checkBoxImg(false, imgFolderPath, content, 270, 400, 7, 7);
+//        if (moistScan == false) {
+//            singleTextLine(content, "Ja", 10, 250, 400);
+//            checkBoxImg(moistScan, imgFolderPath, content, 240, 400, 7, 7);
+//            singleTextLine(content, "Nej", 10, 280, 400);
+//            checkBoxImg(true, imgFolderPath, content, 270, 400, 7, 7);
+//
+//            //To be displayed if moistScan has been performed
+//        } else if (moistScan == true) {
+//            singleTextLine(content, "Ja", 10, 250, 400);
+//            checkBoxImg(moistScan, imgFolderPath, content, 240, 400, 7, 7);
+//            singleTextLine(content, "Nej", 10, 280, 400);
+//            checkBoxImg(false, imgFolderPath, content, 270, 400, 7, 7);
             singleTextLineWithUserInput(content, "Fugtscanning", moistScanned, 10, 50, 380);
             singleTextLineWithUserInput(content, "Målepunkt", moistMeasurePoint, 10, 250, 380);
-            singleTextLineWithUserInput(content, "Note:", "Vi har konstateret fugtskade under kontorbordet!", 10, 50, 360);
-        }
+            //singleTextLineWithUserInput(content, "Note:", "Vi har konstateret fugtskade under kontorbordet!", 10, 50, 360);
+//        }
 
     }
 
