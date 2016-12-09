@@ -86,33 +86,43 @@ public class PDFCreator {
 
             for (int i = 0; i < areaList.size(); i++) {
                 for (int j = 0; j < roomList.size(); j++) {
+
+//                    //CHECK AREA
+//                    if (hasIssue(0, areaList.get(i).getArea_id())) {
+//
+//                        areaWalkthrough(pdfName, areaList.get(i), imgFolderPath, doc);
+//                        pageNumber++;
+//
+//                    }
+
                     if ((areaList.get(i).getArea_id() == roomList.get(j).getArea_id())) {
 
+                        //CHECK ROOM
                         if (hasIssue(1, roomList.get(j).getRoom_id())) {
 
                             roomWalkthrough(pdfName, areaList.get(i), roomList.get(j), imgFolderPath, doc);
                             pageNumber++;
 
-                        }
+                            //Dmg report
+                            for (int k = 0; k < dmgRepair.size(); k++) {
 
-                        //Dmg report
-                        for (int k = 0; k < dmgRepair.size(); k++) {
+                                if (dmgRepair.get(k).getRoomId() == roomList.get(j).getRoom_id() - 1) {
 
-                            if (dmgRepair.get(k).getRoomId() == roomList.get(j).getRoom_id() - 1) {
+                                    damageReport(pdfName, roomList.get(j), areaList.get(i), dmgRepair.get(k), imgFolderPath, doc);
+                                    pageNumber++;
 
-                                damageReport(pdfName, roomList.get(j), areaList.get(i), dmgRepair.get(k), imgFolderPath, doc);
-                                pageNumber++;
+                                }
 
                             }
 
-                        }
+                            for (int k = 0; k < moistList.size(); k++) {
 
-                        for (int k = 0; k < moistList.size(); k++) {
+                                if (moistList.get(k).getRoomId() == roomList.get(j).getRoom_id() - 1) {
 
-                            if (moistList.get(k).getRoomId() == roomList.get(j).getRoom_id() - 1) {
+                                    roomMoistReport(pdfName, areaList.get(i), roomList.get(j), moistList.get(k), imgFolderPath, doc);
+                                    pageNumber++;
 
-                                roomMoistReport(pdfName, areaList.get(i), roomList.get(j), moistList.get(k), imgFolderPath, doc);
-                                pageNumber++;
+                                }
 
                             }
 
@@ -137,7 +147,6 @@ public class PDFCreator {
     //Setup of Page 1
     public void frontPage(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
             Integer buildingSQM, String buildingPurpose, PDDocument doc, String imgFolderPath) {
-
 
         //Registers the time and date for the PDF document
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -481,8 +490,6 @@ public class PDFCreator {
         }
     }
 
-    //Setup of Page 4
-    //If "Ingen bemærkning" on Page 4, DOES THIS PAGE NEED TO BE GENERATED!?
     public void roomWalkthrough(String pdfName, Area area, Room room, String imgFolderPath, PDDocument doc) {
 
         //Creates a new page Object
@@ -516,6 +523,46 @@ public class PDFCreator {
             //Underline for "Anbefalinger"
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 100, 2);
             singleTextLine(pageContentStreamNumber, "Anbefaldet: " + issueList.get(getIssueId(1, room.getRoom_id())).getRecommendation(), 10, 50, 200);
+
+            //checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
+            //Closes the content creation for Page 4
+            pageContentStreamNumber.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void areaWalkthrough(String pdfName, Area area, String imgFolderPath, PDDocument doc) {
+
+        //Creates a new page Object
+        PDPage pageNumberTitel = new PDPage();
+
+        //Adds the new page to the .doc
+        doc.addPage(pageNumberTitel);
+        try {
+
+            //Creates a new PDPageContentStream object,
+            //which consist of a PDDocument object and PDPAge object
+            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
+
+            //Method that writes and places the default information that is required for each page of the PDF document.
+            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
+
+            //
+            singleTextLineWithUserInput(pageContentStreamNumber, "Område", area.getName(), 10, 50, 645);
+
+            singleTextLine(pageContentStreamNumber, "Problem Beskrivelse", 10, 50, 600);
+            //Creates a image from a file and places it.
+            //Underline for "Lokale"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 596, 100, 2);
+            singleTextLine(pageContentStreamNumber, "Problem: " + issueList.get(getIssueId(0, area.getArea_id())).getDescription(), 10, 50, 300);
+
+            singleTextLine(pageContentStreamNumber, "Anbefalet behandling", 10, 200, 600);
+            //Creates a image from a file and places it.
+            //Underline for "Anbefalinger"
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 100, 2);
+            singleTextLine(pageContentStreamNumber, "Anbefaldet: " + issueList.get(getIssueId(1, area.getArea_id())).getRecommendation(), 10, 50, 200);
 
             //checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
             //Closes the content creation for Page 4
