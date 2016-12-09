@@ -237,6 +237,7 @@ public class AdminServlet extends HttpServlet {
 
                     break;
 
+                    //BLIVER DENNE BRUGT!?!?!?!
                 case "healthcheckButton":
 
                     //Save list of technicians in the Session
@@ -249,7 +250,12 @@ public class AdminServlet extends HttpServlet {
                     int technicianId = Integer.parseInt(request.getParameter("selectedTechnician").split("\\|")[0]);
                     bldgCtrl.assignHealthcheck(buildingId, technicianId);
                     
-                    
+//                    for (int i = 0; i < userList.size(); i++) {
+//                        
+//                    }
+//                    String customerName = 
+//                    String assignedTechName = userList.get(technicianId).getEmail();
+//                    String assignedTechEmail = userList.get(technicianId).getEmail();
                     
                     refreshAllBuildings(request);
                     response.sendRedirect("adminPendingBuildings.jsp");
@@ -305,7 +311,7 @@ public class AdminServlet extends HttpServlet {
                         //Loops through all registered users
                         for (int i = 1; i < temp.size(); i++) {
 
-                            System.out.println("USER: " + temp.get(i).getEmail());
+                            
                             emailCtrl.send(temp.get(i).getEmail(), emailHeader, emailMessage);
 
                         }
@@ -462,7 +468,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void emailNewTechnician(String name, String email, Integer phone, String address, Integer postcode, String city) {
-        //Send confirmation email to new Admin
+        //Send confirmation email to new Technician
         String emailNewCustomerHeader = "Hej " + name + " og velkommen til Polygons som Teknikker!";
         String emailNewCustomerMessage = "Hej " + name + "!"
                 + "\n\nTeknikker\n\n"

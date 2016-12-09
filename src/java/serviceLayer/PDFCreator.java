@@ -56,11 +56,7 @@ public class PDFCreator {
     String pageNumberTitel = "page" + pageNumber;
     String pageContentStreamNumber = "content" + pageNumber;
 
-    //Method that creates the PDF pages.
-    //Way too much input
-//    Check up on:
-//    tech ID Name
-//    buildingowner name
+
     public void createPDF(int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) {
 
         
