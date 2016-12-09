@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.DataController;
+import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
 import serviceLayer.controllers.interfaces.BuildingControllerInterface;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
+import serviceLayer.controllers.interfaces.EmailControllerInterface;
 import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
@@ -41,10 +43,13 @@ public class TechnicianServlet extends HttpServlet {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
     private ArrayList<Document> buildingDocuments = new ArrayList();
+    
 
     private UserControllerInterface usrCtrl = new UserController();
     private BuildingControllerInterface bldgCtrl = new BuildingController();
     private DataControllerInterface datCtrl = new DataController();
+    private EmailControllerInterface emailCtrl = new EmailController();
+    
     private User user = null;
     private int user_id, buildingId = 0;
     private String origin = "";
@@ -336,6 +341,8 @@ public class TechnicianServlet extends HttpServlet {
                         response.sendRedirect("technicianViewBuilding.jsp?value=" + build.getbuildingId() + "");
                     } //If a healthcheck needs completing
                     else if (request.getParameter("originSection").equals("completeHealthcheck")) {
+                        
+                        
                         request.getSession().setAttribute("source", "");
 
                         String condition = request.getParameter("condition");
@@ -343,7 +350,7 @@ public class TechnicianServlet extends HttpServlet {
 
                         healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
 
-                        //Needs to be a permanent addition!
+                        //Not working
                         if (condition.equalsIgnoreCase("GOOD")) {
                             build.setCondition(Building.condition.GOOD);
                         } else if (condition.equalsIgnoreCase("MEDIUM")) {
@@ -352,13 +359,6 @@ public class TechnicianServlet extends HttpServlet {
                             build.setCondition(Building.condition.POOR);
                         }
 
-//                        //NEEDS TO UPDATE BUILDINGSQM!
-//                        int bSqm = 0;
-//                        for (int i = 0; i < roomList.size(); i++) {
-//                            bSqm += roomList.get(i).getSqm();
-//                        }
-//
-//                        System.out.println("BSQM : " + bSqm);
 
                         //CreatePDF
                         pdf.createPDF(healthcheckId, build.getbuildingId(), buildingResponsible, condition, request.getServletContext().getRealPath("/img/"));
@@ -378,6 +378,8 @@ public class TechnicianServlet extends HttpServlet {
                     //Call method to modify database
                     bldgCtrl.acceptHealthcheck(buildingId, technicianId);
                     refreshAllBuildings(request);
+                    
+                    
                     //redirect to user.jsp
                     response.sendRedirect("technician.jsp?success=UpdateSuccessful");
                     break;
