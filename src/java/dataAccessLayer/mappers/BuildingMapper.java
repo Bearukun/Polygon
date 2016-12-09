@@ -7,8 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.DamageRepair;
@@ -34,6 +37,11 @@ public class BuildingMapper implements BuildingMapperInterface {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
 
+    //FIX THIS ASAP
+    java.util.Date date = new Date();
+    Timestamp timestamp = new Timestamp(date.getTime());
+    
+    
     /**
      * Method to retrieve all buildings pertaining a specific user
      *
@@ -1259,7 +1267,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, 1);
-            stmt.setString(2, damageTime);
+            stmt.setTimestamp(2, timestamp);
             stmt.setString(3, damageLocation);
             stmt.setString(4, damageDetails);
             stmt.setString(5, workDone);
@@ -1268,7 +1276,7 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new PolygonException("SQL Error: Connection problem.");
+            throw new PolygonException("SQL Error: Connection problem." + e.getMessage());
         } finally {
             //Try releasing objects. 
             try {
@@ -1373,15 +1381,16 @@ public class BuildingMapper implements BuildingMapperInterface {
 
     /**
      * Method used to get a specific building
+     *
      * @param buildingId int specifying the building from the database
      * @return one specific building
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public Building getBuilding(int buildingId) throws PolygonException {
-        
+
         Building building = new Building();
-        
+
         //Declare new Building.condation object, with the name condition.
         Building.condition condition;
 
@@ -1425,7 +1434,7 @@ public class BuildingMapper implements BuildingMapperInterface {
                     building.setCondition(Building.condition.NONE);
 
                 }
-                
+
                 building.setbuildingId(rs.getInt(1));
                 building.setName(rs.getString(2));
                 building.setDate_created(rs.getTimestamp(3));
@@ -1464,6 +1473,6 @@ public class BuildingMapper implements BuildingMapperInterface {
 
         //Return building).
         return building;
-        
+
     }
 }

@@ -44,8 +44,7 @@ public class LoginServlet extends HttpServlet {
         String errMsg = null;
         String origin = request.getParameter("origin");
         //System.getProperties().list(System.out);
-        
-      
+
         try {
 
             switch (origin) {
@@ -58,37 +57,34 @@ public class LoginServlet extends HttpServlet {
                     //Save where (which page) we are coming from
                     request.getSession().setAttribute("sourcePage", "LoginServlet");
                     //Save user values to Session
-                    
-                    
+
                     request.getSession().setAttribute("user_id", user.getUser_id());
                     request.getSession().setAttribute("email", user.getEmail());
                     //Set user type and redirect
                     userTypeRedirect(user, request, response);
-                break;
-                
+                    break;
+
                 case "login":
 
                     if (request.getSession().getAttribute("user") == null) {
 
                         String email = request.getParameter("email");
                         String password = request.getParameter("password");
-                        
+
                         try {
-                            
-                            
+
                             user = usrCtrl.login(email, password);
                             request.getSession().setAttribute("user_id", user.getUser_id());
                             request.getSession().setAttribute("email", user.getEmail());
-                            
+
                             if (user != null) {
-                                
+
                                 //Save where (which page) we are coming from
                                 request.getSession().setAttribute("sourcePage", "LoginServlet");
 
                                 //Set user type and redirect
                                 userTypeRedirect(user, request, response);
                                 EmailController EC = new EmailController();
-                             
 
                             }
 
@@ -115,7 +111,6 @@ public class LoginServlet extends HttpServlet {
 
                     break;
 
-
                 case "update":
 
                 case "newCustomer":
@@ -132,16 +127,16 @@ public class LoginServlet extends HttpServlet {
                         String address = request.getParameter("address");
                         String postcode = request.getParameter("postcode"); //HUSK INTEGER.PARSE!*/
                         String city = request.getParameter("city");
-                    
-                         try {
-                            System.out.println("creating user");
+
+                        try {
+
                             //Create user
-                          usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
+                            usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
                             //If successful, redirect
                             System.out.println("Index redirect");
-                            
-                             emailNewCustomer(name, email, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
-                           
+
+                            emailNewCustomer(name, email, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
+
                             response.sendRedirect("index.jsp?success");
 
                         } catch (Exception e) {
@@ -160,19 +155,16 @@ public class LoginServlet extends HttpServlet {
 
                     break;
 
-
             }
 
         } catch (Exception e) {
 
         }
 
-        
-        
     }
-    
-    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws PolygonException{
-        try{
+
+    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws PolygonException {
+        try {
             if (user.getType().toString().equals("CUSTOMER")) {
                 request.getSession().setAttribute("type", "Kunde");
                 response.sendRedirect("UserServlet");
@@ -186,49 +178,46 @@ public class LoginServlet extends HttpServlet {
         } catch (Exception e) {
         }
     }
-    
-    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city){
-         //Send confirmation email to new Customer:
-                            String emailNewCustomerHeader = "Hej " + name + " (" + company+ " )"+" og velkommen til Polygons's Sundebygninger!";
-                            String emailNewCustomerMessage = "Hej " + name + "!"+
-                                    "\n\nVi er glade for at de har registeret "
-                                    + "deres virksomhed hos os"
-                                    + "og vi ser frem til at arbejde sammen med "
-                                    + "dem i den nærmeste fremtid!"
-                                    + "\n\n\n"
-                                    
-                                    
-                                    +"Her er hvad vi har registeret: "
-                                    + "\n\n"
-                                    + "Navn: " + name +"\n"
-                                    + "Email: " + email +"\n"
-                                    
-                                    + "Telefon: " + phone +"\n"
-                                    + "Firma: " + company + "\n"
-                                    + "Adresse: " + address +"\n"
-                                    + "Postnummer: " + postcode + "\n " 
-                                    + "By: "+ city 
-                                    +"\n\n\n"
-                                    + "Skulle de glemme deres kodeord til deres "
-                                    + "bruger eller har andre spørgsmål, "
-                                    + "så tøv ikke med at kontakte os!"
-                                   
-                                    + "\n\n\n"
-                                    +" Med Venlig Hilsen"
-                                    + "\n\n"
-                                    +"Polygon"
-                                    +"\n\n"
-                                    +"Rypevang 5\n"
-                                    +"3450 Allerød\n"
-                                    +"Tlf. 4814 0055\n"
-                                    + "sundebygninger@polygon.dk" ;
-                   
-                            try{
-                            emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
-                            }  catch (Exception e) {
+
+    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city) {
+        //Send confirmation email to new Customer:
+        String emailNewCustomerHeader = "Hej " + name + " (" + company + " )" + " og velkommen til Polygons's Sundebygninger!";
+        String emailNewCustomerMessage = "Hej " + name + "!"
+                + "\n\nVi er glade for at de har registeret "
+                + "deres virksomhed hos os"
+                + "og vi ser frem til at arbejde sammen med "
+                + "dem i den nærmeste fremtid!"
+                + "\n\n\n"
+                + "Her er hvad vi har registeret: "
+                + "\n\n"
+                + "Navn: " + name + "\n"
+                + "Email: " + email + "\n"
+                + "Telefon: " + phone + "\n"
+                + "Firma: " + company + "\n"
+                + "Adresse: " + address + "\n"
+                + "Postnummer: " + postcode + "\n "
+                + "By: " + city
+                + "\n\n\n"
+                + "Skulle de glemme deres kodeord til deres "
+                + "bruger eller har andre spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        try {
+            emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
