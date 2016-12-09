@@ -18,6 +18,7 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  * Servlet that handles the customer.
@@ -192,7 +193,7 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Redirects the user to the appropriate page
-    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws PolygonException {
         try {
             if (request.getParameter("originSection").equals("Kunde")) {
                 response.sendRedirect("user.jsp?success");
@@ -207,7 +208,7 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Populates the editUser.jsp fields
-    public void populateEditUserPage(HttpServletRequest request, User user) throws Exception {
+    public void populateEditUserPage(HttpServletRequest request, User user) throws PolygonException {
 
         //Retrieve the user's data
         uEmail = user.getEmail();
@@ -233,7 +234,7 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Edits the user's details
-    public void editUser(HttpServletRequest request, int user_id) throws Exception {
+    public void editUser(HttpServletRequest request, int user_id) throws PolygonException {
         System.out.println("EDITUSER!!!");
 
         //Retrieve form input values from editProfile.jsp
@@ -266,7 +267,7 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws Exception {
+    public void refreshBuilding(int user_id) throws PolygonException {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -274,25 +275,25 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int buildingId) throws Exception {
+    public void refreshAreas(int buildingId) throws PolygonException {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int buildingId) throws Exception {
+    public void refreshRooms(int buildingId) throws PolygonException {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
-    public void refreshUsers(HttpServletRequest request) throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws PolygonException {
 
         userList.clear();
         userList = usrCtrl.getUsers();

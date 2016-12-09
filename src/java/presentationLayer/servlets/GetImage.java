@@ -19,6 +19,14 @@ public class GetImage extends HttpServlet {
     private DataControllerInterface dat = new DataController();
     private Image img;
 
+    /**
+     * Handles the HTTP <code>GET</code> method
+     * 
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException
+     * @throws IOException 
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -80,14 +88,7 @@ public class GetImage extends HttpServlet {
 
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     /**
      * Returns a short description of the servlet.
      *

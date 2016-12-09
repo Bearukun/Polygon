@@ -7,9 +7,19 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
+import serviceLayer.exceptions.PolygonException;
 
 public class EmailController implements EmailControllerInterface{
-    public void send(String to, String title, String body) throws Exception {
+    
+    /**
+     * Method used to send emails
+     * 
+     * @param to String containing the email of the recieving person
+     * @param title String contining the title of the email
+     * @param body String containing the content of the email
+     * @throws Exception 
+     */
+    public void send(String to, String title, String body) throws PolygonException {
 
         try {
 

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import serviceLayer.entities.Document;
 import serviceLayer.entities.Image;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  * Class dealing with file data
@@ -21,10 +22,10 @@ public class DataMapper implements DataMapperInterface {
      *
      * @param image_id int specifying which image to retrieve
      * @return An object of type Image
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public Image getImage(int image_id) throws Exception {
+    public Image getImage(int image_id) throws PolygonException {
 
         Image img = new Image();
 
@@ -56,7 +57,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.getImage." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.getImage." + e.getMessage());
 
         } finally {
 
@@ -70,7 +71,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.getImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.getImage." + ex.getMessage());
 
             }
 
@@ -86,10 +87,10 @@ public class DataMapper implements DataMapperInterface {
      *
      * @param buildingId int specifying which building's image to retrieve
      * @return An object of type Image
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public Image getBuildingImage(int buildingId) throws Exception {
+    public Image getBuildingImage(int buildingId) throws PolygonException {
 
         Image img = new Image();
 
@@ -122,7 +123,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.getBuildingImage." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.getBuildingImage." + e.getMessage());
 
         } finally {
 
@@ -136,7 +137,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.getBuildingImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.getBuildingImage." + ex.getMessage());
 
             }
 
@@ -152,10 +153,10 @@ public class DataMapper implements DataMapperInterface {
      *
      * @param issue_id int specifying which issue's image to retrieve
      * @return An object of type Image
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public Image getIssueImage(int issue_id) throws Exception {
+    public Image getIssueImage(int issue_id) throws PolygonException {
 
         Image img = new Image();
 
@@ -188,7 +189,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.getIssueImage." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.getIssueImage." + e.getMessage());
 
         } finally {
 
@@ -202,7 +203,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.getIssueImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.getIssueImage." + ex.getMessage());
 
             }
 
@@ -219,10 +220,10 @@ public class DataMapper implements DataMapperInterface {
      * @param issue_id int specifying which issue for which to upload an image
      * @param img_name String detailing the image name
      * @param img_file InputStream containing the image data
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception {
+    public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -245,7 +246,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.uploadIssueImage." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.uploadIssueImage." + e.getMessage());
 
         } finally {
 
@@ -258,7 +259,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.uploadIssueImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.uploadIssueImage." + ex.getMessage());
 
             }
 
@@ -273,10 +274,10 @@ public class DataMapper implements DataMapperInterface {
      * @param issue_id int containing the issue to be checked
      * @param buildingId int containing the building to be checked
      * @return true, if it has - false, if it does not.
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public boolean hasImage(ImageType imageType, int issue_id, int buildingId) throws Exception {
+    public boolean hasImage(ImageType imageType, int issue_id, int buildingId) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -322,7 +323,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.hasImage." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.hasImage." + e.getMessage());
 
         } finally {
 
@@ -336,7 +337,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.hasImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.hasImage." + ex.getMessage());
 
             }
 
@@ -353,10 +354,10 @@ public class DataMapper implements DataMapperInterface {
      * @param buildingId int specifying which building the image is pertaining
      * @param img_name String detailing the image name
      * @param img_file InputStream containing the image data
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws Exception {
+    public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -379,7 +380,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.uploadBuildingImage." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.uploadBuildingImage." + e.getMessage());
 
         } finally {
 
@@ -392,7 +393,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
 
             }
 
@@ -408,10 +409,10 @@ public class DataMapper implements DataMapperInterface {
      * @param buildingId Int specifying the building
      * @param img_name String specifying the name of the image
      * @param img_file InputStream specifying the image file
-     * @throws Exception
+     * @throws PolygonException
      */
     @Override
-    public void updateImage(ImageType imageType, int issue_id, int buildingId, String img_name, InputStream img_file) throws Exception {
+    public void updateImage(ImageType imageType, int issue_id, int buildingId, String img_name, InputStream img_file) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -454,7 +455,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.updateImage." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.updateImage." + e.getMessage());
 
         } finally {
 
@@ -467,7 +468,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.updateImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.updateImage." + ex.getMessage());
 
             }
 
@@ -475,8 +476,15 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method to get decuments
+     * 
+     * @param buildingId int identifying the building the document is linked to
+     * @return an Arraylist of documents
+     * @throws Exception 
+     */
     @Override
-    public ArrayList<Document> getDocuments(int buildingId) throws Exception {
+    public ArrayList<Document> getDocuments(int buildingId) throws PolygonException {
 
         ArrayList<Document> documents = new ArrayList();
 
@@ -506,7 +514,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.getDocuments." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.getDocuments." + e.getMessage());
 
         } finally {
 
@@ -520,7 +528,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.getDocuments." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.getDocuments." + ex.getMessage());
 
             }
 
@@ -530,8 +538,16 @@ public class DataMapper implements DataMapperInterface {
         return documents;
     }
 
+    /**
+     * Method to upload a document on a building
+     * @param buildingId int identifying the building from the database
+     * @param documentName String containing the documents name
+     * @param documentType String containing the documents filetype
+     * @param document_file InputStream containing the document file
+     * @throws Exception 
+     */
     @Override
-    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception {
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws PolygonException {
 
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -555,7 +571,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.addDocument." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.addDocument." + e.getMessage());
 
         } finally {
 
@@ -568,7 +584,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.uploadBuildingImage." + ex.getMessage());
 
             }
 
@@ -576,8 +592,13 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method used to delete a document
+     * @param documentId int identifying the document from the database
+     * @throws Exception 
+     */
     @Override
-    public void deleteDocument(int documentId) throws Exception {
+    public void deleteDocument(int documentId) throws PolygonException {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -598,7 +619,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.deleteDocument." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.deleteDocument." + e.getMessage());
 
         } finally {
 
@@ -611,7 +632,7 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.deleteDocument." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.deleteDocument." + ex.getMessage());
 
             }
 
@@ -619,8 +640,14 @@ public class DataMapper implements DataMapperInterface {
 
     }
 
+    /**
+     * Method used to get a specific document
+     * @param documentId int identifying the document from the database
+     * @return a specific document
+     * @throws Exception 
+     */
     @Override
-    public Document getDocument(int documentId) throws Exception {
+    public Document getDocument(int documentId) throws PolygonException {
         Document document = new Document();
 
         //Declare new objects of the Connection and PrepareStatement.
@@ -654,7 +681,7 @@ public class DataMapper implements DataMapperInterface {
 
         } catch (Exception e) {
 
-            throw new Exception("SQL Error:@DataMapper.getDocument." + e.getMessage());
+            throw new PolygonException("SQL Error:@DataMapper.getDocument." + e.getMessage());
 
         } finally {
 
@@ -668,13 +695,13 @@ public class DataMapper implements DataMapperInterface {
             } catch (SQLException ex) {
 
                 //throw error if not successful. 
-                throw new Exception("SQL Error:@DataMapper.getDocument." + ex.getMessage());
+                throw new PolygonException("SQL Error:@DataMapper.getDocument." + ex.getMessage());
 
             }
 
         }
 
-        //Return image.
+        //Return document.
         return document;
     }
 

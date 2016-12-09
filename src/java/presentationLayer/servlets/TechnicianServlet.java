@@ -25,6 +25,7 @@ import serviceLayer.entities.Issue;
 import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 @WebServlet(name = "TechnicianServlet", urlPatterns = {"/TechnicianServlet"})
 public class TechnicianServlet extends HttpServlet {
@@ -441,49 +442,48 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Refreshes the list of all healthchecks
-    public void refreshAllHealthchecks(HttpServletRequest request) throws Exception {
+    public void refreshAllHealthchecks(HttpServletRequest request) throws PolygonException {
         allHealthchecks.clear();
         allHealthchecks = bldgCtrl.getAllHealthchecks();
         request.getSession().setAttribute("allHealthchecks", allHealthchecks);
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(HttpServletRequest request, int user_id) throws Exception {
+    public void refreshBuilding(HttpServletRequest request, int user_id) throws PolygonException {
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
         request.getSession().setAttribute("userBuildings", userBuildings);
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(HttpServletRequest request, int buildingId) throws Exception {
+    public void refreshAreas(HttpServletRequest request, int buildingId) throws PolygonException {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
         request.getSession().setAttribute("buildingAreas", buildingAreas);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(HttpServletRequest request, int buildingId) throws Exception {
+    public void refreshRooms(HttpServletRequest request, int buildingId) throws PolygonException {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
         request.getSession().setAttribute("buildingRooms", buildingRooms);
     }
 
-    public void refreshUsers(HttpServletRequest request) throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws PolygonException {
 
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
     }
-    //Refreshes documents of a select building.
-
-    public void refreshDocuments(int buildingId) throws Exception {
+        //Refreshes documents of a select building.
+    public void refreshDocuments(int buildingId) throws PolygonException {
 
         buildingDocuments.clear();
         buildingDocuments = datCtrl.getDocuments(buildingId);

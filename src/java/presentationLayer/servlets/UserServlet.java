@@ -21,6 +21,7 @@ import serviceLayer.entities.Building;
 import serviceLayer.entities.Document;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  * Servlet that handles the customer.
@@ -371,7 +372,7 @@ public class UserServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(HttpServletRequest request, int user_id) throws Exception {
+    public void refreshBuilding(HttpServletRequest request, int user_id) throws PolygonException {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -379,33 +380,33 @@ public class UserServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int buildingId) throws Exception {
+    public void refreshAreas(int buildingId) throws PolygonException {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int buildingId) throws Exception {
+    public void refreshRooms(int buildingId) throws PolygonException {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
     //Refreshes documents of a select building.
-    public void refreshDocuments(int buildingId) throws Exception {
+    public void refreshDocuments(int buildingId) throws PolygonException {
 
         buildingDocuments.clear();
         buildingDocuments = dat.getDocuments(buildingId);
 
     }
 
-    public void refreshUsers(HttpServletRequest request) throws Exception {
+    public void refreshUsers(HttpServletRequest request) throws PolygonException {
 
         userList.clear();
         userList = usrCtrl.getUsers();
@@ -448,7 +449,7 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    public void emailHealthcheckRequest(Building build, int id) throws Exception {
+    public void emailHealthcheckRequest(Building build, int id) throws PolygonException {
         //Email the customer about the requested healthcheck 
 
         String polygonMail = "polygonmailtest4@gmail.com";
