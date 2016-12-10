@@ -110,7 +110,7 @@ public class UserServlet extends HttpServlet {
                     //If 'Request healthcheck' button was clicked
                     if (request.getParameter("originSection").equals("healthcheckButton")) {
 
-                        emailHealthcheckRequest(build, user_id);
+                        
 
                         request.getSession().setAttribute("source", "healthcheckButton");
 
@@ -118,10 +118,15 @@ public class UserServlet extends HttpServlet {
                         //If the building's healthcheck pending status needs setting to false
                         if (request.getParameter("originValue").equals("cancel")) {
                             healthcheckValueToWrite = 0;
+                            //Sends a confirmation email regarding cancellation of the healthcheck
+                        emailCustomerCancelHealthcheck(build, user_id);
                         } //If the building's healthcheck pending status needs setting to true
                         else {
                             healthcheckValueToWrite = 1;
+                            emailHealthcheckRequest(build, user_id);
                         }
+                        
+                        
 
                         //Save values to database
                         bldgCtrl.toggleHealthcheck(build.getbuildingId(), healthcheckValueToWrite);
@@ -480,6 +485,38 @@ public class UserServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+    
+    public void emailCustomerCancelHealthcheck(Building build, int id) throws PolygonException {
+        //Email the customer about the requested healthcheck 
+
+        String polygonMail = "polygonmailtest4@gmail.com";
+        String emailHealthcheckRequestHeader = "Polygon: Anmodning om Aflysning af Sunhedscheck  af \"" + build.getName() + "\". ";
+        String emailHealthcheckRequestMessage = "Hej " + usrCtrl.getUser(id).getName() + " (" + usrCtrl.getUser(id).getCompany() + " )"
+                + "\n\nVi har den " + date + " registeret, at de har anmodet om at aflyse sundhedschecket af deres bygning: \"" + build.getName() + "\". "
+                + ""
+                + "\n"
+                + "Har de nogen spørgsmål, "
+                + "så tøv ikke med at kontakte os!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        try {
+//        Sends email to both he customer and Polygon
+//        Customer
+            emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+            //Polygon
+            emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -520,3 +557,4 @@ public class UserServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 }
+

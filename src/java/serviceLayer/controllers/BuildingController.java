@@ -18,6 +18,7 @@ public class BuildingController implements BuildingControllerInterface{
 
     private final DBFacadeInterface dbfacade = new DBFacade();
     
+    
     @Override
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws PolygonException {
         dbfacade.createBuilding( name, address, postcode, city, construction_year, purpose, sqm, user_id);

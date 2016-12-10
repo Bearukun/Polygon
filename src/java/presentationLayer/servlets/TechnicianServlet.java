@@ -4,6 +4,7 @@ import serviceLayer.PDFCreator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,17 +44,17 @@ public class TechnicianServlet extends HttpServlet {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
     private ArrayList<Document> buildingDocuments = new ArrayList();
-    
 
     private UserControllerInterface usrCtrl = new UserController();
     private BuildingControllerInterface bldgCtrl = new BuildingController();
     private DataControllerInterface datCtrl = new DataController();
     private EmailControllerInterface emailCtrl = new EmailController();
-    
+
     private User user = null;
     private int user_id, buildingId = 0;
     private String origin = "";
-    PDFCreator pdf = new PDFCreator();
+    private Date date = new Date();
+    private PDFCreator pdf = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -342,6 +343,20 @@ public class TechnicianServlet extends HttpServlet {
                     } //If a healthcheck needs completing
                     else if (request.getParameter("originSection").equals("completeHealthcheck")) {
                         
+                        int technicianId = (Integer) request.getSession().getAttribute("user_id");
+                        buildingId = Integer.parseInt(request.getParameter("buildingId"));
+                        int userId = bldgCtrl.getBuilding(buildingId).getUser_id();
+                        
+                        
+                        //Mail to customer
+                        completeHealtcheckCustomerEmail(technicianId, userId, buildingId);
+                        
+
+                        //mail to technician
+                        completeHealthcheckTechnicianEmail(technicianId, userId, buildingId);
+                        
+                        //Mail to Polygon
+                        completeHealthcheckPolygonEmail(technicianId, userId, buildingId);
                         
                         request.getSession().setAttribute("source", "");
 
@@ -350,15 +365,14 @@ public class TechnicianServlet extends HttpServlet {
 
                         healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
 
-                        //Not working
-                        if (condition.equalsIgnoreCase("GOOD")) {
-                            build.setCondition(Building.condition.GOOD);
-                        } else if (condition.equalsIgnoreCase("MEDIUM")) {
-                            build.setCondition(Building.condition.MEDIUM);
-                        } else if (condition.equalsIgnoreCase("POOR")) {
-                            build.setCondition(Building.condition.POOR);
-                        }
-
+//                        //Not working
+//                        if (condition.equalsIgnoreCase("GOOD")) {
+//                            build.setCondition(Building.condition.GOOD);
+//                        } else if (condition.equalsIgnoreCase("MEDIUM")) {
+//                            build.setCondition(Building.condition.MEDIUM);
+//                        } else if (condition.equalsIgnoreCase("POOR")) {
+//                            build.setCondition(Building.condition.POOR);
+//                        }
 
                         //CreatePDF
                         pdf.createPDF(healthcheckId, build.getbuildingId(), buildingResponsible, condition, request.getServletContext().getRealPath("/img/"));
@@ -378,9 +392,22 @@ public class TechnicianServlet extends HttpServlet {
                     //Call method to modify database
                     bldgCtrl.acceptHealthcheck(buildingId, technicianId);
                     refreshAllBuildings(request);
+
+                    int userId = bldgCtrl.getBuilding(buildingId).getUser_id();
+                    //Sends an email to the technician with information/confirmation,
+                    //regaring the assigned building to be inspected for a healthcheck
+                    // and with the customers contact information.
+                    acceptHealthcheckTechnicianEmail(technicianId, userId, buildingId);
+
+                    //Send a email to the customer about the technician that 
+                    //has been assigned to the healthcheck of the customers building,
+                    // along with contact information regarding the technician.
+                    acceptHealthcheckCustomerEmail(technicianId, userId, buildingId);
                     
-                    
-                    //redirect to user.jsp
+                    //Email to Polygon as documentation.
+                    acceptHealthcheckPolygonEmail(technicianId, userId, buildingId);
+
+                    //redirect to technician.jsp
                     response.sendRedirect("technician.jsp?success=UpdateSuccessful");
                     break;
             }
@@ -484,12 +511,230 @@ public class TechnicianServlet extends HttpServlet {
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
     }
-        //Refreshes documents of a select building.
+    //Refreshes documents of a select building.
+
     public void refreshDocuments(int buildingId) throws PolygonException {
 
         buildingDocuments.clear();
         buildingDocuments = datCtrl.getDocuments(buildingId);
 
+    }
+
+    public void acceptHealthcheckCustomerEmail(int technicianId, int userId, int buildingId) throws PolygonException {
+        String acceptHealthcheckCustomerEmailHeader = "Healthcheck Opdatering:  Tekniker er blevet tildelt! ";
+        String acceptHealthcheckCustomerEmailMessage = "Hej " + usrCtrl.getUser(userId).getName() + "!"
+                + "\n\nVi har " + date + " tildelt en teknikker til deres anmodet Healtcheck af deres bygning: "
+                + "\"" + bldgCtrl.getBuilding(buildingId).getName() + "\""
+                + "\n" + "Adresse:" + bldgCtrl.getBuilding(buildingId).getAddress()
+                + "\n" + "Postnummer & By: " + bldgCtrl.getBuilding(buildingId).getPostcode()
+                + " " + bldgCtrl.getBuilding(buildingId).getCity()
+                + "\n" + "-------------------------------------------------------"
+                + "\n\n" + "Deres tildelte Polygon tekniker er: "
+                + "\n" + "Navn: " + usrCtrl.getUser(technicianId).getName()
+                + "\n" + "Email: " + usrCtrl.getUser(technicianId).getEmail()
+                + "\n" + "Telefon: " + usrCtrl.getUser(technicianId).getPhone()
+                + "\n\nDe vil inden længe blive kontaktet af vores tekniker, så de kan få aftalt tid og dato for healthchecket."
+                + "\n\n" + "Har de nogen spørgsmål, så tøv ikke med at kontakte os eller teknikeren!"
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";;
+
+        try {
+            emailCtrl.send(usrCtrl.getUser(userId).getEmail(),
+                    acceptHealthcheckCustomerEmailHeader,
+                    acceptHealthcheckCustomerEmailMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void acceptHealthcheckTechnicianEmail(int technicianId, int userId, int buildingId) throws PolygonException {
+
+        String acceptHealthcheckTechnicianEmailHeader = "Ny HealthCheck opgave:  "
+                + "[" + bldgCtrl.getBuilding(buildingId).getName() + "]"
+                + " - ID#" + "[" + bldgCtrl.getBuilding(buildingId).getbuildingId() + "]";
+
+        String acceptHealthcheckTechnicianEmailMessage = "Hej " + usrCtrl.getUser(technicianId).getName() + "!"
+                + "\n\n" + "Du har accepteret og påtaget dig følgende Healthecheck opgave " + date
+                + "\n\n" + "Bygningens navn: " + bldgCtrl.getBuilding(buildingId).getName()
+                + "\n\n" + "Kundens navn & [Virksomhed/Firma]: " + usrCtrl.getUser(userId).getName() + "  ["
+                + usrCtrl.getUser(userId).getCompany() + "] "
+                + "\n\n" + "----------------------------------------------------"
+                + "\nBygnings information"
+                + "\n\n" + "Navn og [ID#]: " + bldgCtrl.getBuilding(buildingId).getName()
+                + " [" + bldgCtrl.getBuilding(buildingId).getbuildingId() + "]"
+                + "\n" + "Formål: " + bldgCtrl.getBuilding(buildingId).getPurpose()
+                + "\n" + "Adresse:" + bldgCtrl.getBuilding(buildingId).getAddress()
+                + "\n" + "Postnummer & By: " + bldgCtrl.getBuilding(buildingId).getPostcode()
+                + " " + bldgCtrl.getBuilding(buildingId).getCity()
+                + "\n" + "Bygnings år: " + bldgCtrl.getBuilding(buildingId).getConstruction_year()
+                + "\n" + "-------------------------------------------------------"
+                + "\n\n\n"
+                + "---------------------------------------------------------------"
+                + "\nKundens kontakt information"
+                + "\n\n " + "Kundens navn og [ID#]: " + usrCtrl.getUser(userId).getName()
+                + " [" + usrCtrl.getUser(userId).getUser_id() + "] "
+                + "\n" + "Kundens Email: " + usrCtrl.getUser(userId).getEmail()
+                + "\n" + "Kundens telefon nummer: " + usrCtrl.getUser(userId).getPhone()
+                + "\n" + "-------------------------------------------------------"
+                + "\n\n\n"
+                + "Husk at kontakte kunden så hurtigt så muligt, så tid og dato healthchecket kan blive aftalt hurtigt! "
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        try {
+            emailCtrl.send(usrCtrl.getUser(technicianId).getEmail(),
+                    acceptHealthcheckTechnicianEmailHeader,
+                    acceptHealthcheckTechnicianEmailMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void acceptHealthcheckPolygonEmail(int technicianId, int userId, int buildingId) throws PolygonException {
+        String polygonEmail = "polygonmailtest4@gmail.com";
+        String acceptHealthcheckPolygonHeader = "Healtcheck for \""
+                + bldgCtrl.getBuilding(buildingId).getName() + "\""
+                + " - ID[" + bldgCtrl.getBuilding(buildingId).getbuildingId()
+                + "] Accepteret af Tekniker " + usrCtrl.getUser(technicianId).getName()
+                + " - ID[" + usrCtrl.getUser(technicianId).getUser_id() + "]";
+
+        String acceptHealthcheckPolygonMessage = "Information om accepteret Healtcheck: "
+                + "\nAccepteret " + date
+                + "\nBygning: " + bldgCtrl.getBuilding(buildingId).getName() + "  - ID[" + bldgCtrl.getBuilding(buildingId).getbuildingId() + "]"
+                + "\nKunde: " + usrCtrl.getUser(userId).getName() + "  - ID[" + usrCtrl.getUser(userId).getUser_id() + "]"
+                + "\nAccepteret af tildelt Tekniker: " + usrCtrl.getUser(technicianId).getName() + "  - ID[" + usrCtrl.getUser(technicianId).getUser_id() + "]";
+        try {
+            emailCtrl.send(polygonEmail,
+                    acceptHealthcheckPolygonHeader,
+                    acceptHealthcheckPolygonMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void completeHealtcheckCustomerEmail(int technicianId, int userId, int buildingId) throws PolygonException {
+String completeHealthcheckCustomerEmailHeader = "Healthcheck Gennemført!";
+        String completeHealthcheckCustomerEmailMessage = "Hej " + usrCtrl.getUser(userId).getName() + "!"
+                + "\n\nVores tekniker " + usrCtrl.getUser(technicianId).getName()+ " har " + date 
+                + " gennemført et healthcheck af deres bygning: "
+                + "\"" + bldgCtrl.getBuilding(buildingId).getName() + "\""
+                + "\n" + "Adresse:" + bldgCtrl.getBuilding(buildingId).getAddress()
+                + "\n" + "Postnummer & By: " + bldgCtrl.getBuilding(buildingId).getPostcode()
+                + " " + bldgCtrl.getBuilding(buildingId).getCity()
+                + "\n" + "-------------------------------------------------------"
+                
+                + "\n\nDe kan finde healthcheck rapporten for bygningen ved at:"
+                + "\n *Login på hjemmesiden"
+                + "\n *I \"Overblik\"-sektionen, vælg bygningen der er blevet udført healthcheck på (" + bldgCtrl.getBuilding(buildingId).getName() + ")"
+                + "\n\n" + "Har de nogen spørgsmål, så tøv ikke med at kontakte os eller teknikeren!"
+                + "\n\n" + "Polygon tekniker: "
+                + "\n" + "Navn: " + usrCtrl.getUser(technicianId).getName()
+                + "\n" + "Email: " + usrCtrl.getUser(technicianId).getEmail()
+                + "\n" + "Telefon: " + usrCtrl.getUser(technicianId).getPhone()
+                
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";;
+
+        try {
+            emailCtrl.send(usrCtrl.getUser(userId).getEmail(),
+                    completeHealthcheckCustomerEmailHeader,
+                    completeHealthcheckCustomerEmailMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void completeHealthcheckTechnicianEmail(int technicianId, int userId, int buildingId) throws PolygonException {
+
+         String completeHealthcheckTechnicianEmailHeader = "Gennemført HealthCheck opgave:  "
+                + "[" + bldgCtrl.getBuilding(buildingId).getName() + "]"
+                + " - ID#" + "[" + bldgCtrl.getBuilding(buildingId).getbuildingId() + "]";
+
+        String completeHealthcheckTechnicianEmailMessage = "Hej " + usrCtrl.getUser(technicianId).getName() + "!"
+                + "\n\n" + "Du har gennemført følgende healthcheckopgave " + date
+                + "\n\n" + "Bygningens navn: " + bldgCtrl.getBuilding(buildingId).getName()
+                + "\n\n" + "Kundens navn & [Virksomhed/Firma]: " + usrCtrl.getUser(userId).getName() + "  ["
+                + usrCtrl.getUser(userId).getCompany() + "] "
+                + "\n\n" + "----------------------------------------------------"
+                + "\nBygnings information"
+                + "\n\n" + "Navn og [ID#]: " + bldgCtrl.getBuilding(buildingId).getName()
+                + " [" + bldgCtrl.getBuilding(buildingId).getbuildingId() + "]"
+                + "\n" + "Formål: " + bldgCtrl.getBuilding(buildingId).getPurpose()
+                + "\n" + "Adresse:" + bldgCtrl.getBuilding(buildingId).getAddress()
+                + "\n" + "Postnummer & By: " + bldgCtrl.getBuilding(buildingId).getPostcode()
+                + " " + bldgCtrl.getBuilding(buildingId).getCity()
+                + "\n" + "Bygnings år: " + bldgCtrl.getBuilding(buildingId).getConstruction_year()
+                + "\n" + "-------------------------------------------------------"
+                + "\n\n\n"
+                + "---------------------------------------------------------------"
+                + "\nKundens kontakt information"
+                + "\n\n " + "Kundens navn og [ID#]: " + usrCtrl.getUser(userId).getName()
+                + " [" + usrCtrl.getUser(userId).getUser_id() + "] "
+                + "\n" + "Kundens Email: " + usrCtrl.getUser(userId).getEmail()
+                + "\n" + "Kundens telefon nummer: " + usrCtrl.getUser(userId).getPhone()
+                + "\n" + "-------------------------------------------------------"
+                + "\n\n\n"
+                + "Husk at minde kunden om, at de kan se rapporten af healtchecket"
+                + " som PDF på vores hjemmeside, hvor de også kan uploade relavante dokumenter vedr. bygningen!  "
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+        try {
+            emailCtrl.send(usrCtrl.getUser(technicianId).getEmail(),
+                    completeHealthcheckTechnicianEmailHeader,
+                    completeHealthcheckTechnicianEmailMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void completeHealthcheckPolygonEmail(int technicianId, int userId, int buildingId) throws PolygonException {
+        String polygonEmail = "polygonmailtest4@gmail.com";
+        String completeHealthcheckPolygonHeader = "Complete: HealthCheck af "
+                + bldgCtrl.getBuilding(buildingId).getName() + "\""
+                + " - ID[" + bldgCtrl.getBuilding(buildingId).getbuildingId();
+
+        String completeHealthcheckPolygonMessage = 
+                "\nHealthcheck Gennemført " + date
+                + "\nBygning: " + bldgCtrl.getBuilding(buildingId).getName() + "  - ID[" + bldgCtrl.getBuilding(buildingId).getbuildingId() + "]"
+                + "\nKunde: " + usrCtrl.getUser(userId).getName() + "  - ID[" + usrCtrl.getUser(userId).getUser_id() + "]"
+                + "\nGennemført af Tekniker: " + usrCtrl.getUser(technicianId).getName() + "  - ID[" + usrCtrl.getUser(technicianId).getUser_id() + "]";;
+
+        try {
+            emailCtrl.send(polygonEmail,
+                    completeHealthcheckPolygonHeader,
+                    completeHealthcheckPolygonMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
