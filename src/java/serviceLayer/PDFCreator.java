@@ -637,9 +637,9 @@ public class PDFCreator {
             //byte[] -> InputStream
             inStream = new ByteArrayInputStream(output.toByteArray());
 
-            datCtrl.uploadDocument(1, pdfName, "pdf", inStream);
+            datCtrl.uploadDocument(building.getbuildingId(), pdfName, "pdf", inStream);
 
-            inStream.close();
+            
 
         } catch (Exception e) {
             System.out.println("savepdf" + e.getMessage());
