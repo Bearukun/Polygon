@@ -66,12 +66,12 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("sourcePage", "Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
-                user =  usrCtrl.getUser(user_id);
+                user = usrCtrl.getUser(user_id);
                 refreshBuilding(request, user_id);
                 response.sendRedirect("user.jsp");
             }
 
-            String errMsg = null;
+          
             if (request.getParameter("origin") != null) {
                 origin = request.getParameter("origin");
             }
@@ -111,8 +111,6 @@ public class UserServlet extends HttpServlet {
                     //If 'Request healthcheck' button was clicked
                     if (request.getParameter("originSection").equals("healthcheckButton")) {
 
-                        
-
                         request.getSession().setAttribute("source", "healthcheckButton");
 
                         int healthcheckValueToWrite;
@@ -120,14 +118,12 @@ public class UserServlet extends HttpServlet {
                         if (request.getParameter("originValue").equals("cancel")) {
                             healthcheckValueToWrite = 0;
                             //Sends a confirmation email regarding cancellation of the healthcheck
-                        emailCustomerCancelHealthcheck(build, user_id);
+                            emailCustomerCancelHealthcheck(build, user_id);
                         } //If the building's healthcheck pending status needs setting to true
                         else {
                             healthcheckValueToWrite = 1;
                             emailHealthcheckRequest(build, user_id);
                         }
-                        
-                        
 
                         //Save values to database
                         bldgCtrl.toggleHealthcheck(build.getbuildingId(), healthcheckValueToWrite);
@@ -230,7 +226,7 @@ public class UserServlet extends HttpServlet {
                     } //If a new document needs uploaded
                     else if (request.getParameter("originSection").equals("addDocument")) {
                         request.getSession().setAttribute("source", "addDocument");
-                        
+
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
                         buildingId = build.getbuildingId();
@@ -246,7 +242,7 @@ public class UserServlet extends HttpServlet {
 
                         //Refresh documents
                         refreshDocuments(buildingId);
-                        
+
                         //Save documents in Session
                         request.getSession().setAttribute("buildingDocuments", buildingDocuments);
 
@@ -255,18 +251,18 @@ public class UserServlet extends HttpServlet {
                     } //If an area needs deleting
                     else if (request.getParameter("originSection").equals("deleteDocumentButton")) {
                         request.getSession().setAttribute("source", "deleteDocumentButton");
-                        
+
                         //Retrieve the building being edited (saved in the Session) and save it in the reference object build
-                         build = (Building) request.getSession().getAttribute("buildingBeingEdited");
+                        build = (Building) request.getSession().getAttribute("buildingBeingEdited");
                         buildingId = build.getbuildingId();
                         int documentId = Integer.parseInt(request.getParameter("documentId"));
-                        
+
                         //Remove document from database
                         dat.deleteDocument(documentId);
 
                         //Refresh documents
                         refreshDocuments(buildingId);
-                        
+
                         //Save documents in Session
                         request.getSession().setAttribute("buildingDocuments", buildingDocuments);
 
@@ -350,17 +346,17 @@ public class UserServlet extends HttpServlet {
                 case "sendEmailToPolygon":
 
                     String polygonEmail = "polygonmailtest4@gmail.com";
-                    String emailHeader = "Bruger#" + usrCtrl.getUser(user_id).getUser_id() + " (" + usrCtrl.getUser(user_id).getCompany() + "): " + request.getParameter("emailHead");
+                    String emailHeader = "Bruger#" + user.getUser_id() + " (" + user.getCompany() + "): " + request.getParameter("emailHead");
 
                     String userInfo
                             = "\n\n---------------------------------------------------------------------\n"
                             + "Kunde information\n"
                             + "---------------------------------------------------------------------\n"
-                            + "Kunde Email: " + usrCtrl.getUser(user_id).getEmail() + "\n"
-                            + "Kunde id: " + usrCtrl.getUser(user_id).getUser_id() + "\n"
-                            + "Kunde Navn: " + usrCtrl.getUser(user_id).getName() + "\n"
-                            + "Kunde Firma: " + usrCtrl.getUser(user_id).getCompany() + "\n"
-                            + "Kunde Tlf: " + usrCtrl.getUser(user_id).getPhone() + "\n"
+                            + "Kunde Email: " + user.getEmail() + "\n"
+                            + "Kunde id: " + user.getUser_id() + "\n"
+                            + "Kunde Navn: " + user.getName() + "\n"
+                            + "Kunde Firma: " + user.getCompany() + "\n"
+                            + "Kunde Tlf: " + user.getPhone() + "\n"
                             + "---------------------------------------------------------------------\n\n";
 
                     String emailMessage = request.getParameter("emailMessage") + userInfo;
@@ -412,13 +408,6 @@ public class UserServlet extends HttpServlet {
 
     }
 
-    public void refreshUsers(HttpServletRequest request) throws PolygonException {
-
-        userList.clear();
-        userList = usrCtrl.getUsers();
-        request.getSession().setAttribute("userList", userList);
-    }
-
     public void emailEditBuilding(String buildingName, String address, int postcod, String cit, int constructionYear, String purpos, int sqm, int selectedBuilding) {
         //Email the customer about the changes to the building           
         String emailEditBuildingHeader = "Polygon: Ændringer i deres bygning\"" + buildingName + "\". ";
@@ -450,7 +439,7 @@ public class UserServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
         try {
             emailCtrl.send(user.getEmail(), emailEditBuildingHeader, emailEditBuildingMessage);
-        } catch (Exception e) {
+        } catch (PolygonException e) {
             e.printStackTrace();
         }
     }
@@ -460,7 +449,7 @@ public class UserServlet extends HttpServlet {
 
         String polygonMail = "polygonmailtest4@gmail.com";
         String emailHealthcheckRequestHeader = "Polygon: Anmodning om Sunhedscheck indsendt af \"" + build.getName() + "\". ";
-        String emailHealthcheckRequestMessage = "Hej " + usrCtrl.getUser(id).getName() + " (" + usrCtrl.getUser(id).getCompany() + " )"
+        String emailHealthcheckRequestMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
                 + "\n\nVi har den " + date + " registeret, at de har anmodet om et sundhedscheck af deres bygning: \"" + build.getName() + "\". "
                 + ""
                 + "\n"
@@ -482,17 +471,17 @@ public class UserServlet extends HttpServlet {
             emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
             //Polygon
             emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
-        } catch (Exception e) {
+        } catch (PolygonException e) {
             e.printStackTrace();
         }
     }
-    
+
     public void emailCustomerCancelHealthcheck(Building build, int id) throws PolygonException {
         //Email the customer about the requested healthcheck 
 
         String polygonMail = "polygonmailtest4@gmail.com";
         String emailHealthcheckRequestHeader = "Polygon: Anmodning om Aflysning af Sunhedscheck  af \"" + build.getName() + "\". ";
-        String emailHealthcheckRequestMessage = "Hej " + usrCtrl.getUser(id).getName() + " (" + usrCtrl.getUser(id).getCompany() + " )"
+        String emailHealthcheckRequestMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
                 + "\n\nVi har den " + date + " registeret, at de har anmodet om at aflyse sundhedschecket af deres bygning: \"" + build.getName() + "\". "
                 + ""
                 + "\n"
@@ -514,7 +503,7 @@ public class UserServlet extends HttpServlet {
             emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
             //Polygon
             emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
-        } catch (Exception e) {
+        } catch (PolygonException e) {
             e.printStackTrace();
         }
     }
@@ -558,4 +547,3 @@ public class UserServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 }
-
