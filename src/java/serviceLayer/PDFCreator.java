@@ -444,11 +444,11 @@ public class PDFCreator {
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 596, 100, 2);
             singleTextLine(pageContentStreamNumber, "Problem: " + issueList.get(getIssueId(1, room.getRoom_id())).getDescription(), 10, 50, 300);
 
-            singleTextLine(pageContentStreamNumber, "Anbefalet behandling", 10, 200, 600);
+            singleTextLine(pageContentStreamNumber, "Anbefalet behandling", 10, 50, 550);
             //Creates a image from a file and places it.
             //Underline for "Anbefalinger"
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 100, 2);
-            singleTextLine(pageContentStreamNumber, "Anbefaldet: " + issueList.get(getIssueId(1, room.getRoom_id())).getRecommendation(), 10, 50, 200);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 546, 100, 2);
+            singleTextLine(pageContentStreamNumber, "Anbefaldet: " + issueList.get(getIssueId(1, room.getRoom_id())).getRecommendation(), 10, 50, 530);
 
             //checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
             //Closes the content creation for Page 4
@@ -487,8 +487,8 @@ public class PDFCreator {
             singleTextLine(pageContentStreamNumber, "Anbefalet behandling", 10, 50, 550);
             //Creates a image from a file and places it.
             //Underline for "Anbefalinger"
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 100, 2);
-            singleTextLine(pageContentStreamNumber, "" + issueList.get(getIssueId(0, area.getArea_id())).getRecommendation(), 10, 50, 540);
+            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 546, 100, 2);
+            singleTextLine(pageContentStreamNumber, "" + issueList.get(getIssueId(0, area.getArea_id())).getRecommendation(), 10, 50, 530);
 
             //checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
             //Closes the content creation for Page 4
