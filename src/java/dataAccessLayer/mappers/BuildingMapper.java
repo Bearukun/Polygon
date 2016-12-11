@@ -40,8 +40,7 @@ public class BuildingMapper implements BuildingMapperInterface {
     //FIX THIS ASAP
     java.util.Date date = new Date();
     Timestamp timestamp = new Timestamp(date.getTime());
-    
-    
+
     /**
      * Method to retrieve all buildings pertaining a specific user
      *
@@ -803,8 +802,7 @@ public class BuildingMapper implements BuildingMapperInterface {
 
             } else {
 
-                //NEEDS TO BE FIXED!
-                return 99;
+                return 0;
 
             }
 
@@ -1340,6 +1338,8 @@ public class BuildingMapper implements BuildingMapperInterface {
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
+        
+        
         try {
             //Get connection object.
             con = DBConnection.getConnection();
@@ -1350,26 +1350,27 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
 
-            
             stmt.setString(1, condition);
             stmt.setNull(2, Types.INTEGER);
             stmt.setInt(3, buildingId);
             stmt.setString(4, buildingResponsible);
             stmt.setInt(5, healthcheckId);
-                  
 
             //Execute update.
             stmt.executeUpdate();
-            
+
+           
         } catch (Exception e) {
-            
+
             throw new PolygonException("SQL Error: Connection problem." + e.getMessage());
-            
+
         } finally {
             //Try releasing objects. 
             try {
+                
                 con.close();
                 stmt.close();
+               
             } catch (SQLException ex) {
                 //throw error if not successful. 
                 throw new PolygonException("SQL Error:@DBFacade.completeHealthcheck." + ex.getMessage());

@@ -361,7 +361,7 @@ public class TechnicianServlet extends HttpServlet {
 
                  
                         //Complete healthcehck.
-                        //bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
+                        bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
 
                         //CreatePDF
                         pdf.createPDF(technician, customer, healthcheckId, build.getbuildingId(), buildingResponsible, condition, request.getServletContext().getRealPath("/img/"));
@@ -369,9 +369,9 @@ public class TechnicianServlet extends HttpServlet {
                         
                         
                         //Send emails
-                        //completeHealtcheckCustomerEmail();
-                        //completeHealthcheckTechnicianEmail();
-                        //completeHealthcheckPolygonEmail();
+                        completeHealtcheckCustomerEmail();
+                        completeHealthcheckTechnicianEmail();
+                        completeHealthcheckPolygonEmail();
                         
                         refreshAllBuildings(request);
                         response.sendRedirect("technician.jsp");
