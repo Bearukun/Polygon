@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.mail.Transport;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -267,13 +268,17 @@ public class TechnicianServlet extends HttpServlet {
                         //create new issue
                         int issue_index = bldgCtrl.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
 
-                        Part filePart = request.getPart("img");
-                        String[] header = (filePart.getHeader("content-disposition").split(" "));
-                        String[] fileName = header[2].split("\"");
+                        if(request.getPart("img").getSize() != 0){
+                            
+                            Part filePart = request.getPart("img");
+                            String[] header = (filePart.getHeader("content-disposition").split(" "));
+                            String[] fileName = header[2].split("\"");
 
-                        InputStream inputStream = filePart.getInputStream();
-                        //Save values to database
-                        datCtrl.uploadIssueImage(issue_index, fileName[1], inputStream);
+                            InputStream inputStream = filePart.getInputStream();
+                            //Save values to database
+                            datCtrl.uploadIssueImage(issue_index, fileName[1], inputStream);
+                            
+                        }
 
                         //Fetch the current healthcheck and its issues for the chosen building 
                         healthcheckId = getBuildingHealthcheck(request, buildingId);
@@ -410,7 +415,8 @@ public class TechnicianServlet extends HttpServlet {
             }
 
         } catch (PolygonException e) {
-            e.getMessage();
+            request.getSession().setAttribute("error", e.getMessage());
+            response.sendRedirect("error.jsp");
         }
 
     }

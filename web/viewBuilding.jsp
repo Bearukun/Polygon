@@ -295,7 +295,7 @@
                                                     <input class="btn btn-danger" type="submit" value="Slet bygning" />
                                                 </form>
                                                 <br>
-                                                <% if (build.getHealthcheck_pending() > 1) {%>
+                                                <% if (build.getHealthcheck_pending() >= 1) {%>
                                                 <form class="form-view-building" action="UserServlet" method="POST">
                                                     <input type="hidden" name="origin" value="viewBuilding" />
                                                     <input type="hidden" name="originSection" value="healthcheckButton" />

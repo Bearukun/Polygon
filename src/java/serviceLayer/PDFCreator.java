@@ -62,8 +62,6 @@ public class PDFCreator {
 
         try {
 
-            System.out.println("" + healthcheckId);
-
             areaList = buildCtrl.getAreas(buildingId);
             roomList = buildCtrl.getRooms(buildingId);
             building = buildCtrl.getBuilding(buildingId);
@@ -83,44 +81,50 @@ public class PDFCreator {
             frontPage();
             pageNumber++;
 
-            //Outer loop is area, cos it has rooms. 
-            for (int a = 0; a < areaList.size(); a++) {
+            if (areaList.size() != 0) {
+                //Outer loop is area, cos it has rooms. 
+                for (int a = 0; a < areaList.size(); a++) {
 
-                if (hasIssue(0, areaList.get(a).getArea_id())) {
+                    if (hasIssue(0, areaList.get(a).getArea_id())) {
 
-                    areaWalkthrough(areaList.get(a));
-                    pageNumber++;
-                    
-                }
-
-            }
-
-            for (int i = 0; i < roomList.size(); i++) {
-
-                if (hasIssue(1, roomList.get(i).getRoom_id())) {
-
-                    roomWalkthrough(areaList.get(1), roomList.get(i));
-                    pageNumber++;
-                }
-
-                //Dmg report
-                for (int k = 0; k < dmgRepair.size(); k++) {
-
-                    if (dmgRepair.get(k).getRoomId() == roomList.get(i).getRoom_id()) {
-
-                        damageReport(roomList.get(i), areaList.get(1), dmgRepair.get(k));
+                        areaWalkthrough(areaList.get(a));
                         pageNumber++;
 
                     }
 
                 }
+            }
 
-                for (int k = 0; k < moistList.size(); k++) {
+            if (roomList.size() != 0) {
 
-                    if (moistList.get(k).getRoomId() == roomList.get(i).getRoom_id()) {
+                for (int i = 0; i < roomList.size(); i++) {
 
-                        roomMoistReport(areaList.get(1), roomList.get(i), moistList.get(k));
+                    if (hasIssue(1, roomList.get(i).getRoom_id())) {
+
+                        roomWalkthrough(areaList.get(1), roomList.get(i));
                         pageNumber++;
+                    }
+
+                    //Dmg report
+                    for (int k = 0; k < dmgRepair.size(); k++) {
+
+                        if (dmgRepair.get(k).getRoomId() == roomList.get(i).getRoom_id()) {
+
+                            damageReport(roomList.get(i), areaList.get(1), dmgRepair.get(k));
+                            pageNumber++;
+
+                        }
+
+                    }
+
+                    for (int k = 0; k < moistList.size(); k++) {
+
+                        if (moistList.get(k).getRoomId() == roomList.get(i).getRoom_id()) {
+
+                            roomMoistReport(areaList.get(1), roomList.get(i), moistList.get(k));
+                            pageNumber++;
+
+                        }
 
                     }
 
@@ -133,7 +137,7 @@ public class PDFCreator {
 
             savePDF(pdfName, doc);
         } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());;
+            System.out.println("CreatePDF: Error: " + ex.getMessage());;
         }
 
     }
@@ -623,8 +627,6 @@ public class PDFCreator {
             System.out.println(e.getMessage());
         }
     }
-    
-    
 
     //Method to save the PDF document 
     public void savePDF(String pdfName, PDDocument doc) {
@@ -640,8 +642,6 @@ public class PDFCreator {
             inStream = new ByteArrayInputStream(output.toByteArray());
 
             datCtrl.uploadDocument(building.getbuildingId(), pdfName, "pdf", inStream);
-
-            
 
         } catch (Exception e) {
             System.out.println("savepdf" + e.getMessage());

@@ -64,6 +64,7 @@ public class UserServlet extends HttpServlet {
             //If we are coming from the LoginServlet servlet, i.e. we have just logged in
             if (request.getSession().getAttribute("sourcePage").toString().equals("LoginServlet")) {
                 request.getSession().setAttribute("sourcePage", "Invalid");
+                request.getSession().setAttribute("source", "user");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
                 user = usrCtrl.getUser(user_id);
