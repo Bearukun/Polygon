@@ -66,6 +66,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("sourcePage", "Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
+                user =  usrCtrl.getUser(user_id);
                 refreshBuilding(request, user_id);
                 response.sendRedirect("user.jsp");
             }
