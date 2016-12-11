@@ -1344,29 +1344,27 @@ public class BuildingMapper implements BuildingMapperInterface {
             //Get connection object.
             con = DBConnection.getConnection();
 
-            String sql = "UPDATE `polygon`.`building` SET `condition`= ?, `healthcheck_pending`='0', `assigned_tech_id` = ? WHERE `building_id`= ?;UPDATE polygon.healthcheck SET building_responsible=? WHERE healthcheck_id=?;";
+            String sql = "UPDATE `polygon`.`building` SET `condition`= ?, `healthcheck_pending`='0', `assigned_tech_id` = ? WHERE `building_id`= ?; UPDATE `polygon`.`healthcheck` SET `building_responsible`= ? WHERE `healthcheck_id`= ?;";
 
+            //String sql = "UPDATE `polygon`.`building` SET `condition`= ? WHERE `building_id`=?;";
             //Creating prepare statement.
             stmt = con.prepareStatement(sql);
 
+            
             stmt.setString(1, condition);
             stmt.setNull(2, Types.INTEGER);
             stmt.setInt(3, buildingId);
             stmt.setString(4, buildingResponsible);
             stmt.setInt(5, healthcheckId);
-
-            //stmt.setInt(1, 0);
-            //String a = "GOOD";
-            stmt.setString(1, Building.condition.NONE.name());
-
-            stmt.setInt(2, buildingId);
-            //stmt.setString(4, buildingResponsible);
-            //stmt.setInt(5, healthcheckId);
+                  
 
             //Execute update.
             stmt.executeUpdate();
+            
         } catch (Exception e) {
+            
             throw new PolygonException("SQL Error: Connection problem." + e.getMessage());
+            
         } finally {
             //Try releasing objects. 
             try {

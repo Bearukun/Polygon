@@ -4,12 +4,9 @@ import dataAccessLayer.mappers.BuildingMapper;
 import dataAccessLayer.mappers.interfaces.BuildingMapperInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -35,14 +32,20 @@ public class PDFCreator {
     BuildingMapperInterface buildCtrl = new BuildingMapper();
     UserControllerInterface usrCtrl = new UserController();
 
+    User technician = null;
+    User customer = null;
+
     Building building = new Building();
     Healthcheck healthcheck = new Healthcheck();
-    ArrayList<User> user = new ArrayList();
     ArrayList<Room> roomList = new ArrayList();
     ArrayList<DamageRepair> dmgRepair = new ArrayList();
     ArrayList<Area> areaList = new ArrayList();
     ArrayList<Issue> issueList = new ArrayList();
     ArrayList<MoistureInfo> moistList = new ArrayList();
+
+    String imgFolderPath;
+    String pdfName;
+    String buildingResponsible;
 
     //sourceFolder sf = new sourceFolder();
     PDDocument doc = new PDDocument();
@@ -55,9 +58,11 @@ public class PDFCreator {
     String pageNumberTitel = "page" + pageNumber;
     String pageContentStreamNumber = "content" + pageNumber;
 
-    public void createPDF(int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) {
+    public void createPDF(User technician, User customer, int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) {
 
         try {
+
+            System.out.println("" + healthcheckId);
 
             areaList = buildCtrl.getAreas(buildingId);
             roomList = buildCtrl.getRooms(buildingId);
@@ -65,91 +70,78 @@ public class PDFCreator {
             issueList = buildCtrl.getHealthcheckIssues(healthcheckId);
             dmgRepair = buildCtrl.getAllDamageRepairs();
             moistList = buildCtrl.getAllMoistureMeasurements();
-
-            user = usrCtrl.getUsers();
+            this.customer = customer;
+            this.technician = technician;
+            this.imgFolderPath = imgFolderPath;
+            this.buildingResponsible = buildingResponsible;
 
             //MOISTLIST
             //TODO Add pdf-id here through parameter.
-            String pdfName = building.getName() + "ID#" + building.getbuildingId();
-            String buildingName = building.getName();
-            String buildingAddress = building.getAddress();
-            int buildingPostcode = building.getPostcode();
-            String buildingCity = building.getCity();
-            int buildingConstructionYear = building.getConstruction_year();
-            int buildingSQM = building.getSqm();
-            String buildingPurpose = building.getPurpose();
+            pdfName = building.getName() + "ID#" + building.getbuildingId();
 
             //Create front page.
-            frontPage(pdfName, buildingName, buildingAddress, buildingPostcode, buildingCity, buildingConstructionYear, buildingSQM(), buildingPurpose, doc, imgFolderPath);
-
+            frontPage();
             pageNumber++;
 
-            for (int i = 0; i < areaList.size(); i++) {
-                for (int j = 0; j < roomList.size(); j++) {
+            //Outer loop is area, cos it has rooms. 
+            for (int a = 0; a < areaList.size(); a++) {
 
-//                    //CHECK AREA
-//                    if (hasIssue(0, areaList.get(i).getArea_id())) {
-//
-//                        areaWalkthrough(pdfName, areaList.get(i), imgFolderPath, doc);
-//                        pageNumber++;
-//
-//                    }
+                if (hasIssue(0, areaList.get(a).getArea_id())) {
 
-                    if ((areaList.get(i).getArea_id() == roomList.get(j).getArea_id())) {
+                    areaWalkthrough(areaList.get(a));
+                    pageNumber++;
+                    
+                }
 
-                        //CHECK ROOM
-                        if (hasIssue(1, roomList.get(j).getRoom_id())) {
+            }
 
-                            roomWalkthrough(pdfName, areaList.get(i), roomList.get(j), imgFolderPath, doc);
-                            pageNumber++;
+            for (int i = 0; i < roomList.size(); i++) {
 
-                            //Dmg report
-                            for (int k = 0; k < dmgRepair.size(); k++) {
+                if (hasIssue(1, roomList.get(i).getRoom_id())) {
 
-                                if (dmgRepair.get(k).getRoomId() == roomList.get(j).getRoom_id() - 1) {
+                    roomWalkthrough(areaList.get(1), roomList.get(i));
+                    pageNumber++;
+                }
 
-                                    damageReport(pdfName, roomList.get(j), areaList.get(i), dmgRepair.get(k), imgFolderPath, doc);
-                                    pageNumber++;
+                //Dmg report
+                for (int k = 0; k < dmgRepair.size(); k++) {
 
-                                }
+                    if (dmgRepair.get(k).getRoomId() == roomList.get(i).getRoom_id()) {
 
-                            }
-
-                            for (int k = 0; k < moistList.size(); k++) {
-
-                                if (moistList.get(k).getRoomId() == roomList.get(j).getRoom_id() - 1) {
-
-                                    roomMoistReport(pdfName, areaList.get(i), roomList.get(j), moistList.get(k), imgFolderPath, doc);
-                                    pageNumber++;
-
-                                }
-
-                            }
-
-                        }
+                        damageReport(roomList.get(i), areaList.get(1), dmgRepair.get(k));
+                        pageNumber++;
 
                     }
 
                 }
+
+                for (int k = 0; k < moistList.size(); k++) {
+
+                    if (moistList.get(k).getRoomId() == roomList.get(i).getRoom_id()) {
+
+                        roomMoistReport(areaList.get(1), roomList.get(i), moistList.get(k));
+                        pageNumber++;
+
+                    }
+
+                }
+
             }
 
-            lastPage(pdfName, buildingResponsible, condition, imgFolderPath, doc);
+            lastPage();
             pageNumber++;
 
             savePDF(pdfName, doc);
-
         } catch (Exception ex) {
-            Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: " + ex.getMessage());;
         }
 
     }
 
     //Setup of Page 1
-    public void frontPage(String pdfName, String buildingName, String buildingAddress, Integer buildingPostcode, String buildingCity, Integer buildingContructionYear,
-            Integer buildingSQM, String buildingPurpose, PDDocument doc, String imgFolderPath) {
+    public void frontPage() {
 
         //Registers the time and date for the PDF document
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
 
         //Initiates new PDPAge Object
@@ -180,7 +172,7 @@ public class PDFCreator {
             //Set Coordinates for the first line of text
             pageContentStreamNumber.moveTextPositionByAmount(50, 610);
             //First line of text
-            pageContentStreamNumber.drawString("" + buildingName);
+            pageContentStreamNumber.drawString("" + building.getName());
             //Coordinates for the next line of text,
             //which are offset from the previous line of text            
             pageContentStreamNumber.newLineAtOffset(0, -12);
@@ -201,7 +193,6 @@ public class PDFCreator {
             //Creates a image from a file and places it.
             //Underline for "bygningens navn"             
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 606, 200, 2);
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, pdfName, 0, 0, 0, 0);
 
             //Creates a image from a file and places it.
             //Underline for "the date "
@@ -220,7 +211,7 @@ public class PDFCreator {
             //which are offset from the previous line of text
             pageContentStreamNumber.newLineAtOffset(0, 12);
             //Second line of text
-            pageContentStreamNumber.drawString("" + buildingAddress);
+            pageContentStreamNumber.drawString("" + building.getAddress());
             //End writting text
             pageContentStreamNumber.endText();
 
@@ -243,12 +234,12 @@ public class PDFCreator {
             //which are offset from the previous line of text
             pageContentStreamNumber.newLineAtOffset(0, 12);
             //Second line of text
-            pageContentStreamNumber.drawString("" + buildingPostcode);
+            pageContentStreamNumber.drawString("" + building.getPostcode());
             //Coordinates for the next line of text,
             //which are offset from the previous line of text
             pageContentStreamNumber.newLineAtOffset(45, 0);
             //Third line of text
-            pageContentStreamNumber.drawString("" + buildingCity);
+            pageContentStreamNumber.drawString("" + building.getCity());
             //End writting text
             pageContentStreamNumber.endText();
 
@@ -303,21 +294,21 @@ public class PDFCreator {
             singleTextLine(pageContentStreamNumber, "Generel information om bygningen:", 12, 50, 200);
 
             //Writes and places the text line "Bygge år"
-            singleTextLineWithUserInput(pageContentStreamNumber, "Bygge år", buildingContructionYear.toString(), 10, 50, 175);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Bygge år", "" + building.getConstruction_year(), 10, 50, 175);
 
             //Creates a image from a file and places it.
             //Underline for the "Bygge År "           
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 98, 172, 25, 2);
 
             //Writes and places the text line "Bygningens Areal"
-            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningens Areal", buildingSQM + " Kvadrat Meter", 10, 50, 145);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningens Areal", building.getSqm() + " Kvadrat Meter", 10, 50, 145);
 
             //Creates a image from a file and places it.
             //Underline for the "Bygningens Areal"
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 140, 142, 120, 2);
 
             //Writes and places the text line "Hvad bruges bygningen til / Hvad har bygningen været brugt til?" + the users input
-            singleTextLineWithUserInput(pageContentStreamNumber, "Hvad bruges bygningen til / Hvad har bygningen været brugt til?", buildingPurpose, 10, 50, 120);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Hvad bruges bygningen til / Hvad har bygningen været brugt til?", building.getPurpose(), 10, 50, 120);
 
             //Creates a image from a file and places it.
             //Underline for the "Hvad bruges bygningen til / Hvad har bygningen været brugt til?"
@@ -326,82 +317,14 @@ public class PDFCreator {
             //closes the page for anymore content to be written.
             pageContentStreamNumber.close();
 
-            System.out.println("End of testMethod");
-
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
-    }
-
-    //Setup of Page 2
-    public void buildingOuterWalkthrough(String pdfName, String imgFolderPath, PDDocument doc) {
-
-        //Creates a new page Object
-        PDPage pageNumberTitel = new PDPage();
-
-        //Adds the page to the .doc
-        doc.addPage(pageNumberTitel);
-
-        try {
-            //Creates a new PDPageContentStream object,
-            //which consist of a PDDocument object and PDPAge object
-            PDPageContentStream pageContentStreamNumber = new PDPageContentStream(doc, pageNumberTitel);
-
-            //Method that writes and places the default information that is required for each page of the PDF document.
-            defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
-
-            //Writes and places the text line "Gennemgang af bygningen udvendig "
-            singleTextLine(pageContentStreamNumber, "Gennemgang af bygningen udvendig ", 16, 50, 660);
-
-            //Writes and places the text line "Tag"
-            singleTextLine(pageContentStreamNumber, "Tag", 12, 50, 625);
-            //Creates a image from a file and places it.
-            //Underline for "Tag"
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 620, 23, 2);
-
-            //Writes and places the text line "Bemærkning" for "Tag"
-            singleTextLine(pageContentStreamNumber, "Bemærkning", 8, 325, 625);
-
-            //Writes and places the text line "Ingen Bemærkning" for "Tag"
-            singleTextLine(pageContentStreamNumber, "Ingen Bemærkning", 8, 400, 625);
-
-            //Writes and places the text line "Billede" for "Tag"
-            singleTextLine(pageContentStreamNumber, "Billede", 8, 500, 625);
-
-            //Writes and places the text line "Ydervægge" 
-            singleTextLine(pageContentStreamNumber, "Ydervægge", 12, 50, 310);
-
-            //Writes and places the text line "Bemærkning" for "Ydervægge"
-            singleTextLine(pageContentStreamNumber, "Bemærkning", 8, 325, 310);
-
-            //Writes and places the text line "Ingen Bemærkning" for "Ydervægge"
-            singleTextLine(pageContentStreamNumber, "Ingen Bemærkning", 8, 400, 310);
-
-            //Writes and places the text line "Billede" for "Ydervægge"
-            singleTextLine(pageContentStreamNumber, "Billede", 8, 500, 310);
-
-            //Creates a image from a file and places it.
-            //Underline for "Ydervægge"
-            insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 305, 70, 2);
-
-            //NEEDS DYNAMIC USER INPUT!!!
-            //Sets the checkboxes for:
-            //"Tag" (Bemærkning, Ingen bemærkning, Billede) and 
-            //Ydervægge (Bemærkning, Ingen bemærkning, Billede)
-            //checkBoxesPage2(pageContentStreamNumber, imgFolderPath, true, false, true, false, true, true);
-            checkBoxesPage2(pageContentStreamNumber, imgFolderPath, false, true, false, true, false, false);
-
-            //Closes the content creation for Page 2           
-            pageContentStreamNumber.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     //Setup of Page 3
-    public void damageReport(String pdfName, Room room, Area area, DamageRepair dmgRepair, String imgFolderPath, PDDocument doc) {
+    public void damageReport(Room room, Area area, DamageRepair dmgRepair) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -451,11 +374,11 @@ public class PDFCreator {
             pageContentStreamNumber.close();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 
-    public void roomMoistReport(String pdfName, Area area, Room room, MoistureInfo moistInfo, String imgFolderPath, PDDocument doc) {
+    public void roomMoistReport(Area area, Room room, MoistureInfo moistInfo) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -482,15 +405,18 @@ public class PDFCreator {
             singleTextLineWithUserInput(pageContentStreamNumber, "Fugtscanning", "" + moistInfo.getMoistureValue(), 10, 50, 380);
             singleTextLineWithUserInput(pageContentStreamNumber, "Målepunkt", moistInfo.getMeasurePoint(), 10, 250, 380);
 
-            //Closes the content creation for Page 3
+            //Closes the content creation
             pageContentStreamNumber.close();
 
         } catch (Exception e) {
-            System.out.println(e);
+
+            System.out.println("roomMoist" + e.getMessage());
+
         }
+
     }
 
-    public void roomWalkthrough(String pdfName, Area area, Room room, String imgFolderPath, PDDocument doc) {
+    public void roomWalkthrough(Area area, Room room) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -529,11 +455,11 @@ public class PDFCreator {
             pageContentStreamNumber.close();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("NONO" + e.getMessage());
         }
     }
 
-    public void areaWalkthrough(String pdfName, Area area, String imgFolderPath, PDDocument doc) {
+    public void areaWalkthrough(Area area) {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -562,7 +488,7 @@ public class PDFCreator {
             //Creates a image from a file and places it.
             //Underline for "Anbefalinger"
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 200, 596, 100, 2);
-            singleTextLine(pageContentStreamNumber, "Anbefaldet: " + issueList.get(getIssueId(1, area.getArea_id())).getRecommendation(), 10, 50, 200);
+            singleTextLine(pageContentStreamNumber, "Anbefaldet: " + issueList.get(getIssueId(0, area.getArea_id())).getRecommendation(), 10, 50, 200);
 
             //checkBoxesPage4Walkthrough(pageContentStreamNumber, imgFolderPath);
             //Closes the content creation for Page 4
@@ -574,7 +500,7 @@ public class PDFCreator {
     }
 
     //Setup of the last and final Page
-    public void lastPage(String pdfName, String buildingResponsible, String condition, String imgFolderPath, PDDocument doc) {
+    public void lastPage() {
 
         //Creates a new page Object
         PDPage pageNumberTitel = new PDPage();
@@ -591,7 +517,7 @@ public class PDFCreator {
             defaultNewPageSetup(pageContentStreamNumber, imgFolderPath, pdfName);
 
             //Needs real user input
-            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningsgennemgang er fortaget af", user.get(building.getAssigned_tech_id()).getName() + " , Polygon (Teknikker)", 10, 50, 650);
+            singleTextLineWithUserInput(pageContentStreamNumber, "Bygningsgennemgang er fortaget af", technician.getName() + " , Polygon (Teknikker)", 10, 50, 650);
 
             //Needs real user input
             singleTextLineWithUserInput(pageContentStreamNumber, "i samarbejde med ", buildingResponsible + " (bygningsansvarlig).", 10, 50, 630);
@@ -623,7 +549,7 @@ public class PDFCreator {
             //Writes and places the text-line ""Dårlig Tilstand"
             singleTextLine(pageContentStreamNumber, "Dårlig Tilstand", 10, 50, 465);
 
-            if (condition.equalsIgnoreCase("GOOD")) {
+            if (building.getCondition() == Building.condition.GOOD) {
 
                 //Sets the checkbox for "God Tilstand"
                 checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 560, 7, 7);
@@ -633,7 +559,7 @@ public class PDFCreator {
 
                 //Sets the empty checkbox for "Dårlig Tilstand"
                 checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
-            } else if (condition.equalsIgnoreCase("MEDIUM")) {
+            } else if (building.getCondition() == Building.condition.MEDIUM) {
 
                 //Sets the Checkbox for "Middel Tilstand"
                 checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 520, 7, 7);
@@ -644,7 +570,7 @@ public class PDFCreator {
                 //Sets the empty checkbox for "Dårlig Tilstand"
                 checkBoxImg(false, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
 
-            } else if (condition.equalsIgnoreCase("POOR")) {
+            } else if (building.getCondition() == Building.condition.POOR) {
 
                 //Sets the checkbox for "Dårlig Tilstand"
                 checkBoxImg(true, imgFolderPath, pageContentStreamNumber, 550, 480, 7, 7);
@@ -694,7 +620,7 @@ public class PDFCreator {
             pageContentStreamNumber.close();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -702,20 +628,34 @@ public class PDFCreator {
     public void savePDF(String pdfName, PDDocument doc) {
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayInputStream inStream = null;
 
         try {
 
             doc.save(output);
-            doc.close();
 
             //byte[] -> InputStream
-            ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+            inStream = new ByteArrayInputStream(output.toByteArray());
 
             datCtrl.uploadDocument(1, pdfName, "pdf", inStream);
 
+            inStream.close();
+
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("savepdf" + e.getMessage());
+        } finally {
+
+            try {
+                output.close();
+                doc.close();
+                inStream.close();
+
+            } catch (IOException ex) {
+                System.out.println("save" + ex.getMessage());
+            }
+
         }
+
     }
 
     //Method to insert .jpg image
@@ -727,7 +667,7 @@ public class PDFCreator {
             content.drawXObject(underLineString, xCoordinate, yCoordinate, imgWidth, imgHeight);
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("inserJpg" + e.getMessage());
         }
     }
 
@@ -742,7 +682,7 @@ public class PDFCreator {
             content.endText();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("pagenumber" + e.getMessage());
         }
     }
 
@@ -766,7 +706,7 @@ public class PDFCreator {
             content.endText();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("reportnr" + e.getMessage());
         }
 
     }
@@ -799,7 +739,7 @@ public class PDFCreator {
             content.endText();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("pdfDocName" + e.getMessage());
         }
     }
 
@@ -821,7 +761,7 @@ public class PDFCreator {
 
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("checkBoxImg" + e.getMessage());
         }
     }
 
@@ -843,7 +783,7 @@ public class PDFCreator {
             content.endText();
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("singleTextline" + e.getMessage());
         }
 
     }
@@ -867,355 +807,7 @@ public class PDFCreator {
             content.endText();
 
         } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    //Sets the checkboxes for Page 2:
-    //"Tag" (Bemærkning, Ingen bemærkning, Billede) and 
-    //Ydervægge (Bemærkning, Ingen bemærkning, Billede)
-    public void checkBoxesPage2(PDPageContentStream content, String imgFolderPath,
-            boolean roofNotes, boolean noRoofNotes, boolean roofPicture,
-            boolean wallNotes, boolean noWallNotes, boolean wallPicture) {
-
-        //Ydervægge
-        //Bemærkning
-        checkBoxImg(roofNotes, imgFolderPath, content, 375, 624, 7, 7);
-        if (roofNotes == true) {
-            //Some test Text !TO BE REMOVED!
-            singleTextLine(content, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
-        }
-
-        //  Ingen Bemærkning
-        checkBoxImg(noRoofNotes, imgFolderPath, content, 475, 624, 7, 7);
-        // Billede
-
-        checkBoxImg(roofPicture, imgFolderPath, content, 528, 624, 7, 7);
-
-        //Ydervægge
-        //Bemærkning
-        checkBoxImg(wallNotes, imgFolderPath, content, 375, 310, 7, 7);
-        if (wallNotes == true) {
-            //Some test Text !TO BE REMOVED!
-            singleTextLine(content, "There are some topics which will be addressed in the project period. Basically they are best understood when you have a larger system to keep track of.", 6, 50, 600);
-        }
-        //  Ingen Bemærkning
-        checkBoxImg(noWallNotes, imgFolderPath, content, 475, 310, 7, 7);
-
-        // Billede
-        checkBoxImg(wallPicture, imgFolderPath, content, 528, 310, 7, 7);
-
-    }
-
-    //NEEDS USER INPUT
-    //METHOD NEEDS BOOLEAN PARAMTERS!
-    public void checkBoxesPage4Walkthrough(PDPageContentStream content, String imgFolderPath) {
-
-        singleTextLine(content, "Gennemgang af lokalet", 12, 50, 640);
-        singleTextLine(content, "Bemærkning", 10, 335, 610);
-        singleTextLine(content, "Ingen Bemærkning", 10, 420, 610);
-        singleTextLine(content, "Billede", 10, 540, 610);
-
-        //Test of method
-        wallWalkthrough(content, imgFolderPath, false, false, "it works!",
-                600, 596, 590, 600, 600, 0);
-        ceilingWalkthrough(content, imgFolderPath, true, true, "it really works!",
-                520, 516, 510, 520, 520, 0);
-        floorWalkthrough(content, imgFolderPath, false, false, "Holy hell!",
-                440, 436, 430, 440, 440, 0);
-        windowsWalkthrough(content, imgFolderPath, true, false, "When the night...",
-                360, 356, 350, 360, 360, 0);
-        doorWalkthrough(content, imgFolderPath, true, true, "... has come",
-                280, 276, 270, 280, 280, 0);
-
-        otherWalkthrough(content, imgFolderPath, true, false, "Jambo jambo!",
-                200, 196, 190, 200, 200, 0);
-    }
-
-    //int wallTitelXCoordinate, int wallTitelYCoordinate
-    //int underlineJPGXCoordinate, int underlineJPGYCoordinate,
-    //int wallNotesCheckBoxImgXCoordinate, int wallNotesCheckBoxImgYCoordinate
-    //int pictureCheckBoxImgXCoordinate, int pictureCheckBoxBoxImgYCoordinate
-    //int pictureIMGXCoordinate, int pictureIMGYCoordinate
-    public void wallWalkthrough(PDPageContentStream content, String imgFolderPath,
-            boolean wallNotes, boolean wallPicture, String wallNoteText,
-            int wallTitelYCoordinate, int underlineJPGYCoordinate,
-            int wallNoteTextYCoordinate, int wallNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate
-    ) {
-        //Vægge
-        // singleTextLine(content, "Vægge", 10, 50, 600);
-        singleTextLine(content, "Vægge", 10, 50, wallTitelYCoordinate);
-
-        //Underlinde-jpg
-        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 596, 37, 2);
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 37, 2);
-        //Bemærkning / Ingen Bemærkning
-        if (wallNotes == true) {
-            //set "Bermærkninger" true
-            //singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 590);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + wallNoteText, 8, 50, wallNoteTextYCoordinate);
-
-            //checkBoxImg(true, imgFolderPath, content, 360, 600, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 360, wallNotesCheckBoxImgYCoordinate, 7, 7);
-
-            //Set "ingen bemærkninger" false + 100!
-            //checkBoxImg(false, imgFolderPath, content, 460, 600, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 460, wallNotesCheckBoxImgYCoordinate, 7, 7);
-
-        } else if (wallNotes != true || wallNotes == false) {
-            //set "Bermærkninger" false
-            //checkBoxImg(false, imgFolderPath, content, 360, 600, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 360, wallNotesCheckBoxImgYCoordinate, 7, 7);
-            //Set "ingen bemærkninger" true + 100!
-            //checkBoxImg(true, imgFolderPath, content, 460, 600, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 460, wallNotesCheckBoxImgYCoordinate, 7, 7);
-        }
-
-        //Billede
-        if (wallPicture == true) {
-            //set "Picture" true
-
-            //checkBoxImg(true, imgFolderPath, content, 553, 600, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 50, 25);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 50, 25);
-        } else if (wallPicture != true || wallPicture == false) {
-            // set "Picture" false
-            //checkBoxImg(false, imgFolderPath, content, 553, 600, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-        }
-    }
-
-    public void ceilingWalkthrough(PDPageContentStream content, String imgFolderPath,
-            boolean ceilingNotes, boolean ceilingPicture, String ceilingNoteText,
-            int ceilingTitelYCoordinate, int underlineJPGYCoordinate,
-            int celingNoteTextYCoordinate, int ceilingNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
-        //Loft
-        //singleTextLine(content, "Loft", 10, 50, 520);
-        singleTextLine(content, "Loft", 10, 50, ceilingTitelYCoordinate);
-        //Underlinde-jpg
-        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 516, 20, 2);
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 20, 2);
-        //Bemærkning / Ingen Bemærkning
-        if (ceilingNotes == true) {
-            //set "Bermærkninger" true
-            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/"" + ceilingNoteText, 8, 50, 510);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + ceilingNoteText, 8, 50, celingNoteTextYCoordinate);
-
-            //checkBoxImg(true, imgFolderPath, content, 360, 520, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 360, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            // checkBoxImg(false, imgFolderPath, content, 460, 520, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 460, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
-
-        } else if (ceilingNotes != true || ceilingNotes == false) {
-            //set "Bermærkninger" false
-            //checkBoxImg(false, imgFolderPath, content, 360, 520, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 360, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
-            //Set "ingen bemærkninger" true
-            //checkBoxImg(true, imgFolderPath, content, 460, 520, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 460, ceilingNotesCheckBoxImgYCoordinate, 7, 7);
-        }
-
-        //Billede
-        if (ceilingPicture == true) {
-            //set "Picture" true
-            //checkBoxImg(true, imgFolderPath, content, 553, 520, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
-
-        } else if (ceilingPicture != true || ceilingPicture == false) {
-            // set "Picture" false
-            //checkBoxImg(false, imgFolderPath, content, 553, 520, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-        }
-    }
-
-    public void floorWalkthrough(PDPageContentStream content, String imgFolderPath,
-            boolean floorNotes, boolean floorPicture, String floorNoteText,
-            int floorTitelYCoordinate, int underlineJPGYCoordinate,
-            int floorNoteTextYCoordinate, int floorNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
-        //Gulv
-        //singleTextLine(content, "Gulv", 10, 50, 440);
-        singleTextLine(content, "Gulv", 10, 50, floorTitelYCoordinate);
-        //Underlinde-jpg
-        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 436, 23, 2);
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
-        //Bemærkning / Ingen Bemærkning
-        if (floorNotes == true) {
-            //set "Bermærkninger" true
-            //singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 430);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + floorNoteText, 8, 50, floorNoteTextYCoordinate);
-
-            //checkBoxImg(true, imgFolderPath, content, 360, 440, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 360, floorNotesCheckBoxImgYCoordinate, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            //checkBoxImg(false, imgFolderPath, content, 460, 440, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 460, floorNotesCheckBoxImgYCoordinate, 7, 7);
-
-        } else if (floorNotes != true || floorNotes == false) {
-            //set "Bermærkninger" false
-            //checkBoxImg(false, imgFolderPath, content, 360, 440, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 360, floorNotesCheckBoxImgYCoordinate, 7, 7);
-            //Set "ingen bemærkninger" true
-            //checkBoxImg(true, imgFolderPath, content, 460, 440, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 460, floorNotesCheckBoxImgYCoordinate, 7, 7);
-        }
-        //Billede
-        if (floorPicture == true) {
-            //set "Picture" true
-            //checkBoxImg(true, imgFolderPath, content, 553, 440, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
-        } else if (floorPicture != true || floorPicture == false) {
-            // set "Picture" false
-            //checkBoxImg(false, imgFolderPath, content, 553, 440, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-        }
-
-    }
-
-    public void windowsWalkthrough(PDPageContentStream content, String imgFolderPath,
-            boolean windowNotes, boolean windowPicture, String windowNoteText,
-            int windowTitelYCoordinate, int underlineJPGYCoordinate,
-            int windowNoteTextYCoordinate, int windowNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
-        //Vinduer
-        //singleTextLine(content, "Vinduer", 10, 50, 360);
-        singleTextLine(content, "Vinduer", 10, 50, windowTitelYCoordinate);
-        //Underlinde-jpg
-        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 356, 45, 2);
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 45, 2);
-        if (windowNotes == true) {
-            //set "Bermærkninger" true
-            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 350);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + windowNoteText, 8, 50, windowNoteTextYCoordinate);
-
-            //checkBoxImg(true, imgFolderPath, content, 360, 360, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 360, windowNotesCheckBoxImgYCoordinate, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            // checkBoxImg(false, imgFolderPath, content, 460, 360, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 460, windowNotesCheckBoxImgYCoordinate, 7, 7);
-
-        } else if (windowNotes != true || windowNotes == false) {
-            //set "Bermærkninger" false
-            // checkBoxImg(false, imgFolderPath, content, 360, 360, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 360, windowNotesCheckBoxImgYCoordinate, 7, 7);
-            //Set "ingen bemærkninger" true
-            // checkBoxImg(true, imgFolderPath, content, 460, 360, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 460, windowNotesCheckBoxImgYCoordinate, 7, 7);
-        }
-        //Billede
-        if (windowPicture == true) {
-            //set "Picture" true
-            //checkBoxImg(true, imgFolderPath, content, 553, 360, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
-        } else if (windowPicture != true || windowPicture == false) {
-            // set "Picture" false
-            //checkBoxImg(false, imgFolderPath, content, 553, 360, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-        }
-    }
-
-    public void doorWalkthrough(PDPageContentStream content, String imgFolderPath,
-            boolean doorNotes, boolean doorPicture, String doorNoteText,
-            int doorTitelYCoordinate, int underlineJPGYCoordinate,
-            int doorNoteTextYCoordinate, int doorNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
-
-        //Døre
-        //singleTextLine(content, "Døre", 10, 50, 280);
-        singleTextLine(content, "Døre", 10, 50, doorTitelYCoordinate);
-        //Underlinde-jpg
-        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 276, 23, 2);
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
-        if (doorNotes == true) {
-            //set "Bermærkninger" true
-            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + doorNoteText, 8, 50, doorNoteTextYCoordinate);
-
-            // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 360, doorNotesCheckBoxImgYCoordinate, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            //checkBoxImg(false, imgFolderPath, content, 460, 280, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 460, doorNotesCheckBoxImgYCoordinate, 7, 7);
-
-        } else if (doorNotes != true || doorNotes == false) {
-            //set "Bermærkninger" false
-            // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 360, doorNotesCheckBoxImgYCoordinate, 7, 7);
-            //Set "ingen bemærkninger" true
-            //checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 460, doorNotesCheckBoxImgYCoordinate, 7, 7);
-        }
-        //Billede
-        if (doorPicture == true) {
-            //set "Picture" true
-            // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
-        } else if (doorPicture != true || doorPicture == false) {
-            // set "Picture" false
-            //checkBoxImg(false, imgFolderPath, content, 553, 280, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-        }
-    }
-
-    public void otherWalkthrough(PDPageContentStream content, String imgFolderPath,
-            boolean otherNotes, boolean otherPicture, String otherNoteText,
-            int otherTitelYCoordinate, int underlineJPGYCoordinate,
-            int otherNoteTextYCoordinate, int otherNotesCheckBoxImgYCoordinate,
-            int pictureCheckBoxImgYCoordinate, int pictureIMGYCoordinate) {
-
-        //Andet
-        //singleTextLine(content, "Andet", 10, 50, 280);
-        singleTextLine(content, "Andet", 10, 50, otherTitelYCoordinate);
-        //Underlinde-jpg
-        //insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, 276, 23, 2);
-        insertJPGImage(content, imgFolderPath, "underLineJPG.jpg", 50, underlineJPGYCoordinate, 23, 2);
-        if (otherNotes == true) {
-            //set "Bermærkninger" true
-            // singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "teeeeeeeeest", 8, 50, 270);
-            singleTextLineWithUserInput(content, imgFolderPath, /*NEEDS USER INPUT*/ "" + otherNoteText, 8, 50, otherNoteTextYCoordinate);
-
-            // checkBoxImg(true, imgFolderPath, content, 360, 280, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 360, otherNotesCheckBoxImgYCoordinate, 7, 7);
-
-            //Set "ingen bemærkninger" false
-            //checkBoxImg(false, imgFolderPath, content, 460, 280, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 460, otherNotesCheckBoxImgYCoordinate, 7, 7);
-
-        } else if (otherNotes != true || otherNotes == false) {
-            //set "Bermærkninger" false
-            // checkBoxImg(false, imgFolderPath, content, 360, 280, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 360, otherNotesCheckBoxImgYCoordinate, 7, 7);
-            //Set "ingen bemærkninger" true
-            //checkBoxImg(true, imgFolderPath, content, 460, 280, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 460, otherNotesCheckBoxImgYCoordinate, 7, 7);
-        }
-        //Billede
-        if (otherPicture == true) {
-            //set "Picture" true
-            // checkBoxImg(true, imgFolderPath, content, 553, 280, 7, 7);
-            checkBoxImg(true, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
-            //insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, 0, 0, 0);
-            insertJPGImage(content, imgFolderPath, /*IMG NAME HERE*/ imgFolderPath, 0, pictureIMGYCoordinate, 0, 0);
-        } else if (otherPicture != true || otherPicture == false) {
-            // set "Picture" false
-            //checkBoxImg(false, imgFolderPath, content, 553, 280, 7, 7);
-            checkBoxImg(false, imgFolderPath, content, 553, pictureCheckBoxImgYCoordinate, 7, 7);
+            System.out.println("singleTextLIneWithUserInput" + e.getMessage());
         }
     }
 
@@ -1255,7 +847,7 @@ public class PDFCreator {
 
             for (int i = 0; i < issueList.size(); i++) {
 
-                if (issueList.get(i).getArea_id() == id) {
+                if (issueList.get(i).getRoom_id() == id) {
 
                     return i;
 
@@ -1293,7 +885,7 @@ public class PDFCreator {
 
             for (int i = 0; i < issueList.size(); i++) {
 
-                if (issueList.get(i).getArea_id() == id) {
+                if (issueList.get(i).getRoom_id() == id) {
 
                     return true;
 
