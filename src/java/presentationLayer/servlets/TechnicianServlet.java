@@ -345,6 +345,7 @@ public class TechnicianServlet extends HttpServlet {
                         
                         int technicianId = (Integer) request.getSession().getAttribute("user_id");
                         buildingId = Integer.parseInt(request.getParameter("buildingId"));
+                        System.out.println("buildingID" + buildingId);
                         int userId = bldgCtrl.getBuilding(buildingId).getUser_id();
                         
                         

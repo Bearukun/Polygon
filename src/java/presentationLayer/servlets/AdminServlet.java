@@ -249,6 +249,8 @@ public class AdminServlet extends HttpServlet {
                     int buildingId = Integer.parseInt(request.getParameter("buildingId"));
                     int technicianId = Integer.parseInt(request.getParameter("selectedTechnician").split("\\|")[0]);
                     bldgCtrl.assignHealthcheck(buildingId, technicianId);
+                    emailTecnichianPendingHealthcheck(technicianId);
+                    
                     
 //                    for (int i = 0; i < userList.size(); i++) {
 //                        
@@ -467,7 +469,7 @@ public class AdminServlet extends HttpServlet {
         request.getSession().setAttribute("userList", userList);
     }
 
-    public void emailNewTechnician(String name, String email, Integer phone, String address, Integer postcode, String city) {
+    public void emailNewTechnician(String name, String email, Integer phone, String address, Integer postcode, String city) throws PolygonException {
         //Send confirmation email to new Technician
         String emailNewCustomerHeader = "Hej " + name + " og velkommen til Polygons som Teknikker!";
         String emailNewCustomerMessage = "Hej " + name + "!"
@@ -500,7 +502,7 @@ public class AdminServlet extends HttpServlet {
 
     }
 
-    public void emailNewAdmin(String name, String email, Integer phone, String address, Integer postcode, String city) {
+    public void emailNewAdmin(String name, String email, Integer phone, String address, Integer postcode, String city) throws PolygonException{
         //Send confirmation email to new Admin
         String emailNewCustomerHeader = "Hej " + name + " og velkommen til Polygons som Admin!";
         String emailNewCustomerMessage = "Hej " + name + "!"
@@ -535,7 +537,7 @@ public class AdminServlet extends HttpServlet {
    
     
     
-    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city) {
+    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city) throws PolygonException{
         //Send confirmation email to new Customer:
         String emailNewCustomerHeader = "Hej " + name + " (" + company + " )" + " og velkommen til Polygons's Sundebygninger!";
         String emailNewCustomerMessage = "Hej " + name + "!"
@@ -568,6 +570,28 @@ public class AdminServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
         try {
             emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+     public void emailTecnichianPendingHealthcheck(int technicianID) throws PolygonException{
+        //Send confirmation email to new Admin
+        String emailTechnicianPendingHCHeader = "Pending Healthcheck: Tjek din support side!";
+        String emailTechnicianPendingHCMessage = "Hej " + usrCtrl.getUser(technicianID).getName() + "!"
+                + "\n\nVi har tildelt dig en ny opgave! Tjek venligst din support-side og klik på \"Påbegynd\" for at acceptere opgaven"                           
+                + "\n\n\n"
+                + " Med Venlig Hilsen"
+                + "\n\n"
+                + "Polygon"
+                + "\n\n"
+                + "Rypevang 5\n"
+                + "3450 Allerød\n"
+                + "Tlf. 4814 0055\n"
+                + "sundebygninger@polygon.dk";
+
+        try {
+            emailCtrl.send(usrCtrl.getUser(technicianID).getEmail(), emailTechnicianPendingHCHeader, emailTechnicianPendingHCMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
