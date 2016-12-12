@@ -26,6 +26,10 @@ import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 
+/**
+ * Class that generates a PDF Document.
+ *
+ */
 public class PDFCreator {
 
     DataControllerInterface datCtrl = new DataController();
@@ -54,10 +58,26 @@ public class PDFCreator {
     PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
     PDFont fontHel = PDType1Font.TIMES_ROMAN;
 
+    //Sets the first page number
     int pageNumber = 1;
+    //Sets the first page number to be 
     String pageNumberTitel = "page" + pageNumber;
     String pageContentStreamNumber = "content" + pageNumber;
 
+    /**
+     * The actual method that generates and creates the PDF.
+     *
+     * @param technician User type, this case a technician.
+     * @param customer User type, this case a customer.
+     * @param healthcheckId int that identifies the healthcheck to be retrived
+     * @param buildingId int that identifies the building to be retrived
+     * @param buildingResponsible String that contains the name of the
+     * technician who signed off on the PDF
+     * @param condition String that contains the type of condition the
+     * technician has determined the building to be in
+     * @param imgFolderPath String that contains the root path to the images on
+     * the website
+     */
     public void createPDF(User technician, User customer, int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) {
 
         try {
@@ -142,7 +162,9 @@ public class PDFCreator {
 
     }
 
-    //Setup of Page 1
+    /**
+     * Setup of the front page
+     */
     public void frontPage() {
 
         //Registers the time and date for the PDF document
@@ -327,7 +349,15 @@ public class PDFCreator {
 
     }
 
-    //Setup of Page 3
+    /**
+     * Setup of the page that genereates the damage report part of the PDF
+     *
+     * @param room Room type that contains the information regarding the specific room
+     * @param area Area type that contains the information regarding the specific area
+     * @param dmgRepair DamageRepair type that contains the information regarding 
+     * the specific damage done to the room
+     */
+
     public void damageReport(Room room, Area area, DamageRepair dmgRepair) {
 
         //Creates a new page Object
@@ -382,6 +412,13 @@ public class PDFCreator {
         }
     }
 
+    /**
+     * Setup of the page that genereates the moist scan part of the PDF
+     *
+     * @param area Area type that contains the information regarding the specific area
+     * @param room Room type that contains the information regarding the specific room
+     * @param moistInfo MoistInfo type that contains the information regarding the specific moist Scan
+     */
     public void roomMoistReport(Area area, Room room, MoistureInfo moistInfo) {
 
         //Creates a new page Object
@@ -420,6 +457,13 @@ public class PDFCreator {
 
     }
 
+    /**
+     * Setup of the page that genereates the pdf's report about the individual
+     * rooms, the room issues and suggested solutions.
+     *
+     * @param area Area type that contains the information regarding the specific area
+     * @param room Room type that contains the information regarding the specific Room
+     */
     public void roomWalkthrough(Area area, Room room) {
 
         //Creates a new page Object
@@ -463,6 +507,12 @@ public class PDFCreator {
         }
     }
 
+    /**
+     * Setup of the page that genereates the pdf's report about the individual
+     * area, the room issues and suggested solutions.
+     *
+     * @param area Area type that contains the information regarding the specific area
+     */
     public void areaWalkthrough(Area area) {
 
         //Creates a new page Object
@@ -503,6 +553,9 @@ public class PDFCreator {
         }
     }
 
+    /**
+     * Generates the last and final page of the PDF report!
+     */
     //Setup of the last and final Page
     public void lastPage() {
 
@@ -628,7 +681,12 @@ public class PDFCreator {
         }
     }
 
-    //Method to save the PDF document 
+    /**
+     * Method that saves the PDF
+     *
+     * @param pdfName String name of the PDF
+     * @param doc PDDOcument object that is generated
+     */
     public void savePDF(String pdfName, PDDocument doc) {
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -660,6 +718,19 @@ public class PDFCreator {
 
     }
 
+    /**
+     * Method that handles and inserts images (.jpg) into the PDF
+     *
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     * @param imgFolderPath String that contains the root path to the images on
+     * the website
+     * @param imgName String that contains the image.jpg file name
+     * @param xCoordinate int that sets the x-coordinate for where to place the image
+     * @param yCoordinate int that sets the y-coordinate for where to place the image
+     * @param imgWidth int that sets the width of the image
+     * @param imgHeight int that sets the height of the image
+     */
     //Method to insert .jpg image
     public void insertJPGImage(PDPageContentStream content, String imgFolderPath, String imgName, int xCoordinate, int yCoordinate, int imgWidth, int imgHeight) {
 
@@ -673,7 +744,13 @@ public class PDFCreator {
         }
     }
 
-    //Method that writes and places the Page number
+    /**
+     * Method that writes and places the Page number
+     *
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     */
+
     public void pageNumber(PDPageContentStream content) {
         try {
 
@@ -688,7 +765,13 @@ public class PDFCreator {
         }
     }
 
-    //Method that writes and places the reportnumber
+    /**
+     * Method that writes and places the reportnumber
+     *
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     */
+
     public void reportNumber(PDPageContentStream content) {
 
         //
@@ -713,7 +796,17 @@ public class PDFCreator {
 
     }
 
-    //Method that writes and places the default information that is required for each page of the PDF document.
+    /**
+     * Method that writes and places the default information that is required
+     * for each page of the PDF document.
+     *
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     * @param imgFolderPath String that contains the root path to the images on
+     * the website
+     * @param pdfName String that contains the PDFname
+     */
+
     public void defaultNewPageSetup(PDPageContentStream content, String imgFolderPath, String pdfName) {
 
         reportNumber(content);
@@ -723,8 +816,16 @@ public class PDFCreator {
 
     }
 
-    //Method for the user to write the name of the PDF Document.
-    //The name will be displayed in the PDF document and will also be the pdfdocuments filename.
+    /**
+     * Method for the user to write the name of the PDF Document in the bottom
+     * left corner of each generated page.
+     *
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     * @param pdfName String that contains the PDFname
+     */
+    //
+
     public void pdfDocName(PDPageContentStream content, String pdfName) {
         try {
 
@@ -745,7 +846,21 @@ public class PDFCreator {
         }
     }
 
-    //Method to handle the "checked"- and "unchecked"-checkbox image
+    /**
+     * Method that handles the "checked"- and "unchecked"-checkbox images and
+     * their placement
+     *
+     * @param box boolean to decide which box is to be displayed
+     * @param imgFolderPath String that contains the root path to the images on
+     * the website
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     * @param xCoordinate int that sets the x-coordinate for where to place the image
+     * @param yCoordinate int that sets the y-coordinate for where to place the image
+     * @param imgWidth int that sets the width of the image
+     * @param imgHeight int that sets the height of the image
+     */
+    //
     //Also req. coordinates as paramters, for where the boxes needs to be placed.
     public void checkBoxImg(boolean box, String imgFolderPath, PDPageContentStream content, int xCoordinate, int yCoordinate, int imgWidth, int imgHeight) {
 
@@ -767,8 +882,17 @@ public class PDFCreator {
         }
     }
 
-    //Add a 'PDFont' parameter at a later point!
-    //Method to simplify the creation of text-lines       
+    /**
+     * Method to creat single-textlines quick and simple!
+     *
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     * @param textLine String that contains the wanted text to be displayed
+     * @param textSize int that sets the text size
+     * @param xCoordinate int that sets the x-coordinate for where to place the textline
+     * @param yCoordinateint int that sets the y-coordinate for where to place the textline
+     */
+
     public void singleTextLine(PDPageContentStream content, String textLine, int textSize, int xCoordinate, int yCoordinate) {
 
         try {
@@ -790,9 +914,18 @@ public class PDFCreator {
 
     }
 
-    //Add a 'PDFont' parameter at a later point!
-    //Method to simplify the creation of text-lines, 
-    //which also contains user input.
+    /**
+     * Method to creat single-textlines with user input (parameters) quick and
+     * simple!
+     *
+     * @param content PDPageContentStream object that determines which 'page'
+     * that needs to be written to
+     * @param textLine String that contains the wanted text to be displayed
+     * @param userInput String that contains the users input
+     * @param textSize int that sets the text size
+     * @param xCoordinate int that sets the x-coordinate for the textline
+     * @param yCoordinate int that sets the y-coordinate for the textline
+     */
     public void singleTextLineWithUserInput(PDPageContentStream content, String textLine, String userInput, int textSize, int xCoordinate, int yCoordinate) {
 
         try {
@@ -813,6 +946,11 @@ public class PDFCreator {
         }
     }
 
+    /**
+     * Calculates the buildings total squaremeter
+     *
+     * @return int bSqm
+     */
     public int buildingSQM() {
 
         //Get buildings final squarementer
@@ -829,7 +967,7 @@ public class PDFCreator {
      *
      * @param type 0 for area 1 for room
      * @param id id of given area/room
-     * @return
+     * @return a int
      */
     private int getIssueId(int type, int id) {
 
@@ -864,10 +1002,11 @@ public class PDFCreator {
     }
 
     /**
+     * Returns boolean if there are issues
      *
      * @param type 0 for area 1 for room
      * @param id id of given area/room
-     * @return
+     * @return a boolean
      */
     private boolean hasIssue(int type, int id) {
 
