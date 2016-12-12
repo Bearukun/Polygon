@@ -3,9 +3,6 @@
 <%@page import="serviceLayer.entities.Building"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<%--TO DO
-We need to check if a user is logged in,
-if yes - then redirect - else nothing. --%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

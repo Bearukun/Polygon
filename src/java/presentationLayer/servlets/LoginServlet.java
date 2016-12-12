@@ -51,6 +51,7 @@ public class LoginServlet extends HttpServlet {
             switch (origin) {
 
                 case "loginAsUser":
+                    
                     //Retrieve user email from adminUsers.jsp
                     int user_id = Integer.parseInt(request.getParameter("user_id"));
                     //Get user object with the above email

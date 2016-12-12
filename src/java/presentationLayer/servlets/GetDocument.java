@@ -66,10 +66,12 @@ public class GetDocument extends HttpServlet {
             }
 
         } catch (Exception e) {
+            
             e.printStackTrace();
             response.setContentType("text/html");
             out.println("Some error found!");
             return;
+            
         }
 
     }

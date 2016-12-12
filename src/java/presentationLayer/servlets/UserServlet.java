@@ -1,6 +1,5 @@
 package presentationLayer.servlets;
 
-import serviceLayer.PDFCreator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -72,7 +71,6 @@ public class UserServlet extends HttpServlet {
                 response.sendRedirect("user.jsp");
             }
 
-          
             if (request.getParameter("origin") != null) {
                 origin = request.getParameter("origin");
             }
@@ -367,9 +365,11 @@ public class UserServlet extends HttpServlet {
                     break;
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            e.getMessage();
+        } catch (PolygonException e) {
+            
+            request.getSession().setAttribute("ExceptionError", e.getMessage());
+            response.sendRedirect("error.jsp");
+            
         }
 
     }
@@ -410,6 +410,7 @@ public class UserServlet extends HttpServlet {
     }
 
     public void emailEditBuilding(String buildingName, String address, int postcod, String cit, int constructionYear, String purpos, int sqm, int selectedBuilding) {
+        
         //Email the customer about the changes to the building           
         String emailEditBuildingHeader = "Polygon: Ændringer i deres bygning\"" + buildingName + "\". ";
         String emailEditBuildingMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
@@ -438,10 +439,15 @@ public class UserServlet extends HttpServlet {
                 + "3450 Allerød\n"
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
+        
         try {
+            
             emailCtrl.send(user.getEmail(), emailEditBuildingHeader, emailEditBuildingMessage);
+            
         } catch (PolygonException e) {
-            e.printStackTrace();
+            
+            e.getMessage();
+            
         }
     }
 
@@ -467,14 +473,19 @@ public class UserServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-//        Sends email to both he customer and Polygon
-//        Customer
+            
+            //Sends email to both he customer and Polygon
+            //Customer
             emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
             //Polygon
             emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+            
         } catch (PolygonException e) {
-            e.printStackTrace();
+            
+            e.getMessage();
+            
         }
+        
     }
 
     public void emailCustomerCancelHealthcheck(Building build, int id) throws PolygonException {
@@ -499,14 +510,19 @@ public class UserServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-//        Sends email to both he customer and Polygon
-//        Customer
+            
+            //Sends email to both he customer and Polygon
+            //Customer
             emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
             //Polygon
             emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
+            
         } catch (PolygonException e) {
-            e.printStackTrace();
+            
+            e.getMessage();
+            
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

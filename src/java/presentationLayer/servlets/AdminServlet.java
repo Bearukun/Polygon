@@ -281,7 +281,6 @@ public class AdminServlet extends HttpServlet {
 
                     String newUserEmail = request.getParameter("email");
                     String newUserPassword = request.getParameter("password");
-                    String newUserConfirmedPassword = request.getParameter("passwordConfirm");
                     String newUserName = request.getParameter("name");
                     int newUserPhone = Integer.parseInt(request.getParameter("phone"));
                     String newUserCompany = request.getParameter("company");

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.mail.Transport;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -415,8 +414,10 @@ public class TechnicianServlet extends HttpServlet {
             }
 
         } catch (PolygonException e) {
-            request.getSession().setAttribute("error", e.getMessage());
+            
+            request.getSession().setAttribute("ExceptionError", e.getMessage());
             response.sendRedirect("error.jsp");
+            
         }
 
     }
