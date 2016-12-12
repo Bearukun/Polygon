@@ -66,40 +66,31 @@ public class LoginServlet extends HttpServlet {
                     break;
 
                 case "login":
-                    System.out.println("hej");
 
-                    if (request.getSession().getAttribute("user") == null) {
+                    String loginEmail = request.getParameter("email");
+                    String loginPassword = request.getParameter("password");
 
-                        String email = request.getParameter("email");
-                        String password = request.getParameter("password");
+                    try {
 
-                        try {
+                        user = usrCtrl.login(loginEmail, loginPassword);
+                        request.getSession().setAttribute("user_id", user.getUser_id());
+                        request.getSession().setAttribute("email", user.getEmail());
 
-                            user = usrCtrl.login(email, password);
-                            request.getSession().setAttribute("user_id", user.getUser_id());
-                            request.getSession().setAttribute("email", user.getEmail());
+                        if (user != null) {
 
-                            if (user != null) {
+                            //Save where (which page) we are coming from
+                            request.getSession().setAttribute("sourcePage", "LoginServlet");
 
-                                //Save where (which page) we are coming from
-                                request.getSession().setAttribute("sourcePage", "LoginServlet");
-
-                                //Set user type and redirect
-                                userTypeRedirect(user, request, response);
-
-                            }
-
-                            //If something goes wrong, we need a way to show it.
-                        } catch (PolygonException e) {
-                            
-                            request.getSession().setAttribute("error", e.getMessage());
-                            response.sendRedirect("index.jsp");
+                            //Set user type and redirect
+                            userTypeRedirect(user, request, response);
 
                         }
 
-                    } else {
+                        //If something goes wrong, we need a way to show it.
+                    } catch (PolygonException e) {
 
-                        response.sendRedirect("index.jsp?wrongLogin");
+                        request.getSession().setAttribute("error", e.getMessage());
+                        response.sendRedirect("index.jsp");
 
                     }
 
@@ -109,7 +100,7 @@ public class LoginServlet extends HttpServlet {
                 case "logout":
 
                     request.getSession().invalidate();
-                    response.sendRedirect("index.jsp#");
+                    response.sendRedirect("index.jsp");
 
                     break;
 
@@ -135,16 +126,13 @@ public class LoginServlet extends HttpServlet {
                             //Create user
                             usrCtrl.createUser(email, password, name, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city, User.type.CUSTOMER);
                             //If successful, redirect
-                            System.out.println("Index redirect");
-
                             emailNewCustomer(name, email, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
-
                             response.sendRedirect("index.jsp?success");
 
-                        } catch (Exception e) {
+                        } catch (PolygonException e) {
 
-                            errMsg = e.getMessage();
-                            response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
+                            request.getSession().setAttribute("error", e.getMessage());
+                            response.sendRedirect("index.jsp");
 
                         }
 
@@ -159,7 +147,10 @@ public class LoginServlet extends HttpServlet {
 
             }
 
-        } catch (Exception e) {
+        } catch (PolygonException e) {
+
+            request.getSession().setAttribute("ExceptionError", e.getMessage());
+            response.sendRedirect("error.jsp");
 
         }
 
@@ -178,6 +169,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("AdminServlet");
             }
         } catch (Exception e) {
+
         }
     }
 

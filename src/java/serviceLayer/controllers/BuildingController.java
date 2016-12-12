@@ -13,6 +13,9 @@ import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.exceptions.PolygonException;
 
+/**
+ * BuildingController for the service layer.
+ */
 public class BuildingController implements BuildingControllerInterface{
 
     private final DBFacadeInterface dbfacade = new DBFacade();
