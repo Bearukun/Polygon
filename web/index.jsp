@@ -49,8 +49,7 @@
         <div class="login_container">
             <form class="form-signin" action="LoginServlet" method="POST">
                 <img src="./img/logo.png" class="img-responsive center-block" alt="Responsive image">
-                        <% String login_msg = (String)request.getSession().getAttribute("error"); if(login_msg != null) out.println("<div class=\"alert alert-warning\"><center>" + login_msg + "</center></div>"); %>
-
+                <% String login_msg = (String)request.getSession().getAttribute("error"); if(login_msg != null) out.println("<div class=\"alert alert-warning\"><center>" + login_msg + "</center></div>"); %>
                 <input class="form-control" type="text" name="email" value="" placeholder="Email" />
                 <input class="form-control" type="password" name="password" value="" placeholder="Adgangskode" />
                 <input type="hidden" name="origin" value="login" />
