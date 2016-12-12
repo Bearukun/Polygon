@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *
- * Class dealing with moisture scans
+ * Class used to hold moisture info.
  */
 public class MoistureInfo implements Serializable {
     
@@ -21,7 +21,7 @@ public class MoistureInfo implements Serializable {
     }
 
     /**
-     * Constructor to instansiate a moisture measurement
+     * Constructor to instantiate a moisture measurement
      * 
      * @param moisture_info_id int identifying the measurement from the database
      * @param measurePoint String containing the point where the measurement was made

@@ -76,13 +76,13 @@ public class UserMapper implements UserMapperInterface {
 
             } else {
                 
-                throw new PolygonException("BDFacade:@getUser-No match for passwd and email.");
+                throw new PolygonException("Combined username and password doesn't exist.");
                 
             }
             
         } catch (Exception e) {
             
-            throw new PolygonException("SQL Error: Database connection failed.");
+            throw new PolygonException("Exception:@UserMapper:"+e.getMessage());
             
         }finally{
         
@@ -93,10 +93,10 @@ public class UserMapper implements UserMapperInterface {
                 stmt.close();
                 rs.close();
                 
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQL Error:@DBFacade.getUserByEmail."+ex.getMessage());
+                 throw new PolygonException("SQLException:@UserMapper.getUserByEmail."+e.getMessage());
             
             }
             
@@ -160,13 +160,13 @@ public class UserMapper implements UserMapperInterface {
 
             } else {
                 
-                throw new PolygonException("BDFacade:@getUser-No match for passwd and email.");
+                throw new PolygonException("Exception:@UserMapper.getUser: User doesn't exist!");
                 
             }
             
         } catch (Exception e) {
             
-            throw new PolygonException("SQL Error: Database connection failed.");
+            throw new PolygonException("Exception:@UserMapper.getUser:" + e.getMessage());
             
         }finally{
         
@@ -177,10 +177,10 @@ public class UserMapper implements UserMapperInterface {
                 stmt.close();
                 rs.close();
                 
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQL Error:@DBFacade.getUser."+ex.getMessage());
+                 throw new PolygonException("SQLException:@UserMapper.getUser:"+e.getMessage());
             
             }
             
@@ -252,7 +252,7 @@ public class UserMapper implements UserMapperInterface {
 
         } catch (Exception e) {
 
-            throw new PolygonException("SQL Error: Email in use.");
+            throw new PolygonException("Exception:@UserMapper.createUser:"+e.getMessage());
 
         }finally{
         
@@ -263,10 +263,10 @@ public class UserMapper implements UserMapperInterface {
                 stmt.close();
                 rs.close();
                 
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new PolygonException("SQLException:@UserMapper.createUser"+e.getMessage());
             
             }
             
@@ -370,7 +370,7 @@ public class UserMapper implements UserMapperInterface {
             
         } catch (Exception e) {
             
-            throw new PolygonException("SQL Error: Connection problem.");
+            throw new PolygonException("Exception:@UserMapper.editUser: Try@editUser has failed.");
             
         }finally{
         
@@ -380,10 +380,10 @@ public class UserMapper implements UserMapperInterface {
                 con.close();
                 stmt.close();
                 
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new PolygonException("SQLException:@UserMapper."+e.getMessage());
             
             }
             
@@ -398,6 +398,7 @@ public class UserMapper implements UserMapperInterface {
      */
     @Override
     public void deleteUser(int user_id) throws PolygonException {
+        
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
         PreparedStatement stmt = null;
@@ -413,17 +414,26 @@ public class UserMapper implements UserMapperInterface {
             //Execute update
             stmt.executeUpdate();
         } catch (Exception e) {
-            throw new PolygonException("SQL Error: Connection problem.");
+            
+            throw new PolygonException("Exception:@UserMapper.deleteUser:"+e.getMessage());
+            
         }finally{
+            
             //Try releasing objects. 
             try {
+                
                 con.close();
                 stmt.close();
-            } catch (SQLException ex) {
+                
+            } catch (SQLException e) {
+                
                 //throw error if not successful. 
-                 throw new PolygonException("SQL Error:@DBFacade.deleteUser."+ex.getMessage());
+                 throw new PolygonException("SQLException:@UserMapper.deleteUser."+e.getMessage());
+                 
             }
+            
         }
+        
     }
 
 }

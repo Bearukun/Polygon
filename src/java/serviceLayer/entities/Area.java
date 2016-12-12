@@ -2,7 +2,7 @@ package serviceLayer.entities;
 import java.io.Serializable;
 
 /**
- * Class dealing with areas
+ * Class used to hold an area.
  */
 public class Area implements Serializable {
 

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 public class DBConnection {
 
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
+        
+        //Prepare the url used to connect to the database.
         String url = String.format("jdbc:mysql://%s:3306/%s?allowMultiQueries=true", HOST, DBNAME);
         Class.forName("com.mysql.jdbc.Driver");
 

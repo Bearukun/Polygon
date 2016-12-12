@@ -3,8 +3,6 @@ package serviceLayer.controllers;
 import dataAccessLayer.DBFacade;
 import dataAccessLayer.interfaces.DBFacadeInterface;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
-
 import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.PolygonException;
@@ -21,21 +19,10 @@ public class UserController implements UserControllerInterface {
             //Get user by that email from database.
             User user = dbfacade.checkLogin(email, password);
             
-            //System.out.println(user.getPassword()+" . Check for æøå in database user import");
-            
             //Check if user is null. (If null, no such user) 
             if (user != null) {
-
-                //If password is correct
-                if (user.getPassword().equals(password)) {
-
+                
                     return user;
-                    //If password is incorrect.     
-                } else {
-
-                    throw new PolygonException("Password or username incorrect..!");
-
-                }
 
             }
 
@@ -48,7 +35,9 @@ public class UserController implements UserControllerInterface {
 
     @Override
     public User getUser(int user_id) throws PolygonException {
+        
         return dbfacade.getUser(user_id);
+    
     }
     
     @Override
@@ -71,18 +60,23 @@ public class UserController implements UserControllerInterface {
 
     @Override
     public ArrayList<User> getUsers() throws PolygonException {
+        
         return dbfacade.getUsers();
+    
     }
 
     @Override
     public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws PolygonException {
+    
         dbfacade.editUser(selectedUser, email, password, name, phone, company, address, postcode, city);
 
     }
 
     @Override
     public void deleteUser(int user_id) throws PolygonException {
+        
         dbfacade.deleteUser(user_id);
+        
     }
 
 }

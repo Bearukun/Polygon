@@ -28,5 +28,4 @@ public interface DataControllerInterface {
     
     public Document getDocument(int documentId) throws PolygonException;
     
-
 }

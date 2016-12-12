@@ -1,12 +1,9 @@
-
 package serviceLayer.controllers;
 
 import serviceLayer.controllers.interfaces.EmailControllerInterface;
-
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
 import serviceLayer.exceptions.PolygonException;
 
 public class EmailController implements EmailControllerInterface{
@@ -24,7 +21,7 @@ public class EmailController implements EmailControllerInterface{
         try {
 
             Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp.gmail.com"); // use for gmail: smtp.gmail.com - yahoo: smtp.mail.yahoo.com
+            props.put("mail.smtp.host", "smtp.gmail.com"); // use for gmail: smtp.gmail.com
             props.put("mail.smtp.auth", "true");
             props.put("mail.debug", "true");
             props.put("mail.smtp.starttls.enable", "true");
@@ -41,32 +38,31 @@ public class EmailController implements EmailControllerInterface{
                 }
             });
 
-            mailSession.setDebug(true); // Enable the debug mode
+            //Enable the debug mode
+            mailSession.setDebug(true); 
 
             Message msg = new MimeMessage(mailSession);
 
-            //--[ Set the FROM, TO, DATE and SUBJECT fields
+            //Set the FROM, TO, DATE and SUBJECT fields
             msg.setFrom(new InternetAddress("polygonmailtest4@gmail.com"));
-//        msg.setFrom( new InternetAddress( "fromusername@yahoo.com" ) );
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             msg.setSentDate(new Date());
             msg.setSubject(title);
 
-            //--[ Create the body of the mail
+            //Create the body of the mail
             msg.setText(body);
 
-            //--[ Ask the Transport class to send our mail message
+            //Ask the Transport class to send our mail message
             Transport.send(msg);
 
-        } catch (Exception E) {
-            System.out.println("Error: something went wrong when trying to send the Email");
-            System.out.println(E);
+        } catch (Exception e) {
+            
+            throw new PolygonException("Exception:@EmailController:"+e.getMessage());
+            
         }
+        
     }
-//    public static void main(String[] args) {
-//        SendEmail se = new SendEmail();
-//        se.send("polygonmail4@gmail.com", "Test fra mit sendmail java program", "Dette er selve mail beskeden");
-//    }
+
 }
 
 

@@ -38,4 +38,5 @@ public interface DataMapperInterface {
     public void deleteDocument(int documentId) throws PolygonException;
 
     public Document getDocument(int documentId) throws PolygonException;
+    
 }

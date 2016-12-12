@@ -66,4 +66,5 @@ public interface BuildingControllerInterface {
     public void deleteDamageRepair(int roomId) throws PolygonException;
 
     public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws PolygonException;
+
 }

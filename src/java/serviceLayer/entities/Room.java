@@ -1,7 +1,7 @@
 package serviceLayer.entities;
 import java.io.Serializable;
 /**
- * Class dealing with rooms
+ * Class used to hold a room.
  */
 public class Room implements Serializable {
 
@@ -90,6 +90,5 @@ public class Room implements Serializable {
     public String toString() {
         return  name  + " " +  description;
     }
-    
     
 }

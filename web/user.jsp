@@ -9,7 +9,7 @@ if yes - then redirect - else nothing. --%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="shortcut icon" href="/img/favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
         <title>Sunde Bygninger - Brugerportal</title>
         <!-- Latest compiled and minified CSS -->

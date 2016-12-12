@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * Class dealing with buildings
+ * Class used to hold a building.
  */
 public class Building implements Serializable {
     
@@ -24,7 +24,6 @@ public class Building implements Serializable {
     private String name, address, city, purpose;
     private Timestamp date_created;
     private condition condition;
-    
     
     /**
      * Empty constructor. 
@@ -63,7 +62,6 @@ public class Building implements Serializable {
         this.assigned_tech_id = assigned_tech_id;
         this.user_id = user_id;
     }
-
     
     /**
      * Getters and setters (WE NEED TO CLEAN UP HERE BOYS) 
@@ -172,9 +170,5 @@ public class Building implements Serializable {
     public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
-
- 
-
-    
     
 }

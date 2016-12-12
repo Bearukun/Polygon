@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 
- * Class dealing with issues
+ * Class used to hold an issue.
  */
 public class Issue implements Serializable {
     

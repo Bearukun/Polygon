@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 /**
  *
- * Class dealing with healthchecks
+ * Class used to hold a healthcheck
  */
 public class Healthcheck implements Serializable {
 

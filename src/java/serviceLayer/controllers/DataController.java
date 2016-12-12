@@ -77,6 +77,7 @@ public class DataController implements DataControllerInterface {
     @Override
     public Image checkIfImageExists(Image img) throws PolygonException {
 
+        //If the image doesn't exist in the db, return the "default" img.
         if (img.getImg_file() == null) {
 
             return img = dbfacade.getImage(1);
@@ -98,17 +99,23 @@ public class DataController implements DataControllerInterface {
 
     @Override
     public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws PolygonException {
+        
         dbfacade.uploadDocument(buildingId, documentName, documentType, document_file);
+        
     }
 
     @Override
     public void deleteDocument(int documentId) throws PolygonException {
+        
         dbfacade.deleteDocument(documentId);
+        
     }
 
     @Override
     public Document getDocument(int documentId) throws PolygonException {
+        
         return dbfacade.getDocument(documentId);
+        
     }
 
 }

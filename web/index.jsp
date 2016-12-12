@@ -7,7 +7,7 @@ if yes - then redirect - else nothing. --%>
     <head>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="shortcut icon" href="/img/favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
         <title>Sunde Bygninger - Login</title>
         <!-- Latest compiled and minified CSS -->
@@ -18,11 +18,11 @@ if yes - then redirect - else nothing. --%>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!--Adding our own css-->
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
-       
-        
+
+
     </head>
     <body>
-        
+
 
         <!-- Register user div, as modal window -->
         <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true" style="display: none;">

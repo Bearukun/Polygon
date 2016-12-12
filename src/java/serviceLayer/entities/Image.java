@@ -5,7 +5,7 @@ import java.sql.Blob;
 
 /**
  * 
- * Class dealing with images
+ * Class used to hold an image.
  */
 
 public class Image implements Serializable {

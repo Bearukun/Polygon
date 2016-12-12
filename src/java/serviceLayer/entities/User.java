@@ -2,7 +2,7 @@ package serviceLayer.entities;
 
 import java.io.Serializable;
 /**
- * Class dealing with users
+ * Class used to hold a user.
  */
 public class User implements Serializable {
 

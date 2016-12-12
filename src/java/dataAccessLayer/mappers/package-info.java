@@ -1,4 +1,4 @@
 /**
- * Package containing classes writing to/from the database
+ * Package containing mappers writing to/from the database
  */
 package dataAccessLayer.mappers;

@@ -5,9 +5,8 @@ import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
- * Class dealing with documents
+ * Class used to hold a document.
  */
-
 public class Document implements Serializable {
 
     private int document_id, building_id;
@@ -16,7 +15,7 @@ public class Document implements Serializable {
     private Timestamp date_created;
 
     /**
-     * Empty cnonstructor
+     * Empty constructor
      */
     public Document() {
     }
@@ -38,7 +37,6 @@ public class Document implements Serializable {
         this.document_type = document_type;
         this.document_file = document_file;
     }
-
     
     /**
      * getters & setters 
@@ -90,8 +88,5 @@ public class Document implements Serializable {
     public void setDate_created(Timestamp date_created) {
         this.date_created = date_created;
     }
-
- 
-    
 
 }
