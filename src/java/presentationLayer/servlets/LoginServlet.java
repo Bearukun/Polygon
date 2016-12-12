@@ -41,6 +41,7 @@ public class LoginServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        request.getSession().setAttribute("error", null);
         String errMsg = null;
         String origin = request.getParameter("origin");
         //System.getProperties().list(System.out);
@@ -65,6 +66,7 @@ public class LoginServlet extends HttpServlet {
                     break;
 
                 case "login":
+                    System.out.println("hej");
 
                     if (request.getSession().getAttribute("user") == null) {
 
@@ -84,14 +86,14 @@ public class LoginServlet extends HttpServlet {
 
                                 //Set user type and redirect
                                 userTypeRedirect(user, request, response);
-                                EmailController EC = new EmailController();
 
                             }
 
                             //If something goes wrong, we need a way to show it.
-                        } catch (Exception e) {
-
-                            response.sendRedirect("#" + e.getMessage());
+                        } catch (PolygonException e) {
+                            
+                            request.getSession().setAttribute("error", e.getMessage());
+                            response.sendRedirect("index.jsp");
 
                         }
 

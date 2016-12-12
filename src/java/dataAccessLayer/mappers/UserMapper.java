@@ -76,13 +76,13 @@ public class UserMapper implements UserMapperInterface {
 
             } else {
                 
-                throw new PolygonException("Combined username and password doesn't exist.");
+                throw new PolygonException("Forkert email/kode, prøv igen.");
                 
             }
             
         } catch (Exception e) {
             
-            throw new PolygonException("Exception:@UserMapper:"+e.getMessage());
+            throw new PolygonException("Login fejl: "+e.getMessage());
             
         }finally{
         
