@@ -59,7 +59,6 @@ public class LoginServlet extends HttpServlet {
                     //Save where (which page) we are coming from
                     request.getSession().setAttribute("sourcePage", "LoginServlet");
                     //Save user values to Session
-
                     request.getSession().setAttribute("user_id", user.getUser_id());
                     request.getSession().setAttribute("email", user.getEmail());
                     request.getSession().setAttribute("loginName", user.getName());
