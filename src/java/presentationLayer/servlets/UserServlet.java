@@ -341,12 +341,6 @@ public class UserServlet extends HttpServlet {
                     response.sendRedirect("addBuilding.jsp");
                     break;
 
-                case "sendEmailButton":
-                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
-                    request.getSession().setAttribute("source", "");
-                    response.sendRedirect("userEmail.jsp");
-                    break;
-
                 case "sendEmailToPolygon":
 
                     String polygonEmail = "polygonmailtest4@gmail.com";

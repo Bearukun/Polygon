@@ -25,21 +25,14 @@
                 </form>
             </a>
         </li>
-        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("sendEmailButton")){%>
+        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("sendEmail")){%>
             <li class="active">
         <%} else{%>
             <li>
         <%}%>
-           <a>
-                <form action="UserServlet" method="POST">
-                    <input type="hidden" name="origin" value="sendEmailButton" />
-                    <label for="sendEmailSubmit" span role="button" style="font-weight: normal">
-                        <i class="glyphicon glyphicon-envelope"></i>
-                        Send email
-                    </label>
-                    <input id="sendEmailSubmit" type="submit" class="hidden" />
-                </form>
-            </a>
+            <a href="userEmail.jsp" target="_self">
+                <i class="glyphicon glyphicon-envelope"></i>
+                Send email til Polygon </a>
         </li>
         <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("VisBygning")){%>
             <li class="active">
