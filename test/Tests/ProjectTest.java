@@ -1,11 +1,5 @@
 package Tests;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import dataAccessLayer.mappers.BuildingMapper;
 import dataAccessLayer.mappers.UserMapper;
 import java.util.ArrayList;
@@ -19,10 +13,6 @@ import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.PolygonException;
 
-/**
- *
- * @author Martin
- */
 public class ProjectTest {
     
     BuildingMapper bm = new BuildingMapper();
@@ -42,11 +32,9 @@ public class ProjectTest {
     @Test
     public void testGetUserBuildings() throws PolygonException {
         System.out.println("getUserBuildings");
-        ArrayList<Building> result = bm.getBuildings(1);
+        ArrayList<Building> result = bm.getBuildings(3);
         assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
-        result.clear();
-        result = bm.getBuildings(3);
-        assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
+
     }
     
     @Test

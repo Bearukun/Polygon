@@ -35,7 +35,6 @@
             buildingAreas = (ArrayList<Area>) request.getSession().getAttribute("buildingAreas");
 
             ArrayList<Room> buildingRooms = new ArrayList();
-            //buildingRooms.add(new Room(8, "name", "description", 100, 1, 1));
             buildingRooms = (ArrayList<Room>) request.getSession().getAttribute("buildingRooms");
 
             ArrayList<Document> buildingDocuments = new ArrayList();
