@@ -46,7 +46,7 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param user_id int identifying the user whose buildings are to be
      * retrieved
      * @return An ArrayList of type Building
-     * @throws PolygonException
+     * @throws PolygonException the exception
      */
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws PolygonException {
@@ -139,7 +139,7 @@ public class BuildingMapper implements BuildingMapperInterface {
      * @param sqm int detailing the building's size in square meters
      * @param user_id int identifying the user who needs to be linked to the new
      * building
-     * @throws PolygonException
+     * @throws PolygonException the exception
      */
     @Override
     public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws PolygonException {

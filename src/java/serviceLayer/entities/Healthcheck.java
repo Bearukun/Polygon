@@ -29,7 +29,7 @@ public class Healthcheck implements Serializable {
      * added to the database
      * @param tech_id int identifying the technician that is linked to the
      * healthcheck
-     * @param building_responsible
+     * @param building_responsible id of building responsible
      * @param buildingId int identifying the building that is linked to the 
      * healthcheck
      */
@@ -41,9 +41,7 @@ public class Healthcheck implements Serializable {
         this.buildingId = buildingId;
     }
 
-    /**
-     * Getters and setters (WE NEED TO CLEAN UP HERE BOYS)
-     */
+
     public int getHealthcheck_id() {
         return healthcheck_id;
     }

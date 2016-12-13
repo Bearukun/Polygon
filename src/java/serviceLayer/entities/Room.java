@@ -35,9 +35,7 @@ public class Room implements Serializable {
         this.areaId = areaId;
     }
 
-    /**
-     * @return getters & setters
-     */
+
     public int getRoom_id() {
         return roomId;
     }

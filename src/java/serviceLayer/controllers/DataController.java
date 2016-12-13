@@ -72,7 +72,7 @@ public class DataController implements DataControllerInterface {
      *
      * @param img The Image to be examined.
      * @return returns either a existing image, or the default.
-     * @throws PolygonException
+     * @throws PolygonException throws the exception
      */
     @Override
     public Image checkIfImageExists(Image img) throws PolygonException {

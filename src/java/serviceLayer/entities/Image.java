@@ -39,10 +39,7 @@ public class Image implements Serializable {
         this.img_file = img_file;
     }
 
-    /**
-     * 
-     * @return getters & setters
-     */
+
     public int getImage_id() {
         return image_id;
     }

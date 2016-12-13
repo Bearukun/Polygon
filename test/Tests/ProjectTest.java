@@ -77,16 +77,5 @@ public class ProjectTest {
         assertTrue("Elements in ArrayList: "+result.size(), result.size()>0);
     }
     
-    //Uncommented, doesn't work with new login system.
-//    @Test
-//    public void testGetUser() throws PolygonException {
-//        System.out.println("getUser");
-//        ArrayList<User> userList = um.getUsers();
-//        User result = um.getUser(userList.get(0).getEmail());
-//        assertTrue("User ID: "+result.getUser_id(), result.getUser_id()>0);
-//        result = um.getUser(userList.get(1).getEmail());
-//        assertTrue("User ID: "+result.getUser_id(), result.getUser_id()>0);
-//        result = um.getUser(userList.get(2).getEmail());
-//        assertTrue("User ID: "+result.getUser_id(), result.getUser_id()>0);
-//    }
+    
 }

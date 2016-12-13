@@ -37,10 +37,8 @@ public class Document implements Serializable {
         this.document_type = document_type;
         this.document_file = document_file;
     }
+
     
-    /**
-     * getters & setters 
-     */
     public int getDocument_id() {
         return document_id;
     }

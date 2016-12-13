@@ -35,10 +35,7 @@ public class Area implements Serializable {
         this.buildingId = buildingId;
     }
 
-    /**
-     * 
-     * @return getters & setters
-     */
+
     
     public int getArea_id() {
         return areaId;

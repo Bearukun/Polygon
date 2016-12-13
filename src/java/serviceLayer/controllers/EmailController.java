@@ -14,7 +14,7 @@ public class EmailController implements EmailControllerInterface{
      * @param to String containing the email of the recieving person
      * @param title String contining the title of the email
      * @param body String containing the content of the email
-     * @throws Exception 
+     * @throws PolygonException throws the exception
      */
     public void send(String to, String title, String body) throws PolygonException {
 

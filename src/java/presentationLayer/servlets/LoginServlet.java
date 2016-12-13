@@ -25,7 +25,6 @@ public class LoginServlet extends HttpServlet {
     private User user = null;
     private EmailController emailCtrl = new EmailController();
 
-    PDFCreator pdfwt = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

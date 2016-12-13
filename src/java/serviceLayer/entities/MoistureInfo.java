@@ -35,9 +35,7 @@ public class MoistureInfo implements Serializable {
         this.roomId = roomId;
     }
 
-    /**
-     * Getters and setters (WE NEED TO CLEAN UP HERE BOYS)
-     */
+
     public int getMoisture_info_id() {
         return moisture_info_id;
     }

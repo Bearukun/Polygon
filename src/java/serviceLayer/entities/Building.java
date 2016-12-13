@@ -63,9 +63,7 @@ public class Building implements Serializable {
         this.user_id = user_id;
     }
     
-    /**
-     * Getters and setters (WE NEED TO CLEAN UP HERE BOYS) 
-     */
+
     
     public int getbuildingId() {
         return buildingId;

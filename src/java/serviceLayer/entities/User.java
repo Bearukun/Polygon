@@ -76,10 +76,7 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    /**
-     *
-     * @return getters & setters
-     */
+
     public int getUser_id() {
         return user_id;
     }

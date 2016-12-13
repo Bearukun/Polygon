@@ -40,9 +40,7 @@ public class Issue implements Serializable {
         this.healthcheck_id = healthcheck_id;
     }
     
-    /**
-     * Getters and setters (WE NEED TO CLEAN UP HERE BOYS) 
-     */
+
     public int getIssue_id() {
         return issue_id;
     }
