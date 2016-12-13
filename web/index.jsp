@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="/img/favicon.ico">
         <script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
@@ -15,12 +14,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!--Adding our own css-->
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
-
-
     </head>
     <body>
-
-
         <!-- Register user div, as modal window -->
         <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true" style="display: none;">
             <div class="modal-dialog">
@@ -45,7 +40,6 @@
         </div>
         <script src="scripts/passwordChecker.js" type="text/javascript"></script>
         <!-- Login div -->
-
         <div class="login_container">
             <form class="form-signin" action="LoginServlet" method="POST">
                 <img src="./img/logo.png" class="img-responsive center-block" alt="Responsive image">

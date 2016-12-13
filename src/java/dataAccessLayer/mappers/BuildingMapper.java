@@ -36,9 +36,9 @@ public class BuildingMapper implements BuildingMapperInterface {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
 
-    //FIX THIS ASAP
-    java.util.Date date = new Date();
-    Timestamp timestamp = new Timestamp(date.getTime());
+    //Used as temp. implementation for adding time/date for the function to reg. prev. dmg.
+    private java.util.Date date = new Date();
+    private Timestamp timestamp = new Timestamp(date.getTime());
 
     /**
      * Method to retrieve all buildings pertaining a specific user

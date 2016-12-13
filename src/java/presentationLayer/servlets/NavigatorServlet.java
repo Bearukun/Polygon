@@ -39,8 +39,8 @@ public class NavigatorServlet extends HttpServlet {
     private boolean editingOtherUserProfile = false;
     private Building build;
     private EmailController emailCtrl = new EmailController();
-    PDFCreator pdfwt = new PDFCreator();
-    Date date = new Date();
+    private PDFCreator pdfwt = new PDFCreator();
+    private Date date = new Date();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

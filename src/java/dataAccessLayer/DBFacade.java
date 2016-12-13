@@ -27,9 +27,9 @@ import serviceLayer.exceptions.PolygonException;
  */
 public class DBFacade implements DBFacadeInterface {
 
-    UserMapperInterface umi = new UserMapper();
-    BuildingMapperInterface bmi = new BuildingMapper();
-    DataMapperInterface dmi = new DataMapper();
+    private UserMapperInterface umi = new UserMapper();
+    private BuildingMapperInterface bmi = new BuildingMapper();
+    private DataMapperInterface dmi = new DataMapper();
 
     @Override
     public ArrayList<Building> getBuildings(int user_id) throws PolygonException {

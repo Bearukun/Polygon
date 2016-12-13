@@ -54,8 +54,6 @@
                     <div id="container" class="container-fluid">
 
                         <h1>Overblik:</h1>
-                        
-                        <a href="userEmail.jsp"> Opret test Mail </a>
 
                         <% ArrayList<Building> userBuildings = new ArrayList();
 

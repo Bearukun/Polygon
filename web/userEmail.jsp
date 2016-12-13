@@ -16,12 +16,9 @@
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
     </head>
     <style>
-        body{
-            font-family: Verdana;
-        }
+    
         .bluebox{
-            border: 2px solid blue;
-            padding: 5px;
+
             margin-left: 10px;
             width: 300px;
             height: 525px;
@@ -62,18 +59,17 @@
                 </div>
                 <!-- END SIDEBAR BUTTONS -->
                 <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                <% request.getSession().setAttribute("ActiveSidebarMenu", "Overblik");
-                           %>
+                <% request.getSession().setAttribute("ActiveSidebarMenu", "sendEmailButton"); %>
                 <%@ include file="userSidebar.jsp" %>
                 <!-- END MENU -->
             </div>
         </div>
         <body>
-            <h1>User Send Email</h1>
-            <h1>        
+            <h3>User Send Email</h3>
+            <h5>        
                 Send en email til Polygon! Vi sender vores svar til din registeret email adresse.
 
-            </h1> 
+            </h5> 
 
             <div class="bluebox"><form action="UserServlet" method="POST">
                     <!--<input type="text" name="from" value="" placeholder="from"/>-->

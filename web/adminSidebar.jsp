@@ -27,6 +27,15 @@
                 <i class="glyphicon glyphicon-th-list"></i>
                 Håndter brugere </a>
         </li>
+        <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("sendEmailToAllButton")){%>
+            <li class="active">
+        <%} else{%>
+            <li>
+        <%}%>
+            <a href="adminEmail.jsp" target="_self">
+                <i class="glyphicon glyphicon-envelope"></i>
+                Send email til brugere </a>
+        </li>
         <% if(request.getSession().getAttribute("ActiveSidebarMenu").toString().equals("NyBruger")){%>
             <li class="active">
                 <a>

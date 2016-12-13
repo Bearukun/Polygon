@@ -133,7 +133,6 @@ public class UserServlet extends HttpServlet {
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
                     }
-
                     //If 'Create area' button was clicked
                     if (request.getParameter("originSection").equals("createAreaButton")) {
                         request.getSession().setAttribute("source", "createAreaButton");
@@ -342,11 +341,16 @@ public class UserServlet extends HttpServlet {
                     response.sendRedirect("addBuilding.jsp");
                     break;
 
+                case "sendEmailButton":
+                    //Tell the page redirected to where it was accessed from, in order to display the corresponding sidebar menu
+                    request.getSession().setAttribute("source", "");
+                    response.sendRedirect("userEmail.jsp");
+                    break;
+
                 case "sendEmailToPolygon":
 
                     String polygonEmail = "polygonmailtest4@gmail.com";
                     String emailHeader = "Bruger#" + user.getUser_id() + " (" + user.getCompany() + "): " + request.getParameter("emailHead");
-
                     String userInfo
                             = "\n\n---------------------------------------------------------------------\n"
                             + "Kunde information\n"
@@ -359,7 +363,7 @@ public class UserServlet extends HttpServlet {
                             + "---------------------------------------------------------------------\n\n";
 
                     String emailMessage = request.getParameter("emailMessage") + userInfo;
-
+                    request.getSession().setAttribute("source", "user");
                     emailCtrl.send(polygonEmail, emailHeader, emailMessage);
                     response.sendRedirect("user.jsp?mailSuccess");
                     break;

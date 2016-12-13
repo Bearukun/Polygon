@@ -34,7 +34,7 @@ public class AdminServlet extends HttpServlet {
     private User user = null;
     private int user_id;
     private String origin = "";
-    PDFCreator pdfwt = new PDFCreator();
+    private PDFCreator pdfwt = new PDFCreator();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

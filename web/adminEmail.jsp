@@ -15,12 +15,9 @@
         <!--Adding our own css-->
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
         <style>
-            body{
-                font-family: Verdana;
-            }
+           
             .bluebox{
-                border: 2px solid blue;
-                padding: 5px;
+
                 margin-left: 10px;
                 width: 300px;
                 height: 525px;
@@ -61,16 +58,16 @@
                     </div>
                     <!-- END SIDEBAR BUTTONS -->
                     <!-- SIDEBAR MENU - For icons find class names here http://getbootstrap.com/components/ -->
-                    <% request.getSession().setAttribute("ActiveSidebarMenu", "Overblik");%>
+                    <% request.getSession().setAttribute("ActiveSidebarMenu", "sendEmailToAllButton");%>
                     <%@ include file="adminSidebar.jsp" %>
                     <!-- END MENU -->
                 </div>
             </div>
             <body>
-                <h1>Admin Send Email</h1>
-                <h1>        
-                    Send an email (If you need to check the mails sent to Polygon, go to gmail.com and login polygonmailtest4.
-                </h1> 
+                <h3>Admin Send Email</h3>
+                <h5>        
+                    Send an email to all customers.
+                </h5> 
 
                 <div class="bluebox"><form action="AdminServlet" method="POST">
                         <!--<input type="text" name="from" value="" placeholder="from"/>-->

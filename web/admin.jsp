@@ -55,8 +55,6 @@
                 <div class="col-sm-10">
                     <div id="container" class="container-fluid">
                         <h1>Overblik:</h1>
-                         <a href="adminEmail.jsp"> Opret test Mail </a>
-                       
                         <% ArrayList<User> userList = new ArrayList();
                             ArrayList<Building> allBuildings = new ArrayList();
 
@@ -75,11 +73,10 @@
                                 bldgPurpose.add("Transport");
                                 bldgPurpose.add("Andet");
                             %>
-                        
-                        <br><br>
+                       
                         <table text-align="left" class="table">
                             <tbody>
-                                <tr bgcolor='cyan'>
+                                <tr bgcolor='#c0dee8'>
                                     <th colspan="2"><b>Brugere</b></th>
                                 </tr>
                                 <tr>
@@ -108,7 +105,7 @@
                         <br><br>
                         <table text-align="left" class="table">
                             <tbody>
-                                <tr bgcolor='cyan'>
+                                <tr bgcolor='#c0dee8'>
                                     <th colspan="4"><b>Bygninger</b></th>
                                 </tr>
                                 <tr>

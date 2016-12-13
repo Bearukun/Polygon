@@ -25,6 +25,7 @@ import serviceLayer.entities.Issue;
 import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
+import serviceLayer.exceptions.PolygonException;
 
 /**
  * Class that generates a PDF Document.
@@ -32,37 +33,37 @@ import serviceLayer.entities.User;
  */
 public class PDFCreator {
 
-    DataControllerInterface datCtrl = new DataController();
-    BuildingMapperInterface buildCtrl = new BuildingMapper();
-    UserControllerInterface usrCtrl = new UserController();
+    private DataControllerInterface datCtrl = new DataController();
+    private BuildingMapperInterface buildCtrl = new BuildingMapper();
+    private UserControllerInterface usrCtrl = new UserController();
 
-    User technician = null;
-    User customer = null;
+    private User technician = null;
+    private User customer = null;
 
-    Building building = new Building();
-    Healthcheck healthcheck = new Healthcheck();
-    ArrayList<Room> roomList = new ArrayList();
-    ArrayList<DamageRepair> dmgRepair = new ArrayList();
-    ArrayList<Area> areaList = new ArrayList();
-    ArrayList<Issue> issueList = new ArrayList();
-    ArrayList<MoistureInfo> moistList = new ArrayList();
+    private Building building = new Building();
+    private Healthcheck healthcheck = new Healthcheck();
+    private ArrayList<Room> roomList = new ArrayList();
+    private ArrayList<DamageRepair> dmgRepair = new ArrayList();
+    private ArrayList<Area> areaList = new ArrayList();
+    private ArrayList<Issue> issueList = new ArrayList();
+    private ArrayList<MoistureInfo> moistList = new ArrayList();
 
-    String imgFolderPath;
-    String pdfName;
-    String buildingResponsible;
+    private String imgFolderPath;
+    private String pdfName;
+    private String buildingResponsible;
 
     //sourceFolder sf = new sourceFolder();
-    PDDocument doc = new PDDocument();
+    private PDDocument doc = new PDDocument();
 
     //Creates various text font objects
-    PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
-    PDFont fontHel = PDType1Font.TIMES_ROMAN;
+    private PDFont fontHelB = PDType1Font.HELVETICA_BOLD;
+    private PDFont fontHel = PDType1Font.TIMES_ROMAN;
 
     //Sets the first page number
-    int pageNumber = 1;
+    private int pageNumber = 1;
     //Sets the first page number to be 
-    String pageNumberTitel = "page" + pageNumber;
-    String pageContentStreamNumber = "content" + pageNumber;
+    private String pageNumberTitel = "page" + pageNumber;
+    private String pageContentStreamNumber = "content" + pageNumber;
 
     /**
      * The actual method that generates and creates the PDF.
@@ -78,7 +79,7 @@ public class PDFCreator {
      * @param imgFolderPath String that contains the root path to the images on
      * the website
      */
-    public void createPDF(User technician, User customer, int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) {
+    public void createPDF(User technician, User customer, int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) throws PolygonException {
 
         try {
 
@@ -94,7 +95,6 @@ public class PDFCreator {
             this.buildingResponsible = buildingResponsible;
 
             //MOISTLIST
-            //TODO Add pdf-id here through parameter.
             pdfName = building.getName() + "ID#" + building.getbuildingId();
 
             //Create front page.
@@ -123,6 +123,7 @@ public class PDFCreator {
 
                         roomWalkthrough(areaList.get(1), roomList.get(i));
                         pageNumber++;
+                        
                     }
 
                     //Dmg report
@@ -156,8 +157,11 @@ public class PDFCreator {
             pageNumber++;
 
             savePDF(pdfName, doc);
-        } catch (Exception ex) {
-            System.out.println("CreatePDF: Error: " + ex.getMessage());;
+            
+        } catch (Exception e) {
+            
+            throw new PolygonException("Exception:@PDFCreator.createPDF:" + e.getMessage());
+            
         }
 
     }
@@ -490,7 +494,7 @@ public class PDFCreator {
             //Creates a image from a file and places it.
             //Underline for "Lokale"
             insertJPGImage(pageContentStreamNumber, imgFolderPath, "underLineJPG.jpg", 50, 596, 100, 2);
-            singleTextLine(pageContentStreamNumber, "Problem: " + issueList.get(getIssueId(1, room.getRoom_id())).getDescription(), 10, 50, 300);
+            singleTextLine(pageContentStreamNumber, "Problem: " + issueList.get(getIssueId(1, room.getRoom_id())).getDescription(), 10, 50, 580);
 
             singleTextLine(pageContentStreamNumber, "Anbefalet behandling", 10, 50, 550);
             //Creates a image from a file and places it.
