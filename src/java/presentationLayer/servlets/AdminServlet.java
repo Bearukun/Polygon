@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.controllers.interfaces.BuildingControllerInterface;
+import serviceLayer.controllers.interfaces.EmailControllerInterface;
+import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
@@ -28,9 +31,9 @@ public class AdminServlet extends HttpServlet {
     private ArrayList<Room> buildingRooms = new ArrayList();
     private ArrayList<String> buildingPurposes = new ArrayList(Arrays.asList("Landbrug", "Erhverv", "Bolig", "Uddannelse", "Offentlig", "Industriel", "Militær", "Religiøs", "Transport", "Andet"));
 
-    private EmailController emailCtrl = new EmailController();
-    private UserController usrCtrl = new UserController();
-    private BuildingController bldgCtrl = new BuildingController();
+    private EmailControllerInterface emailCtrl = new EmailController();
+    private UserControllerInterface usrCtrl = new UserController();
+    private BuildingControllerInterface bldgCtrl = new BuildingController();
     private User user = null;
     private int user_id;
     private String origin = "";

@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.controllers.interfaces.BuildingControllerInterface;
+import serviceLayer.controllers.interfaces.EmailControllerInterface;
+import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
@@ -31,14 +34,14 @@ public class NavigatorServlet extends HttpServlet {
     private ArrayList<Area> buildingAreas = new ArrayList();
     private ArrayList<Room> buildingRooms = new ArrayList();
 
-    private UserController usrCtrl = new UserController();
-    private BuildingController bldgCtrl = new BuildingController();
+    private UserControllerInterface usrCtrl = new UserController();
+    private BuildingControllerInterface bldgCtrl = new BuildingController();
     private User user = null;
     private String uEmail, uPassword, uName, uCompany, uAddress, uCity;
     private int user_id, uPhone, uPostcode, uUser_id;
     private boolean editingOtherUserProfile = false;
     private Building build;
-    private EmailController emailCtrl = new EmailController();
+    private EmailControllerInterface emailCtrl = new EmailController();
     private PDFCreator pdfwt = new PDFCreator();
     private Date date = new Date();
 

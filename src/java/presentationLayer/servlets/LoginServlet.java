@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.controllers.interfaces.BuildingControllerInterface;
+import serviceLayer.controllers.interfaces.EmailControllerInterface;
+import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.User;
 import serviceLayer.exceptions.PolygonException;
 
@@ -18,10 +21,10 @@ import serviceLayer.exceptions.PolygonException;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
-    private UserController usrCtrl = new UserController();
-    private BuildingController bldgCtrl = new BuildingController();
+    private UserControllerInterface usrCtrl = new UserController();
+    private BuildingControllerInterface bldgCtrl = new BuildingController();
     private User user = null;
-    private EmailController emailCtrl = new EmailController();
+    private EmailControllerInterface emailCtrl = new EmailController();
 
 
     /**

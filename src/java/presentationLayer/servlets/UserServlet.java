@@ -14,7 +14,10 @@ import serviceLayer.controllers.BuildingController;
 import serviceLayer.controllers.DataController;
 import serviceLayer.controllers.EmailController;
 import serviceLayer.controllers.UserController;
+import serviceLayer.controllers.interfaces.BuildingControllerInterface;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
+import serviceLayer.controllers.interfaces.EmailControllerInterface;
+import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Document;
@@ -36,10 +39,10 @@ public class UserServlet extends HttpServlet {
     private ArrayList<Document> buildingDocuments = new ArrayList();
 
     private Date date = new Date();
-    private UserController usrCtrl = new UserController();
-    private BuildingController bldgCtrl = new BuildingController();
+    private UserControllerInterface usrCtrl = new UserController();
+    private BuildingControllerInterface bldgCtrl = new BuildingController();
     private DataControllerInterface dat = new DataController();
-    private EmailController emailCtrl = new EmailController();
+    private EmailControllerInterface emailCtrl = new EmailController();
     private User user = null;
     private int user_id;
     private String origin = "";
