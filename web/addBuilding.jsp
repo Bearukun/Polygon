@@ -29,7 +29,7 @@
                         <!-- SIDEBAR USER TITLE -->
                         <div class="profile-usertitle">
                             <div class="profile-usertitle-name">
-                                <%= session.getAttribute("email")%>
+                                <%= session.getAttribute("loginName")%>
                             </div>
                             <div class="profile-usertitle-job">
                                 <%= session.getAttribute("type")%>

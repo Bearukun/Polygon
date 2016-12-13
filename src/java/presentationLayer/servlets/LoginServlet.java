@@ -59,6 +59,7 @@ public class LoginServlet extends HttpServlet {
 
                     request.getSession().setAttribute("user_id", user.getUser_id());
                     request.getSession().setAttribute("email", user.getEmail());
+                    request.getSession().setAttribute("loginName", user.getName());
                     //Set user type and redirect
                     userTypeRedirect(user, request, response);
                     break;
@@ -73,6 +74,7 @@ public class LoginServlet extends HttpServlet {
                         user = usrCtrl.login(loginEmail, loginPassword);
                         request.getSession().setAttribute("user_id", user.getUser_id());
                         request.getSession().setAttribute("email", user.getEmail());
+                        request.getSession().setAttribute("loginName", user.getName());
 
                         if (user != null) {
 
