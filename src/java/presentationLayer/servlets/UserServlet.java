@@ -2,6 +2,8 @@ package presentationLayer.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.ServletException;
@@ -23,7 +25,6 @@ import serviceLayer.entities.Building;
 import serviceLayer.entities.Document;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.PolygonException;
 
 /**
  * Servlet that handles the customer.
@@ -46,6 +47,10 @@ public class UserServlet extends HttpServlet {
     private User user = null;
     private int user_id;
     private String origin = "";
+
+//    //This is new, used to handle Exceptions
+//    StringWriter sw = new StringWriter();
+//    PrintWriter pw = new PrintWriter(sw);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -366,17 +371,26 @@ public class UserServlet extends HttpServlet {
                     break;
             }
 
-        } catch (PolygonException e) {
+        } catch (Exception e) {
+
+//            //Get the stacktrace, and save it to pw. 
+//            e.printStackTrace(pw);
+//            e.getLocalizedMessage();
+//            
+//            //This could be sent to it-department.
+//            sw.toString();
             
-            request.getSession().setAttribute("ExceptionError", e.getMessage());
+            request.getSession().setAttribute("ExceptionError", "Fejl: " + e.toString());
+
             response.sendRedirect("error.jsp");
-            
+                        
+
         }
 
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(HttpServletRequest request, int user_id) throws PolygonException {
+    public void refreshBuilding(HttpServletRequest request, int user_id) throws Exception {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -384,34 +398,34 @@ public class UserServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
+    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int buildingId) throws PolygonException {
+    public void refreshAreas(int buildingId) throws Exception {
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int buildingId) throws PolygonException {
+    public void refreshRooms(int buildingId) throws Exception {
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
     }
 
     //Refreshes documents of a select building.
-    public void refreshDocuments(int buildingId) throws PolygonException {
+    public void refreshDocuments(int buildingId) throws Exception {
 
         buildingDocuments.clear();
         buildingDocuments = dat.getDocuments(buildingId);
 
     }
 
-    public void emailEditBuilding(String buildingName, String address, int postcod, String cit, int constructionYear, String purpos, int sqm, int selectedBuilding) {
-        
+    public void emailEditBuilding(String buildingName, String address, int postcod, String cit, int constructionYear, String purpos, int sqm, int selectedBuilding) throws Exception {
+
         //Email the customer about the changes to the building           
         String emailEditBuildingHeader = "Polygon: Ændringer i deres bygning\"" + buildingName + "\". ";
         String emailEditBuildingMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
@@ -440,19 +454,19 @@ public class UserServlet extends HttpServlet {
                 + "3450 Allerød\n"
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
-        
+
         try {
-            
+
             emailCtrl.send(user.getEmail(), emailEditBuildingHeader, emailEditBuildingMessage);
-            
-        } catch (PolygonException e) {
-            
+
+        } catch (Exception e) {
+
             e.getMessage();
-            
+
         }
     }
 
-    public void emailHealthcheckRequest(Building build, int id) throws PolygonException {
+    public void emailHealthcheckRequest(Building build, int id) throws Exception {
         //Email the customer about the requested healthcheck 
 
         String polygonMail = "polygonmailtest4@gmail.com";
@@ -474,22 +488,22 @@ public class UserServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             //Sends email to both he customer and Polygon
             //Customer
             emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
             //Polygon
             emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
-            
-        } catch (PolygonException e) {
-            
+
+        } catch (Exception e) {
+
             e.getMessage();
-            
+
         }
-        
+
     }
 
-    public void emailCustomerCancelHealthcheck(Building build, int id) throws PolygonException {
+    public void emailCustomerCancelHealthcheck(Building build, int id) throws Exception {
         //Email the customer about the requested healthcheck 
 
         String polygonMail = "polygonmailtest4@gmail.com";
@@ -511,19 +525,19 @@ public class UserServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             //Sends email to both he customer and Polygon
             //Customer
             emailCtrl.send(usrCtrl.getUser(id).getEmail(), emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
             //Polygon
             emailCtrl.send(polygonMail, emailHealthcheckRequestHeader, emailHealthcheckRequestMessage);
-            
-        } catch (PolygonException e) {
-            
+
+        } catch (Exception e) {
+
             e.getMessage();
-            
+
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

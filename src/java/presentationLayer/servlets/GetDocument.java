@@ -2,7 +2,6 @@ package presentationLayer.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Blob;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -19,6 +18,10 @@ public class GetDocument extends HttpServlet {
 
     private DataControllerInterface dat = new DataController();
     private Document document;
+    
+//    //This is new, used to handle Exceptions
+//    StringWriter sw = new StringWriter();
+//    PrintWriter pw = new PrintWriter(sw);
 
     /**
      * Handles the HTTP <code>GET</code> method
@@ -67,9 +70,16 @@ public class GetDocument extends HttpServlet {
 
         } catch (Exception e) {
             
-            e.printStackTrace();
-            response.setContentType("text/html");
-            out.println("Some error found!");
+//            //Get the stacktrace, and save it to pw. 
+//            e.printStackTrace(pw);
+//            e.getLocalizedMessage();
+//            
+//            //This could be sent to it-department.
+//            sw.toString();
+            
+            request.getSession().setAttribute("ExceptionError", "Fejl: " + e.toString());
+
+            response.sendRedirect("error.jsp");
             return;
             
         }

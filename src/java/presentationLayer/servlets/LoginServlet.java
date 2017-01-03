@@ -13,7 +13,6 @@ import serviceLayer.controllers.interfaces.BuildingControllerInterface;
 import serviceLayer.controllers.interfaces.EmailControllerInterface;
 import serviceLayer.controllers.interfaces.UserControllerInterface;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.PolygonException;
 
 /**
  * Servlet used to check what type of user is logging in.
@@ -25,6 +24,10 @@ public class LoginServlet extends HttpServlet {
     private BuildingControllerInterface bldgCtrl = new BuildingController();
     private User user = null;
     private EmailControllerInterface emailCtrl = new EmailController();
+    
+//    //This is new, used to handle Exceptions
+//    StringWriter sw = new StringWriter();
+//    PrintWriter pw = new PrintWriter(sw);
 
 
     /**
@@ -89,7 +92,7 @@ public class LoginServlet extends HttpServlet {
                         }
 
                         //If something goes wrong, we need a way to show it.
-                    } catch (PolygonException e) {
+                    } catch (Exception e) {
 
                         request.getSession().setAttribute("error", e.getMessage());
                         response.sendRedirect("index.jsp");
@@ -131,7 +134,7 @@ public class LoginServlet extends HttpServlet {
                             emailNewCustomer(name, email, Integer.parseInt(phone), company, address, Integer.parseInt(postcode), city);
                             response.sendRedirect("index.jsp?success");
 
-                        } catch (PolygonException e) {
+                        } catch (Exception e) {
 
                             request.getSession().setAttribute("error", e.getMessage());
                             response.sendRedirect("index.jsp");
@@ -149,16 +152,24 @@ public class LoginServlet extends HttpServlet {
 
             }
 
-        } catch (PolygonException e) {
+        } catch (Exception e) {
 
-            request.getSession().setAttribute("ExceptionError", e.getMessage());
+//            //Get the stacktrace, and save it to pw. 
+//            e.printStackTrace(pw);
+//            e.getLocalizedMessage();
+//            
+//            //This could be sent to it-department.
+//            sw.toString();
+            
+            request.getSession().setAttribute("ExceptionError", "Fejl: " + e.toString());
+
             response.sendRedirect("error.jsp");
 
         }
 
     }
 
-    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws PolygonException {
+    public void userTypeRedirect(User user, HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
             if (user.getType().toString().equals("CUSTOMER")) {
                 request.getSession().setAttribute("type", "Kunde");

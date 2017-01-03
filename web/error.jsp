@@ -20,7 +20,7 @@
             <form class="form-signin" action="LoginServlet" method="POST">
                 <img src="./img/logo.png" class="img-responsive center-block" alt="Responsive image">
                 <center>
-                    <h1>Ups...<br>Det er sket en fejl!</h1>
+                    <h1>Ups...<br>Der er sket en fejl!</h1>
                 </center>
                 <% String exception_msg = (String) request.getSession().getAttribute("ExceptionError");
                     if (exception_msg != null) {

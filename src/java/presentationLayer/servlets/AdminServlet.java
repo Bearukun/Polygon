@@ -19,7 +19,6 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.PolygonException;
 
 @WebServlet(name = "AdminServlet", urlPatterns = {"/AdminServlet"})
 public class AdminServlet extends HttpServlet {
@@ -38,6 +37,10 @@ public class AdminServlet extends HttpServlet {
     private int user_id;
     private String origin = "";
     private PDFCreator pdfwt = new PDFCreator();
+    
+//    //This is new, used to handle Exceptions
+//    StringWriter sw = new StringWriter();
+//    PrintWriter pw = new PrintWriter(sw);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,7 +60,7 @@ public class AdminServlet extends HttpServlet {
 
             //If we are coming from the LoginServlet servlet, i.e. we have just logged in
             if (request.getSession().getAttribute("sourcePage").toString().equals("LoginServlet")) {
-                
+
                 request.getSession().setAttribute("sourcePage", "Invalid");
                 //Save the logged in user's id
                 user_id = (Integer) request.getSession().getAttribute("user_id");
@@ -66,14 +69,13 @@ public class AdminServlet extends HttpServlet {
                 compileAdminOverviewStats(request);
                 compileAdminOverviewBuildingStats(request);
                 response.sendRedirect("admin.jsp");
-                
+
             }
 
-        
             if (request.getParameter("origin") != null) {
-                
+
                 origin = request.getParameter("origin");
-                
+
             }
 
             switch (origin) {
@@ -104,19 +106,19 @@ public class AdminServlet extends HttpServlet {
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     }
 
                     //If 'Create area' button was clicked
                     if (request.getParameter("originSection").equals("createAreaButton")) {
-                        
+
                         request.getSession().setAttribute("source", "createAreaButton");
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     } //If an area needs deleting
                     else if (request.getParameter("originSection").equals("deleteAreaButton")) {
-                        
+
                         request.getSession().setAttribute("source", "deleteAreaButton");
 
                         //Retrieve form input values from viewBuilding
@@ -138,10 +140,10 @@ public class AdminServlet extends HttpServlet {
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     } //If a new area needs creating
                     else if (request.getParameter("originSection").equals("createArea")) {
-                        
+
                         request.getSession().setAttribute("source", "createArea");
                         //Retrieve form input values from viewBuilding
                         String areaName = request.getParameter("areaName");
@@ -161,19 +163,19 @@ public class AdminServlet extends HttpServlet {
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     } //If 'Create area' button was clicked
                     else if (request.getParameter("originSection").equals("createRoomButton")) {
-                        
+
                         request.getSession().setAttribute("source", "createRoomButton");
                         request.getSession().setAttribute("areaId", request.getParameter("areaId"));
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     } //If a new room needs creating
                     else if (request.getParameter("originSection").equals("createRoom")) {
-                        
+
                         request.getSession().setAttribute("source", "createRoom");
                         //Retrieve form input values from viewBuilding
                         String roomName = request.getParameter("roomName");
@@ -198,10 +200,10 @@ public class AdminServlet extends HttpServlet {
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     } //If an area needs deleting
                     else if (request.getParameter("originSection").equals("deleteRoomButton")) {
-                        
+
                         request.getSession().setAttribute("source", "deleteRoomButton");
 
                         //Retrieve form input values from viewBuilding
@@ -225,17 +227,17 @@ public class AdminServlet extends HttpServlet {
 
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     } //If 'Edit building details' button was clicked
                     else if (request.getParameter("originSection").equals("editBuildingButton")) {
-                        
+
                         request.getSession().setAttribute("source", "editBuildingButton");
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     } //If the building needs editing
                     else if (request.getParameter("originSection").equals("editBuilding")) {
-                        
+
                         request.getSession().setAttribute("source", "editBuilding");
                         //Retrieve form input values from viewBuilding
                         String buildingName = request.getParameter("buildingName");
@@ -252,7 +254,7 @@ public class AdminServlet extends HttpServlet {
                         refreshBuilding(user_id);
                         //redirect to viewBuilding into the specific building being edited
                         response.sendRedirect("viewBuilding.jsp?value=" + build.getbuildingId() + "");
-                        
+
                     }
 
                     break;
@@ -270,14 +272,14 @@ public class AdminServlet extends HttpServlet {
                 case "assignHealthcheckButton":
                     int buildingId = Integer.parseInt(request.getParameter("buildingId"));
                     int technicianId = Integer.parseInt(request.getParameter("selectedTechnician").split("\\|")[0]);
-                    
+
                     bldgCtrl.assignHealthcheck(buildingId, technicianId);
-                    
+
                     emailTecnichianPendingHealthcheck(technicianId);
                     refreshAllBuildings(request);
-                    
+
                     response.sendRedirect("adminPendingBuildings.jsp");
-                    
+
                     break;
 
                 case "newCustomer":
@@ -299,13 +301,13 @@ public class AdminServlet extends HttpServlet {
                         emailNewAdmin(newUserName, newUserEmail, newUserPhone, newUserAddress, newUserPostcode, newUserCity);
 
                     } else if (newUserType.equalsIgnoreCase("TECHNICIAN")) {
-                        
+
                         emailNewTechnician(newUserName, newUserEmail, newUserPhone, newUserAddress, newUserPostcode, newUserCity);
 
                     } else {
-                        
+
                         emailNewCustomer(newUserName, newUserEmail, newUserPhone, newUserCompany, newUserAddress, newUserPostcode, newUserCity);
-                    
+
                     }
                     refreshUsers(request);
 
@@ -329,63 +331,70 @@ public class AdminServlet extends HttpServlet {
                     String emailMessage = request.getParameter("emailMessage");
 
                     try {
-                        
+
                         //Loops through all registered users
                         for (int i = 1; i < temp.size(); i++) {
-                            
+
                             emailCtrl.send(temp.get(i).getEmail(), emailHeader, emailMessage);
 
                         }
-                        
+
                     } catch (Exception e) {
-                        
+
                         e.printStackTrace();
-                        
+
                     }
 
                     response.sendRedirect("admin.jsp?mailSuccess");
 
                     break;
-                    
+
             }
 
-        } catch (PolygonException e) {
+        } catch (Exception e) {
 
-            request.getSession().setAttribute("ExceptionError", e.getMessage());
+//            //Get the stacktrace, and save it to pw. 
+//            e.printStackTrace(pw);
+//            e.getLocalizedMessage();
+//            
+//            //This could be sent to it-department.
+//            sw.toString();
+            request.getSession().setAttribute("ExceptionError", "Fejl: " + e.toString());
+
             response.sendRedirect("error.jsp");
-            
+
         }
 
     }
 
     //Compiles user statistics to display on admin overview page
     public void compileAdminOverviewStats(HttpServletRequest request) {
-        
+
         int countOfCustomers = 0;
         int countOfTechnicians = 0;
         int countOfAdministrators = 0;
 
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getType().toString().equals("CUSTOMER")) {
-                
+
                 countOfCustomers++;
-                
+
             } else if (userList.get(i).getType().toString().equals("TECHNICIAN")) {
-                
+
                 countOfTechnicians++;
-                
+
             } else if (userList.get(i).getType().toString().equals("ADMIN")) {
-                
+
                 countOfAdministrators++;
-                
+
             }
-            
+
         }
 
         request.getSession().setAttribute("countOfCustomers", countOfCustomers);
         request.getSession().setAttribute("countOfTechnicians", countOfTechnicians);
         request.getSession().setAttribute("countOfAdministrators", countOfAdministrators);
-        
+
     }
 
     //Compiles building statistics to display on admin overview page
@@ -402,9 +411,9 @@ public class AdminServlet extends HttpServlet {
         int countOfTransport = 0;
         int countOfAndet = 0;
         for (int i = 0; i < allBuildings.size(); i++) {
-            
+
             String buildingPurpose = allBuildings.get(i).getPurpose();
-            
+
             switch (buildingPurpose) {
                 case "Landbrug":
                     countOfLandbrug++;
@@ -445,7 +454,7 @@ public class AdminServlet extends HttpServlet {
                 case "Andet":
                     countOfAndet++;
                     break;
-                    
+
             }
 
         }
@@ -460,29 +469,29 @@ public class AdminServlet extends HttpServlet {
         request.getSession().setAttribute("countOfReligiøs", countOfReligiøs);
         request.getSession().setAttribute("countOfTransport", countOfTransport);
         request.getSession().setAttribute("countOfAndet", countOfAndet);
-        
+
     }
 
     //Deducts a list of technicians from the user list
-    public ArrayList<User> getTechnicians() throws PolygonException {
-        
+    public ArrayList<User> getTechnicians() throws Exception {
+
         ArrayList<User> techniciansList = new ArrayList();
         for (User thisUser : userList) {
-            
+
             if (thisUser.getType().toString().equals("TECHNICIAN")) {
-                
+
                 techniciansList.add(new User(thisUser.getUser_id(), thisUser.getEmail(), thisUser.getName()));
-                
+
             }
-            
+
         }
-        
+
         return techniciansList;
-        
+
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws PolygonException {
+    public void refreshBuilding(int user_id) throws Exception {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -490,40 +499,40 @@ public class AdminServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
-        
+    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
-        
+
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int buildingId) throws PolygonException {
-        
+    public void refreshAreas(int buildingId) throws Exception {
+
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
-        
+
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int buildingId) throws PolygonException {
-        
+    public void refreshRooms(int buildingId) throws Exception {
+
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
-        
+
     }
 
-    public void refreshUsers(HttpServletRequest request) throws PolygonException {
+    public void refreshUsers(HttpServletRequest request) throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
-        
+
     }
 
-    public void emailNewTechnician(String name, String email, Integer phone, String address, Integer postcode, String city) throws PolygonException {
-        
+    public void emailNewTechnician(String name, String email, Integer phone, String address, Integer postcode, String city) throws Exception {
+
         //Send confirmation email to new Technician
         String emailNewCustomerHeader = "Hej " + name + " og velkommen til Polygons som Teknikker!";
         String emailNewCustomerMessage = "Hej " + name + "!"
@@ -549,19 +558,19 @@ public class AdminServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
-            
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
 
     }
 
-    public void emailNewAdmin(String name, String email, Integer phone, String address, Integer postcode, String city) throws PolygonException{
-        
+    public void emailNewAdmin(String name, String email, Integer phone, String address, Integer postcode, String city) throws Exception {
+
         //Send confirmation email to new Admin
         String emailNewCustomerHeader = "Hej " + name + " og velkommen til Polygons som Admin!";
         String emailNewCustomerMessage = "Hej " + name + "!"
@@ -587,22 +596,19 @@ public class AdminServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
-            
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
-        
+
     }
 
-   
-    
-    
-    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city) throws PolygonException{
-        
+    public void emailNewCustomer(String name, String email, Integer phone, String company, String address, Integer postcode, String city) throws Exception {
+
         //Send confirmation email to new Customer:
         String emailNewCustomerHeader = "Hej " + name + " (" + company + " )" + " og velkommen til Polygons's Sundebygninger!";
         String emailNewCustomerMessage = "Hej " + name + "!"
@@ -634,23 +640,23 @@ public class AdminServlet extends HttpServlet {
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
         try {
-            
+
             emailCtrl.send(email, emailNewCustomerHeader, emailNewCustomerMessage);
-            
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
-        
+
     }
-    
-     public void emailTecnichianPendingHealthcheck(int technicianID) throws PolygonException{
-        
+
+    public void emailTecnichianPendingHealthcheck(int technicianID) throws Exception {
+
         //Send confirmation email to new Admin
         String emailTechnicianPendingHCHeader = "Pending Healthcheck: Tjek din support side!";
         String emailTechnicianPendingHCMessage = "Hej " + usrCtrl.getUser(technicianID).getName() + "!"
-                + "\n\nVi har tildelt dig en ny opgave! Tjek venligst din support-side og klik på \"Påbegynd\" for at acceptere opgaven"                           
+                + "\n\nVi har tildelt dig en ny opgave! Tjek venligst din support-side og klik på \"Påbegynd\" for at acceptere opgaven"
                 + "\n\n\n"
                 + " Med Venlig Hilsen"
                 + "\n\n"
@@ -662,15 +668,15 @@ public class AdminServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             emailCtrl.send(usrCtrl.getUser(technicianID).getEmail(), emailTechnicianPendingHCHeader, emailTechnicianPendingHCMessage);
-        
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

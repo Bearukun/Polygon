@@ -4,7 +4,7 @@ import serviceLayer.controllers.interfaces.EmailControllerInterface;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import serviceLayer.exceptions.PolygonException;
+
 
 public class EmailController implements EmailControllerInterface{
     
@@ -14,9 +14,9 @@ public class EmailController implements EmailControllerInterface{
      * @param to String containing the email of the recieving person
      * @param title String contining the title of the email
      * @param body String containing the content of the email
-     * @throws PolygonException throws the exception
+     * @throws Exception throws the exception
      */
-    public void send(String to, String title, String body) throws PolygonException {
+    public void send(String to, String title, String body) throws Exception {
 
         try {
 
@@ -57,7 +57,7 @@ public class EmailController implements EmailControllerInterface{
 
         } catch (Exception e) {
             
-            throw new PolygonException("Exception:@EmailController:"+e.getMessage());
+            throw new Exception("Exception:@EmailController:"+e.getMessage());
             
         }
         

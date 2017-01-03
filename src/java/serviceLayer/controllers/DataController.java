@@ -8,35 +8,35 @@ import java.util.ArrayList;
 import serviceLayer.controllers.interfaces.DataControllerInterface;
 import serviceLayer.entities.Document;
 import serviceLayer.entities.Image;
-import serviceLayer.exceptions.PolygonException;
+
 
 public class DataController implements DataControllerInterface {
 
     private final DBFacadeInterface dbfacade = new DBFacade();
 
     @Override
-    public Image getImage(int image_id) throws PolygonException {
+    public Image getImage(int image_id) throws Exception {
 
         return checkIfImageExists(dbfacade.getImage(image_id));
 
     }
 
     @Override
-    public Image getBuildingImage(int buildingId) throws PolygonException {
+    public Image getBuildingImage(int buildingId) throws Exception {
 
         return checkIfImageExists(dbfacade.getBuildingImage(buildingId));
 
     }
 
     @Override
-    public Image getIssueImage(int issue_id) throws PolygonException {
+    public Image getIssueImage(int issue_id) throws Exception {
 
         return checkIfImageExists(dbfacade.getIssueImage(issue_id));
 
     }
 
     @Override
-    public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws PolygonException {
+    public void uploadIssueImage(int issue_id, String img_name, InputStream img_file) throws Exception {
 
         if (dbfacade.hasImage(DataMapperInterface.ImageType.issue, issue_id, 0)) {
 
@@ -52,7 +52,7 @@ public class DataController implements DataControllerInterface {
     }
 
     @Override
-    public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws PolygonException {
+    public void uploadBuildingImage(int buildingId, String img_name, InputStream img_file) throws Exception {
 
         if (dbfacade.hasImage(DataMapperInterface.ImageType.building, 0, buildingId)) {
 
@@ -72,10 +72,10 @@ public class DataController implements DataControllerInterface {
      *
      * @param img The Image to be examined.
      * @return returns either a existing image, or the default.
-     * @throws PolygonException throws the exception
+     * @throws Exception throws the exception
      */
     @Override
-    public Image checkIfImageExists(Image img) throws PolygonException {
+    public Image checkIfImageExists(Image img) throws Exception {
 
         //If the image doesn't exist in the db, return the "default" img.
         if (img.getImg_file() == null) {
@@ -91,28 +91,28 @@ public class DataController implements DataControllerInterface {
     }
 
     @Override
-    public ArrayList<Document> getDocuments(int buildingId) throws PolygonException {
+    public ArrayList<Document> getDocuments(int buildingId) throws Exception {
         
         return dbfacade.getDocuments(buildingId);
         
     }
 
     @Override
-    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws PolygonException {
+    public void uploadDocument(int buildingId, String documentName, String documentType, InputStream document_file) throws Exception {
         
         dbfacade.uploadDocument(buildingId, documentName, documentType, document_file);
         
     }
 
     @Override
-    public void deleteDocument(int documentId) throws PolygonException {
+    public void deleteDocument(int documentId) throws Exception {
         
         dbfacade.deleteDocument(documentId);
         
     }
 
     @Override
-    public Document getDocument(int documentId) throws PolygonException {
+    public Document getDocument(int documentId) throws Exception {
         
         return dbfacade.getDocument(documentId);
         

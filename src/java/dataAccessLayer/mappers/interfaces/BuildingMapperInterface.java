@@ -8,62 +8,62 @@ import serviceLayer.entities.Healthcheck;
 import serviceLayer.entities.Issue;
 import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
-import serviceLayer.exceptions.PolygonException;
+
 
 public interface BuildingMapperInterface {
 
-    public ArrayList<Building> getBuildings(int user_id) throws PolygonException;
+    public ArrayList<Building> getBuildings(int user_id) throws Exception;
     
-    public Building getBuilding(int buildingId) throws PolygonException;
+    public Building getBuilding(int buildingId) throws Exception;
 
-    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws PolygonException;
+    public void createBuilding(String name, String address, Integer postcode, String city, Integer construction_year, String purpose, Integer sqm, int user_id) throws Exception;
 
-    public void deleteBuilding(int buildingId) throws PolygonException;
+    public void deleteBuilding(int buildingId) throws Exception;
     
-    public ArrayList<Building> getAllBuildings() throws PolygonException;
+    public ArrayList<Building> getAllBuildings() throws Exception;
 
-    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws PolygonException;
+    public void editBuilding(int selectedBuilding, String buildingName, String addres, int postcod, String cit, int constructionYear, String purpose, int sqm) throws Exception;
 
-    public ArrayList<Area> getAreas(int buildingId) throws PolygonException;
+    public ArrayList<Area> getAreas(int buildingId) throws Exception;
     
-    public void createArea(String name, String description, int sqm, int buildingId) throws PolygonException;
+    public void createArea(String name, String description, int sqm, int buildingId) throws Exception;
     
-    public void deleteArea(int areaId) throws PolygonException;
+    public void deleteArea(int areaId) throws Exception;
     
-    public ArrayList<Room> getRooms(int buildingId) throws PolygonException;
+    public ArrayList<Room> getRooms(int buildingId) throws Exception;
     
-    public void createRoom(String name, String description, int sqm, int areaId) throws PolygonException;
+    public void createRoom(String name, String description, int sqm, int areaId) throws Exception;
     
-    public void deleteRoom(int roomId) throws PolygonException;
+    public void deleteRoom(int roomId) throws Exception;
     
-    public void toggleHealthcheck(int buildingId, int healthcheck_pending) throws PolygonException;
+    public void toggleHealthcheck(int buildingId, int healthcheck_pending) throws Exception;
     
-    public void assignHealthcheck(int buildingId, int technicianId) throws PolygonException;
+    public void assignHealthcheck(int buildingId, int technicianId) throws Exception;
     
-    public void acceptHealthcheck(int buildingId, int technicianId) throws PolygonException;
+    public void acceptHealthcheck(int buildingId, int technicianId) throws Exception;
     
-    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws PolygonException;
+    public int createIssue(int buildingId, int areaId, int roomId, String description, String recommendation, int healthcheck_id) throws Exception;
     
-    public void deleteIssue(int issueId) throws PolygonException;
+    public void deleteIssue(int issueId) throws Exception;
     
-    public ArrayList<Healthcheck> getAllHealthchecks() throws PolygonException;
+    public ArrayList<Healthcheck> getAllHealthchecks() throws Exception;
     
-    public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws PolygonException;
+    public ArrayList<Healthcheck> getBuildingHealthchecks(int buildingId) throws Exception;
     
-    public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws PolygonException;
+    public ArrayList<Issue> getHealthcheckIssues(int healthcheckId) throws Exception;
     
-    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws PolygonException;
+    public void registerMoistureMeasurement(int roomId, String measurePoint, int measureValue) throws Exception;
     
-    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws PolygonException;
+    public ArrayList<MoistureInfo> getAllMoistureMeasurements() throws Exception;
     
-    public void deleteMoistureMeasurement(int moistId) throws PolygonException;
+    public void deleteMoistureMeasurement(int moistId) throws Exception;
     
-    public ArrayList<DamageRepair> getAllDamageRepairs() throws PolygonException;
+    public ArrayList<DamageRepair> getAllDamageRepairs() throws Exception;
     
-    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws PolygonException;
+    public void registerDamageRepair(int roomId, String damageTime, String damageLocation, String damageDetails, String workDone, String type) throws Exception;
     
-    public void deleteDamageRepair(int roomId) throws PolygonException;
+    public void deleteDamageRepair(int roomId) throws Exception;
     
-    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws PolygonException;
+    public void completeHealthcheck(String condition, String buildingResponsible, int healthcheckId, int buildingId) throws Exception;
 
 }

@@ -20,7 +20,6 @@ import serviceLayer.entities.Area;
 import serviceLayer.entities.Building;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.PolygonException;
 
 /**
  * Servlet that handles the customer.
@@ -45,6 +44,9 @@ public class NavigatorServlet extends HttpServlet {
     private PDFCreator pdfwt = new PDFCreator();
     private Date date = new Date();
 
+//    //This is new, used to handle Exceptions
+//    StringWriter sw = new StringWriter();
+//    PrintWriter pw = new PrintWriter(sw);
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -122,8 +124,9 @@ public class NavigatorServlet extends HttpServlet {
                         redirectUser(request, response);
                     } catch (Exception e) {
 
-                        errMsg = e.getMessage();
-                        response.sendRedirect("newCustomer.jsp?error=" + URLEncoder.encode(errMsg, "UTF-8"));
+                        request.getSession().setAttribute("ExceptionError", "Fejl: " + e.toString());
+
+                        response.sendRedirect("error.jsp");
 
                     }
                     break;
@@ -177,43 +180,50 @@ public class NavigatorServlet extends HttpServlet {
                     break;
             }
 
-        } catch (PolygonException e) {
-            
-            request.getSession().setAttribute("ExceptionError", e.getMessage());
+        } catch (Exception e) {
+
+//            //Get the stacktrace, and save it to pw. 
+//            e.printStackTrace(pw);
+//            e.getLocalizedMessage();
+//            
+//            //This could be sent to it-department.
+//            sw.toString();
+            request.getSession().setAttribute("ExceptionError", "Fejl: " + e.toString());
+
             response.sendRedirect("error.jsp");
-            
+
         }
 
     }
 
     //Redirects the user to the appropriate page
-    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws PolygonException {
-        
+    public void redirectUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         try {
             if (request.getParameter("originSection").equals("Kunde")) {
-                
+
                 response.sendRedirect("user.jsp?success");
-                
+
             } else if (request.getParameter("originSection").equals("Tekniker")) {
-                
+
                 response.sendRedirect("technician.jsp?success");
-                
+
             } else if (request.getParameter("originSection").equals("Administration")) {
-                
+
                 response.sendRedirect("admin.jsp?success");
-                
+
             }
-            
+
         } catch (IOException ex) {
-            
+
             ex.printStackTrace();
-            
+
         }
-        
+
     }
 
     //Populates the editUser.jsp fields
-    public void populateEditUserPage(HttpServletRequest request, User user) throws PolygonException {
+    public void populateEditUserPage(HttpServletRequest request, User user) throws Exception {
 
         //Retrieve the user's data
         uEmail = user.getEmail();
@@ -236,11 +246,11 @@ public class NavigatorServlet extends HttpServlet {
         request.getSession().setAttribute("uPostcode", uPostcode);
         request.getSession().setAttribute("uCity", uCity);
         request.getSession().setAttribute("uUser_id", uUser_id);
-        
+
     }
 
     //Edits the user's details
-    public void editUser(HttpServletRequest request, int user_id) throws PolygonException {
+    public void editUser(HttpServletRequest request, int user_id) throws Exception {
 
         //Retrieve form input values from editProfile.jsp
         uEmail = request.getParameter("email");
@@ -267,14 +277,14 @@ public class NavigatorServlet extends HttpServlet {
             editProfileEmail();
 
         }
-        
+
         //Save the user's edited values to the user database        
         usrCtrl.editUser(uSelectedUser, uEmail, uPassword, uName, uPhone, uCompany, uAddress, uPostcode, uCity);
-        
+
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(int user_id) throws PolygonException {
+    public void refreshBuilding(int user_id) throws Exception {
 
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
@@ -282,40 +292,40 @@ public class NavigatorServlet extends HttpServlet {
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
-        
+    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
-        
+
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(int buildingId) throws PolygonException {
-        
+    public void refreshAreas(int buildingId) throws Exception {
+
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
-        
+
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(int buildingId) throws PolygonException {
-        
+    public void refreshRooms(int buildingId) throws Exception {
+
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
-        
+
     }
 
-    public void refreshUsers(HttpServletRequest request) throws PolygonException {
+    public void refreshUsers(HttpServletRequest request) throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
-        
+
     }
 
     public void emailNewBuilding(String bName, String bAddress, String bPostcode, String bCity, String bConstructionYear, String bPurpose, String bSqm) {
-        
+
         //Send confirmation email to the customer, regarding the creation of a new building:
         String emailNewCustomerHeader = "Polygon: Ny bygning tilføjet til deres profil";
         String emailNewCustomerMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
@@ -345,15 +355,15 @@ public class NavigatorServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             emailCtrl.send(user.getEmail(), emailNewCustomerHeader, emailNewCustomerMessage);
-            
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
-        
+
     }
 
     public void editProfileEmail() {
@@ -385,19 +395,19 @@ public class NavigatorServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             emailCtrl.send(user.getEmail(), emailEditProfileHeader, emailEditProfileMessage);
-            
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
-        
+
     }
 
     public void editProfilePasswordEmail() {
-        
+
         //Email to be send if the user changes their password
         String emailEditProfilePasswordHeader = "Polygon: Ændret kodeord";
         String emailEditProfilePasswordMessage = "Hej " + user.getName() + " (" + user.getCompany() + " )"
@@ -419,15 +429,15 @@ public class NavigatorServlet extends HttpServlet {
                 + "sundebygninger@polygon.dk";
 
         try {
-            
+
             emailCtrl.send(user.getEmail(), emailEditProfilePasswordHeader, emailEditProfilePasswordMessage);
-            
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
-        
+
     }
 
     public void editProfileEmailAddressEmail() {
@@ -453,14 +463,14 @@ public class NavigatorServlet extends HttpServlet {
 
         //Sends the email to both the old and new email
         try {
-            
+
             emailCtrl.send(uEmail, emailEditProfileEmailHeader, emailEditProfileEmailMessage);
             emailCtrl.send(user.getEmail(), emailEditProfileEmailHeader, emailEditProfileEmailMessage);
-            
+
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-            
+
         }
 
     }

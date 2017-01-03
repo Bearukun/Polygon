@@ -25,7 +25,7 @@ import serviceLayer.entities.Issue;
 import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.PolygonException;
+
 
 /**
  * Class that generates a PDF Document.
@@ -79,7 +79,7 @@ public class PDFCreator {
      * @param imgFolderPath String that contains the root path to the images on
      * the website
      */
-    public void createPDF(User technician, User customer, int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) throws PolygonException {
+    public void createPDF(User technician, User customer, int healthcheckId, int buildingId, String buildingResponsible, String condition, String imgFolderPath) throws Exception {
 
         try {
 
@@ -160,7 +160,7 @@ public class PDFCreator {
             
         } catch (Exception e) {
             
-            throw new PolygonException("Exception:@PDFCreator.createPDF:" + e.getMessage());
+            throw new Exception("Exception:@PDFCreator.createPDF:" + e.getMessage());
             
         }
 

@@ -28,7 +28,6 @@ import serviceLayer.entities.Issue;
 import serviceLayer.entities.MoistureInfo;
 import serviceLayer.entities.Room;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.PolygonException;
 
 @WebServlet(name = "TechnicianServlet", urlPatterns = {"/TechnicianServlet"})
 public class TechnicianServlet extends HttpServlet {
@@ -58,6 +57,9 @@ public class TechnicianServlet extends HttpServlet {
     private Date date = new Date();
     private PDFCreator pdf = new PDFCreator();
 
+//    //This is new, used to handle Exceptions
+//    StringWriter sw = new StringWriter();
+//    PrintWriter pw = new PrintWriter(sw);
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -267,8 +269,8 @@ public class TechnicianServlet extends HttpServlet {
                         //create new issue
                         int issue_index = bldgCtrl.createIssue(buildingId, areaId, roomId, description, recommendation, healthcheck_id);
 
-                        if(request.getPart("img").getSize() != 0){
-                            
+                        if (request.getPart("img").getSize() != 0) {
+
                             Part filePart = request.getPart("img");
                             String[] header = (filePart.getHeader("content-disposition").split(" "));
                             String[] fileName = header[2].split("\"");
@@ -276,7 +278,7 @@ public class TechnicianServlet extends HttpServlet {
                             InputStream inputStream = filePart.getInputStream();
                             //Save values to database
                             datCtrl.uploadIssueImage(issue_index, fileName[1], inputStream);
-                            
+
                         }
 
                         //Fetch the current healthcheck and its issues for the chosen building 
@@ -354,29 +356,25 @@ public class TechnicianServlet extends HttpServlet {
                         //Get customer object, this step shouldn't be needed. 
                         customer = usrCtrl.getUser(build.getUser_id());
 
-                       
                         request.getSession().setAttribute("source", "");
 
                         String condition = request.getParameter("condition");
-                        
+
                         String buildingResponsible = request.getParameter("buildingResponsible");
 
                         healthcheckId = (Integer) request.getSession().getAttribute("healthcheckId");
 
-                 
                         //Complete healthcehck.
                         bldgCtrl.completeHealthcheck(condition, buildingResponsible, healthcheckId, build.getbuildingId());
 
                         //CreatePDF
                         pdf.createPDF(technician, customer, healthcheckId, build.getbuildingId(), buildingResponsible, condition, request.getServletContext().getRealPath("/img/"));
 
-                        
-                        
                         //Send emails
                         completeHealtcheckCustomerEmail();
                         completeHealthcheckTechnicianEmail();
                         completeHealthcheckPolygonEmail();
-                        
+
                         refreshAllBuildings(request);
                         response.sendRedirect("technician.jsp");
 
@@ -385,16 +383,16 @@ public class TechnicianServlet extends HttpServlet {
                     break;
 
                 case "acceptHealthcheckButton":
-                  
+
                     buildingId = Integer.parseInt(request.getParameter("buildingId"));
                     //Call method to modify database
                     bldgCtrl.acceptHealthcheck(buildingId, technician.getUser_id());
                     refreshAllBuildings(request);
-                   
+
                     //
                     build = bldgCtrl.getBuilding(buildingId);
                     customer = usrCtrl.getUser(build.getUser_id());
-                   
+
                     //Sends an email to the technician with information/confirmation,
                     //regaring the assigned building to be inspected for a healthcheck
                     // and with the customers contact information.
@@ -413,17 +411,24 @@ public class TechnicianServlet extends HttpServlet {
                     break;
             }
 
-        } catch (PolygonException e) {
-            
-            request.getSession().setAttribute("ExceptionError", e.getMessage());
+        } catch (Exception e) {
+
+//            //Get the stacktrace, and save it to pw. 
+//            e.printStackTrace(pw);
+//            e.getLocalizedMessage();
+//            
+//            //This could be sent to it-department.
+//            sw.toString();
+            request.getSession().setAttribute("ExceptionError", "Fejl: " + e.toString());
+
             response.sendRedirect("error.jsp");
-            
+
         }
 
     }
 
     //Refreshes the damage repairs list
-    public void refreshAllDamageRepairs(HttpServletRequest request) {
+    public void refreshAllDamageRepairs(HttpServletRequest request) throws Exception {
         allDamageRepairs.clear();
         try {
             allDamageRepairs = bldgCtrl.getAllDamageRepairs();
@@ -434,7 +439,7 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Refreshes the moisture measurements list
-    public void refreshAllMoistureMeasurements(HttpServletRequest request) {
+    public void refreshAllMoistureMeasurements(HttpServletRequest request) throws Exception {
         allMoistureMeasurements.clear();
         try {
             allMoistureMeasurements = bldgCtrl.getAllMoistureMeasurements();
@@ -445,7 +450,7 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Fetches the issues for the current healthcheck
-    public void getHealthcheckIssues(HttpServletRequest request, int healthcheckId) {
+    public void getHealthcheckIssues(HttpServletRequest request, int healthcheckId) throws Exception {
         try {
             healthcheckIssues.clear();
             healthcheckIssues = bldgCtrl.getHealthcheckIssues(healthcheckId);
@@ -456,7 +461,7 @@ public class TechnicianServlet extends HttpServlet {
     }
 
     //Get the current healthcheck for a building
-    public int getBuildingHealthcheck(HttpServletRequest request, int buildingId) {
+    public int getBuildingHealthcheck(HttpServletRequest request, int buildingId) throws Exception{
         int healthcheck_id = 0;
         try {
             buildingHealthchecks.clear();
@@ -467,79 +472,79 @@ public class TechnicianServlet extends HttpServlet {
                     healthcheck_id = buildingHealthchecks.get(i).getHealthcheck_id();
                 }
             }
-        } catch (PolygonException ex) {
-            
+        } catch (Exception ex) {
+
             ex.getMessage();
-        
+
         }
-        
+
         request.getSession().setAttribute("healthcheckId", healthcheck_id);
-        
+
         return healthcheck_id;
-        
+
     }
 
     //Refreshes the list of all healthchecks
-    public void refreshAllHealthchecks(HttpServletRequest request) throws PolygonException {
-        
+    public void refreshAllHealthchecks(HttpServletRequest request) throws Exception {
+
         allHealthchecks.clear();
         allHealthchecks = bldgCtrl.getAllHealthchecks();
         request.getSession().setAttribute("allHealthchecks", allHealthchecks);
-        
+
     }
 
     //Refreshes the list of buildings
-    public void refreshBuilding(HttpServletRequest request, int user_id) throws PolygonException {
-        
+    public void refreshBuilding(HttpServletRequest request, int user_id) throws Exception {
+
         userBuildings.clear();
         userBuildings = bldgCtrl.getBuildings(user_id);
         request.getSession().setAttribute("userBuildings", userBuildings);
-        
+
     }
 
     //Refreshes the list of buildings
-    public void refreshAllBuildings(HttpServletRequest request) throws PolygonException {
-        
+    public void refreshAllBuildings(HttpServletRequest request) throws Exception {
+
         allBuildings.clear();
         allBuildings = bldgCtrl.getAllBuildings();
         request.getSession().setAttribute("allBuildings", allBuildings);
-        
+
     }
 
     //Refreshes the list of building areas
-    public void refreshAreas(HttpServletRequest request, int buildingId) throws PolygonException {
-        
+    public void refreshAreas(HttpServletRequest request, int buildingId) throws Exception {
+
         buildingAreas.clear();
         buildingAreas = bldgCtrl.getAreas(buildingId);
         request.getSession().setAttribute("buildingAreas", buildingAreas);
-        
+
     }
 
     //Refreshes the list of building rooms
-    public void refreshRooms(HttpServletRequest request, int buildingId) throws PolygonException {
-        
+    public void refreshRooms(HttpServletRequest request, int buildingId) throws Exception {
+
         buildingRooms.clear();
         buildingRooms = bldgCtrl.getRooms(buildingId);
         request.getSession().setAttribute("buildingRooms", buildingRooms);
-        
+
     }
 
-    public void refreshUsers(HttpServletRequest request) throws PolygonException {
+    public void refreshUsers(HttpServletRequest request) throws Exception {
 
         userList.clear();
         userList = usrCtrl.getUsers();
         request.getSession().setAttribute("userList", userList);
-        
+
     }
-    
-    public void refreshDocuments(int buildingId) throws PolygonException {
+
+    public void refreshDocuments(int buildingId) throws Exception {
 
         buildingDocuments.clear();
         buildingDocuments = datCtrl.getDocuments(buildingId);
 
     }
 
-    public void acceptHealthcheckCustomerEmail() throws PolygonException {
+    public void acceptHealthcheckCustomerEmail() throws Exception {
 
         String acceptHealthcheckCustomerEmailHeader = "Healthcheck Opdatering: Tekniker er blevet tildelt!";
 
@@ -570,15 +575,15 @@ public class TechnicianServlet extends HttpServlet {
 
             emailCtrl.send(customer.getEmail(), acceptHealthcheckCustomerEmailHeader, acceptHealthcheckCustomerEmailMessage);
 
-        } catch (PolygonException e) {
+        } catch (Exception e) {
 
             e.getMessage();
 
         }
-        
+
     }
 
-    public void acceptHealthcheckTechnicianEmail() {
+    public void acceptHealthcheckTechnicianEmail() throws Exception {
 
         String acceptHealthcheckTechnicianEmailHeader = "Ny HealthCheck opgave:  "
                 + "[" + build.getName() + "]"
@@ -622,7 +627,7 @@ public class TechnicianServlet extends HttpServlet {
         try {
             emailCtrl.send(technician.getEmail(), acceptHealthcheckTechnicianEmailHeader, acceptHealthcheckTechnicianEmailMessage);
 
-        } catch (PolygonException e) {
+        } catch (Exception e) {
 
             e.getMessage();
 
@@ -630,10 +635,10 @@ public class TechnicianServlet extends HttpServlet {
 
     }
 
-    public void acceptHealthcheckPolygonEmail() throws PolygonException {
-        
+    public void acceptHealthcheckPolygonEmail() throws Exception {
+
         String polygonEmail = "polygonmailtest4@gmail.com";
-        
+
         String acceptHealthcheckPolygonHeader = "Healtcheck for \""
                 + build.getName() + "\""
                 + " - ID[" + build.getbuildingId()
@@ -649,7 +654,7 @@ public class TechnicianServlet extends HttpServlet {
 
             emailCtrl.send(polygonEmail, acceptHealthcheckPolygonHeader, acceptHealthcheckPolygonMessage);
 
-        } catch (PolygonException e) {
+        } catch (Exception e) {
 
             e.getMessage();
 
@@ -657,7 +662,7 @@ public class TechnicianServlet extends HttpServlet {
 
     }
 
-    public void completeHealtcheckCustomerEmail() throws PolygonException {
+    public void completeHealtcheckCustomerEmail() throws Exception {
         String completeHealthcheckCustomerEmailHeader = "Healthcheck Gennemført!";
         String completeHealthcheckCustomerEmailMessage = "Hej " + customer.getName() + "!"
                 + "\n\nVores tekniker " + technician.getName() + " har " + date
@@ -689,15 +694,15 @@ public class TechnicianServlet extends HttpServlet {
 
             emailCtrl.send(customer.getEmail(), completeHealthcheckCustomerEmailHeader, completeHealthcheckCustomerEmailMessage);
 
-        } catch (PolygonException e) {
+        } catch (Exception e) {
 
             e.getMessage();
 
         }
-        
+
     }
 
-    public void completeHealthcheckTechnicianEmail() throws PolygonException {
+    public void completeHealthcheckTechnicianEmail() throws Exception {
 
         String completeHealthcheckTechnicianEmailHeader = "Gennemført HealthCheck opgave:  "
                 + "[" + build.getName() + "]"
@@ -739,21 +744,21 @@ public class TechnicianServlet extends HttpServlet {
                 + "Tlf. 4814 0055\n"
                 + "sundebygninger@polygon.dk";
         try {
-            
+
             emailCtrl.send(technician.getEmail(), completeHealthcheckTechnicianEmailHeader, completeHealthcheckTechnicianEmailMessage);
-            
-        } catch (PolygonException e) {
-            
+
+        } catch (Exception e) {
+
             e.getMessage();
-        
+
         }
-    
+
     }
 
-    public void completeHealthcheckPolygonEmail() throws PolygonException {
-        
+    public void completeHealthcheckPolygonEmail() throws Exception {
+
         String polygonEmail = "polygonmailtest4@gmail.com";
-       
+
         String completeHealthcheckPolygonHeader = "Complete: HealthCheck af "
                 + build.getName() + "\""
                 + " - ID[" + build.getbuildingId();
@@ -765,15 +770,15 @@ public class TechnicianServlet extends HttpServlet {
                 + "\nGennemført af Tekniker: " + technician.getName() + "  - ID[" + technician.getUser_id() + "]";;
 
         try {
-            
+
             emailCtrl.send(polygonEmail, completeHealthcheckPolygonHeader, completeHealthcheckPolygonMessage);
-        
-        } catch (PolygonException e) {
-            
+
+        } catch (Exception e) {
+
             e.printStackTrace();
-            
+
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

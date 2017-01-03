@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import serviceLayer.entities.User;
-import serviceLayer.exceptions.PolygonException;
+
 
 /**
  * Class dealing with user data
@@ -23,10 +23,10 @@ public class UserMapper implements UserMapperInterface {
      * @param email String specifying which email need to be looked up.
      * @param password String specifying which password that needs to match the email.
      * @return An object of type User
-     * @throws PolygonException 
+     * @throws Exception 
      */
     @Override
-    public User checkLogin(String email, String password) throws PolygonException {
+    public User checkLogin(String email, String password) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -76,13 +76,13 @@ public class UserMapper implements UserMapperInterface {
 
             } else {
                 
-                throw new PolygonException("Forkert email/kode, prøv igen.");
+                throw new Exception("Forkert email/kode, prøv igen.");
                 
             }
             
         } catch (Exception e) {
             
-            throw new PolygonException("Login fejl: "+e.getMessage());
+            throw new Exception("Login fejl: "+e.getMessage());
             
         }finally{
         
@@ -96,7 +96,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQLException:@UserMapper.getUserByEmail."+e.getMessage());
+                 throw new Exception("SQLException:@UserMapper.getUserByEmail."+e.getMessage());
             
             }
             
@@ -108,10 +108,10 @@ public class UserMapper implements UserMapperInterface {
      * Method to retrieve a specific user
      * @param user_id int specifying which user needs retrieving
      * @return An object of type User
-     * @throws PolygonException 
+     * @throws Exception 
      */
     @Override
-    public User getUser(int user_id) throws PolygonException {
+    public User getUser(int user_id) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -160,13 +160,13 @@ public class UserMapper implements UserMapperInterface {
 
             } else {
                 
-                throw new PolygonException("Exception:@UserMapper.getUser: User doesn't exist!");
+                throw new Exception("Exception:@UserMapper.getUser: User doesn't exist!");
                 
             }
             
         } catch (Exception e) {
             
-            throw new PolygonException("Exception:@UserMapper.getUser:" + e.getMessage());
+            throw new Exception("Exception:@UserMapper.getUser:" + e.getMessage());
             
         }finally{
         
@@ -180,7 +180,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQLException:@UserMapper.getUser:"+e.getMessage());
+                 throw new Exception("SQLException:@UserMapper.getUser:"+e.getMessage());
             
             }
             
@@ -199,10 +199,10 @@ public class UserMapper implements UserMapperInterface {
      * @param postcode int detailing the new user's postcode
      * @param city int detailing the new user's city
      * @param type Enum detailing the new user's user category
-     * @throws PolygonException 
+     * @throws Exception 
      */
     @Override
-    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws PolygonException {
+    public void createUser(String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city, User.type type) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -246,13 +246,13 @@ public class UserMapper implements UserMapperInterface {
             } else {
 
                 //If the ResultSet returns positive on email.
-                throw new PolygonException("Email in use.");
+                throw new Exception("Email in use.");
 
             }
 
         } catch (Exception e) {
 
-            throw new PolygonException("Exception:@UserMapper.createUser:"+e.getMessage());
+            throw new Exception("Exception:@UserMapper.createUser:"+e.getMessage());
 
         }finally{
         
@@ -266,7 +266,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQLException:@UserMapper.createUser"+e.getMessage());
+                 throw new Exception("SQLException:@UserMapper.createUser"+e.getMessage());
             
             }
             
@@ -277,10 +277,10 @@ public class UserMapper implements UserMapperInterface {
     /**
      * Method to retrieve all users
      * @return An ArrayList of type User
-     * @throws PolygonException 
+     * @throws Exception 
      */
     @Override
-    public ArrayList<User> getUsers() throws PolygonException {
+    public ArrayList<User> getUsers() throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -312,7 +312,7 @@ public class UserMapper implements UserMapperInterface {
                 allUsers.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), type, rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
             }
         } catch (Exception e) {
-            throw new PolygonException("SQL Error: getUsers failed in facade.");
+            throw new Exception("SQL Error: getUsers failed in facade.");
         }finally{
             //Try releasing objects. 
             try {
@@ -321,7 +321,7 @@ public class UserMapper implements UserMapperInterface {
                 rs.close();
             } catch (SQLException ex) {
                 //throw error if not successful. 
-                 throw new PolygonException("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
+                 throw new Exception("SQL Error:@DBFacade.getBuildings."+ex.getMessage());
             }
         }
         return allUsers;
@@ -338,10 +338,10 @@ public class UserMapper implements UserMapperInterface {
      * @param address String detailing the user's address
      * @param postcode int detailing the user's postcode
      * @param city String detailing the user's city
-     * @throws PolygonException 
+     * @throws Exception 
      */
     @Override
-    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws PolygonException {
+    public void editUser(int selectedUser, String email, String password, String name, Integer phone, String company, String address, Integer postcode, String city) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -370,7 +370,7 @@ public class UserMapper implements UserMapperInterface {
             
         } catch (Exception e) {
             
-            throw new PolygonException("Exception:@UserMapper.editUser: Try@editUser has failed.");
+            throw new Exception("Exception:@UserMapper.editUser: Try@editUser has failed.");
             
         }finally{
         
@@ -383,7 +383,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQLException:@UserMapper."+e.getMessage());
+                 throw new Exception("SQLException:@UserMapper."+e.getMessage());
             
             }
             
@@ -394,10 +394,10 @@ public class UserMapper implements UserMapperInterface {
     /**
      * Method to delete a user
      * @param user_id int specifying which user is to be deleted
-     * @throws PolygonException 
+     * @throws Exception 
      */
     @Override
-    public void deleteUser(int user_id) throws PolygonException {
+    public void deleteUser(int user_id) throws Exception {
         
         //Declare new objects of the Connection and PrepareStatement.
         Connection con = null;
@@ -415,7 +415,7 @@ public class UserMapper implements UserMapperInterface {
             stmt.executeUpdate();
         } catch (Exception e) {
             
-            throw new PolygonException("Exception:@UserMapper.deleteUser:"+e.getMessage());
+            throw new Exception("Exception:@UserMapper.deleteUser:"+e.getMessage());
             
         }finally{
             
@@ -428,7 +428,7 @@ public class UserMapper implements UserMapperInterface {
             } catch (SQLException e) {
                 
                 //throw error if not successful. 
-                 throw new PolygonException("SQLException:@UserMapper.deleteUser."+e.getMessage());
+                 throw new Exception("SQLException:@UserMapper.deleteUser."+e.getMessage());
                  
             }
             
